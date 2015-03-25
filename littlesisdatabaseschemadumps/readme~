@@ -1,0 +1,19 @@
+mysql -u root -p
+enter password: ****
+
+create database littlesis;
+use littlesis;
+source littlesis.sql;
+show tables;
+describe entity;
+show create table entity;
+
+repeat for other
+
+
+Also for some fields look at : https://github.com/littlesis-org/littlesis/blob/master/lib/util/LsApi.class.php
+Api mapping.
+
+
+Also one good schema resource for littlesis could be found here : https://github.com/littlesis-org/littlesis/blob/master/config/doctrine/schema.yml
+ 

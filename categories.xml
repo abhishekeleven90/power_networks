@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Meta>
+              </Meta>
+  <Data>
+    <RelationshipCategories>
+  <RelationshipCategory><id>1</id><name>Position</name><fields>is_board,is_executive,is_employee,compensation,boss_id</fields></RelationshipCategory>  <RelationshipCategory><id>2</id><name>Education</name><fields>degree_id,field,is_dropout</fields></RelationshipCategory>  <RelationshipCategory><id>3</id><name>Membership</name><fields>dues</fields></RelationshipCategory>  <RelationshipCategory><id>4</id><name>Family</name><fields/></RelationshipCategory>  <RelationshipCategory><id>5</id><name>Donation</name><fields>bundler_id</fields></RelationshipCategory>  <RelationshipCategory><id>6</id><name>Transaction</name><fields>contact1_id,contact2_id,district_id,is_lobbying</fields></RelationshipCategory>  <RelationshipCategory><id>7</id><name>Lobbying</name><fields/></RelationshipCategory>  <RelationshipCategory><id>8</id><name>Social</name><fields/></RelationshipCategory>  <RelationshipCategory><id>9</id><name>Professional</name><fields/></RelationshipCategory>  <RelationshipCategory><id>10</id><name>Ownership</name><fields>percent_stake,shares</fields></RelationshipCategory>  <RelationshipCategory><id>11</id><name>Hierarchy</name><fields/></RelationshipCategory>  <RelationshipCategory><id>12</id><name>Misc</name><fields/></RelationshipCategory></RelationshipCategories>  </Data>
+</Response>

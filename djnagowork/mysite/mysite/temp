@@ -1,0 +1,9 @@
+sudo apt-get install python-django
+Using version 1.6
+sudo apt-get install python-mysqldb
+django-admin startproject mysite
+python -c "import django; print(django.get_version())"
+python manage.py startapp polls 3 at same level as mysite
+python manage.py sql polls
+
+admin: abhishek, password same as gcl for now
