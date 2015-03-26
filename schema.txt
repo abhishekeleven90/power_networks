@@ -64,3 +64,11 @@ CREATE TABLE `extension_record` (
   CONSTRAINT `extrec_entity_fk` FOREIGN KEY (`entity_id`) REFERENCES `entity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
   );
 
+create table states(
+id int not null AUTO_INCREMENT PRIMARY KEY,
+isocode varchar(5) not null UNIQUE,
+fullname varchar(200) not null, 
+typeof varchar(1) not null,
+entity_id bigint(20) NOT NULL,
+CONSTRAINT `states_entity_fk` FOREIGN KEY (`entity_id`) REFERENCES entity (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
