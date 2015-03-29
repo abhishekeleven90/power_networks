@@ -61,23 +61,30 @@ class Alias(models.Model):
     name = models.CharField(max_length=200)
     context = models.CharField(max_length=50, blank=True)
     is_primary = models.IntegerField()
-    created_at = models.DateTimeField(blank=True, null=True)
-    updated_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(blank=True, null=True)#trigger
+    updated_at = models.DateTimeField(blank=True, null=True)#trigger
     last_user_id = models.BigIntegerField(blank=True, null=True)
     class Meta:
         db_table = 'alias'
     def __unicode__(self):  # Python 3: def __str__(self):
         return self.name
 
+class ParliamentaryConstituency(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=300)
+    typeof = models.CharField(max_length=5)
+    state = models.ForeignKey('States')
+    class Meta:
+        db_table = 'parliamentary_constituency'
+    def __unicode__(self):
+        return self.name
 
 class States(models.Model):
     id = models.AutoField(primary_key=True)
     isocode = models.CharField(unique=True, max_length=5)
     fullname = models.CharField(max_length=200)
     typeof = models.CharField(max_length=1)
-    entity = models.ForeignKey(Entity)
     class Meta:
         db_table = 'states'
-    def __unicode__(self):  # Python 3: def __str__(self):
+    def __unicode__(self):
         return self.fullname
-
