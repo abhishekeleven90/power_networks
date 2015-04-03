@@ -1,7 +1,7 @@
 # power_networks
 
 Let's follow power elites.
-
+Indian version of littlesis.org
 
 sudo apt-get install python-django
 sudo apt-get install python-mysqldb
