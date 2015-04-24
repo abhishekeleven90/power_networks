@@ -99,3 +99,56 @@ CONSTRAINT `pc_state_fk` FOREIGN KEY (`state_id`) REFERENCES states(id) ON DELET
 );
 
 ##should we use state id or should we use entity id??
+
+--
+--poltical parties all
+--
+-- id
+-- type:'N','S','U'
+--Name: 
+--Alias:??
+--Sybmol
+--Abbreviation
+--foundingyear
+--state if type 'S'
+--fetchyear : 2015
+--source: http://eci.nic.in/eci_main/ElectoralLaws/OrdersNotifications/year2014/Notification%20English%2013.01.2015.pdf
+--parties are entities so afterwards we need to handle the schema
+
+
+create table stateparty
+(
+id int not null AUTO_INCREMENT PRIMARY KEY,
+name varchar(300) not null,
+state_id int null,
+abbr varchar(10) not null,
+symbol varchar(200) null,
+foundingyear int null,
+fetchyear int not null,
+source varchar(1000) not null,
+CONSTRAINT `stateparty_state_fk` FOREIGN KEY (`state_id`) REFERENCES states(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+create table nationalparty
+(
+id int not null AUTO_INCREMENT PRIMARY KEY,
+name varchar(300) not null,
+abbr varchar(10) not null UNIQUE,
+symbol varchar(200) null,
+foundingyear int null,
+fetchyear int not null,
+source varchar(1000) not null 
+);
+
+	 
+
+create table unrecognized_party
+(
+id int not null AUTO_INCREMENT PRIMARY KEY,
+name varchar(300) not null,
+abbr varchar(10) null,
+symbol varchar(200) null,
+foundingyear int null,
+fetchyear int not null,
+source varchar(1000) not null
+);

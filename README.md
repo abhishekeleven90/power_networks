@@ -13,3 +13,10 @@ To fire ipython for a project:
 python manage.py shell_plus --notebook
 
 bigautofield custom
+
+
+##FuzzyWuzzy
+git clone git://github.com/seatgeek/fuzzywuzzy.git fuzzywuzzy
+cd fuzzywuzzy
+sudo python setup.py install
+Also install: sudo apt-get install python-Levenshtein

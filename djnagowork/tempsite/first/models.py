@@ -88,3 +88,70 @@ class States(models.Model):
         db_table = 'states'
     def __unicode__(self):
         return self.fullname
+
+#adding here latest................................................................................
+
+class Nationalparty(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=300)
+    abbr = models.CharField(unique=True, max_length=10)
+    symbol = models.CharField(max_length=200, blank=True)
+    foundingyear = models.IntegerField(blank=True, null=True)
+    fetchyear = models.IntegerField()
+    source = models.CharField(max_length=1000)
+    class Meta:
+        db_table = 'nationalparty'
+    def __unicode__(self):
+        return self.name
+
+class Stateparty(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=300)
+    state = models.ForeignKey('States', blank=True, null=True)
+    abbr = models.CharField(unique=True, max_length=10)
+    symbol = models.CharField(max_length=200, blank=True)
+    foundingyear = models.IntegerField(blank=True, null=True)
+    fetchyear = models.IntegerField()
+    source = models.CharField(max_length=1000)
+    class Meta:
+        db_table = 'stateparty'
+    def __unicode__(self):
+        return self.name
+
+class UnrecognizedParty(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=300)
+    abbr = models.CharField(max_length=10, blank=True)
+    symbol = models.CharField(max_length=200, blank=True)
+    foundingyear = models.IntegerField(blank=True, null=True)
+    fetchyear = models.IntegerField()
+    source = models.CharField(max_length=1000)
+    class Meta:
+        db_table = 'unrecognized_party'
+    def __unicode__(self):
+        return self.name
+
+
+class Politicalparty(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=300)
+    state = models.ForeignKey('States', blank=True, null=True)
+    abbr = models.CharField(max_length=10)
+    symbol = models.CharField(max_length=200, blank=True)
+    foundingyear = models.IntegerField(blank=True, null=True)
+    fetchyear = models.IntegerField()
+    source = models.CharField(max_length=1000)
+    class Meta:
+        db_table = 'politicalparty'
+    def __unicode__(self):
+        return self.name
+
+class PoliticalPartyAlias(models.Model):
+    id = bigauto.BigAutoField(primary_key=True)
+    party = models.ForeignKey('Politicalparty')
+    name = models.CharField(max_length=200)
+    is_primary = models.IntegerField()
+    class Meta:
+        db_table = 'politicalpartyalias'
+    def __unicode__(self):  # Python 3: def __str__(self):
+        return self.name

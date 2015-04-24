@@ -151,6 +151,18 @@ class ExtensionRecord(models.Model):
         managed = False
         db_table = 'extension_record'
 
+class Nationalparty(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=300)
+    abbr = models.CharField(unique=True, max_length=10)
+    symbol = models.CharField(max_length=200, blank=True)
+    foundingyear = models.IntegerField(blank=True, null=True)
+    fetchyear = models.IntegerField()
+    source = models.CharField(max_length=1000)
+    class Meta:
+        managed = False
+        db_table = 'nationalparty'
+
 class ParliamentaryConstituency(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=300)
@@ -160,6 +172,19 @@ class ParliamentaryConstituency(models.Model):
         managed = False
         db_table = 'parliamentary_constituency'
 
+class Stateparty(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=300)
+    state = models.ForeignKey('States', blank=True, null=True)
+    abbr = models.CharField(unique=True, max_length=10)
+    symbol = models.CharField(max_length=200, blank=True)
+    foundingyear = models.IntegerField(blank=True, null=True)
+    fetchyear = models.IntegerField()
+    source = models.CharField(max_length=1000)
+    class Meta:
+        managed = False
+        db_table = 'stateparty'
+
 class States(models.Model):
     id = models.IntegerField(primary_key=True)
     isocode = models.CharField(unique=True, max_length=5)
@@ -168,4 +193,16 @@ class States(models.Model):
     class Meta:
         managed = False
         db_table = 'states'
+
+class UnrecognizedParty(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=300)
+    abbr = models.CharField(max_length=10, blank=True)
+    symbol = models.CharField(max_length=200, blank=True)
+    foundingyear = models.IntegerField(blank=True, null=True)
+    fetchyear = models.IntegerField()
+    source = models.CharField(max_length=1000)
+    class Meta:
+        managed = False
+        db_table = 'unrecognized_party'
 

@@ -86,3 +86,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#to be required only when at bhya's place, though won't harm anywhere, and fire ipython using manage.py only
+IPYTHON_ARGUMENTS = [
+    '--ip=0.0.0.0'
+]

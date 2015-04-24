@@ -1,0 +1,54 @@
+sno	id	is_primary	name	party_id
+78	3281	1	Rashtriya Janata Dal	27
+79	3282	0	RJD	27
+80	3283	0	R.J.D.	27
+84	3287	1	Communist Party of India	29
+85	3288	0	CPI	29
+86	3289	0	C.P.I.	29
+90	3293	1	Janata Dal (Secular)	31
+91	3294	0	JD(S)	31
+92	3295	0	J.D.(S)	31
+102	3305	1	Nationalist Congress Party	35
+108	3311	1	All India Trinamool Congress	37
+109	3312	0	AITC	37
+110	3313	0	A.I.T.C.	37
+138	3341	1	Naga People's Front	47
+139	3342	0	NPF	47
+140	3343	0	N.P.F.	47
+159	3362	1	Communist Party of India	54
+160	3363	0	CPI	54
+161	3364	0	C.P.I.	54
+174	3377	1	Telugu Desam Party	59
+175	3378	0	TDP	59
+176	3379	0	T.D.P.	59
+177	3380	1	YSR Congress Party	60
+178	3381	0	YSRCP	60
+179	3382	0	Y.S.R.C.P.	60
+180	3383	1	All India Trinamool Congress	61
+181	3384	0	AITC	61
+182	3385	0	A.I.T.C.	61
+186	3389	1	Rashtriya Jankranti Party	63
+187	3390	0	RAJPA	63
+188	3391	0	R.A.J.P.A.	63
+189	3392	1	Bahujan Samaj Party	64
+190	3393	0	BSP	64
+191	3394	0	B.S.P.	64
+198	3401	1	All India Trinamool Congress	67
+199	3402	0	AITC	67
+200	3403	0	A.I.T.C.	67
+201	3404	1	Communist Party of India	68
+202	3405	0	CPI	68
+203	3406	0	C.P.I.	68
+204	3407	1	Revolutionary Socialist Party	69
+205	3408	0	RSP	69
+206	3409	0	R.S.P.	69
+207	3410	1	Aam Aadmi Party	70
+208	3411	0	AAP	70
+209	3412	0	A.A.P.	70
+210	3413	1	All India Anna Dravida Munnetra Kazhagam	71
+211	3414	0	AIADMK	71
+212	3415	0	A.I.A.D.M.K.	71
+216	3419	1	Dravida Munnetra Kazhagam	73
+217	3420	0	DMK	73
+218	3421	0	D.M.K.	73
+1524	4727	1	Rashtriya Jankranti Party	1377
