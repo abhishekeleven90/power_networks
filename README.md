@@ -20,3 +20,6 @@ git clone git://github.com/seatgeek/fuzzywuzzy.git fuzzywuzzy
 cd fuzzywuzzy
 sudo python setup.py install
 Also install: sudo apt-get install python-Levenshtein
+
+#Keep this course! You have to do it!
+https://github.com/amplab/datascience-sp14
