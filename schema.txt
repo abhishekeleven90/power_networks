@@ -152,3 +152,45 @@ foundingyear int null,
 fetchyear int not null,
 source varchar(1000) not null
 );
+
+create table qc_director
+(
+  din varchar(12) primary key,
+  address varchar(1500),
+  doa varchar(15),
+  dsc_status varchar(15),
+  designation varchar(25),
+  link varchar(250),
+  name varchar(200)
+);
+
+create table qc_company
+(
+  cin varchar(20) primary key,
+  AuthorizedShareCapital varchar(25),
+  ClassofCompany varchar(25),
+  CompanyCategory varchar(200),
+  CompanyStatusforeFiling varchar(20),
+  CompanySubCategory varchar(60),
+  DateofIncorporation varchar(15),
+  DateofLastAnnualGeneralMeeting varchar(15),
+  DateofLatestBalanceSheet varchar(15),
+  EmailID varchar(100),
+  Listingstatus varchar(20),
+  Name varchar(500),
+  NumberofMembers int,
+  PaidUpCapital varchar(25),
+  RegisteredOfficeAddress varchar(1500),
+  RegistrationNumber varchar(10),
+  RegistrationState varchar(50),
+  link varchar(300)
+);
+
+create table qc_bod
+(
+  cin varchar(20),
+  din varchar(12),
+  CONSTRAINT `qc_bod_pk` PRIMARY KEY (`cin`,`din`),
+  CONSTRAINT `qc_cin_fk` FOREIGN KEY (`cin`) REFERENCES qc_company(cin) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `qc_din_fk` FOREIGN KEY (`din`) REFERENCES qc_director(din) ON DELETE CASCADE ON UPDATE CASCADE
+);
