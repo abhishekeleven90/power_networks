@@ -155,3 +155,54 @@ class PoliticalPartyAlias(models.Model):
         db_table = 'politicalpartyalias'
     def __unicode__(self):  # Python 3: def __str__(self):
         return self.name
+
+class QcBod(models.Model):
+    id = bigauto.BigAutoField(primary_key=True)
+    cin = models.ForeignKey('QcCompany', db_column='cin', blank=True, null=True)
+    din = models.ForeignKey('QcDirector', db_column='din', blank=True, null=True)
+    doa = models.CharField(max_length=15, blank=True)
+    designation = models.CharField(max_length=300, blank=True)
+    class Meta:
+        db_table = 'qc_bod'
+
+class QcCompany(models.Model):
+    cin = models.CharField(primary_key=True, max_length=25)
+    authorizedsharecapital = models.CharField(db_column='AuthorizedShareCapital', max_length=50, blank=True) # Field name made lowercase.
+    classofcompany = models.CharField(db_column='ClassofCompany', max_length=50, blank=True) # Field name made lowercase.
+    companycategory = models.CharField(db_column='CompanyCategory', max_length=250, blank=True) # Field name made lowercase.
+    companystatusforefiling = models.CharField(db_column='CompanyStatusforeFiling', max_length=60, blank=True) # Field name made lowercase.
+    companysubcategory = models.CharField(db_column='CompanySubCategory', max_length=70, blank=True) # Field name made lowercase.
+    dateofincorporation = models.CharField(db_column='DateofIncorporation', max_length=15, blank=True) # Field name made lowercase.
+    dateoflastannualgeneralmeeting = models.CharField(db_column='DateofLastAnnualGeneralMeeting', max_length=15, blank=True) # Field name made lowercase.
+    dateoflatestbalancesheet = models.CharField(db_column='DateofLatestBalanceSheet', max_length=15, blank=True) # Field name made lowercase.
+    emailid = models.CharField(db_column='EmailID', max_length=150, blank=True) # Field name made lowercase.
+    listingstatus = models.CharField(db_column='Listingstatus', max_length=50, blank=True) # Field name made lowercase.
+    name = models.CharField(db_column='Name', max_length=500, blank=True) # Field name made lowercase.
+    numberofmembers = models.IntegerField(db_column='NumberofMembers', blank=True, null=True) # Field name made lowercase.
+    paidupcapital = models.CharField(db_column='PaidUpCapital', max_length=50, blank=True) # Field name made lowercase.
+    registeredofficeaddress = models.CharField(db_column='RegisteredOfficeAddress', max_length=1800, blank=True) # Field name made lowercase.
+    registrationnumber = models.CharField(db_column='RegistrationNumber', max_length=14, blank=True) # Field name made lowercase.
+    registrationstate = models.CharField(db_column='RegistrationState', max_length=70, blank=True) # Field name made lowercase.
+    link = models.CharField(max_length=500, blank=True)
+    class Meta:
+        db_table = 'qc_company'
+
+class QcDirector(models.Model):
+    din = models.CharField(primary_key=True, max_length=12)
+    address = models.CharField(max_length=1800, blank=True)
+    dsc_status = models.CharField(max_length=40, blank=True)
+    link = models.CharField(max_length=400, blank=True)
+    name = models.CharField(max_length=300, blank=True)
+    class Meta:
+        db_table = 'qc_director'
+
+class QTrack(models.Model):
+    mynetaid = models.IntegerField(primary_key=True)
+    class Meta:
+        db_table = 'q_track'
+
+class QQuery(models.Model):
+    id = models.AutoField(primary_key=True)
+    hashmyfield = models.CharField(max_length=32)
+    class Meta:
+        db_table = 'q_query'

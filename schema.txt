@@ -156,41 +156,44 @@ source varchar(1000) not null
 create table qc_director
 (
   din varchar(12) primary key,
-  address varchar(1500),
-  doa varchar(15),
-  dsc_status varchar(15),
-  designation varchar(25),
-  link varchar(250),
-  name varchar(200)
+  address varchar(1800),
+  dsc_status varchar(40),
+  link varchar(400),
+  name varchar(300)
 );
+
+
 
 create table qc_company
 (
-  cin varchar(20) primary key,
-  AuthorizedShareCapital varchar(25),
-  ClassofCompany varchar(25),
-  CompanyCategory varchar(200),
-  CompanyStatusforeFiling varchar(20),
-  CompanySubCategory varchar(60),
+  cin varchar(25) primary key,
+  AuthorizedShareCapital varchar(50),
+  ClassofCompany varchar(50),
+  CompanyCategory varchar(250),
+  CompanyStatusforeFiling varchar(60),
+  CompanySubCategory varchar(70),
   DateofIncorporation varchar(15),
   DateofLastAnnualGeneralMeeting varchar(15),
   DateofLatestBalanceSheet varchar(15),
-  EmailID varchar(100),
-  Listingstatus varchar(20),
+  EmailID varchar(150),
+  Listingstatus varchar(50),
   Name varchar(500),
   NumberofMembers int,
-  PaidUpCapital varchar(25),
-  RegisteredOfficeAddress varchar(1500),
-  RegistrationNumber varchar(10),
-  RegistrationState varchar(50),
-  link varchar(300)
+  PaidUpCapital varchar(50),
+  RegisteredOfficeAddress varchar(1800),
+  RegistrationNumber varchar(14),
+  RegistrationState varchar(70),
+  link varchar(500)
 );
 
 create table qc_bod
 (
-  cin varchar(20),
+  id bigint not null AUTO_INCREMENT PRIMARY KEY,
+  cin varchar(25),
   din varchar(12),
-  CONSTRAINT `qc_bod_pk` PRIMARY KEY (`cin`,`din`),
+  doa varchar(15),
+  designation varchar(300),
+  CONSTRAINT `qc_bod_uq` UNIQUE(`cin`,`din`),
   CONSTRAINT `qc_cin_fk` FOREIGN KEY (`cin`) REFERENCES qc_company(cin) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `qc_din_fk` FOREIGN KEY (`din`) REFERENCES qc_director(din) ON DELETE CASCADE ON UPDATE CASCADE
 );
