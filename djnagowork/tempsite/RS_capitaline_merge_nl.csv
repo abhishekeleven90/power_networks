@@ -1,4 +1,105 @@
 ,Candidate,Candidate ID,Party,State,dir_id,dir_name,dir_state,position
-0,"Ashwani Kumar, Shri ",14,INC,punjab,27662,Ashwani Kumar,punjab,Director
-1,"Bhattacharya, Shri P. ",27,INC,west bengal,12328,S Bhattacharya,west bengal,Director
-2,"Chandrasekhar, Shri Rajeev ",33,IND.,karnataka,15473,Chandrasekhar Sripada,karnataka,Director
+0,anu aga,3,NOM.,nominated,2298,anurag kumar,karnataka,Director(Parttime Non-officia)
+1,anu aga,3,NOM.,nominated,3219,sanjeev aga,maharashtra,Additional Director
+2,anu aga,3,NOM.,nominated,4767,anu aga,maharashtra,Director
+3,anu aga,3,NOM.,nominated,12350,arun agarwal,new delhi,Part Time Non Official Ind.Dir
+4,anu aga,3,NOM.,nominated,22197,ankineedu maganti,maharashtra,Director
+5,anu aga,3,NOM.,nominated,23040,sanjeev aga,gujarat,Director
+6,anu aga,3,NOM.,nominated,184,anshul bhargava,maharashtra,Company Secretary
+7,anu aga,3,NOM.,nominated,12466,anup bagchi,maharashtra,Executive Director
+8,anu aga,3,NOM.,nominated,23633,anju bansal,new delhi,Whole-time Director
+9,naresh agrawal,4,SP,uttar pradesh,14057,surendra agarwal,uttar pradesh,Director
+10,naresh agrawal,4,SP,uttar pradesh,5135,sandeep agarwal,uttar pradesh,Managing Director & CEO
+11,javed akhtar,6,NOM.,nominated,4144,jayesh d thakkar,gujarat,Director
+12,javed akhtar,6,NOM.,nominated,5586,javed akhtar,maharashtra,Director
+13,anand sharma,8,INC,rajasthan,4335,anita k sharma,rajasthan,Company Secretary
+14,anand sharma,8,INC,rajasthan,18363,govind sharma,rajasthan,Director
+15,ashwani kumar,14,INC,punjab,27662,ashwani kumar,punjab,Director
+16,ashwani kumar,14,INC,punjab,12498,sanjay kumar,punjab,Whole-time Director
+17,shadi lal batra,25,INC,haryana,42,hira lal bhatia,haryana,Director
+18,p. bhattacharya,27,INC,west bengal,2897,n n bhattacharyya,west bengal,Director
+19,p. bhattacharya,27,INC,west bengal,4640,sujit bhattacharya,west bengal,Director
+20,p. bhattacharya,27,INC,west bengal,12328,s bhattacharya,west bengal,Director
+21,p. bhattacharya,27,INC,west bengal,20207,s bhattacharyya,west bengal,Nominee (EXIM)
+22,vandana chavan,35,NCP,maharashtra,577,anand mahajan,maharashtra,Director
+23,jogen chowdhury,38,AITC,west bengal,281,g ray chowdhury,west bengal,Company Secretary
+24,husain dalwai,41,INC,maharashtra,20392,shanaz diwan,maharashtra,Whole-time Director
+25,anil desai,46,SS,maharashtra,34,ina dani,maharashtra,Director
+26,anil desai,46,SS,maharashtra,88,anil d ambani,maharashtra,Chairman
+27,anil desai,46,SS,maharashtra,135,anil sachdev,maharashtra,Director
+28,anil desai,46,SS,maharashtra,313,atul desai,maharashtra,Director
+29,anil desai,46,SS,maharashtra,2467,anil harish,maharashtra,Director
+30,anil desai,46,SS,maharashtra,18105,samir desai,maharashtra,Director
+31,anil desai,46,SS,maharashtra,18105,samir t desai,maharashtra,Director
+32,anil desai,46,SS,maharashtra,23244,nilesh jain,maharashtra,Company Secretary
+33,anil desai,46,SS,maharashtra,27206,anil d ambani,maharashtra,Chairman
+34,anil desai,46,SS,maharashtra,3750,anil harish,maharashtra,Chairman
+35,rajkumar dhoot,48,SS,maharashtra,12002,rajkumar ghosh,maharashtra,Director (Refineries)
+36,ashok s. ganguly,55,NOM.,nominated,365,a s ganguly,maharashtra,Director
+37,ashok s. ganguly,55,NOM.,nominated,435,ashok goyal,west bengal,Managing Director & CEO
+38,ashok s. ganguly,55,NOM.,nominated,614,ashok ganguly,karnataka,Director
+39,ashok s. ganguly,55,NOM.,nominated,664,ashok ganguly,maharashtra,Director
+40,ashok s. ganguly,55,NOM.,nominated,815,ashok sekhar ganguly,andhra pradesh,Director
+41,kunal kumar ghosh,57,AITC,west bengal,20946,kunal kanti ghosh,west bengal,Director
+42,kunal kumar ghosh,57,AITC,west bengal,12374,kalyan kumar ghosh,west bengal,Director (Finance)
+43,naresh gujral,64,SAD,punjab,231,naresh dayal,punjab,Director
+44,vivek gupta,66,AITC,west bengal,2846,i sengupta,west bengal,Director
+45,b. jayashree,81,NOM.,nominated,19611,jayasree k,kerala,Company Secretary
+46,prabhakar kore,99,BJP,karnataka,29776,prabhakara kore,karnataka,Director
+47,r. lakshmanan,103,AIADMK,tamil nadu,539,r ramakrishnan,tamil nadu,Director
+48,r. lakshmanan,103,AIADMK,tamil nadu,8029,h lakshmanan,tamil nadu,Director
+49,r. lakshmanan,103,AIADMK,tamil nadu,8029,r ramakrishnan,tamil nadu,Director
+50,r. lakshmanan,103,AIADMK,tamil nadu,103,m lakshminarayan,tamil nadu,Director
+51,r. lakshmanan,103,AIADMK,tamil nadu,267,h lakshmanan,tamil nadu,Director
+52,r. lakshmanan,103,AIADMK,tamil nadu,24429,r ramakrishnan,tamil nadu,Director
+53,r. lakshmanan,103,AIADMK,tamil nadu,25134,h lakshmanan,tamil nadu,Director
+54,r. lakshmanan,103,AIADMK,tamil nadu,28069,m lakshminarayan,tamil nadu,Chairman
+55,v. maitreyan,107,AIADMK,tamil nadu,848,v ramani,tamil nadu,Whole Time Director & CFO
+56,vijay mallya,108,IND.,karnataka,368,vijay mallya,karnataka,Chairman
+57,vijay mallya,108,IND.,karnataka,8036,vijay mallya,karnataka,Chairman
+58,vijay mallya,108,IND.,karnataka,23220,vijay mallya,karnataka,Chairman
+59,vijay mallya,108,IND.,karnataka,23220,vijay mallya,karnataka,Chairman
+60,vijay mallya,108,IND.,karnataka,27271,vijay mallya,karnataka,Chairman & Managing Director
+61,madhusudan mistry,116,INC,gujarat,4169,madhusudan somani,gujarat,Director
+62,s. muthukaruppan,122,AIADMK,tamil nadu,771,s s muthuvelappan,tamil nadu,Director
+63,s. muthukaruppan,122,AIADMK,tamil nadu,848,r m muthukaruppan,tamil nadu,Managing Director
+64,c.p. narayanan,128,CPI(M),kerala,23,s narayan,kerala,Director
+65,avinash pande,136,INC,maharashtra,1167,avinash h malpani,maharashtra,Director
+66,avinash pande,136,INC,maharashtra,26856,awinash m arondekar,maharashtra,Director
+67,avinash pande,136,INC,maharashtra,446,avinash gandhi,maharashtra,Chairman
+68,avinash pande,136,INC,maharashtra,12832,avinash malpani,maharashtra,Director
+69,dilipbhai pandya,138,BJP,gujarat,12121,dilipbhai raval,gujarat,Director
+70,k. parasaran,139,NOM.,nominated,7167,m g parameswaran,maharashtra,Director
+71,ahmed patel,142,INC,gujarat,2378,mona patel,gujarat,Company Secretary
+72,ahmed patel,142,INC,gujarat,2100,mukesh patel,gujarat,Director
+73,ahmed patel,142,INC,gujarat,3782,mahendra v patel,gujarat,Director
+74,ahmed patel,142,INC,gujarat,22219,ramesh m patel,gujarat,Executive Director
+75,praful patel,143,NCP,maharashtra,1320,pravin patel,maharashtra,Chairman
+76,rajani patil,145,INC,maharashtra,34,tarjani vakil,maharashtra,Director
+77,rajani patil,145,INC,maharashtra,22071,tarjani vakil,maharashtra,Director
+78,sharad pawar,146,NCP,maharashtra,4177,sharad upasani,maharashtra,Chairman
+79,sharad pawar,146,NCP,maharashtra,16277,sharad p chauhan,maharashtra,Managing Director
+80,suresh prabhu,148,BJP,haryana,1318,suresh mathur,haryana,Chairman
+81,rajaram,155,BSP,uttar pradesh,1846,rajaram jaipuria,uttar pradesh,Chairman & Managing Director
+82,sanjay raut,168,SS,maharashtra,55,sanjay asher,maharashtra,Director
+83,sanjay raut,168,SS,maharashtra,657,sanjay gupta,maharashtra,Company Secretary
+84,sanjay raut,168,SS,maharashtra,1971,sanjay kukreja,maharashtra,Director
+85,sanjay raut,168,SS,maharashtra,303,sanjay asher,maharashtra,Alternate Director
+86,sanjay raut,168,SS,maharashtra,12360,sanjay buch,maharashtra,Director
+87,sanjay raut,168,SS,maharashtra,19638,sanjay asher,maharashtra,Independent Director
+88,sanjay raut,168,SS,maharashtra,24882,sanjay gupta,maharashtra,Company Secretary
+89,sanjay raut,168,SS,maharashtra,25303,sanjay dube,maharashtra,Director
+90,sanjay raut,168,SS,maharashtra,28574,sanjay asher,maharashtra,Director
+91,t. subbarami reddy,172,INC,andhra pradesh,16500,g siva kumar reddy,andhra pradesh,Director
+92,mukul roy,174,AITC,west bengal,4640,mukul somany,west bengal,Vice Chairman & M.D.
+93,ajay sancheti,184,BJP,maharashtra,19638,ajay mehta,maharashtra,Independent Director
+94,satish sharma,194,INC,uttar pradesh,17136,ashok sharma,uttar pradesh,Director
+95,rajeev shukla,196,INC,maharashtra,337,rajeev bakshi,maharashtra,Director
+96,rajeev shukla,196,INC,maharashtra,12585,rajeev bakshi,maharashtra,Director
+97,rajeev shukla,196,INC,maharashtra,27802,rajeev kakar,maharashtra,Director
+98,manmohan singh,204,INC,assam,2324,maninder singh,assam,Director
+99,veer singh,206,BSP,uttar pradesh,15293,r k singh,uttar pradesh,Whole-time Director
+100,veer singh,206,BSP,uttar pradesh,15293,r k singh,uttar pradesh,Whole-time Director
+101,s. thangavelu,223,DMK,tamil nadu,1016,k dhanavel,tamil nadu,Director
+102,s. thangavelu,223,DMK,tamil nadu,848,k dhanavel,tamil nadu,Director
+103,d.p. tripathi,228,NCP,maharashtra,1140,p r tripathi,maharashtra,Director
