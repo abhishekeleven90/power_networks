@@ -15,6 +15,11 @@ python manage.py shell_plus --notebook
 bigautofield custom
 
 
+##Scrapy
+1. sudo su -
+2. pip install scrapy
+
+
 ##FuzzyWuzzy
 git clone git://github.com/seatgeek/fuzzywuzzy.git fuzzywuzzy
 cd fuzzywuzzy
