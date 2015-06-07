@@ -43,11 +43,11 @@ def custom_merge(df1,df2,df1_field,df2_field,thres = 0.6):
                 column_list = []
                 for c in df1.columns:
                     s = c+'_df1' #done so that both the dataframes have unique column names
-                    dictionary[c].append(df1[c][i1])
+                    dictionary[s].append(df1[c][i1])
                     column_list.append(s)
                 for c in df2.columns:
                     s = c+'_df2'#done so that both the dataframes have unique column names
-                    dictionary[c].append(df2[c][i2])
+                    dictionary[s].append(df2[c][i2])
                     column_list.append(s)
                     
                 df_new = pd.DataFrame(dictionary, columns = column_list)
@@ -58,6 +58,7 @@ def custom_merge(df1,df2,df1_field,df2_field,thres = 0.6):
         return df
     df  = pd.concat(df_list,ignore_index=True)
     return df
+
 
 def opt_custom_merge(df1,df2,df1_field,df2_field,thres = 0.6):
 
