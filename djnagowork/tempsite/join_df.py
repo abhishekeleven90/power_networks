@@ -38,7 +38,9 @@ def custom_merge(df1,df2,df1_field,df2_field,thres = 0.6):
 
             if can_join(key1,key2,thres):
 
+                print "Got match {} -- {}".format(key1,key2)
                 dictionary = defaultdict(list)
+                column_list = []
                 for c in df1.columns:
                     s = c+'_df1' #done so that both the dataframes have unique column names
                     dictionary[c].append(df1[c][i1])
@@ -48,7 +50,7 @@ def custom_merge(df1,df2,df1_field,df2_field,thres = 0.6):
                     dictionary[c].append(df2[c][i2])
                     column_list.append(s)
                     
-                df_new = pd.DataFrame(dictionary, columns = df_columns)
+                df_new = pd.DataFrame(dictionary, columns = column_list)
                 df_list.append(df_new)
 
     
@@ -90,6 +92,7 @@ def opt_custom_merge(df1,df2,df1_field,df2_field,thres = 0.6):
 
         if can_join(key1,key2,thres):
 
+            print "Got match {} -- {}".format(key1,key2)
             dictionary = defaultdict(list)
             column_list = []
             for c in df1.columns:
@@ -104,10 +107,10 @@ def opt_custom_merge(df1,df2,df1_field,df2_field,thres = 0.6):
             df_new = pd.DataFrame(dictionary, columns = column_list)
             df_list.append(df_new)
 
-            i1 += 1
-            i2 += 1
-        else:
+        if key1 <= key2:
             i1 +=1
+        else:
+            i2 +=1
 
     
     if not df_list:
