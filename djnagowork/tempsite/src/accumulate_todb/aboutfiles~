@@ -1,0 +1,7 @@
+AllPartiesTODB.ipynb : 
+Constituencies_Final_Actual.ipynb
+IndianStates_AfterChange_Latest.ipynb
+NationalPartiesToDB.ipynb
+StatePartiesToDB.ipynb
+unrecognized_parties_correction.ipynb
+UnrecognizedToDB.ipynb

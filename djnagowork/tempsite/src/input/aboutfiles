@@ -1,0 +1,9 @@
+2014-electoral-rolls.csv : resolving consitutencies
+Alphabeticallist.csv : RS members list wd states
+IndianStates2.csv : states names and union territories
+ls2014winners.csv: adr direct data from manoj
+nationalparties.csv: as is
+RS_members_relatives.csv: RS members list wd relatives
+stateparties.csv: as is
+unrecognized_corrected.csv: all 1737 unrecognized parties
+unrecognized_from_tabula.csv: unclean data from tabula and pdf

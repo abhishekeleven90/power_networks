@@ -1,0 +1,7 @@
+AllPartiesTODB.ipynb : read other tables and paste to master table with alias
+Constituencies_Final_Actual.ipynb : to db
+IndianStates_AfterChange_Latest.ipynb: to db
+NationalPartiesToDB.ipynb: to db
+StatePartiesToDB.ipynb: to db
+unrecognized_parties_correction.ipynb: correct data from tabula
+UnrecognizedToDB.ipynb: to db

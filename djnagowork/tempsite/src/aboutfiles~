@@ -1,0 +1,13 @@
+*CORE django*
+first: models
+tempsite: django project
+
+*project folders*
+accumulate_todb : accumulator, writing stuff to db 
+cleaner: preprocess, like names
+input: all input csv files
+outpt: all output csv files
+unsure: all that seems to not matter
+utils: placeholder for libs and apis
+resolver: merge and entity resolution
+scraper: jobs for scraping from various sites

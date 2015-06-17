@@ -1,0 +1,10 @@
+ls2014winners_augmented1.csv : wd dependenet info
+LS04_cpt.csv: merge wd capitalline
+LS09_cpt.csv: merge wd capitalline
+LS_capitaline_merge_nl.csv: 
+myneta_constituencies_resolved.csv: 
+myneta_qc_merge.csv: first merge, small players, quick company
+QuickCompanyScrape_AddToParag1.csv: missing data from parag's top 1000, not added still
+RS_capitaline_merge.csv:merge with name only
+RS_capitaline_merge_nl.csv: merge with name and location
+RS_spouse_cpt.csv: spouse merge with capital line
