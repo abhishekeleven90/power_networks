@@ -1,0 +1,2 @@
+tempsite: all the dirty django work is here, all the ipython files, somwhow all the non-django code is till also here.
+mysite: this was the site Amartya and me worked while reading the tutorial, did not delete it as did not wanted to reinvent the wheel: though we will have to move to django 1.8, this is django 1.6 and support is no longer there.
