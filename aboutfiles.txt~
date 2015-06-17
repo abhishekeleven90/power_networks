@@ -1,9 +1,0 @@
-1. schema_before_parag.txt : tables that we tried to make before the parag attempt(ER joins), quick company data also there.
-2. powernetworks.sql : this is the sql for powernetworks, seems to be before quick company crawling.
-3. categories.xml : categories of relationship from littlesis.
-4. IndianStates2.csv : indian states with either s or u code.
-5. littlesis.sql : contians the entire data model of littlesis without any dummy data.
-6. localsettings.php : unsure why here, forgotten now. but seems to be the attempt to launch littlesis locally.
-7. readme.md : README, meh!
-8. nat_parties :  national parties, why the hell is this still here! god only knows! 
-9. types.xml: types of entitites as in mysql.
