@@ -1,0 +1,543 @@
+Candidate,Candidate ID,partyid,stateid,StateType,constid
+Bishnu Pada Ray,585,9,1,U,1
+Gokaraju Ganga Raju,9455,9,2,S,2
+Dr. Kambhampati Hari Babu,9055,9,2,S,3
+Pandula Ravindra Babu,8160,34,2,S,4
+Muttamsetti Srinivasa Rao,8245,34,2,S,5
+Jutur Chinna Reddy Divakar Reddy,8326,34,2,S,6
+Malyadri Sriram,8482,34,2,S,7
+Naramalli Sivaprasad,8170,34,2,S,8
+Venkateswara Rao Maganti,8178,34,2,S,9
+Jayadev Galla,8183,34,2,S,10
+Kristappa Nimmala,8911,34,2,S,11
+Thota Venkata Narasimham,8194,34,2,S,12
+Konakalla Narayana Rao,8339,34,2,S,13
+Rayapati Sambasiva Rao,8213,34,2,S,14
+Murali Mohan Maganti,8985,34,2,S,15
+Rammohannaidu Kinjarapu,8230,34,2,S,16
+Srinivas Kesineni,8239,34,2,S,17
+Ashok Gajapathi Raju Pusapati,9061,34,2,S,18
+Kothapalli Geetha,8865,36,2,S,19
+Avinash Reddy Yeduguri Sandinti,8191,36,2,S,20
+Butta Renuka,8202,36,2,S,21
+S.P.Y Reddy,8211,36,2,S,22
+Mekapati Rajamohan Reddy,8343,36,2,S,23
+Yarram Venkata Subbareddy,8505,36,2,S,24
+P.V.Midhun Reddy,8510,36,2,S,25
+Varaprasad Rao Velagapalli,8233,36,2,S,26
+Kiren Rijiju,246,9,3,S,27
+Ninong Ering,406,12,3,S,28
+Rameshwar Teli,81,9,4,S,32
+Smt. Bijoya Chakraborty,82,9,4,S,33
+Kamakhya Prasad Tasa,85,9,4,S,34
+Sarbananda Sonowal,517,9,4,S,35
+Ramen Deka,83,9,4,S,36
+Rajen Gohain,84,9,4,S,37
+Ram Prasad Sarmah,80,9,4,S,38
+Biren Singh Engti,2271,12,4,S,39
+Gourav Gogoi,115,12,4,S,40
+Sushmita Dev,2255,12,4,S,41
+Siraj Uddin Ajmal,4857,4,4,S,29
+Badruddin Ajmal,4088,4,4,S,30
+Radheshyam Biswas,2240,4,4,S,31
+Naba Kumar Sarania,4096,13,4,S,42
+Raj Kumar Singh,2641,9,5,S,43
+Sushil Kumar Singh,371,9,5,S,44
+Bhola Singh,6156,9,5,S,45
+Ashwini Kumar Choubey,2656,9,5,S,46
+Kirti Azad,6166,9,5,S,47
+Hari Manjhi,155,9,5,S,48
+Janak Ram,9138,9,5,S,49
+Birendra Kumar Chaudhary,6180,9,5,S,50
+Hukum Deo Narayan Yadav,6237,9,5,S,51
+Janardan Singh Sigriwal,87,9,5,S,52
+Ajay Nishad,8130,9,5,S,53
+Giriraj Singh,149,9,5,S,54
+Dr. Sanjay Jayaswal,114,9,5,S,55
+Ram Kripal Yadav,2750,9,5,S,56
+Shatrughan Sinha,88,9,5,S,57
+Radha Mohan Singh,9156,9,5,S,58
+Rajiv Pratap Rudy,8143,9,5,S,59
+Chhedi Paswan,145,9,5,S,60
+Rama Devi,8144,9,5,S,61
+Om Prakash Yadav,9167,9,5,S,62
+Nityanand Rai,8154,9,5,S,63
+Satish Dubey,113,9,5,S,64
+Mohammad Asrarul Haque,4488,12,5,S,65
+Ranjeet Ranjan,4499,12,5,S,66
+Taslim Uddin,4456,27,5,S,79
+Jaiprakash Narayan Yadav,4467,27,5,S,80
+Shailesh Kumar Urph Bulo Mandal,4470,27,5,S,81
+Rajesh Ranjan Urf Pappu Yadav,6198,27,5,S,82
+Ram Vilas Paswan,8120,21,5,S,69
+Chirag Kumar Paswan,158,21,5,S,70
+Choudhary Mahboob Ali Kaiser,6773,21,5,S,71
+Veena Devi,2695,21,5,S,72
+Ram Chandra Paswan,6248,21,5,S,73
+Rama Kishore Singh,9179,21,5,S,74
+Dr. Arun Kumar,2671,26,5,S,76
+Upendra Kushwaha,554,26,5,S,77
+Ram Kumar Sharma,8558,26,5,S,78
+Shah Tariq Anwar,4109,22,5,S,75
+Kaushlendra Kumar,2725,17,5,S,67
+Santosh Kumar,3975,17,5,S,68
+Smt. Kirron Kher,72,9,6,S,83
+Dinesh Kashyap,111,9,7,U,84
+Lakhanlal Sau S/O Kalyan Lal Sahu,106,9,7,U,85
+Smt. Kamla Patle,104,9,7,U,86
+Vikram Usendi,112,9,7,U,87
+Dr. Banshilal Mahato,105,9,7,U,88
+Chandu Lal Sahu (Chandu Bhaiya) S/O Late Puneen Ram,110,9,7,U,89
+Vishnudev Sai,103,9,7,U,90
+Ramesh Bais,109,9,7,U,91
+Abhishek Singh,107,9,7,U,92
+Kamalbhan Singh,102,9,7,U,93
+Tamradwaj Sahu,3985,12,7,U,94
+Natubhai G. Patel,7905,9,8,U,95
+Patel Lalubhai Babubhai,6084,9,9,U,96
+Shripad Yesso Naik,1979,9,10,S,97
+Adv. Narendra Keshav Sawaikar,1989,9,10,S,98
+Paresh Dahyalal Rawal,5283,9,11,S,99
+Dr. Solanki Kiritbhai Premjibhai,4562,9,11,S,100
+Kachhadiya Naranbhai Bhikhabhai,5294,9,11,S,101
+Patel Dilipbhai Manibhai,5296,9,11,S,102
+Chaudhry Haribhai Parthibhai,4570,9,11,S,103
+Parbhubhai Nagarbhai Vasava,7303,9,11,S,104
+Mansukhbhai Dhanjibhai Vasava,4581,9,11,S,105
+Shyal Bhartiben Dhirubhai,5309,9,11,S,106
+Rathwa Ramsingbhai Patalbhai,4588,9,11,S,107
+Bhabhor Jasvantsinh Sumanbhai,5311,9,11,S,108
+Lal Krishna Advani,4596,9,11,S,109
+Maadam Poonamben Hematbhai,5336,9,11,S,110
+Chudasama Rajeshbhai Naranbhai,4605,9,11,S,111
+Chavda Vinod Lakhmashi,4608,9,11,S,112
+Chauhan Devusinh Jesingbhai,4615,9,11,S,113
+Patel Jayshreeben Kanubhai,5354,9,11,S,114
+Patil Chandrakant Raghunath,5358,9,11,S,115
+Chauhan Prabhatsinh Pratapsinh,5362,9,11,S,116
+Vaghela Liladharbhai Khodaji,6500,9,11,S,117
+Radadiya Vithalbhai Hansrajbhai,6518,9,11,S,118
+Mohanbhai Kalyanjibhai Kundariya,6531,9,11,S,119
+Rathod Dipsinh Shankarsinh,6552,9,11,S,120
+Jardosh Darshnaben Vikrambhai,5315,9,11,S,121
+Fatepara Devajibhai Govindbhai,6575,9,11,S,122
+Bhatt Ranjanaben Dhananjay,9858,9,11,S,123
+Dr. K.C.Patel,6597,9,11,S,124
+Rattan Lal Kataria,89,9,12,S,125
+Dharambir,865,9,12,S,126
+Krishan Pal,1047,9,12,S,127
+Inderjit Singh,1046,9,12,S,128
+Ashwini Kumar,1052,9,12,S,129
+Rajkumar Saini,90,9,12,S,130
+Ramesh Kaushik,91,9,12,S,131
+Deepender Singh,1268,12,12,S,132
+Dushyant Chautala,201,14,12,S,133
+Charanjeet Singh,1056,14,12,S,134
+Anurag Singh Thakur,7997,9,13,S,135
+Shanta Kumar,8469,9,13,S,136
+Ram Swaroop Sharma,8353,9,13,S,137
+Virender Kashyap,8307,9,13,S,138
+Jugal Kishore,881,9,14,S,139
+Thupstan Chhewang,8304,9,14,S,140
+Dr. Jitendra Singh,2778,9,14,S,141
+Mehbooba Mufti,4146,18,14,S,142
+Muzaffar Hussain Baig,8467,18,14,S,143
+Tariq Hameed Karra,6815,18,14,S,144
+Sunil Kumar Singh,1230,9,15,S,145
+Pashupati Nath Singh,4701,9,15,S,146
+Ravindra Kumar Pandey,2814,9,15,S,147
+Nishikant Dubey,4164,9,15,S,148
+Jayant Sinha,2835,9,15,S,149
+Karia Munda,2863,9,15,S,150
+Ravindra Kumar Ray,47,9,15,S,151
+Sudarshan Bhagat,481,9,15,S,152
+Vishnu Dayal Ram,488,9,15,S,153
+Ramtahal Choudhary,2875,9,15,S,154
+Laxman Giluwa,2887,9,15,S,155
+Shibu Soren,4160,19,15,S,156
+Vijay Kumar Hansdak,4170,19,15,S,157
+P.C. Gaddigoudar,1218,9,16,S,158
+P.C. Mohan,187,9,16,S,159
+D.V. Sadananda Gowda,1224,9,16,S,160
+Ananth Kumar,189,9,16,S,161
+Suresh Angadi,1181,9,16,S,162
+B Sreeramulu,2162,9,16,S,163
+Bhagwanth,2141,9,16,S,164
+Ramesh Jigajinagi,840,9,16,S,165
+Nalin Kumar Katil,1221,9,16,S,166
+G.M. Siddeshwara,1220,9,16,S,167
+Pralhad Joshi,1075,9,16,S,168
+Udasi Shivakumar Channabasappa,1070,9,16,S,169
+Sanganna A. Karadi,1186,9,16,S,170
+Prathap Simha,1216,9,16,S,171
+B.S. Yeddyurappa,399,9,16,S,172
+Shobha Karandlaje,182,9,16,S,173
+Anantkumar Hegde,398,9,16,S,174
+D.K.Suresh,1090,12,16,S,175
+R. Dhruvanarayana,863,12,16,S,176
+M Veerappa Moily,402,12,16,S,177
+Prakash Hukkeri,1815,12,16,S,178
+B.N.Chandrappa,1085,12,16,S,179
+Mallikarjun Kharge,358,12,16,S,180
+K H Muniyappa,126,12,16,S,181
+B.V.Nayak,2120,12,16,S,182
+S.P.Muddahanumegowda,605,12,16,S,183
+H.D. Devegowda,2613,16,16,S,184
+C.S.Puttaraju,1088,16,16,S,185
+Bodhsingh Bhagat,761,9,19,S,207
+Jyoti Dhurve,4752,9,19,S,208
+Bhagirath Prasad,2898,9,19,S,209
+Alok Sanjar,2907,9,19,S,210
+Prahalad Singh Patel,2921,9,19,S,211
+Manohar Untwal,4178,9,19,S,212
+Savitri Thakur,4183,9,19,S,213
+Narendra Singh Tomar,2957,9,19,S,214
+Uday Pratap Singh,134,9,19,S,215
+Sumitra Mahajan,4765,9,19,S,216
+Rakesh Singh Urf Ghanshyam Singh,750,9,19,S,217
+Nagendra Singh,2962,9,19,S,218
+Nandkumar Singh Chouhan,4194,9,19,S,219
+Subhash Patel,4200,9,19,S,220
+Faggan Singh Kulaste,129,9,19,S,221
+Sudhir Gupta,4203,9,19,S,222
+Anoop Mishra,2983,9,19,S,223
+Rodmal Nagar,2993,9,19,S,224
+Dileep Singh Bhuriya,4805,9,19,S,225
+Janardan Mishra,738,9,19,S,226
+Laxmi Narayan Yadav,3001,9,19,S,227
+Ganesh Singh,732,9,19,S,228
+Dalpat Singh Paraste,745,9,19,S,229
+Riti Pathak,741,9,19,S,230
+Dr. Virendra Kumar,3011,9,19,S,231
+Chintamani Malviya,4209,9,19,S,232
+Sushma Swaraj,4818,9,19,S,233
+Kamal Nath,766,12,19,S,234
+Jyotiraditya M. Scindia,2933,12,19,S,235
+Gandhi Dilipkumar Mansukhlal,3492,9,20,S,236
+Dhotre Sanjay Shyamrao,543,9,20,S,237
+Munde Pritam,9896,9,20,S,238
+Nanabhau Falgunrao Patole,917,9,20,S,239
+Kapil Moreshwar Patil,5185,9,20,S,240
+Ahir Hansraj Gangaram,926,9,20,S,241
+Bhamare Subhash Ramrao,5203,9,20,S,242
+Chavan Harishchandra Deoram,5822,9,20,S,243
+Ashok Mahadeorao Nete,689,9,20,S,244
+Patil Ashok Tapiram,5833,9,20,S,245
+Danve Raosaheb Dadarao,5855,9,20,S,246
+Gaikwad Sunil Baliram,3548,9,20,S,247
+Gopal Chinayya Shetty,5896,9,20,S,248
+Poonam Mahajan Alias Poonam Vajendla Rao,5902,9,20,S,249
+Kirit Somaiya,7220,9,20,S,250
+Gadkari Nitin Jairam,1226,9,20,S,251
+Dr.Gavit Heena Vaijaykumar,7249,9,20,S,252
+Wanaga Chintaman Navasha,5977,9,20,S,253
+Anil Shirole,3373,9,20,S,254
+Khadase Raksha Nikhil,5594,9,20,S,255
+Sanjaykaka Patil,3655,9,20,S,256
+Sharad Bansode,3692,9,20,S,257
+Ramdas Chandrabhanji Tadas,944,9,20,S,258
+Rajeev Shankarrao Satav,3511,12,20,S,259
+Shri Chavan Ashokrao Shankarrao,3590,12,20,S,260
+Supriya Sule,3386,22,20,S,261
+Dhananjay Bhimrao Mahadik,3532,22,20,S,262
+Mohite Patil Vijaysinh Shankarrao,3565,22,20,S,263
+Shrimant Chh. Udayanraje Pratapsinha Bhonsale,3676,22,20,S,264
+Adsul Anandrao Vithoba,315,31,20,S,265
+Chandrakant Bhaurao Khaire,5156,31,20,S,266
+Jadhav Prataprao Ganpatrao,777,31,20,S,267
+Dr.Shrikant Eknath Shinde,5869,31,20,S,268
+Barne Shrirang Chandu,3356,31,20,S,269
+Gajanan Chandrakant Kirtikar,5908,31,20,S,270
+Sawant Arvind Ganpat,5913,31,20,S,271
+Shewale Rahul Ramesh,5950,31,20,S,272
+Godse Hement Tukaram,5961,31,20,S,273
+Gaikwad Ravindra Vishwanath,3598,31,20,S,274
+Jadhav Sanjay (Bandu) Haribhau,3621,31,20,S,275
+Geete Anant Gangaram,5997,31,20,S,276
+Krupal Balaji Tumane,942,31,20,S,277
+Vinayak Bhaurao Raut,3642,31,20,S,278
+Lokhande Sadashiv Kisan,3405,31,20,S,279
+Adhalrao Shivaji Dattatrey,3391,31,20,S,280
+Vichare Rajan Baburao,5662,31,20,S,281
+Gawali Bhavana Pundlikrao,1511,31,20,S,282
+Raju Shetty,3501,33,20,S,283
+Dr. Harsh Vardhan,65,9,25,U,290
+Mahesh Giri,67,9,25,U,291
+Smt. Meenakshi Lekhi,68,9,25,U,292
+Manoj Tiwari,66,9,25,U,293
+Udit Raj,69,9,25,U,294
+Ramesh Bidhuri,71,9,25,U,295
+Parvesh Sahib Singh,70,9,25,U,296
+Jual Oram,804,9,26,S,317
+Ladu Kishore Swain,823,8,26,S,297
+Rabindra Kumar Jena,3239,8,26,S,298
+Prabhas Kumar Singh,789,8,26,S,299
+Sidhant Mohapatra,118,8,26,S,300
+Arjun Charan Sethi,3246,8,26,S,301
+Prasanna Kumar Patasani-,3710,8,26,S,302
+Kalikesh Narayan Singh Deo,807,8,26,S,303
+Bhartruhari Mahatab,3276,8,26,S,304
+Tathagata Satpathy,3263,8,26,S,305
+Kulamani Samal,3712,8,26,S,306
+Rita Tarai,3255,8,26,S,307
+Arka Keshari Deo,815,8,26,S,308
+Pratyusha Rajeshwari Singh,9888,8,26,S,309
+Sri Baijayant Panda,3287,8,26,S,310
+Sakuntala Laguri,3220,8,26,S,311
+Jhina Hikaka,1171,8,26,S,312
+Rama Chandra Hansdah,3228,8,26,S,313
+Balabhadra Majhi,816,8,26,S,314
+Pinaki Mishra,3715,8,26,S,315
+Nagendra Kumar Pradhan,796,8,26,S,316
+Vinod Khanna,7656,9,28,S,323
+Vijay Sampla,101,9,28,S,324
+Captain Amarinder Singh,6088,12,28,S,325
+Santokh Singh Chaudhary,7699,12,28,S,326
+Ravneet Singh Bittu,7751,12,28,S,327
+Prem Singh Chandumajra,6110,29,28,S,328
+Harsimrat Kaur Badal,7800,29,28,S,329
+Sher Singh Ghubaya,6148,29,28,S,330
+Ranjit Singh Brahmpura,7682,29,28,S,331
+Prof. Sadhu Singh,6133,1,28,S,319
+Harinder Singh Khalsa,6141,1,28,S,320
+Dr.Dharam Vira Gandhi,7853,1,28,S,321
+Bhagwant Mann,7830,1,28,S,322
+Sanwar Lal Jat,3412,9,29,S,332
+Mahant Chand Nath Yogi,5070,9,29,S,333
+Manshankar Ninama,2442,9,29,S,334
+Col. Sona Ram,2472,9,29,S,335
+Bahadur Singh,4225,9,29,S,336
+Subhash Chandra Baheria,2415,9,29,S,337
+Arjun Ram Meghwal,2304,9,29,S,338
+Chandra Prakash,2436,9,29,S,339
+Rahul Kaswan,2312,9,29,S,340
+Harish Chandra,4237,9,29,S,341
+Nihalchand,2281,9,29,S,342
+Ramcharan Bohara,2371,9,29,S,343
+Rajyavardhan Singh Rathore,2360,9,29,S,344
+Devji Patel,3424,9,29,S,345
+Dushyant,2394,9,29,S,346
+Santosh Ahlawat,2332,9,29,S,347
+Gajendrasingh Shekhawat,3438,9,29,S,348
+Manoj Rajoria,5111,9,29,S,349
+Om Birla,2409,9,29,S,350
+C R Choudhary,3452,9,29,S,351
+P P Choudhary,3464,9,29,S,352
+Hari Om Singh Rathore,2459,9,29,S,353
+Sumedha Nand Saraswati,2345,9,29,S,354
+Sukhbir Singh Jaunapuria,4246,9,29,S,355
+Arjunlal Meena,2449,9,29,S,356
+Radhakrishnan P.,7015,9,31,S,395
+Hari G,3929,2,31,S,358
+V.Elumalai,6283,2,31,S,359
+S.R. Vijayakumar,6846,2,31,S,360
+Venkatesh Babu .T.G,6869,2,31,S,361
+Dr. J. Jayavardhan,6917,2,31,S,362
+M.Chandrakasi,3958,2,31,S,363
+Nagarajan- P.,6965,2,31,S,364
+A.Arunmozhithevan,3955,2,31,S,365
+Udhaya Kumar .M,6322,2,31,S,366
+Selvakumara Chinnayan S,6350,2,31,S,367
+K. Kamaraj,3934,2,31,S,368
+Maragatham K,7006,2,31,S,369
+Thambidurai.M,3947,2,31,S,370
+Ashok Kumar.K,7060,2,31,S,371
+R.Gopalakrishnan,3965,2,31,S,372
+Bharathi Mohan R.K,7075,2,31,S,373
+Gopal. Dr. K,7094,2,31,S,374
+Sundaram P.R,3943,2,31,S,375
+Gopalakrishnan- C.,7106,2,31,S,376
+R.P.Marutharajaa,3953,2,31,S,377
+Mahendran.C,7137,2,31,S,378
+Anwhar Raajhaa.A,7152,2,31,S,379
+Pannerselvam.V,3938,2,31,S,380
+Pr Senthilnathan,3961,2,31,S,381
+Ramachandran- K.N. Thiru,7372,2,31,S,382
+Vasanthi.M,7567,2,31,S,383
+Parasuraman.K,7459,2,31,S,384
+Parthipan- R.,7505,2,31,S,385
+Jeyasingh Thiyagaraj Natterjee.J,7553,2,31,S,386
+P.Kumar S/O Palanivel,3952,2,31,S,387
+Prabakaran.K.R.P,7586,2,31,S,388
+V.Sathyabama,4300,2,31,S,389
+Venugopal. P. Dr.,7360,2,31,S,390
+Vanaroja R,5429,2,31,S,391
+Senguttuvan- B.,7393,2,31,S,392
+S. Rajendran,3930,2,31,S,393
+Radhakrishnan,7530,2,31,S,394
+Anbumani Ramadoss,6995,25,31,S,396
+Bandaru Dattatreya,6420,9,32,S,398
+Ch.Malla Reddy,7843,34,32,S,401
+Ponguleti Srinivasa Reddy,4529,36,32,S,413
+Nandi Yellaiah,6840,12,32,S,399
+Gutha Sukhender Reddy,4547,12,32,S,400
+Godam Nagesh,7674,35,32,S,402
+Dr. Narsaiah Boora,6377,35,32,S,403
+Konda Vishweshwar Reddy,1013,35,32,S,404
+Vinod Kumar Boinapally,6220,35,32,S,405
+Prof. Azmeera Seetaram Naik,7937,35,32,S,406
+A P Jithender Reddy,4536,35,32,S,407
+Kotha Prabhakar Reddy,9854,35,32,S,408
+Kalvakuntla Kavitha,6496,35,32,S,409
+Balka Suman,6467,35,32,S,410
+Kadiyam Srihari,6405,35,32,S,411
+B.B.Patil,6395,35,32,S,412
+Asaduddin Owaisi,4523,5,32,S,397
+Dr. Ramshankar Katheria,4916,9,34,S,418
+Devendra Singh Urf Bhole Singh,4264,9,34,S,419
+Satish Kumar,682,9,34,S,420
+Shyama Charan Gupta,8003,9,34,S,421
+Hariom,8403,9,34,S,422
+Kanwar Singh Tanwar,3037,9,34,S,423
+Dharmendra Kumar,3051,9,34,S,424
+Dr. Satyapal Singh,672,9,34,S,425
+Savitri Bai Foole,8043,9,34,S,426
+Bharat Singh,9218,9,34,S,427
+Bhairon Prasad Mishra,5484,9,34,S,428
+Kamlesh Paswan,9219,9,34,S,429
+Priyanka Singh Rawat,5494,9,34,S,430
+Santosh Gangwar,3084,9,34,S,431
+Harish Chandra,8387,9,34,S,432
+Virendra Singh,8054,9,34,S,433
+Kunwar Bhartendra,1764,9,34,S,434
+Dr. Bhola Singh,1214,9,34,S,435
+Mahendra Nath,9227,9,34,S,436
+Kalraj Mishra,9684,9,34,S,437
+Rekha,5499,9,34,S,438
+Jagdambika Pal,9234,9,34,S,439
+Rajvir Singh,4277,9,34,S,440
+Ashok Kumar Doharey,4279,9,34,S,441
+Lallu Singh,8397,9,34,S,442
+Mukesh Rajput,4310,9,34,S,443
+Sadhavi Niranjan Jyoti,5512,9,34,S,444
+Babulal,4316,9,34,S,445
+Mahesh Sharma,60,9,34,S,446
+Vijay Kumar Singh,1667,9,34,S,447
+Manoj Sinha,9241,9,34,S,448
+Harinarayan Rajbhar,9249,9,34,S,449
+Kirti Vardhan Singh,8394,9,34,S,450
+Adityanath,9254,9,34,S,451
+Kunwar Pushpendra Singh,5527,9,34,S,452
+Anshul Verma,4402,9,34,S,453
+Rajesh Kumar,5018,9,34,S,454
+Bhanu Pratap Singh,5540,9,34,S,455
+Krishna Pratap,9261,9,34,S,456
+Uma Bharti,5547,9,34,S,457
+Hukum Singh,655,9,34,S,458
+Brij Bhusan Sharan Singh,8725,9,34,S,459
+Dr.Murli Manohar Joshi,5714,9,34,S,460
+Vinod Kumar,8080,9,34,S,461
+Ajay Kumar,3107,9,34,S,462
+Rajesh Pandey Urf Guddu,9262,9,34,S,463
+Neelam,9268,9,34,S,464
+Raj Nath Singh,5743,9,34,S,465
+Ram Charitra Nishad,9278,9,34,S,466
+Pankaj,9282,9,34,S,467
+Deol Hema Malini Dharmendra,4424,9,34,S,468
+Rajendra Agarwal,667,9,34,S,469
+Anju Bala,5768,9,34,S,470
+Kaushal Kishore,5774,9,34,S,471
+Kunwar Sarvesh Kumar,3117,9,34,S,472
+Dr. Sanjeev Kumar Balyan,663,9,34,S,473
+Yashwant Singh,3139,9,34,S,474
+Keshav Prasad,8081,9,34,S,475
+Maneka Sanjay Gandhi,3154,9,34,S,476
+Dr. Nepal Singh,3180,9,34,S,477
+Chhote Lal,9290,9,34,S,478
+Raghav Lakhanpal,685,9,34,S,479
+Ravindra Kushawaha,9298,9,34,S,480
+Satya Pal Singh,3189,9,34,S,481
+Sharad Tripathi,8099,9,34,S,482
+Krishna Raj,3206,9,34,S,483
+Daddan Mishra,8310,9,34,S,484
+Rajesh Kumar Singh,5798,9,34,S,485
+Feroze Varun Gandhi,8109,9,34,S,486
+Swami Sachchidanand Hari Sakshi,5810,9,34,S,487
+Narendra Modi,9769,9,34,S,488
+Rahul Gandhi,8022,12,34,S,489
+Sonia Gandhi,5781,12,34,S,490
+Mulayam Singh Yadav,9210,32,34,S,491
+Dharmandra Yadav,3066,32,34,S,492
+Akshay Yadav,4389,32,34,S,493
+Dimple Yadav,4411,32,34,S,494
+Tej Pratap Singh Yadav,9864,32,34,S,495
+Anupriya Singh Patel,9708,7,34,S,416
+Kuwar Harivansh Singh,8743,7,34,S,417
+Ajay Tamta,8297,9,35,S,496
+(Maj Gen (Retd.) ) Bhuwan Chandra Khanduri (Avsm),74,9,35,S,497
+Ramesh Pokhariyal Nishank,8381,9,35,S,498
+Bhagat Singh Koshyari,7973,9,35,S,499
+Mala Rajya Laxmi Shah,73,9,35,S,500
+Babul Supriya Boral (Babul Supriyo),8249,9,36,S,535
+Surendrajeet Singh Ahluwalia,1797,9,36,S,536
+Adhir Ranjan Chowdhury,9306,12,36,S,539
+Abhijit Mukherjee,4831,12,36,S,540
+Abu Hasem Kahn Chowdhury,4363,12,36,S,541
+Mausam Noor,4370,12,36,S,542
+Badaruddoza Khan,4376,11,36,S,537
+Md. Salim,4380,11,36,S,538
+Dasrath Tirkey,1775,3,36,S,501
+Aparupa Poddar (Afrin Ali),5819,3,36,S,502
+Arpita Ghosh,4828,3,36,S,503
+Mamata Thakur,9907,3,36,S,504
+Sreemati Dev Varma (Moon Moon Sen),8266,3,36,S,505
+Dr. Kakali Ghoshdostidar,9318,3,36,S,506
+Sunil Kumar Mondal,6007,3,36,S,507
+Mamtaz Sanghamita,6016,3,36,S,508
+Dinesh Trivedi,9330,3,36,S,509
+Idris Ali,9340,3,36,S,510
+Satabdi Roy(Banerjee),6022,3,36,S,511
+Saumitra Khan,8270,3,36,S,512
+Anupam Hazra,6031,3,36,S,513
+Renuka Sinha,1766,3,36,S,514
+Abhishek Banerjee,9347,3,36,S,515
+Saugata Roy,9356,3,36,S,516
+Deepak Adhikari (Dev),9367,3,36,S,517
+Ratna De,6036,3,36,S,518
+Prasun Banerjee,6048,3,36,S,519
+Sugata Bose,9377,3,36,S,520
+Bijoy Chandra Barman,1785,3,36,S,521
+Pratima Mondal,9380,3,36,S,522
+Uma Saren,8253,3,36,S,523
+Sisir Kumar Adhikari,9391,3,36,S,524
+Subrata Bakshi,9398,3,36,S,525
+Sudip Bandyopadhyay,9412,3,36,S,526
+Tapas Paul,9422,3,36,S,527
+Choudhury Mohan Jatua,9426,3,36,S,528
+Sandhya Roy,8259,3,36,S,529
+Mriganka Mahato,8262,3,36,S,530
+Tapas Mandal,9436,3,36,S,531
+Kalyan Banerjee,6058,3,36,S,532
+Suvendu Adhikari,9439,3,36,S,533
+Sultan Ahmed,6066,3,36,S,534
+K C Venugopal,327,12,17,S,192
+K.V. Thomas,6,12,17,S,193
+M .K Raghavan,961,12,17,S,194
+Kodikunnil Suresh,13,12,17,S,195
+Anto Antony,964,12,17,S,196
+Dr. Shashi Tharoor,64,12,17,S,197
+Mullappally Ramachandran,260,12,17,S,198
+M I Shanavas,960,12,17,S,199
+Innocent,290,13,17,S,200
+Adv.Joice George,712,13,17,S,201
+P.K.Biju,1900,11,17,S,187
+A Sampath,340,11,17,S,188
+P K Sreemathi,255,11,17,S,189
+P Karunakaran,251,11,17,S,190
+M B Rajesh,1889,11,17,S,191
+N.K.Premachandran,14,28,17,S,205
+Jose K Mani,11,20,17,S,204
+E. Ahamed,279,15,17,S,202
+E. T. Mohammed Basheer,273,15,17,S,203
+C N Jayadevan,297,10,17,S,186
+Dr. Thokchom Meinya,3477,12,21,S,284
+Thangso Baite,534,12,21,S,285
+Vincent H. Pala,538,12,22,S,286
+Purno Agitok Sangma,650,24,22,S,287
+C. L. Ruala,1042,12,23,S,288
+Mohammed Faizal.P.P,21,22,18,U,206
+Jitendra Choudhury,2497,11,33,S,414
+Sankar Prasad Datta,45,11,33,S,415
+Neiphiu Rio,407,23,24,S,289
+R. Radhakrishnan,5578,6,27,U,318
+Prem Das Rai,2490,30,30,S,357
