@@ -6,7 +6,7 @@ Input -
 df1,df2 - dataframe to join
 flist1,flist2 - list of features to compare should be in order
 thres_list - list of thresholds
-
+Remark - should be called from another python module
 """
 
 from collections import defaultdict
@@ -72,6 +72,7 @@ def custom_merge(df1,df2,df1_field,df2_field,thres = 0.6,algo=jf.jaro_distance):
                 #    column_list.append(s)
                     
                 #df_new = pd.DataFrame(dictionary, columns = column_list)
+                row_added += 1
                 df_list.append(df_new)
 
     if not df_list:
