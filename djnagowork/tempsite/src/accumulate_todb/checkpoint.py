@@ -44,8 +44,9 @@ def getLatestRelById(graph,ids):
 #print isinstance(n1,Node)
 #n1
 def getLatestNodeById(graph,ids):
-    print '' + str(ids)
-    rc = graph.cypher.execute("match (n {nodeid:'"+ids+"',cp_end:'Infinity'}) return n")
+    query = "match (n {nodeid:'"+ids+"',cp_end:'Infinity'}) return n"
+    print query
+    rc = graph.cypher.execute(query)
     return rc[0][0]
 
 ##Use: getLastCheckPoint(graph)
@@ -140,7 +141,7 @@ def create_with_cp_helper(graph,cp,*entities):
 #Relationships done till now, nodes left
 def push_with_cp(graph,*entities):
     cp=getNextCheckPoint(graph)
-    stmt = push_with_cp_helper(graph,cp,*entities)
+    stmt = push_with_cp_helper(graph,cp,*entities) ##TODO: add a true/false variable here that will help in deciding whether a push/revert
     incrementCheckPoint(graph)
     return stmt
 
@@ -161,13 +162,20 @@ def push_with_cp_helper(graph,cp,*entities):
             props=entity.properties
             typed=entity.type
             entity.unbind()
-            old_rel = getLatestRelById(graph, props["relid"])
+            old_rel = getRelAtHead(graph, props["relid"]) ##TODO: Use the cp_check variable here!
             old_rel["cp_end"]=str(int(cp)-1)
             old_rel.push()
             st.bind(st_uri)
             en.bind(en_uri)
             new_rel=copyRelationship(graph,props,st,en,typed)
-            stmt = create_with_cp_helper(graph,cp,new_rel)
+            
+            ##adding patch for keeping the relid same 
+            new_rel["cp_start"]=cp
+            new_rel["cp_end"]="Infinity"
+            new_rel["relid"]=props["relid"]
+            stmt = graph.create(new_rel)
+            ##patch finished
+            
             entity.bind(new_rel.uri)
             s+=str(stmt)
         elif(isinstance(entity,Node)):
@@ -177,13 +185,14 @@ def push_with_cp_helper(graph,cp,*entities):
                 
             #first push the new node just behind our current node
             entity["cp_start"] = cp #not psuhed yet
+            entity["cp_end"] = "Infinity"
             prev_uri= entity.uri
             nodeid=entity["nodeid"]
             entity.unbind()
             
             
             latest = ''
-            old_node = getLatestNodeById(graph, entity["nodeid"])
+            old_node = getNodeAtHead(graph, entity["nodeid"])
             for r in old_node.match_incoming(rel_type="NEXT"):
                 latest = r
                 break
@@ -214,9 +223,9 @@ def push_with_cp_helper(graph,cp,*entities):
 #returns a Relation copy exactly of the Relation in argument
 #the returned relation is a copy of the props, dir, of the relation within same nodes needs to be pushed after this
 def copyRelationship(graph,props,st,en,typed):
-    #print 'insidecopy:'+str(st)
-    start = getLatestNodeById(graph,st["nodeid"])
-    end=getLatestNodeById(graph,en["nodeid"])
+    #print 'insidecopy:'+str(st) 
+    start = getNodeAtHead(graph,st["nodeid"]) ##TODO: check if latestone needed??
+    end=getNodeAtHead(graph,en["nodeid"])
     kind=typed
     r2=Relationship(start,kind,end)
     for x in props:
@@ -236,7 +245,6 @@ def copyNode(node):
     for x in labels:
         naya.labels.add(x)
     return naya
-
 
 ##INITIAL TESTS
 def create_with_cpTest(graph):
@@ -304,7 +312,6 @@ def push_with_cpTest3(graph):
 #push_with_cpTest(graph) #TODO: save the descrption to the metadata
 
 
-
 ##Disclaimer: Dont ever forget to pull the relations!! We fear even to test!
 ##Very basic tests to do
 def test_OneNode(graph):
@@ -342,6 +349,7 @@ def test_OneNode(graph):
     push_with_cp(graph,first)
     
     #delete this node
+    ##TODO: remove comment
     delete_with_cp(graph,first)
     
 
@@ -456,9 +464,67 @@ def test_TwoNodesOneRelation(graph):
     #delete both nodes and rels
     ##EVEN BEFORE DELETING A RELATION, you will have to pull
     ##this we can fix : TODO in delete method
-    employee.pull()
-    delete_with_cp(graph,first,second,employee)
+    
+    #employee.pull()
+    #delete_with_cp(graph,first,second,employee)
 
+
+##returns Relation which has custom id in 'ids' as we have given it
+##and at this cp
+def getRelByIdAndCheckPoint(graph,ids,cp):
+    #TODO:Add check for cp in both these methods
+    query = "match ()-[r {relid:'"+ids+"'}]-() where r.cp_start <='"+cp+"' and r.cp_end >='"+cp+"' return r"
+    #print query
+    rc = graph.cypher.execute(query)
+    return rc[0][0]
+
+##Use: id used is what we have given by ourselves
+#and at this cp
+def getNodeByIdAndCheckPoint(graph,ids,cp):
+    query = "match (n {nodeid:'"+ids+"'}) where n.cp_start <='"+cp+"' and n.cp_end >='"+cp+"' return n"
+    #print query
+    rc = graph.cypher.execute(query)
+    return rc[0][0]
+
+def getNodeAtHead(graph,ids):
+    query = "match (n {nodeid:'"+ids+"'}) return n order by n.cp_end desc limit 1"
+    rc = graph.cypher.execute(query)
+    return rc[0][0]
+
+def getRelAtHead(graph,ids):
+    query = "match ()-[r {relid:'"+ids+"'}]-() return r order by r.cp_end desc limit 1"
+    rc = graph.cypher.execute(query)
+    return rc[0][0]
+    
+def revert(graph,cp):
+    nextcp = getNextCheckPoint(graph)
+    nodequery = "match (n) where n.cp_start>'"+cp+"'  return distinct n.nodeid"
+    noderc = graph.cypher.execute(nodequery)
+    increment = False
+    for r in noderc:
+        old = getNodeByIdAndCheckPoint(graph,r['n.nodeid'],cp)
+        naya = getNodeAtHead(graph,str(r['n.nodeid'])) ##TODO: change to get headoflinkedlist for dead nodes
+        print naya
+        naya.properties.clear()
+        naya.labels.clear()
+        for x in old.properties:
+            naya[x]=old[x]
+        for x in old.labels:
+            naya.labels.add(x)
+        push_with_cp_helper(graph,nextcp,naya)
+        increment = True
+    relquery = "match ()-[r]->() where r.cp_start>'"+cp+"'  return distinct r.relid"
+    relrc = graph.cypher.execute(relquery)
+    for r in relrc:
+        old = getRelByIdAndCheckPoint(graph,r['r.relid'],cp)
+        naya = getRelAtHead(graph,str(r['r.relid'])) ##TODO: change to get headoflinkedlist for dead nodes
+        naya.properties.clear()
+        for x in old.properties:
+            naya[x]=old[x]
+        push_with_cp_helper(graph,nextcp,naya)
+        increment = True
+    if increment:
+        incrementCheckPoint(graph)
 
 def main():
     ###
@@ -471,18 +537,16 @@ def main():
     gt=getGraph('localhost','7474','neo4j','yoyo')
     gt.delete_all()
     gt.cypher.execute("create (n:version_cp:system {next:'1'}),   (p:node_id:system {next:'1'}),  (q:rel_id:system {next:'1'})")
-    #create_with_cpTest(gt)
-    #push_with_cpTest3(gt)
     test_TwoNodesOneRelation(gt)
-
-##TODO: relids are being generated again and again, should we do this? nodeids are being kepth the same
+    revert(gt,'3')
 ##TODO: graph wrapper for new methods
-##Test various scenarios
-##Make api for node,rel at a particular checkpoint
-##Make api for reverting graph to a particular state, can be done
 ##Check django-neo4j and django-reversion
 ##Check neo-kafka
 ##Check method for serailizing and de-serailizing
-#
-#gt=getGraph('localhost','7474','neo4j','yoyo')aaa=Node()
+
+##Check max what number can go in neo4j
+##For a particular cp run a match query !!?? TODO? Match on previous nodes shouldnt be there! 
+##Match always on latest nodes and relation! Never on deleted nodes
+##TODO: Also check if node deleted, some changes elsewhere, now revert back to state where node existed
+##Should give new number on reverting??
 main()
