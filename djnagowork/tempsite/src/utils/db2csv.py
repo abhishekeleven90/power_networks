@@ -8,15 +8,15 @@ import sys
 #db2csv reads in a full table from a mysql db and puts it in a csv file
 def db2csv(table, username, passwd,dbname):
 
-    print "Connecting to ... "+dbname
+    print "[db2csv]-Connecting to ... "+dbname
     conn = db.connect("localhost",username,passwd,dbname)
-    print "Connected"
+    print "[db2csv]-Connected"
 
     query = 'select * from '+table
     dirframe = frame_query(query, conn)
-    print "Dataframe formed writing to csv"
+    print "[db2csv]-Dataframe formed writing to csv"
     dirframe.to_csv('output_from_db.csv')
-    print "Completed!"
+    print "[db2csv]-Completed!"
 
     return
 

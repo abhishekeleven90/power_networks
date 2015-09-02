@@ -123,9 +123,151 @@ def resolver(df1,df2,flist1,flist2, thres_list,algo=jf.jaro_distance):
     print "[resolver] - complete!!"
     return df
 
+def deduper1(df, key_field, rest_fields):
 
-if __name__=='__main__':
+    df_len = len(df)
+    df = df.sort(columns=key_field)
+    print "[deduper]- Sorted df"
+    print df
+    df.to_csv("test_sorted_df.csv")
+    table = []
+    row_added = 0
+    row_added_dup =0
+    df_new = pd.DataFrame()
+    df1_new_dup = pd.DataFrame(columns = df.columns)
+    df2_new_dup = pd.DataFrame(columns = df.columns)
+    df1_new = pd.DataFrame(columns = df.columns)
+    df2_new = pd.DataFrame(columns = df.columns)
 
+    df_list =[]
+    df_list_dup = []
+    #Generator element to get the index
+    gen = df.iterrows()
+    #Adding the first element
+    print "Adding first element"
+    prev_index,prev_row = gen.next()
+    df1_new.loc[0] = df.ix[prev_index]
+    #df2_new.loc[0] = df.ix[prev_index]
+    #df1_new['dupno'] = row_added
+    #df2_new['dupno'] = row_added
+    row_added += 1
+    #df_new = pd.merge(df1_new,df2_new,on='dupno')
+    #df_list.append(df_new)
+    df_list.append(df1_new)
+
+    for i in range (df_len -1 ):
+        new_index, new_row = gen.next()
+        key1 = df[key_field][prev_index]
+        key2 = df[key_field][new_index]
+    
+        if (can_join(key1,key2,thres = 0.9, algo = jf.jaro_distance) ):
+            print "[deduper]- Possible match {} -- {}".format(key1,key2)
+
+
+            join = True
+            for r in rest_fields:
+                key3 = df[r][prev_index]
+                key4 = df[r][new_index]
+                print "Checking rest fields - {} -- {}".format(key3,key4)
+                if (key3 == key4): #if rest is same then dont join it is a duplicate
+                    print "[deduper] - {} matches. Possible duplicate {}--{}".format(r,key1,key2)
+                    join = False
+                    break
+
+            if join:
+            
+                print "[deduper]- joining {} -- {}".format(key1,key2)
+                df1_new_dup.loc[0] = df.ix[prev_index]
+                df2_new_dup.loc[0] = df.ix[new_index]
+                df1_new_dup['dupno'] = row_added_dup
+                df2_new_dup['dupno'] = row_added_dup
+                row_added_dup += 1
+                df_new = pd.merge(df1_new_dup,df2_new_dup,on='dupno')
+                df_list_dup.append(df_new)
+
+        else:
+            print "[deduper]-New name found- "+key2
+            print "[deduper]- Compared with- " +key1
+            df1_new.loc[row_added] = df.ix[new_index]
+            #df1_new.loc[0] = df.ix[new_index]
+            #df2_new.loc[0] = df.ix[new_index]
+            #df1_new['dupno'] = row_added
+            #df2_new['dupno'] = row_added
+            row_added += 1
+            #df_new = pd.merge(df1_new,df2_new,on='dupno')
+            #df_list.append(df_new)
+            #df_list.append(df1_new)
+        prev_index = new_index
+
+
+    print "[deduper] - Deduping done -forming  unique  DataFrame"
+    if (row_added > 0):
+        df_ret = df1_new
+        #df_ret = pd.concat(df_list,axis=0,ignore_index =True)
+    else:
+        print "[deduper]- No unique rows"
+        df_ret = pd.DataFrame()
+
+    print "[deduper]- Forming duplicates DataFrame"
+    if row_added_dup > 0:
+        df_ret_dup = pd.concat(df_list_dup,axis=0,ignore_index =True)
+    else:
+        print "[deduper]- No duplicates"
+        df_ret_dup = pd.DataFrame()
+
+    print "[deduper] - Done!!"
+    return (df_ret,df_ret_dup)
+
+def deduper(df, key_field, rest_fields):
+
+    df_len = len(df)
+    #df = df.sort(columns=key_field)
+    #print "[deduper]- Sorted df"
+    #print df
+    row_added = 0
+    df_new = pd.DataFrame()
+    df1_new = pd.DataFrame(columns = df.columns)
+    df2_new = pd.DataFrame(columns = df.columns)
+
+    df_list =[]
+
+    for i in range (df_len ):
+        for j in range(df_len):
+            key1 = df[key_field][i]
+            key2 = df[key_field][j]
+        
+            if (can_join(key1,key2,thres = 0.9, algo = jf.jaro_distance) ):
+                print "[deduper]- Possible match {} -- {}".format(key1,key2)
+                join = True
+                for r in rest_fields:
+                    key3 = df[r][i]
+                    key4 = df[r][j]
+                    print "Checking rest fields - {}--{}".format(key3,key4)
+                    if (key3 == key4): #if rest is same then dont join it is a duplicate
+                        print "[deduper] - {} matches. Possible duplicate {}--{}".format(r,key1,key2)
+                        join = False
+                    break
+
+                if join:
+                
+                    print "[deduper]- joining {} -- {}".format(key1,key2)
+                    df1_new.loc[0] = df.ix[i]
+                    df2_new.loc[0] = df.ix[j]
+                    df1_new['dupno'] = row_added
+                    df2_new['dupno'] = row_added
+                    row_added += 1
+                    df_new = pd.merge(df1_new,df2_new,on='dupno')
+                    df_list.append(df_new)
+            
+   
+    print "[deduper] - Dedupling done -forming result DataFrame"
+    if (row_added > 0):
+        df_ret = pd.concat(df_list,axis=0,ignore_index =True)
+
+    print "[deduper] - Done!!"
+    return df_ret
+
+def test_resolver():
     filename1 = sys.argv[1]
     filename2 = sys.argv[2]
     
@@ -146,5 +288,36 @@ if __name__=='__main__':
     
     print df
     print "[main] -Dumping to file"
-    df.to_csv("join_df_output.csv")
+    df.to_csv("resolver_output.csv")
     print "[main]- Complete"
+
+    return
+
+def test_deduper():
+
+    filename = sys.argv[1]
+    
+    inp_file = pr.resource_filename('src.input',filename)
+    inp_df = pd.read_csv(inp_file)
+    inp_df['name'] = inp_df.apply(lambda r: name_preprocess(r['name']),axis =1)
+    #inp_df['id'] = inp_df1.apply(lambda r: preprocess(r['state']),axis =1)
+
+    start = time()
+    #if passing tuple of df objs is difficult - dump to csv directly in deduper1 function
+    df,df_dup = deduper1(inp_df,'name',['cid'])
+    end = time()
+    print "[main]- deduping complete"
+    print "[main]-Time taken- " + str(end - start)
+    
+    print df_dup
+    print "[main] -Dumping to file"
+    df.to_csv("deduper_output.csv")
+    df_dup.to_csv("deduper_dup_output.csv")
+    print "[main]- Complete"
+
+
+if __name__=='__main__':
+
+    #test_resolver()
+    test_deduper()
+

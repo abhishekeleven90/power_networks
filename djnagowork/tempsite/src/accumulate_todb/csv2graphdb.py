@@ -34,10 +34,10 @@ def get_entities_graphdb(g,label):
 
     df_list = []
     i = 0
-    print "Scanning all entities from graph ..."
+    print "[get_entities_graphdb] -Scanning all entities from graph ..."
     for node in g.find(label = label):
 
-        print "node - "+str(i)
+        print "[get_entities_graphdb] - node - "+str(i)
         cols = node.properties.keys()
         print cols
         print node.properties
@@ -56,19 +56,19 @@ def load_entities_csv(g,filename, label,prop_list):
 
     #Note prop_list must contain respective column names from the dataset
     df = pd.read_csv(filename)
-    print "df given:-"
+    print "[load_entities_csv] - df given:-"
     print df
 
     for i,r in df.iterrows():
-        print 'scanning row -  {}'.format(i)
+        print '[load_entities_csv] - scanning row -  {}'.format(i)
         nd = Node()
         nd.labels.add(label)
         for c in prop_list:
             nd.properties[c] = r[c]
         
-        print 'creating node...'
+        print '[load_entities_csv] - creating node...'
         g.create(nd)
-        print 'node successfully created'
+        print '[load_entities_csv] - node successfully created'
 
     return
 
@@ -78,16 +78,16 @@ def load_entities_csv(g,filename, label,prop_list):
 #run the main function
 if __name__ =='__main__':
 
-    print "connecting to db..."
+    print "[main] - connecting to db..."
     g = connectdb()
     filename = sys.argv[1]
     filename = pr.resource_filename('src.input',sys.argv[1])
-    print "loading entities to db"
+    print "[main]- loading entities to db"
     load_entities_csv(g,filename,"Party",['Party','partyid'])
 
-    print "now getting df"
+    print "[main] - now getting df"
     df = get_entities_graphdb(g,"Party")
     print df
-    print "COMPLETED"
+    print "[main] - COMPLETED"
 
 

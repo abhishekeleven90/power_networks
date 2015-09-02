@@ -5,12 +5,12 @@ flist1, flist2 - fieldname lists
 filename - the csv file to read
 Returns new df with verification column
 """
+import pandas as pd
+import sys
 
-def verify(filename,flist1,flist2):
+def verify(df,flist1,flist2):
 
-    df = pd.read_csv(filename)
-
-    assert(flist1 == flist2)
+    assert(len(flist1) == len(flist2))
     resp = ''
     resp_list=[]
     for i,r in df.iterrows():
@@ -36,3 +36,15 @@ def verify(filename,flist1,flist2):
     df['verification'] = pd.Series(resp_list)
 
     return df
+
+if __name__=="__main__":
+
+    filename = sys.argv[1]
+    #inp_file = pr.resource_filename('')
+    df = pd.read_csv(filename)
+    flist1 = ['name_x','cid_x']
+    flist2 = ['name_y','cid_y']
+    df_new = verify(df,flist1,flist2)
+
+    df_new.to_csv("verified_"+filename)
+
