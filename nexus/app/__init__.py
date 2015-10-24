@@ -2,7 +2,7 @@ from flask import Flask, g
 from guest import guest
 
 app = Flask(__name__)
-app.register_blueprint(guest, url_prefix='/guest')
+app.register_blueprint(guest, url_prefix='/guest/')
 app.config.from_object('config')
 
 
