@@ -18,12 +18,14 @@ def before_request():
     ##you can keep a dict of route urls
     ##you need to get which url from some custom object flask may provide
     ##raise permission denied error
+    print 'app hi'
     g.db = dbwork.dbobject()
     g.db.connect()
     g.user = None ##Session related
 
 @app.after_request
 def after_request(response):
+    print 'app bye'
     g.db.close()
     return response
 
