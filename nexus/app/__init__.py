@@ -1,8 +1,17 @@
 from flask import Flask, g
 from guest import guest
+from admin import admin
+from user import user
+from mod import mod
 
 app = Flask(__name__)
-app.register_blueprint(guest, url_prefix='/guest/')
+
+##DON'T ADD A FORWARD SLASH AFTER GUEST WILL CREATE A PROBLEM
+app.register_blueprint(guest, url_prefix='/guest')
+app.register_blueprint(admin, url_prefix='/admin')
+app.register_blueprint(user, url_prefix='/user')
+app.register_blueprint(mod, url_prefix='/mod')
+
 app.config.from_object('config')
 
 

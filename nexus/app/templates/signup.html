@@ -1,28 +1,36 @@
 <!-- extend base layout -->
 {% extends "base.html" %}
+{% from "formhelper.html" import render_field %}
 {% block content %}
 	<div class="starter-template" >
-		<form class="form-signin">
-			
+
+		<form class="form-signin" method="POST" action={{url_for('signup')}}>
+			{{ form.hidden_tag() }}
 			<h2 class="form-signin-heading">Fill your details
 			</h2>
-			<label for="inputName" class="sr-only">Name </label>
-			<input type="text" id="inputName" class="form-control" placeholder="Name" required="" autofocus="">
-			<label for="inputEmail" class="sr-only">Email address
+			<label for="name" class="sr-only">{{form.name.label}}</label>
+			{{form.name(class="form-control",placeholder="Name",required="",autofocus="")}}
+			<!--<input type="text" id="inputNames" class="form-control" placeholder="Name" required="" autofocus="">-->
+			<label for="emailid" class="sr-only">{{form.emailid.label}}
 			</label>
-			<input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+			{{form.emailid(class="form-control",placeholder="Email Address",required="",autofocus="")}}
+			<!--<input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">-->
 
-			<label for="inputPassword" class="sr-only">Password</label>
-			<input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+			<label for="password" class="sr-only">{{form.password.label}}</label>
+			{{form.password(class="form-control",placeholder="Password",required="",autofocus="")}}
+			<!--<input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">-->
 
-			<label for="rePassword" class="sr-only">Password Again
+			<label for="repassword" class="sr-only">{{form.repassword.label}}
 			</label>
-			<input type="password" id="rePassword" class="form-control" placeholder="Password Again" required="">
+			{{form.repassword(class="form-control",placeholder="Password Again",required="",autofocus="")}}
+			<!--<input type="password" id="rePassword" class="form-control" placeholder="Password Again" required="">-->
 			<div class="checkbox">
 				<label>
-					<input type="checkbox" value="remember-me"> Remember me
+					{{form.accept_terms(value="remember-me")}} Remember me
+					<!--<input type="checkbox" value="remember-me"> Remember me-->
 				</label>
-			</div><button class="btn btn-lg btn-primary btn-block" type="submit">Register
+			</div>
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Register
 			</button>
 		</form>
 	</div>

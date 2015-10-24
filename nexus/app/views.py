@@ -41,10 +41,12 @@ def login():
 @app.route('/signup/', methods=["GET","POST"]) 
 def signup():
     form = RegisterationForm()
+    print form
     if form.validate_on_submit():
-        flash('Login details valid')
+        flash('Signup details valid')
         return redirect('home')
-    #form = form is mandatory here
+    else:
+        form_error_helper(form)
     return render_template("signup.html", signupclass="active", signincss=True, form=form) 
 
 @app.errorhandler(404)
@@ -68,3 +70,8 @@ def temp():
 
 def get_current_user_role():
     return 'admin'
+
+def form_error_helper(form):
+    for field, errors in form.errors.items():
+           for error in errors:
+               flash(u"Error in the %s field - %s" % (getattr(form, field).label.text,error))
