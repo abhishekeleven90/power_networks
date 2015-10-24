@@ -1,10 +1,14 @@
 from flask import Flask, g
+from guest import guest
 
 app = Flask(__name__)
+app.register_blueprint(guest, url_prefix='/guest')
 app.config.from_object('config')
+
 
 from peewee import *
 from dbwork import *
+
 
 # Request handlers -- these two hooks are provided by flask and we will use them
 # to create and tear down a database connection on each request.
