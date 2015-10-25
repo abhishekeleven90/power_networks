@@ -4,7 +4,7 @@ from wtforms import validators
 from wtforms.fields.html5 import EmailField
 
 class RegisterationForm(Form):
-    emailid = EmailField('emailid', validators=[validators.DataRequired(), validators.Email()])
+    emailid = EmailField('Email', validators=[validators.DataRequired(), validators.Email()])
     name = StringField('name', validators=[validators.DataRequired()])
     password = PasswordField('password', validators=[validators.Required(), 
         validators.EqualTo('repassword',message="Passwords must match")])
@@ -12,7 +12,7 @@ class RegisterationForm(Form):
     accept_terms = BooleanField('I accept everything!')
 
 class LoginForm(Form):
-    emailid = StringField('emailid', validators=[validators.DataRequired()])
-    password = PasswordField('password', validators=[validators.Required(), 
-        validators.EqualTo('confirm',message="Passwords must match")])
-    rem_me = BooleanField('Remember me')
+    emailid = EmailField('Email', validators=[validators.DataRequired(), validators.Email()])
+    password = PasswordField('Password', validators=[validators.Required()])
+    ##rem_me = BooleanField('Remember me')
+    ##TODO: some time afterwards

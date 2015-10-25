@@ -25,6 +25,15 @@ class Pet(BaseModel):
     class Meta:
         db_table = 'pet'
 
+class Users(BaseModel):
+    password = CharField(null=True)
+    role = IntegerField(null=True)
+    userid = CharField(primary_key=True)
+
+    class Meta:
+        db_table = 'users'
+
+
 ##it is just the dbobject
 def dbobject():
     return mysqldb

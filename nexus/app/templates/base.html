@@ -73,14 +73,25 @@
 						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
+						{% if session.userid %}
 						<li class="{{loginclass}}">
-							<a href="{{ url_for('login') }}">Login
-							</a>
+							<a>{{session.userid}}</a>
 						</li>
+						{% endif %}
+
+						<li class="{{loginclass}}">
+							{% if not session.userid %}
+    						<a href="{{ url_for('login') }}">Login</a>
+  							{% else %}
+    						<a href="{{ url_for('logout') }}">Logout</a>
+  							{% endif %}
+						</li>
+						{% if not session.userid %}
 						<li class="{{signupclass}}">
 							<a href="{{ url_for('signup') }}">Sign up
 							</a>
 						</li>
+						{% endif %}
 					</ul>
 					<form class="navbar-form navbar-right" role="search">
 						<div class="form-group">
