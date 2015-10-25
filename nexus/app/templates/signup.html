@@ -1,0 +1,37 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+{% from "formhelper.html" import render_field %}
+{% block content %}
+	<div class="starter-template" >
+
+		<form class="form-signin" method="POST" action={{url_for('signup')}}>
+			{{ form.hidden_tag() }}
+			<h2 class="form-signin-heading">Fill your details
+			</h2>
+			<label for="name" class="sr-only">{{form.name.label}}</label>
+			{{form.name(class="form-control",placeholder="Name",required="",autofocus="")}}
+			<!--<input type="text" id="inputNames" class="form-control" placeholder="Name" required="" autofocus="">-->
+			<label for="emailid" class="sr-only">{{form.emailid.label}}
+			</label>
+			{{form.emailid(class="form-control",placeholder="Email Address",required="",autofocus="")}}
+			<!--<input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">-->
+
+			<label for="password" class="sr-only">{{form.password.label}}</label>
+			{{form.password(class="form-control",placeholder="Password",required="",autofocus="")}}
+			<!--<input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">-->
+
+			<label for="repassword" class="sr-only">{{form.repassword.label}}
+			</label>
+			{{form.repassword(class="form-control",placeholder="Password Again",required="",autofocus="")}}
+			<!--<input type="password" id="rePassword" class="form-control" placeholder="Password Again" required="">-->
+			<div class="checkbox">
+				<label>
+					{{form.accept_terms(value="remember-me")}} Remember me
+					<!--<input type="checkbox" value="remember-me"> Remember me-->
+				</label>
+			</div>
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Register
+			</button>
+		</form>
+	</div>
+{% endblock %}
