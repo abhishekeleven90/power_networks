@@ -28,14 +28,39 @@ def connectdb():
     return secure_graph
 
 
+#get all relationships of a particular node from the graph db
+
+def get_rel_graphdb(g,node,rel_type):
+
+    df_list = []
+    i = 0
+    print "[get_rel_graphdb] -Scanning all relationship from graph ... of given node"
+    print node.properties
+
+    rels = g.match(node,rel_type)
+    for r in rels:
+
+        print "[get_rel_graphdb] - relationship no- "+str(i)
+        cols = r.end_node.properties.keys()
+        print cols
+        print r.end_node.properties
+
+        tmp_df = pd.DataFrame(columns = cols)
+        tmp_df.loc[0] = pd.Series(r.end_node.properties)
+        df_list.append(tmp_df)
+        i += 1
+
+    df = pd.concat(df_list, ignore_index = True)
+    return df
+
 #get all entities from the graph db
 
-def get_entities_graphdb(g,label):
+def get_entities_graphdb(g,label,prop = None, prop_val = None):
 
     df_list = []
     i = 0
     print "[get_entities_graphdb] -Scanning all entities from graph ..."
-    for node in g.find(label = label):
+    for node in g.find(label = label,property_key =prop, property_value = prop_val ):
 
         print "[get_entities_graphdb] - node - "+str(i)
         cols = node.properties.keys()
@@ -86,7 +111,7 @@ if __name__ =='__main__':
     load_entities_csv(g,filename,"Party",['Party','partyid'])
 
     print "[main] - now getting df"
-    df = get_entities_graphdb(g,"Party")
+    df = get_entities_graphdb(g,"Party","Party")
     print df
     print "[main] - COMPLETED"
 

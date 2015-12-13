@@ -6,9 +6,10 @@ from dbwork import *
 import smtplib
 import socks
 import hashlib
+import pandas as pd
 import peewee
-
-
+import gdb2csv as gcd
+import search_query as sq
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -105,6 +106,14 @@ def temp():
     return render_template("temp.html", homeclass="active", temptext=str(nayaperson.id)+" "
         +str(naya_kitty.id))
 
+@app.route('/search/')
+def search():
+    query = request.args.get('query')
+    df = gcd.get_gdb_entity(query)
+    df_html = df.to_html(classes="table")
+    return render_template("search.html",table_title="Search Results",df = df_html)
+
+
 
 def get_current_user_role():
     return 'admin'
@@ -113,3 +122,5 @@ def form_error_helper(form):
     for field, errors in form.errors.items():
            for error in errors:
                flash(u"Error in the %s field - %s" % (getattr(form, field).label.text,error))
+
+

@@ -1,0 +1,73 @@
+### Schema for the data models used ###
+
+/// We have the following data (not all fields value are available may be but assume some are there) ///
+
+
+1.//Entities - Person//
+Politician(mynetaid,spouse,party,constituency)
+
+Corporate(din, name,company,spouse,cin,location)
+
+IAS(iasid, name,doj, location)
+
+2.//Entities - Institutions//
+company(cin,name,value,location)
+
+party(partyid, name,location)
+
+
+3.//Relationships (already in database, usable or not )//
+donation(cin,partyid,amount)
+
+subsidiary(cin,cin_2,name,location,value)
+
+3.//Relationships (we want to find . first one already done.) //
+
+persons_corp_pol(din,name,location,mynetaid,name_2,location_2)
+
+persons_corp_ias(din,name,location,iasid,name_2,location_2)
+
+persons_pol_ias(mynetaid,name,location,iasid,name_2,location_2)
+
+4.// above relations can further combined any one to form ternary relations //
+
+persons_corp_pol_ias(din,name,location,mynetaid,name_2,location_2, iasid,name_3,location_3)
+
+5. //Quite naturally, this is too much redundancy in relationships. So lets create a table.//
+
+persons(params_list:list of parameters by which we are gonna resolve - name,location for instance,
+        id_list : list of ids he/she may have,
+        inst_id_list:list of inst ids he/she may be connected with - cin, partyid for eg.
+        )
+
+//
+id_list and inst_id list are pair mapped - i.e. - id_list[0] --- inst_id_list[0].
+I was mainly talking in an RDBMS perspective. Idea is to keep multi valued attributes.
+For neo4j, string arrays might be a way to do this. The problem is there will be numerous persons with similar name,locations.
+To edit/add we must see this post https://groups.google.com/forum/?fromgroups=#!topic/neo4j/bY5GXWYpM1k 
+Need to check more how to handle string arrays to add/edit.
+Fortunately won't need to do anything such for institutions as they would not overlap.
+//
+
+6. // Another idea is to do it totally in a graph way .We create a person node.//
+    // Relationships are nothing but edges - so need to take care of binary relations only as in above//
+    // params_list items will be the individual properties of a node( name,location for now say)//
+    // For each id item in id list we form a separate node. For every item in in inst_id_list we keep a separate node. //
+
+    //So basically each persons node has some properties (params_list). An edge to each item in iid_list and 
+    an edge to each item in inst_id_list//
+    // How do we add more data?? -
+        We keep params_list ( name,location as before) and fetch items using cypher matching the params_list items 
+        or a regular expression of it.
+
+        If no items:
+            Add the data
+        Else If Some items:
+            Run an almost exact match resolution algo with these items (again over params_list) to make the list smaller.
+            Then we have two options-
+                1. Merge the old node props with new node props.
+                2. Create another node with same properties with an edge with label "<probably same>" with the old node 
+                    AND update all the edges to ids and inst_ids.
+
+   //
+
