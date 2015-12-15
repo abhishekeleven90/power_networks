@@ -1,6 +1,16 @@
 """
 Module - csv2graphdb
 
+Contains functions to read the graphdb
+and put csv file data to graphdb.
+Basic read/write module.
+
+Uses
+-----------
+py2neo lib
+
+functions
+-------------
 function connectdb
 Returns a graph instance
 
@@ -8,8 +18,8 @@ function load_entities_csv
 filename - csv file's absolute path
 labels - label to give in nodes
 prop_list - properties to give to nodes
-
 Returns None
+
 """
 
 import pandas as pd
@@ -55,7 +65,6 @@ def get_rel_graphdb(g,node,rel_type):
     return df
 
 #get all entities from the graph db
-
 def get_entities_graphdb(g,label,prop = None, prop_val = None):
 
     df_list = []
@@ -77,8 +86,7 @@ def get_entities_graphdb(g,label,prop = None, prop_val = None):
         df = pd.concat(df_list, ignore_index = True)
     return df
 
-
-#load entities from db and create nodes in graph
+#load entities from csv and create nodes in graph
 def load_entities_csv(g,filename, label,prop_list):
 
     #Note prop_list must contain respective column names from the dataset

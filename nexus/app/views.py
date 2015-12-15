@@ -109,9 +109,15 @@ def temp():
 @app.route('/search/')
 def search():
     query = request.args.get('query')
-    df = gcd.get_gdb_entity(query)
+    df_list = []
+    table_titles = []
+    df = gcd.get_gdb_entity(query,lab = "Party") #check party name
     df_html = df.to_html(classes="table")
-    return render_template("search.html",table_title="Search Results",df = df_html)
+    if not df.empty:
+        df_list.append(df_html)
+        table_titles.append("Party")
+
+    return render_template("search.html",table_title=table_titles,df_list = df_list,n_results = len(table_titles))
 
 
 
