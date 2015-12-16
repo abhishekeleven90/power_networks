@@ -17,6 +17,7 @@ import pkg_resources as pr
 import sys
 import csv2gdb as cdb
 import search_query as sq
+import gc
 
 def get_gdb_entity(query,lab = "Party",thres = 0.6):
     print "[get_gdb_entity] - connecting to db..."
@@ -25,7 +26,7 @@ def get_gdb_entity(query,lab = "Party",thres = 0.6):
     print "[get_gdb_entity] - now getting df"
     df = cdb.get_entities_graphdb(g,lab)#for now party is the only label . TODO - Politicians
     print df
-    df2 = sq.search_query(df=df,query=query,col = lab,thres = thres)
+    df2 = sq.search_query(df=df,query=query,thres = thres)
     print "[get_gdb_entity] - COMPLETED"
     #return df
     return df2

@@ -110,19 +110,29 @@ def load_entities_csv(g,filename, label,prop_list):
 #similarly we load relationships from csv
 #def load_relationships(filename, )
 
-#run the main function
+#script to enter data to graphdb using cli
+#input file assumed to be in src/input folder
 if __name__ =='__main__':
 
     print "[main] - connecting to db..."
     g = connectdb()
+    if len(sys.argv) < 4:
+        print "Usage: python csv2db.py filename label properties"
+        exit(2)
     filename = sys.argv[1]
     filename = pr.resource_filename('src.input',sys.argv[1])
-    print "[main]- loading entities to db"
-    load_entities_csv(g,filename,"Party",['Party','partyid'])
+    label = sys.argv[2]
+    prop_list = []
+    for i in xrange(3,len(sys.argv)):
+        prop_list.append(sys.argv[i])
+
+    print "[main]- prop list"
+    print prop_list
+    print "[main]- loading entities to gdb"
+    load_entities_csv(g,filename,label,prop_list)
 
     print "[main] - now getting df"
-    df = get_entities_graphdb(g,"Party","Party")
+    df = get_entities_graphdb(g,label = label)
     print df
     print "[main] - COMPLETED"
-
 
