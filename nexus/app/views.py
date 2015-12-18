@@ -8,7 +8,7 @@ import socks
 import hashlib
 import pandas as pd
 import peewee
-import gdb2csv as gcd
+import gdb2csv as gd
 import search_query as sq
 def login_required(f):
     @wraps(f)
@@ -110,15 +110,15 @@ def temp():
 def search():
     query = request.args.get('query')
     labs = ["Party","Politician"]
-    df_list = []
-    table_titles = []
-    for lab in labs:
-        df = gcd.get_gdb_entity(query,lab) #check party name
-        df_html = df.to_html(classes="table")
-        if not df.empty:
-            df_list.append(df_html)
-            table_titles.append(lab)
-
+    thres = [0.6,0.6]
+    #for lab in labs:
+    #    df = gcd.get_gdb_entity(query,lab) #check party name
+    #    df_html = df.to_html(classes="table")
+    #    if not df.empty:
+    #        df_list.append(df_html)
+    #        table_titles.append(lab)
+    df_list,table_titles = gd.get_gdb_entity(query,labs,thres)
+    print "Length of table titles-{}".format(len(table_titles))
     return render_template("search.html",table_title=table_titles,df_list = df_list,n_results = len(table_titles))
 
 

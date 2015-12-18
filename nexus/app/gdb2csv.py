@@ -17,19 +17,59 @@ import pkg_resources as pr
 import sys
 import csv2gdb as cdb
 import search_query as sq
-import gc
+import threading
 
-def get_gdb_entity(query,lab = "Party",thres = 0.6):
-    print "[get_gdb_entity] - connecting to db..."
+class gcd(threading.Thread):
+
+    thrd_list = []
+    df_list = []
+    tab_list =[]
     g = cdb.connectdb()
+    listLock = threading.Lock()
 
-    print "[get_gdb_entity] - now getting df"
-    df = cdb.get_entities_graphdb(g,lab)#for now party is the only label . TODO - Politicians
-    print df
-    df2 = sq.search_query(df=df,query=query,thres = thres)
-    print "[get_gdb_entity] - COMPLETED"
-    #return df
-    return df2
+    def __init__(self,query):
+        threading.Thread.__init__(self)
+        self.query = query
+        self.lab ='Party' 
+        self.thres = 0.6
+
+    def __init__(self,query,lab,thres):
+        threading.Thread.__init__(self)
+        self.query = query
+        self.lab = lab
+        self.thres = thres
+
+    def run(self):
+
+        print "[get_gdb_entity] - now getting df"
+        df = cdb.get_entities_graphdb(gcd.g,self.lab)#for now party is the only label . TODO - Politicians
+        df2 = sq.search_query(df=df,query=self.query,thres = self.thres)
+        print "[get_gdb_entity] - COMPLETED"
+        #return df
+        #return df2
+        if not df2.empty:
+            print "[get_gdb_entity] - label -{}. acquire locks".format(self.lab)
+            #gcd.listLock.acquire()
+            gcd.df_list.append(df2.to_html(classes = "table"))
+            gcd.tab_list.append(self.lab)
+            print "[get_gdb_entity] - label -{}. release locks".format(self.lab)
+            #gcd.listLock.release()
+
+
+
+def get_gdb_entity(query,lab_list,thres_list):
+
+    gcd.thrd_list = []
+    gcd.df_list = []
+    gcd.tab_list = []
+    for lab,thres in zip(lab_list,thres_list):
+        pf = gcd(query,lab,thres)
+        gcd.thrd_list.append(pf)
+        pf.start()
+    for thrds in gcd.thrd_list: thrds.join()
+
+    return (gcd.df_list,gcd.tab_list)
+
 
 #TODO - get_gdb_relationships
 

@@ -74,8 +74,8 @@ def get_entities_graphdb(g,label,prop = None, prop_val = None):
 
         print "[get_entities_graphdb] - node - "+str(i)
         cols = node.properties.keys()
-        print cols
-        print node.properties
+        #print cols
+        #print node.properties
 
         tmp_df = pd.DataFrame(columns = cols)
         tmp_df.loc[0] = pd.Series(node.properties)
