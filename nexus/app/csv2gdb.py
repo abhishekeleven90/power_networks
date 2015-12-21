@@ -108,7 +108,29 @@ def load_entities_csv(g,filename, label,prop_list):
     return
 
 #similarly we load relationships from csv
-#def load_relationships(filename, )
+#it assumes a particular format for csvs
+#first two columns - label1,label2 property. next two columns - relationship property.
+def load_relationships_csv(g,filename,label1,label2,rel_name):
+
+    df = pd.read_csv(filename)
+    pkey1,pkey2,rprop = df.columns[0],df.columns[1],df.columns[2]
+    for i,r in df.iterrows():
+        nd1 = g.find(label1,property_key = pkey1,property_value = r[pkey1])
+        nd2 = g.find(label2,property_key = pkey2,property_value = r[pkey2])
+        rel = Relationship(nd1,nd2,rel_name)
+        rel.properties[rprop] = r[rprop]
+        g.create(rel)
+    return
+
+def load_relationships(g,label1,label2,rel_name):
+
+    for node1 in g.find(label = label1):
+        for node2 in g.find(label = label2):
+            rel = Relationship(node1,node2,rel_name)
+            g.create(rel)
+
+    return
+
 
 #script to enter data to graphdb using cli
 #input file assumed to be in src/input folder
