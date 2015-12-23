@@ -2,6 +2,6 @@
 {% extends "base.html" %}
 {% block content %}
     <div class="starter-template" align="center" >
-        <h2>{{temptext}}</h2>
+        {{temptext|safe}}
     </div>
 {% endblock %}
