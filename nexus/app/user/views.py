@@ -9,6 +9,6 @@ def show():
 def diff():
 	import app.temp as t 
 	graph = t.getGraph()
-	old,naya = t.createNodes(graph)
+	old,naya = t.createNodes2(graph)
 	temp = str(old) + '<hr/>' + str(naya)
 	return render_template("temp.html", homeclass="active", temptext=temp)
