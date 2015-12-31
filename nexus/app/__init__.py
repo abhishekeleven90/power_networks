@@ -31,6 +31,7 @@ def before_request():
     g.db = dbwork.dbobject()
     g.db.connect()
     g.user = None ##Session related
+    ##adding for neo4j graph
 
 @app.after_request
 def after_request(response):
