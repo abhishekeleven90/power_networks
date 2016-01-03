@@ -150,3 +150,39 @@ def form_error_helper(form):
                flash(u"Error in the %s field - %s" % (getattr(form, field).label.text,error))
 
 
+'''work during extension'''
+'''it's offciial we have uuids for nodes and relids for relation, not uniform??'''
+#show the page about this entity
+#show an edit button on that page if the user is logged in, or route to log in page, how to remember?
+#the int works fine here
+#history/last edited??
+@app.route('/entity/<int:uuid>/')
+def readEntity(uuid):
+    ##read about the entity from the graph db
+    ##get that info and convert into presentable format
+    ##show that info
+    ## show the graph and connections in pble format? pble = presentatble
+    from graphdb import *
+    node = entity(uuid)
+    #3missing is how to better represent it online
+    return render_template("temp.html", homeclass="active", temptext='Entity: ' +str(uuid)+"<br>"+str(node))
+
+#show the page about this relation
+#show an edit button on that page if the user is logged in, or route to log in page, how to remember?
+#the int works fine here
+@app.route('/relation/<int:relid>/')
+def readRelation(relid):
+    ##read about the rel from the graph db
+    ##get that info and convert into presentable format
+    ##show that info
+    ##should include a visualization too
+    from graphdb import *
+    rel = relation(relid)
+    #missing is how to better represent it online
+    return render_template("temp.html", homeclass="active", temptext='Relation: ' +str(relid)+"<br>"+str(rel))
+
+
+
+
+
+
