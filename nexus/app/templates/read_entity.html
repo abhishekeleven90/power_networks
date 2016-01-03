@@ -1,0 +1,15 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+{% from "formhelper.html" import render_field %}
+{% block content %}
+
+	<div class="starter-template" >
+		Entity: {{uuid}} <br/> <br/>
+		{{entity}}<br/><br/>
+		<a href="/user/editEntity/{{uuid}}">
+			<button type="button" class="btn btn-primary btn-md">Edit this</button>
+		</a>
+		<!--TODo chnage to a post request next time -->
+	</div>
+
+{% endblock %}

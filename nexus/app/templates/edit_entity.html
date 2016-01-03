@@ -1,0 +1,57 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+{% from "formhelper.html" import render_field %}
+{% block content %}
+
+<div class="starter-template" >
+Entity: {{uuid}} <br/> <hr/>
+<b>Old: </b><br/><br/>{{entity}}<br/><hr/>
+
+	<!--will have to change form definitions here -->
+	<!--
+
+	<div class="starter-template" >
+		Entity: {{uuid}} <br/> <hr/>
+		<b>Old: </b><br/><br/>{{entity}}<br/><hr/>
+		<b>Edit here: </b><br/><br/>
+		<textarea class="form-control" rows="3">{{entity}}</textarea>
+		<br/>
+		<a href="/user/finalEditEntity/{{uuid}}">
+			<button type="button" class="btn btn-primary btn-md">Edit this</button>
+		</a>
+		TODo chnage to a post request next time
+-->
+</div>
+
+<!--this took a lot of time, and then finally was able to do it! yaay!!-->
+<form class="form-horizontal" method="post" action={{url_for('user.editEntity', uuid=uuid)}}>
+
+<fieldset>
+
+<!-- Form Name -->
+
+{{ form.hidden_tag() }}
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="new_entity">{{form.new_entity.label}}</label>  
+  <div class="col-md-4">
+  {{form.new_entity(class="form-control input-md", placeholder=entity, required="", autofocus="", cols="80", rows="10")|safe}}
+  <span class="help-block"></span>  
+  </div>
+</div>
+
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for=""></label>
+  <div class="col-md-4">
+    <!-- Button -->
+    <button type="submit" class="btn btn-default">Submit</button>
+  </div>
+</div>
+
+
+</fieldset>
+</form>
+
+{% endblock %}

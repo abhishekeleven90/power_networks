@@ -10,6 +10,7 @@ import pandas as pd
 import peewee
 import gdb2csv as gd
 import search_query as sq
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -110,7 +111,7 @@ def temp():
 @app.route('/search/')
 def search():
     query = request.args.get('query')
-    labs = ["Party","Politician"]
+    labs = ["Party","Politician"] # tables to search in
     thres = [0.6,0.6]
     #for lab in labs:
     #    df = gcd.get_gdb_entity(query,lab) #check party name
@@ -122,7 +123,24 @@ def search():
     print "Length of table titles-{}".format(len(table_titles))
     return render_template("search.html",table_title=table_titles,df_list = df_list,n_results = len(table_titles))
 
+@app.route('/read/<label>',methods = ['GET'])
+def read_gdb(label):
+    node_list = ['Party','Politician']
+    if label not in node_list:
+        return abort(404)
+    print "Printing request arguments"
+    print request.args
+    df = gd.get_gdb_entity_simple(label,request.args)
+    return df.to_html()
 
+@app.route('/rel/<label>',methods = ['GET'])
+def rel_gdb(label):
+    rel_list = ['test_rel']
+    if label not in rel_list: return abort(404)
+    print "Printing request arguments"
+    print request.args
+    df = gd.get_gdb_rel_simple(label,request.args)
+    return df.to_html()
 
 def get_current_user_role():
     return 'admin'
