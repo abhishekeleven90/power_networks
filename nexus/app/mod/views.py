@@ -7,8 +7,8 @@ def show():
 
 @mod.route('/diff')
 def diff():
-	import app.temp as t 
+	import app.graphdb as t 
 	graph = t.getGraph()
-	old,naya = t.createNodes2(graph)
+	old,naya = t.createNodes(graph)
 	temp = str(old) + '<hr/>' + str(naya)
 	return render_template("temp.html", homeclass="active", temptext=temp)

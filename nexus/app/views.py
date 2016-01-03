@@ -1,7 +1,7 @@
 from app import app
 from flask import render_template, flash, redirect, session, g, request, url_for, abort
 from functools import wraps
-from forms import RegisterationForm, LoginForm
+from forms import RegisterationForm, LoginForm, form_error_helper
 from dbwork import *
 import smtplib
 import socks
@@ -49,6 +49,7 @@ def login():
     server.quit()
     print "Successfully sent email"
     '''
+    #TODO: check if temp.html works fine always
     if session.get('userid')>=1:
         return render_template("temp.html", loginclass="active", signincss=False, temptext="Already logged in!")
     form = LoginForm()
@@ -126,11 +127,12 @@ def search():
 def get_current_user_role():
     return 'admin'
 
-def form_error_helper(form):
+#Moved to forms.py
+'''def form_error_helper(form):
     for field, errors in form.errors.items():
            for error in errors:
                flash(u"Error in the %s field - %s" % (getattr(form, field).label.text,error))
-
+'''
 
 '''work during extension'''
 '''it's offciial we have uuids for nodes and relids for relation, not uniform??'''
@@ -147,7 +149,10 @@ def readEntity(uuid):
     from graphdb import *
     node = entity(uuid)
     #3missing is how to better represent it online
-    return render_template("temp.html", homeclass="active", temptext='Entity: ' +str(uuid)+"<br>"+str(node))
+    return render_template("read_entity.html", 
+        homeclass="active", 
+        uuid=str(uuid),
+        entity=str(node))
 
 #show the page about this relation
 #show an edit button on that page if the user is logged in, or route to log in page, how to remember?

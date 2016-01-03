@@ -33,7 +33,7 @@ def getRelByInternalId(graph,id):
 	a.pull()
 	return a
 
-def createNodes(graph):
+def createNodes2(graph):
 	alice = Node("Party", name="Alice")
 	alice2 = Node("Party", name="Alicehaha", age="34")
 	bob = Node("Politician", name="Bob")
@@ -48,13 +48,25 @@ def createNodes(graph):
 	graph.create(alice_knows_bob)
 
 
-def createNodes2(graph):
-	alice = Node("Party", name="Alice")
+def createNodes(graph):
+	from py2neo.cypher import CypherWriter
+	import sys
+	writer = CypherWriter(sys.stdout)
+	alice = Node("Party","Politician","Director", name="Alice")
 	alice2 = Node("Party", name="Alicehaha", age="34")
 	bob = Node("Politician", name="Bob")
 	alice_knows_bob = Relationship(alice, "related", bob)
+	some = writer.write(alice)
+	print 'printing Some\n'
+	print some
 	calice = str(alice)
 	calice2 = str(alice2)
+	
+	print alice
+	print 'herehfhgfhgfdgjdgfhgggggggggggggggggggggg'
+	nodenaya = ''
+	print nodenaya
+	print 'theredkhfhgffgggggggggggggggg'
 
 	#help from: http://agiliq.com/blog/2014/05/google-diff-match-patch-library/
 
@@ -129,6 +141,77 @@ def relation(relid):
 	#print len(rc)
 	#print rc
 	return rc[0][0]
+
+
+#prev is a Node
+#latest is a Node
+#Usage:
+'''
+alice = Node("Ola","Olap","Olat", name="uinq",uuid=4)
+print alice
+bob = Node("Person","Politician", name="bob",uuid=4)
+print bob
+updatePrev(alice,bob)
+print alice
+'''
+def updatePrev(prev_uuid,latest):
+    prev = entity(prev_uuid)
+    prev_uuid = prev['uuid']
+    prev.labels.clear()
+    prev.properties.clear()
+    for x in latest.labels:
+        prev.labels.add(x)
+    for x in latest.properties: #dont uupdate the uuid
+        if x!= 'uuid':
+            prev[x]=latest[x]
+    prev['uuid'] = prev_uuid
+    prev.push() #also pushed
+    #updated by now
+    print 'The node with uuid '+str(prev_uuid)+' should be update by now'
+
+
+##example of some text input: (n154346:businessperson:person:politician {name:"Anita",uuid:1234})
+##Usage: deserializeNode('''(n154346:businessperson:person:politician {name:"Anita",uuid:1234})''')
+def deserializeNode(nodeText):
+    pos =  nodeText.find(' ')
+    
+    #get the labels in a set
+    startText = nodeText[1:pos]
+    allLabels = startText.split(':')[1:]
+    allLabels =  set(allLabels) #set is imp
+    
+    #get the props in a dict
+    endText = nodeText[pos+1:-1]
+    endTextWB = endText[1:-1]
+    #print endText
+    #print endTextWB
+    propList = endTextWB.split(",")
+    propsDict = {}
+    for x in propList:
+        propval = x.split(":")
+        #for handling the single inverted comma problem
+        prop = propval[0]
+        val = propval[1]
+        if val[0]=="'" and val[-1]=="'":
+            val=val[1:-1]
+        #for handling the double inverted comma problem
+        if val[0]=='"' and val[-1]=='"':
+            val=val[1:-1]
+        propsDict[prop]=val
+
+    
+    #print propsDict
+    
+    #creating the node from parsedText
+    node = Node()
+    for x in allLabels:
+        node.labels.add(x)
+    for x in propsDict:
+        node[x] = propsDict[x]
+    print node
+    return node
+
+
 
 ##work to do add a form where they can create a node
 #get a node's page by uuid
