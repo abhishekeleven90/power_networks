@@ -48,15 +48,16 @@ class gcd(threading.Thread):
         #return df
         #return df2
         if not df2.empty:
-            print "[get_gdb_entity] - label -{}. acquire locks".format(self.lab)
+            #print "[get_gdb_entity] - label -{}. acquire locks".format(self.lab)
             #gcd.listLock.acquire()
             gcd.df_list.append(df2.to_html(classes = "table"))
             gcd.tab_list.append(self.lab)
-            print "[get_gdb_entity] - label -{}. release locks".format(self.lab)
+            #print "[get_gdb_entity] - label -{}. release locks".format(self.lab)
             #gcd.listLock.release()
 
 
 
+#given a list of labels we get a list of tables matching them
 def get_gdb_entity(query,lab_list,thres_list):
 
     gcd.thrd_list = []
@@ -71,6 +72,29 @@ def get_gdb_entity(query,lab_list,thres_list):
     return (gcd.df_list,gcd.tab_list)
 
 
+#simply get an entity with given label and props
+def get_gdb_entity_simple(label,propdic=None):
+
+    prop_key,prop_val= None,None
+    if propdic :
+        prop_key =propdic.keys()[0]
+        prop_val = propdic.values()[0]
+
+    g = cdb.connectdb()
+    df = cdb.get_entities_graphdb(g,label,prop_key,prop_val)
+    return df
+
+#simply get a relationship with given name
+def get_gdb_rel_simple(label,propdic = None):
+
+    prop_key,prop_val = None,None
+    if propdic:
+        prop_key = propdic.keys()[0]
+        prop_val = propdic.values()[0]
+
+    g = cdb.connectdb()
+    df = cdb.get_rel_graphdb(g,label,prop_key,prop_val)
+    return df
 #TODO - get_gdb_relationships
 
 if __name__ == "__main__":
