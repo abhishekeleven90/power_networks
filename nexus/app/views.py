@@ -187,6 +187,15 @@ def readRelation(relid):
     return render_template("temp.html", homeclass="active", temptext='Relation: ' +str(relid)+"<br>"+str(rel))
 
 
+@app.route('/profile/')
+def profile():
+    return render_template("profile.html", homeclass="active")
+
+@app.route('/connections/')
+def conn():
+    return render_template("connections.html", homeclass="active") 
+
+
 
 
 
