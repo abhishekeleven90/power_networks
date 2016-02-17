@@ -1,0 +1,23 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+{% block content %}
+    <!--<div class="container">-->
+        <br/>
+        <br/>
+
+      {{relation_read(rel)}}
+    <!--</div> container-->
+
+    <br/>
+    <br/>
+    <h2 align='center'>FROM</h2>
+    <hr/>
+    {{entity_read(rel.start_node)}}
+    <br/>
+    <br/>
+    <h2 align='center'>TO</h2>
+    <hr/>
+    {{entity_read(rel.end_node)}}
+
+   
+{% endblock %}

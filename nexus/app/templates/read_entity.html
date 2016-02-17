@@ -1,14 +1,41 @@
+<!-- This html page IS obsolote as on 10 feb morning 3:30 am -->
+<!-- Delete when you find suitable -->
+<!-- TODO -->
+
 <!-- extend base layout -->
 {% extends "base.html" %}
 {% from "formhelper.html" import render_field %}
 {% block content %}
 
 	<div class="starter-template" >
-		Entity: {{uuid}} <br/> <br/>
-		{{entity}}<br/><br/>
+		
+        <h2> Entity ID {{node.properties['uuid']}} </h2>
+        <hr/><br/>
+		
+        <p>{{entity}}</p>
+        <hr/>
+
+        <h2>IS-A</h2>
+        {% for label in node.labels %}
+            <p>{{label}}</p>
+        {% endfor %}
+        <hr/>
+
+        <h2>HAS</h2>
+        {% for prop in node.properties %}
+            {% if prop != 'uuid' %}
+                <p>{{prop}} ---> {{node.properties[prop]}}</p>
+            {% endif %}
+        {% endfor %}
+        <hr/>
+
 		<a href="/user/editEntity/{{uuid}}">
 			<button type="button" class="btn btn-primary btn-md">Edit this</button>
 		</a>
+
+        
+
+
 		<!--TODo chnage to a post request next time -->
 	</div>
 

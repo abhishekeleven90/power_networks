@@ -167,10 +167,10 @@ def readEntity(uuid):
     from graphdb import *
     node = entity(uuid)
     #3missing is how to better represent it online
-    return render_template("read_entity.html", 
+    return render_template("entity_read.html", 
         homeclass="active", 
         uuid=str(uuid),
-        entity=str(node))
+        entity=str(node),node=node)
 
 #show the page about this relation
 #show an edit button on that page if the user is logged in, or route to log in page, how to remember?
@@ -184,7 +184,8 @@ def readRelation(relid):
     from graphdb import *
     rel = relation(relid)
     #missing is how to better represent it online
-    return render_template("temp.html", homeclass="active", temptext='Relation: ' +str(relid)+"<br>"+str(rel))
+    return render_template("relation_read.html", homeclass="active", 
+        rel=rel);
 
 
 @app.route('/profile/')
