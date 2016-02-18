@@ -1,0 +1,20 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+{% block content %}
+    <!--<div class="container">-->
+        <br/>
+        <br/> 
+    <!--</div> container-->
+    <h1>To be matched</h1>
+    {{entity_read(row,True)}}
+    <hr/>
+
+    <h1>From graph</h1>
+    <br/>
+    {% for node in graphnodes %}
+    {{entity_read(node,True)}}
+    <hr/>
+    {% endfor %}
+
+   
+{% endblock %}

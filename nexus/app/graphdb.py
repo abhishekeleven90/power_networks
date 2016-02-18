@@ -91,6 +91,13 @@ def createNodes(graph):
 	graph.create(alice_knows_bob)
 	return old_record,new_record
 
+def diffObjects(str1,str2):
+    diff_obj = SideBySideDiff()
+    result = diff_obj.diff_main(str1, str2)
+    diff_obj.diff_cleanupSemantic(result)
+    oldstr = diff_obj.old_content(result) 
+    newstr = diff_obj.new_content(result)
+    return oldstr,newstr
 
 class SideBySideDiff(diff_match_patch.diff_match_patch):
 
@@ -222,3 +229,40 @@ def deserializeNode(nodeText):
 #delete a relation
 #moderate any change --> how to do that --> where will this lie!
 #Note the diff between now and then
+
+
+##### temp work start #####
+def node1():
+    jindal1 = Node("person",name="Navin Jindal",email="info@support.com")
+    return jindal1
+
+def node2():
+    jindal2 = Node("person","politician", name="Naveen Jindal")
+    return jindal2
+
+def node3():
+    jindal3 = Node("person","politician", name="Naveen Jindal",assets="200 Cr",party="INC", gender="Male")
+    return jindal3
+
+def orig():
+    return entity(2)
+
+def labelsToBeAdded(orig, naya):
+    new_labels = []
+    for x in naya.labels:
+        if x not in orig.labels:
+            new_labels.append(x)
+    return new_labels
+
+def propsDiff(orig,naya):
+    conf_props = []
+    new_props = []
+    for x in naya.properties:
+        if x not in orig.properties:
+            new_props.append(x)
+        else:
+            conf_props.append(x)
+    return conf_props, new_props
+
+
+### temp work end #####

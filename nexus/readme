@@ -1,0 +1,31 @@
+###roles
+mod >= 5
+admin == 7
+user >= 1
+verifier >= 3
+crawler >= 2
+
+###users
+abhi1@gmail.com role:1 pw:yoyo
+abhi2@gmail.com role:2 pw:yoyo
+abhi3@gmail.com role:3 pw:yoyo
+abhi4@gmail.com role:4 pw:yoyo
+abhi5@gmail.com role:5 pw:yoyo
+abhi6@gmail.com role:6 pw:yoyo
+abhi7@gmail.com role:7 pw:yoyo
+
+##graphs
+uuid done let anybody update that ever!
+all labels lowercase
+all props name lowercase from now
+atleast one label alwaya mandatory for search else it is a bad havoc! will see after this!
+address may change over time?
+assets may change over time?
+
+
+
+##director sharing graph database main query
+MATCH (t:company {cin:'L28920MH1945PLC004520'}),(r:company {cin:'L40101MH1995PLC084687'}),
+p = shortestPath((t)-[*..30]-(r))
+return p
+

@@ -1,4 +1,4 @@
-{% macro entity_read(node) %}
+{% macro entity_read(node,verifier) %}
     
     <div class="row">
       <!--<div class="col-md-5  toppad  pull-right col-md-offset-3 ">
@@ -13,7 +13,7 @@
    
           <div class="panel panel-info">
             <div class="panel-heading">
-              <h3 class="panel-title">{{ node.properties['name'] }}</h3>
+              <h3 class="panel-title">{{ node.properties['name'] }}:{{node.properties['uuid']}}</h3>
             </div>
             <div class="panel-body">
               <div class="row">
@@ -45,12 +45,12 @@
 
                         </td>
                       </tr>
-
+                          {% if not verifier %}
                           <tr>
                             <td><b>UUID</b></td>
                             <td>{{node.properties['uuid']}}</td>
                           </tr>
-
+                          {% endif %}
 
                       {% for prop in node.properties %}
                         {% if prop != 'uuid' %}
@@ -64,11 +64,13 @@
                     </tbody>
                   </table>
                   
+                  {% if not verifier %}
                   <a href="#" class="btn btn-primary">Edit info</a>
 
                   <a href="#" class="btn btn-primary">Request Delete</a>
                   
                   <a href="#" class="btn btn-primary">View Connections</a>
+                  {% endif %}
 
                 </div>
               </div>

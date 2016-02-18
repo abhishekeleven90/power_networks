@@ -1,0 +1,84 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+{% block content %}
+
+<br/>
+<br/>
+
+
+    <div class="starter-template" align="center" >
+    
+
+
+    {% if new_labels %}
+    <h4>New labels to add</h4>
+       <table class="table  table-hover">
+            {% for label in new_labels%}
+                <tr>
+                    <td>
+                        <b>{{label}}</b>
+                    </td>
+                </tr>
+            {% endfor %}
+        
+       </table>
+    <br/>
+    {% endif %}
+
+
+    {% if new_props %}
+    <h4>New properties to add</h4>
+       <table class="table table-hover">
+            
+
+            {% for prop in new_props%}
+                <tr>
+                    <td>
+                        <b>{{prop}}</b>: {{naya[prop]}}
+                    </td>
+                </tr>
+            {% endfor %}
+        
+       </table>
+    <br/>
+    {% endif %}
+
+    {% if conf_props %}
+    <h4>Conflicting properties to resolve</h4>
+       <table class="table table-hover">
+            
+
+                <tr>
+                    <td>
+                        <b>Original</b>
+                    </td>
+                    <td>
+                        <b>New</b>
+                    </td>
+                </tr>
+
+
+            {% for prop in conf_props%}
+                <tr>
+                    <td>
+                        {{prop}}: <b>{{orig[prop]}}</b>
+                    </td>
+                    <td>
+                        {{prop}}: <b>{{naya[prop]}}</b>
+                    </td>
+
+                </tr>
+            {% endfor %}
+        
+       </table>
+    <br/>
+    {% endif %}
+
+
+
+
+
+    </div>
+    
+   
+{% endblock %}

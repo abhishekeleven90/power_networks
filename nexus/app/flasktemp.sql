@@ -129,11 +129,14 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`userid`, `password`, `role`) VALUES
-('abhiagar90@gmail.com', '48dc8d29308eb256edc76f25def07251', 3),
-('abhijhs11@gmail.com', '48dc8d29308eb256edc76f25def07251', 7),
-('mcs142114@iitd.ac.in', '48dc8d29308eb256edc76f25def07251', 1);
-
+INSERT INTO users (userid, password, role) VALUES
+('abhi1@gmail.com', '48dc8d29308eb256edc76f25def07251', 1),
+('abhi2@gmail.com', '48dc8d29308eb256edc76f25def07251', 2),
+('abhi3@gmail.com', '48dc8d29308eb256edc76f25def07251', 3),
+('abhi4@gmail.com', '48dc8d29308eb256edc76f25def07251', 4),
+('abhi5@gmail.com', '48dc8d29308eb256edc76f25def07251', 5),
+('abhi6@gmail.com', '48dc8d29308eb256edc76f25def07251', 6),
+('abhi7@gmail.com', '48dc8d29308eb256edc76f25def07251', 7);
 --
 -- Constraints for dumped tables
 --
