@@ -16,7 +16,6 @@ app.register_blueprint(verifier, url_prefix='/verifier')
 
 app.config.from_object('config')
 
-
 from peewee import *
 from dbwork import *
 

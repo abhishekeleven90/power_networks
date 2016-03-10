@@ -1,5 +1,6 @@
 from py2neo import Graph, Node, Relationship
 import diff_match_patch
+import pandas as pd
 
 username = 'neo4j'
 password = 'yoyo'
@@ -245,7 +246,7 @@ def node3():
     return jindal3
 
 def orig():
-    return entity(2)
+    return entity(25)
 
 def labelsToBeAdded(orig, naya):
     new_labels = []
@@ -266,3 +267,30 @@ def propsDiff(orig,naya):
 
 
 ### temp work end #####
+
+#df is pandas dataframe
+def createNodeFromMapping(en,df):
+    node =  Node()
+    for label in en['label']:
+        node.labels.add(label)
+    for i in range(len(en['graph'])):
+        node.properties[en['graph'][i]] = df[en['mysql'][i]][0]
+    return node
+
+#df is pandas dataframe
+def createRelFromMapping(rel,startNode,endNode,df):
+    link =  Relationship(startNode,rel['label'],endNode)
+    for i in range(len(rel['graph'])):
+        link.properties[rel['graph'][i]] = df[rel['mysql'][i]][0]
+    return link
+
+
+def wrapCreateNode(graph, node):
+    ## use this table
+    ## this table inside flasktemp for now
+    ## create table uuidtable(uuid bigint(20) not null auto_increment primary key, name varchar(255));
+    uuid = createUuid(node['name'])
+    node['uuid'] = uuid
+    graph.create(node)
+    node.pull()
+    return node
