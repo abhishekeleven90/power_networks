@@ -26,6 +26,7 @@ def is_similar(text1,text2,thres = 0.6,algo = jf.jaro_distance):
     else:
         return False
 
+#input - a df, a property to look at, a query
 def search_query(df,query,col="Party",thres = 0.6):
 
     df_new = pd.DataFrame(columns = df.columns)
@@ -37,6 +38,17 @@ def search_query(df,query,col="Party",thres = 0.6):
             df_new.loc[row_added] = df.ix[i] 
             row_added += 1
 
-
     return df_new
+
+#use gdb2csv to get a particular label as df
+def get_label_from_graphdb(label):
+    return gd.get_gdb_entity_simple(label)
+
+#filter a df with a particular label and property as list
+def filter_df(label,query,properties):
+    df = get_label_from_graphdb(label)
+    for p in  properties:
+        df = search_query(df,query,col=p)
+
+    return df
 
