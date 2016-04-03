@@ -1,0 +1,167 @@
+uuid,label,propname,propvalue
+25,person,assets,240 Cr
+25,person,gender,M
+25,person,uuid,25
+25,person,contact,55467868
+25,person,address,UP
+25,person,party,Indian Congress
+25,person,mynetaid,23
+25,person,email,someing@someone.com
+25,person,name,Navn Jindl
+25,businessman,assets,240 Cr
+25,businessman,gender,M
+25,businessman,uuid,25
+25,businessman,contact,55467868
+25,businessman,address,UP
+25,businessman,party,Indian Congress
+25,businessman,mynetaid,23
+25,businessman,email,someing@someone.com
+25,businessman,name,Navn Jindl
+26,person,uuid,26
+26,person,contact,+91-55467868
+26,person,address,uttar pradesh
+26,person,mynetaid,23
+26,person,email,sommeing@someone.com
+26,person,name,Naveeenn Jindal
+26,politician,uuid,26
+26,politician,contact,+91-55467868
+26,politician,address,uttar pradesh
+26,politician,mynetaid,23
+26,politician,email,sommeing@someone.com
+26,politician,name,Naveeenn Jindal
+27,person,uuid,27
+27,person, age,44
+27,person,address,uttar pradesh
+27,person,mynetaid,23
+27,person, email,sommeing@naveen.com
+27,person,name,Mr. Naveen
+27,businessperson,uuid,27
+27,businessperson, age,44
+27,businessperson,address,uttar pradesh
+27,businessperson,mynetaid,23
+27,businessperson, email,sommeing@naveen.com
+27,businessperson,name,Mr. Naveen
+28,person,uuid,28
+28,person, age,44
+28,person,address,uttar pradesh
+28,person,mynetaid,23
+28,person, email,sommeing@naveen.com
+28,person,name,Mr. Naveen
+28,businessperson,uuid,28
+28,businessperson, age,44
+28,businessperson,address,uttar pradesh
+28,businessperson,mynetaid,23
+28,businessperson, email,sommeing@naveen.com
+28,businessperson,name,Mr. Naveen
+29,person,uuid,29
+29,person, age,44
+29,person,address,uttar pradesh
+29,person,mynetaid,23
+29,person, email,sommeing@naveen.com
+29,person,name,Mr. Naveen
+29,businessperson,uuid,29
+29,businessperson, age,44
+29,businessperson,address,uttar pradesh
+29,businessperson,mynetaid,23
+29,businessperson, email,sommeing@naveen.com
+29,businessperson,name,Mr. Naveen
+30,person,uuid,30
+30,person, age,44
+30,person,address,uttar pradesh
+30,person,mynetaid,23
+30,person, email,sommeing@naveen.com
+30,person,name,Mr. Naveen
+30,businessperson,uuid,30
+30,businessperson, age,44
+30,businessperson,address,uttar pradesh
+30,businessperson,mynetaid,23
+30,businessperson, email,sommeing@naveen.com
+30,businessperson,name,Mr. Naveen
+31,person,uuid,31
+31,person,contact,55467878
+31,person,address,Andhra etc
+31,person,mynetaid,23
+31,person,email,something@someone.com
+31,person,name,Naveen Jindal
+31,politician,uuid,31
+31,politician,contact,55467878
+31,politician,address,Andhra etc
+31,politician,mynetaid,23
+31,politician,email,something@someone.com
+31,politician,name,Naveen Jindal
+32,person,uuid,32
+32,person,contact,55467878
+32,person,address,Andhra etc
+32,person,mynetaid,23
+32,person,email,something@someone.com
+32,person,name,Naveen Jindal
+32,politician,uuid,32
+32,politician,contact,55467878
+32,politician,address,Andhra etc
+32,politician,mynetaid,23
+32,politician,email,something@someone.com
+32,politician,name,Naveen Jindal
+33,person,uuid,33
+33,person,contact,55467878
+33,person,address,Andhra etc
+33,person,mynetaid,23
+33,person,email,something@someone.com
+33,person,name,Naveen Jindal
+33,politician,uuid,33
+33,politician,contact,55467878
+33,politician,address,Andhra etc
+33,politician,mynetaid,23
+33,politician,email,something@someone.com
+33,politician,name,Naveen Jindal
+251,Person,email,narendroo@bjp.com
+251,Person,mynetaid,55
+251,Person,uuid,251
+251,Person,name,Mr. Narandroo Mudi
+251,Person,address,uttar pradesh
+252,person,email,modi@bjp.com
+252,person,mynetaid,55
+252,person,uuid,252
+252,person,name,Mr. Narandra Modi
+252,person,address,uttar pradesh
+252,politician,email,modi@bjp.com
+252,politician,mynetaid,55
+252,politician,uuid,252
+252,politician,name,Mr. Narandra Modi
+252,politician,address,uttar pradesh
+250,Person,name,Narandra Modi
+250,Person,age,55
+250,Person,address,utar pradesh
+250,Person,nationality,Indian
+250,Person,mynetaid,55
+250,Person,email,narendra@bjp.com
+250,Person,uuid,250
+253,person,email,modi@modi.com
+253,person,state,Gujarat
+253,person,someprop,somevalue
+253,person,uuid,253
+253,person,name,Mr. Narayan Modi
+253,politician,email,modi@modi.com
+253,politician,state,Gujarat
+253,politician,someprop,somevalue
+253,politician,uuid,253
+253,politician,name,Mr. Narayan Modi
+350,person,email,jind@jindal.com
+350,person,uuid,350
+350,person,name,Navin Jindal
+350,businessman,email,jind@jindal.com
+350,businessman,uuid,350
+350,businessman,name,Navin Jindal
+351,person,email,jind@jindal.com
+351,person,state,rajsathan
+351,person,uuid,351
+351,person,name,Naveenn Jindel
+353,businessman,dob,some date of birth
+353,businessman,email,someone@jindal.com
+353,businessman,someprop,somevalue
+353,businessman,uuid,353
+353,businessman,name,Naveen Jindal
+352,businessman,dob,some date of birth
+352,businessman,email,someone@jindal.com
+352,businessman,someprop,somevalue
+352,businessman,uuid,352
+352,businessman,name,Naveen Jindal

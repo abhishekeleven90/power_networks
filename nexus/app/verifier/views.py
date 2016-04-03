@@ -6,35 +6,80 @@ import pandas as pd
 
 @verifier.route('/')
 def show():
-    return render_template("temp.html", homeclass="active", temptext='verifier')
+    ##have a verifier page!
+    ##show the begin task button!
+    return render_template("verifier_home.html", homeclass="active")
 
-@verifier.route('/diff/')
+@verifier.route('/diff/', methods=["GET","POST"])
 def diff():
+    
     import app.graphdb as t
-
     ##keep info about not shoiwng labels and not showing props 
     orig = t.orig() ##from the graph
     naya = t.node3() ##from the row
-    
-    new_labels = t.labelsToBeAdded(orig,naya)    
+
+    orig.pull()
+    print orig
+    print '-------'
+
+    new_labels = t.labelsToBeAdded(orig,naya) 
     conf_props,new_props = t.propsDiff(orig,naya)
 
+    if not request.form:
 
-    return render_template("verifier_diff.html", homeclass="active",
-        new_labels=new_labels,conf_props=conf_props, new_props=new_props,orig=orig, naya=naya)
+        return render_template("verifier_diff.html", homeclass="active",
+            new_labels=new_labels,conf_props=conf_props, new_props=new_props,orig=orig, naya=naya)
+    else:
+
+        for prop in conf_props:
+            flash(prop+' : '+request.form[prop])
+            ##update this prop in orig node!
+            #orig[prop] = request.form[prop]
+            orig[prop] = request.form[prop] ##naya prop/orig prop 
+        
+        for label in request.form.getlist('newlabels'):
+            flash('Label: '+str(label))
+            ##add this label to orig!
+            orig.labels.add(label)
+
+
+        for prop in new_props:
+            value_list = request.form.getlist(prop)
+            if len(value_list)==1: ##as only one value is going to be any way!
+                flash(prop+' : '+str(value_list[0]))
+                ##add this prop to orig node!
+                #orig[prop] = request.form[prop]
+                orig[prop] = request.form[prop] ##naya prop/orig prop 
+                
+        print orig
+        ##now can push!
+        orig.push()
+
+
+        return render_template("temp.html", homeclass="active",temptext="DIFF DONE!")
+
+
+
 
 ## TODO: this can be better!
-@verifier.route('/match/')
+@verifier.route('/match/', methods=["GET","POST"])
 def match():
-    from app.resolver import *
-    print resolveNode('xx')
-    ##TODO: this should actaully change acc to the resolve props and show the diffs acc, to the resolve things only!
-    import app.graphdb as t
-    row = t.node1()
+    if not request.form:
+        from app.resolver import *      
+        print resolveNode('xx') ##TODO: remove this!
+        ##TODO: this should actaully change acc to the resolve props and show the diffs acc, to the resolve things only!
+        import app.graphdb as t
+        row = t.node1()
 
-    graphnodes = [t.orig(),t.node2(),t.node3()]
-    return render_template("verifier_match.html", homeclass="active",
-        row=row, graphnodes=graphnodes)
+        graphnodes = [t.orig(),t.node2(),t.node3()]
+        return render_template("verifier_match.html", homeclass="active",
+            row=row, graphnodes=graphnodes)
+    else:
+        ##get the matched_uuid! save it in sessnio or where-ever you want
+        print request.form['match_uuid']
+        return render_template("temp.html", homeclass="active",temptext="MATCH DONE!")
+
+
 
 @verifier.route('/temp/',methods=["GET","POST"])
 def temp():
@@ -78,7 +123,7 @@ def temp2():
 
 @verifier.route('/temp3/')
 def temp3():
-    nodes, rels = mapSqlToGraph(current_app.config['MAPPINGS']+'/crawlerMap')
+    meta, nodes, rels = mapSqlToGraph(current_app.config['MAPPINGS']+'/crawlerMap')
     print nodes
     print rels
 
@@ -145,6 +190,9 @@ def crawlerMappings(crawlFile):
     return metainfo,ens,rels
     
 
+
+#called when the task begins
+##can use the meta info in the dict returned to give the task a unique name
 def mapSqlToGraph(filename):
     from app.graphdb import *
     from app.dbwork import *
@@ -159,35 +207,77 @@ def mapSqlToGraph(filename):
 
     mapNodes = {}
     mapRels = {}
+    resolveNodesOn = {}
+    resolveRelsOn = {}
 
     for en in ens:
-        node = createNodeFromMapping(en,df)
+        node, resolveOn = createNodeFromMapping(en,df)
         mapNodes[en['number']] = str(node) ##TODO: everything is a string for now! find a nice way out of this! May be a class!
+        ##will have to deserialize at any cost!
+        resolveNodesOn[en['number']] = resolveOn
 
     for rel in rels:
         startNode = mapNodes[rel['from']]
         endNode = mapNodes[rel['to']]
-        link = createRelFromMapping(rel,startNode,endNode,df)
-        mapRels[rel['number']] = str(link) ##TODO: everything is a string for now! Find a nice way out of this! 
-    
-    return mapNodes, mapRels
+        link, resolveOn = createRelFromMapping(rel,startNode,endNode,df)
+        mapRels[rel['number']] = str(link) ##TODO: everything is a string for now! Find a nice way out of this!
+        resolveRelsOn[rel['number']] = resolveOn
 
+    
+    meta['row_id'] = df['id'][0] 
+    return meta, mapNodes, mapRels, resolveNodesOn, resolveRelsOn
+
+
+##TODO: move this code?? maybe, no!
 def checkTaskExists():
-    return True
+
+    ##redundant code from mapSqlToGraph remove: TODO!
+    from app.dbwork import *
+
+    ##need to modularize and move this code from here! : TODO!
+    meta,ens,rels = crawlerMappings(current_app.config['MAPPINGS']+'/crawlerMap')
+    df = sqlQuerytoDF("select * from "+ meta['tablename']+" where resolved = 0 order by id limit 1;",
+        current_app.config['CRAWL_DBHOST'], current_app.config['CRAWL_DBNAME'],
+        current_app.config['CRAWL_DBUSER'], current_app.config['CRAWL_DBPASSWORD'])
+
+    return len(df) != 0
+
+
+def findNextNodeNumberToResolve():
+    ##before calling we know for sure that mapNodes exist!
+    mapNodes = session.get('mapNodes')
+    nodeKeys = mapNodes.keys()
+    for key in nodeKeys:
+        if key not in session.get('resolvedNodes'):
+            return key
+    return 'all'
+
 
 @verifier.route('/startTask/')
-def startTask():   
+def startTask():
+
+
+    ##TODO: remove when not needed!
+    session.pop('mapNodes', None)
+    session.pop('mapRels', None)
+    session.pop('resolvedNodes', None)
+    session.pop('resolvedRels', None)
+    session.pop('resolveNodesOn', None)
+    session.pop('resolveRelsOn', None)
+    session.pop('taskID', None)
+
+    ##nos. to shwo how many rows left -- notify?
+
     ##TODO: check if four vars exist in session directly redirect to runTask
     #temptext = ''
-    ##or may be invalidate all 4 vars on this and restart! the task! TODO!
+    ##or may be invalidate all 4 vars on this and restart! the task id! TODO!
     if session.get('mapNodes') is not None:
+        print 'in the middle of the task: '+str(session.get('taskName'))  
         return redirect(url_for('.runTask'))
 
     if checkTaskExists():
         ##TODO: Provide a proceed button here
-        print 'ckeck task exists!!'
-        temptext = 'Task exists click to proceed'
-        ##redirecting for now
+        print 'ckecked task exists!!'
         print 'reeeeeeeeeeeeeediiiiiiirectiiiiing'
         return redirect(url_for('.runTask'))        
     else:
@@ -196,94 +286,216 @@ def startTask():
     return render_template("temp.html", homeclass="active", 
         temptext=temptext)
 
+
 @verifier.route('/runTask/')
 def runTask():
     
     if session.get('mapNodes') is None:
         ##TODO: what if no row is there? ##checked done!
-        mapNodes, mapRels = mapSqlToGraph(current_app.config['MAPPINGS']+'/crawlerMap')
-        if mapNodes is None:
+        ##call this for the time only, call mapSqlToGraph for the first time only
+        meta, mapNodes, mapRels, resolveNodesOn, resolveRelsOn = mapSqlToGraph(current_app.config['MAPPINGS']+'/crawlerMap')
+        ##won/t be none - mapNodes
+        if mapNodes is None: ##this is just a redundant check!
             ## 'No pending tasks at all or all resolved. Heading back to startTask'
-            return redirect(url_for('.startTask'))
+            return render_template("temp.html", homeclass="active", 
+        temptext='No pending tasks as of now')
         else:
+            ##give a new task id also!
             session['mapNodes']  = mapNodes
             session['mapRels'] = mapRels
-            resolveNodes = {}
-            resolveRels = {}
-            session['resolveNodes'] = resolveNodes
-            session['resolveRels'] = resolveRels
+            taskID = meta['tablename'] + str(meta['row_id']) ##useful logging TODO
+            session['resolveNodesOn'] = resolveNodesOn ##props on which to resolve, map between entity number to which props to resolve
+            session['resolveRelsOn'] = resolveRelsOn
+            session['resolvedNodes'] = {} ##should be a  set? TODO
+            session['resolvedRels'] = {}
+            session['taskID'] = taskID
+            print 'Beginning task ID: '+taskID
 
     ##after the outer if mapNodes are not None in session, for sure!
     ##they are in session for sure!
     ##fetch the number in nodes to resolve, if all resolved just pop all and go to start_task
     ## session.pop('username', None)
     number = findNextNodeNumberToResolve() 
-    if number=='all':
+
+    if number=='all': ##all have been resolved!
         ## pop all, redirect to start_task or resolve rels!
-        ## TODO: rels left
+        ## TODO: rels left, remove them only when done with rels !!
+
         session.pop('mapNodes', None)
         session.pop('mapRels', None)
-        session.pop('resolveNodes', None)
-        session.pop('resolveRels', None)
+        session.pop('resolvedNodes', None)
+        session.pop('resolvedRels', None)
+        session.pop('resolveNodesOn', None)
+        session.pop('resolveRelsOn', None)
+        session.pop('taskID', None)
+
         ## 'No pending tasks at all or all resolved. Heading back to startTask'
         return redirect(url_for('.startTask'))
     else:
         ##if a number is returned to resolve call the next two methods! yayy!
-        return redirect(url_for('.matchNew',number = number))
+        session['curr_number'] = number
+        return redirect(url_for('.matchNodeNew'))
     
     
     return render_template("temp.html", homeclass="active", 
         temptext='Running and resolving flow!')
 
-def findNextNodeNumberToResolve():
-    ##before calling we know for sure that mapNodes exist!
-    mapNodes = session.get('mapNodes')
-    nodeKeys = mapNodes.keys()
-    for key in nodeKeys:
-        if key not in session.get('resolveNodes'):
-            return key
-    return 'all'
 
 ##TODO: shoudlnt the number be in form or something??
-@verifier.route('/matchNew/<string:number>/')
-def matchNew(number):
-    ## TODO!!
-    ## form showing all matched uuids
-    ## fetch one uuid from the form
-    ## let uuid = 25 for '1' and 28 for '2' for sake of simplicity here
-    ## forward to diffPush method with number and uuid
+@verifier.route('/matchNodeNew/',methods=["GET","POST"])
+def matchNodeNew():
 
-    ##handle the case when no uuid is resturned TODO!
-    ##just create a new node in above case
-    session['curr_number'] = number
-    if number=='1':
-        session['curr_uuid'] = 25
+    import app.graphdb as t
+
+    ##can get this info: number: from session as in diff!
+    curr_number = session.get('curr_number')
+
+    mapNodes = session.get('mapNodes')
+    curr_node = t.deserializeNode(mapNodes[curr_number])
+
+
+    if not request.form:
+         ##py2neo object node
+
+        matchingUUIDS = [25,26,27,28]
+
+
+        ##use apache solr code here
+        ##from app.resolver import *      
+        ##print resolveNode('xx') ##TODO: remove this!
+        ##TODO: this should actaully change acc to the resolve props and show the diffs acc, to the resolve things only!
+        
+        
+        graphnodes = t.getListOfNodes(matchingUUIDS)
+
+        return render_template("verifier_match_node.html", homeclass="active",
+            row=curr_node, graphnodes=graphnodes)
     else:
-        session['curr_uuid'] = 28
+        ##get the matched_uuid! save it in sessnio or where-ever you want
+        #print request.form['match_uuid']
 
-    ##g is creating a lot of problems but why!!
-    ##have to use session for such a thing! bad! TODO! check what is the solution!
+        flash(request.form['match_uuid'])
 
-    return redirect(url_for('.diffPush'))
-    return render_template("temp.html", hosmeclass="active", 
-        temptext='Matching '+number)
+        if request.form['match_uuid']!='NA':            
+            session['curr_uuid'] = request.form['match_uuid']
+            return redirect(url_for('.diffPush'))
+        else:
+            ##creare a new uuid
+            from app.graphdb import wrapCreateNode, getGraph
+            
+            ##assuming the curr_node has name property if not. no way are we going to insert it! ##TODO a check!!!
+            ##create
+            curr_node = wrapCreateNode(getGraph(),curr_node)
 
+            ##set resolved node to correct number
+            resolvedNodes = session.get('resolvedNodes')
+            resolvedNodes[curr_number] = curr_node['uuid']
+            session['resolvedNodes'] = resolvedNodes
+
+            ##pop current_number
+            #pop curr_uuid
+            session.pop('curr_number', None)
+            session.pop('curr_uuid', None)
+
+            flash('Node created with uuid: '+ str(curr_node['uuid']))
+            return render_template("temp.html", homeclass="active",temptext="DIFF DONE!")
+            return redirect(url_for('.runTask'))
+            ##TODO: second return
+
+
+        ##pop session.curr_number here
+
+
+
+
+    # ## TODO!!
+    # ## form showing all matched uuids
+    # ## fetch one uuid from the form
+    # ## let uuid = 25 for '1' and 28 for '2' for sake of simplicity here
+    # ## forward to diffPush method with number and uuid
+
+    # ##handle the case when no uuid is resturned TODO!
+    # ##just create a new node in above case
+    # session['curr_number'] = number ##popping out ?? TODO!
+    # if number=='1':
+    #     session['curr_uuid'] = 25
+    # else:
+    #     session['curr_uuid'] = 28
+
+    # ##g is creating a lot of problems but why!!
+    # ##have to use session for such a thing! bad! TODO! check what is the solution!
+
+    # return redirect(url_for('.diffPush'))
+    
 
 ##two params: number and uuid ?? in session!
-@verifier.route('/diffPush/')
+@verifier.route('/diffPush/', methods=["GET","POST"])
 def diffPush():
-    number = session.get('curr_number')
-    uuid = session.get('curr_uuid')
-    session.pop('curr_uuid', None)
-    session.pop('curr_number', None)
+    curr_number = session.get('curr_number')
+    curr_uuid = session.get('curr_uuid')
+    mapNodes = session.get('mapNodes')
+    #session.pop('curr_uuid', None)
+    #session.pop('curr_number', None)
 
-    #uuid = request.args.get('uuid') ##not working at all since immutable
-    #push something to this uuid here!
 
-    ##some mechanism will give us a new py2neo node ---> after the selection of the diffs, based on labels, props, etc.
-    ##we will write a method to push that new py2neo node if uuid exists!
+    import app.graphdb as t
+    ##keep info about not shoiwng labels and not showing props 
+    orig = t.entity(curr_uuid)##from the graph
+    naya = t.deserializeNode(mapNodes[curr_number]) ##from the row
 
-    ##TODO: show a start task button here
-    return render_template("temp.html", homeclass="active", 
-        temptext='Push something new to '+ str(uuid)+' task completed') ##str beacuse of None
+    orig.pull()
+    print 'orig: ' + str(orig)
+    print '-------'
+    print 'naya: ' + str(naya)
+    print '-------'
+
+    new_labels = t.labelsToBeAdded(orig,naya) 
+    conf_props,new_props = t.propsDiff(orig,naya)
+
+    if not request.form:
+
+        return render_template("verifier_diff_node.html", homeclass="active",
+            new_labels=new_labels,conf_props=conf_props, new_props=new_props,orig=orig, naya=naya)
+    else:
+
+        
+        for prop in conf_props:
+            flash(prop+' : '+request.form[prop])
+            ##update this prop in orig node!
+            #orig[prop] = request.form[prop]
+            orig[prop] = request.form[prop] ##naya prop/orig prop 
+
+        
+        for label in request.form.getlist('newlabels'):
+            flash('Label: '+str(label))
+            ##add this label to orig!
+            orig.labels.add(label)
+
+        
+        for prop in new_props:
+            value_list = request.form.getlist(prop)
+            if len(value_list)==1: ##as only one value is going to be any way!
+                flash(prop+' : '+str(value_list[0]))
+                ##add this prop to orig node!
+                #orig[prop] = request.form[prop]
+                orig[prop] = request.form[prop] ##naya prop/orig prop 
+        
+        print orig  
+        ##now can push! TODO!
+        ##orig.push()
+
+
+        return render_template("temp.html", homeclass="active",temptext="DIFF DONE!")
+
+
+
+    # #uuid = request.args.get('uuid') ##not working at all since immutable
+    # #push something to this uuid here!
+
+    # ##some mechanism will give us a new py2neo node ---> after the selection of the diffs, based on labels, props, etc.
+    # ##we will write a method to push that new py2neo node if uuid exists!
+
+    # ##TODO: show a start task button here
+    # return render_template("temp.html", homeclass="active", 
+    #     temptext='Push something new to '+ str(uuid)+' task completed') ##str beacuse of None
 

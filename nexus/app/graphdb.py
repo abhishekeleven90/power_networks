@@ -242,7 +242,7 @@ def node2():
     return jindal2
 
 def node3():
-    jindal3 = Node("person","politician", name="Naveen Jindal",assets="200 Cr",party="INC", gender="Male")
+    jindal3 = Node("person","politician","businessman", name="Navn Jindl",assets="240 Cr",party="Indian Congress", gender="M")
     return jindal3
 
 def orig():
@@ -275,22 +275,29 @@ def createNodeFromMapping(en,df):
         node.labels.add(label)
     for i in range(len(en['graph'])):
         node.properties[en['graph'][i]] = df[en['mysql'][i]][0]
-    return node
+    return node, en['resolve']
 
 #df is pandas dataframe
 def createRelFromMapping(rel,startNode,endNode,df):
     link =  Relationship(startNode,rel['label'],endNode)
     for i in range(len(rel['graph'])):
         link.properties[rel['graph'][i]] = df[rel['mysql'][i]][0]
-    return link
+    return link, rel['resolve']
 
 
 def wrapCreateNode(graph, node):
     ## use this table
     ## this table inside flasktemp for now
     ## create table uuidtable(uuid bigint(20) not null auto_increment primary key, name varchar(255));
+    from dbwork import createUuid
     uuid = createUuid(node['name'])
     node['uuid'] = uuid
     graph.create(node)
     node.pull()
     return node
+
+def getListOfNodes(uuid_list):
+    ans = []
+    for c in uuid_list:
+        ans.append(entity(c))
+    return ans

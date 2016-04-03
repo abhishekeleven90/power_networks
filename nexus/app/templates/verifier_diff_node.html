@@ -9,7 +9,7 @@
 <div class="starter-template" align="center" >
 
 
-<form class="form-horizontal" method="post" action={{url_for('verifier.diff')}}>
+<form class="form-horizontal" method="post" action={{url_for('verifier.diffPush')}}>
     
 
 
@@ -74,9 +74,14 @@
             {% for prop in conf_props%}
                 <tr>
                     <td>
-                    
+                       
                     <div class="radio">
-                        <label><input type="radio" name="{{prop}}" value="{{orig[prop]}}"></input> {{prop}}: <b>{{orig[prop]}}</b> </label>
+                        <label>
+
+                            <!--checked is very imp very very imp!-->
+                            <!-- else null goes or nothing goes and that creates a problem! -->
+                            <input type="radio" name="{{prop}}" value="{{orig[prop]}}" checked=""></input> {{prop}}: <b>{{orig[prop]}}</b>
+                        </label>
                     </div>                    
                      
 
@@ -84,7 +89,9 @@
                     <td>
 
                         <div class="radio">
-                            <label><input type="radio" name="{{prop}}"" value="{{naya[prop]}}"></input> {{prop}}: <b>{{naya[prop]}}</b></label>
+                            <label>
+                                <input type="radio" name="{{prop}}" value="{{naya[prop]}}"></input> {{prop}}: <b>{{naya[prop]}}</b>
+                            </label>
                         </div>
 
 

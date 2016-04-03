@@ -1,0 +1,29 @@
+##mysql statements
+use phpmyadmin to fill
+
+
+##neo4j statements
+
+
+create (n:person:politician {uuid:253, name:'Mr. Narayan Modi', email:'modi@modi.com', state:'Gujarat', someprop:'somevalue'}) return n
+
+create (n:person:politician {uuid:252, name:'Mr. Narandra Modi', mynetaid:55, email:'modi@bjp.com', address:'uttar pradesh'}) return n
+
+
+create (n:Person {uuid:251, name:'Mr. Narandroo Mudi', mynetaid:55, email:'narendroo@bjp.com', address:'uttar pradesh'}) return n
+
+
+create (n:Person {uuid:250, name:'Narandra Modi', mynetaid:55, age:55, nationality:'Indian',  email:'narendra@bjp.com', address:'utar pradesh'}) return n
+
+
+
+
+
+create (n:person:businessman {uuid:350, name:'Navin Jindal', email:'jind@jindal.com'}) return n
+
+create (n:person {uuid:351, name:'Naveenn Jindel', email:'jind@jindal.com', state:'rajsathan'}) return n
+
+
+create (n:businessman {uuid:352, name:'Naveen Jindal', email:'jindal@jindal.com', age:55, someprop:'somevalue'}) return n
+
+create (n:businessman {uuid:353, name:'Naveen Jindal', email:'someone@jindal.com', dob:'some date of birth', someprop:'somevalue'}) return n
