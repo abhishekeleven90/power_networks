@@ -2,7 +2,7 @@ import requests as rq
 import ast
 
 def get_uuid(propname=None,propvalue=None,thresvalue=None,label = None):
-    default_url = "http://10.237.27.87:8983/solr/mtp/select?q=*%3A*&wt=python&rows=10&indent=true"
+    default_url = "http://10.237.27.87:8983/solr/mtp/select?q=*%3A*&wt=python&rows=1000&indent=true"
     if thresvalue == None:
         thresvalue = '0.2'
     if label == None:
@@ -12,7 +12,7 @@ def get_uuid(propname=None,propvalue=None,thresvalue=None,label = None):
     else:
 
         base_url = "http://10.237.27.87:8983/solr/mtp/select?q="
-        rest_url = "&wt=python&rows=10&indent=true"
+        rest_url = "&wt=python&rows=1000&indent=true"
 
         if propname == "name":
             initials = propvalue.split(' ')
@@ -47,22 +47,28 @@ def get_uuid(propname=None,propvalue=None,thresvalue=None,label = None):
     print "##UUid list length -{}".format(len(uuid_list))
     return uuid_list
 
-if __name__=="__main__":
-    #l = get_uuid()
-    #print l
-    test_lab = 'company'
-    test_propN  = ['name' , 'status']
-    test_propV = ['jindal' , 'active']
-    test_thres = ['0.2','0.3']
+def get_uuid_helper(prop_names,prop_values,thresholds,label):
     results = []
     i = 0
-    for pN,pV,tH in zip(test_propN,test_propV,test_thres):
-        l = get_uuid(propname =pN,propvalue = pV, thresvalue = tH,label = test_lab)
-        print "##Pirnting output "
+    for pN,pV,tH in zip(prop_names,prop_values,thresholds):
+        l = get_uuid(propname =pN,propvalue = pV, thresvalue = tH,label = label)
+        print "##Prnting output list- get_uuid "
         print l
 
         if i == 0: results = [x for x in l]
         else: results = [x  for x in results if x in l]
         i = i+1
 
-    print results
+    return results
+
+if __name__=="__main__":
+    #l = get_uuid()
+    #print l
+    test_lab = 'company'
+    test_propN  = ['name' , 'status'] ##be careful! it takes the order of the first list!
+    test_propV = ['jindal' , 'active']
+    test_thres = ['0.2','0.3']
+    res = get_uuid_helper(test_propN,test_propV,test_thres,test_lab)
+    print "##Final result:-"
+    print res
+
