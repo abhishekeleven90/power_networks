@@ -3,6 +3,7 @@
 {% block content %}
 
 <br/>
+<h1>Task ID : {{taskID}} | Node Number : {{curr_number}}</h1>
 <br/>
 
 
@@ -76,8 +77,7 @@
                     <td>
                        
                     <div class="radio">
-                        <label>
-
+                        <label>   
                             <!--checked is very imp very very imp!-->
                             <!-- else null goes or nothing goes and that creates a problem! -->
                             <input type="radio" name="{{prop}}" value="{{orig[prop]}}" checked=""></input> {{prop}}: <b>{{orig[prop]}}</b>

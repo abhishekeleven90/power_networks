@@ -68,3 +68,31 @@ def createUuid(name):
     mydb.close()
 
     return cursor.lastrowid
+
+
+##generic can be used by anyone
+def updateSQL(query,ipaddress,database,user,password):
+    import MySQLdb
+    # Open database connection
+    db = MySQLdb.connect(ipaddress,user,password,database)
+
+    # prepare a cursor object using cursor() method
+    cursor = db.cursor()
+
+    # execute SQL query using execute() method.
+    numrows = cursor.execute(query);
+    
+    db.commit()
+
+    db.close()
+    
+    return numrows
+
+##to be used when updating resolved status in a crawled db
+##TODO: since only for crawled db, need to remove the database? 
+def updateResolved(tablename, row_id,ipaddress,database,user,password,resolved=1):
+
+    ##need to modularize and move this code from here! : TODO!
+    numrows = updateSQL("UPDATE "+tablename+" SET resolved="+str(resolved)+" WHERE id="+str(row_id)+";",ipaddress,database,user,password)
+    print "UPDATE "+tablename+" SET resolved="+str(resolved)+" WHERE id="+str(row_id)+";"
+    return numrows
