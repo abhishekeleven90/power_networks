@@ -1,0 +1,10 @@
+WTF_CSRF_ENABLED = True
+SECRET_KEY = 'you-will-never-guess' ##TODO
+MYSQLDBNAME = 'flasktemp'
+MYSQLDBHOST = 'localhost'
+MYSQLDBUSER = 'root'
+MYSQLDBPASSWORD = 'yoyo'
+CRAWL_DBNAME = 'crawldb' ##willl be neo4j data!
+CRAWL_DBHOST = 'localhost'
+CRAWL_DBUSER = 'root'
+CRAWL_DBPASSWORD = 'yoyo'
