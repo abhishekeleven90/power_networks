@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort, g, session
+from flask import Blueprint, render_template, abort, g, session, request
 
 newlinks = Blueprint('newlinks', __name__)
 
@@ -6,9 +6,11 @@ newlinks = Blueprint('newlinks', __name__)
 # to create and tear down a database connection on each request.
 @newlinks.before_request
 def before_request():
-    ##if session.get('role')<2:
-    ##    abort(403)
     print 'newlinks hi!!!' ##this is like a wrapper inside a wrapper
+    from utils_crawler import isValidToken
+    if not isValidToken(request.args.get('_token', ''),2):
+        abort(403)
+    print 'newlinks hi2222!!!' ##this is like a wrapper inside a wrapper
 
 @newlinks.after_request
 def after_request(response):

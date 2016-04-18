@@ -7,8 +7,12 @@ from dbwork import *
 @app.route('/home/')
 @app.route('/index/')
 def home():
+    print request
+    print request.args.get('_token') ##if not using get will throw bad request error!
+    print request.headers
+    print request.data
+    print request.json
     return jsonify({'message': 'Welcome to Power Nexus APIS'}), 200
-
 
 @app.route('/security')
 def security():
