@@ -62,3 +62,38 @@
         }
     ]
 }
+
+
+{
+"taskname": "njconn1",
+"description": "Naveen Jindal Connections",
+"fetchdate": "01/01/2011",
+"sourceurls": ["wikipedia", "capitalline"],
+"entities": 
+    [
+        {
+            "id":"1",
+            "labels":["person","politician"],
+            "properties":
+                {"name":"Naveen Jindal"}
+        },
+        {
+            "id":"2",
+            "labels":["organization","politicalparty"],
+            "properties":
+                {"name":"INC"}
+        }
+    ],
+"relations":
+    [
+        {
+            "id":"1",
+            "label":"worksIn",
+            "start_entity":"1",
+            "end_entity":"2",
+            "bidirectional":"no",
+            "properties":
+                {"startdate":"01/01/2010"}
+        }
+    ]
+}

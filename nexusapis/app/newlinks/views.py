@@ -108,7 +108,7 @@ def pushLinked():
     ## MAJOR TODO!
     ## check for strings 
     ## validation checks: if task exists, 
-    ## ids repeated in nodes
+    ## ids repeated in nodes in json and in actual 
     ## ids repeated in relations
     ## source_urls known in particular format
     ## fetch date in format
@@ -117,9 +117,14 @@ def pushLinked():
     ## values all in strings or particular format?
     ## apis to add a new property in allowed dict with its description?
     ## check if ids are ints 
+    ## check if nodeid already exists in db, or relid
 
 
     entities = request.json['entities']
+    relations = []
+    if 'relations' in request.json:
+        relations = request.json['relations']
+
     
     subgraph = {}
     subgraph['_token'] = tokenid
@@ -132,20 +137,64 @@ def pushLinked():
     links = {}
 
     for en in entities:
-        print en
         #print entities[en]
         nodeid = en['id']
         if nodeid in nodes:
             return error_helper('id repeated under entities',400)
+        
+        if not 'labels' in en:
+            return error_helper('Labels list missing for an entity', 400)
+        if not len(en['labels'])>0:
+            return error_helper('Labels list empty for an entity', 400)
+        if not 'properties' in en:
+            return error_helper('Properties map missing for an entity', 400)
+        if not 'name' in en['properties']:
+            return error_helper('Name property missing for an entity', 400)
+        
         nodelabels = en['labels']
         nodeprops = en['properties']
-        nodes[nodeid] = {'crawlid':tokenid+'_'+taskname+'_'+str(nodeid), 'labels':nodelabels,'properties':nodeprops}
+        nodes[nodeid] = {'crawl_en_id':'en_'+tokenid+'_'+taskname+'_'+str(nodeid), 'labels':nodelabels,'properties':nodeprops}
+
+    for rel in relations:
+        linkid = rel['id']
+        if linkid in links:
+            return error_helper('id repeated under relations',400)
+        
+        if not 'label' in rel:
+            return error_helper('Label missing for a relation', 400)
+        linklabel = rel['label']
+
+        if len(linklabel)<3:
+            return error_helper('Label too short for a relation', 400)
+        
+        if not 'properties' in rel:
+            return error_helper('Properties map missing for a relation', 400)
+        linkprops = rel['properties']
+
+        if not 'start_entity' in rel:
+            return error_helper('Start entity reference missing for a relation', 400)
+        starnode = rel['start_entity']
+        
+        if not 'end_entity' in rel:
+            return error_helper('End entity reference missing for a relation', 400)
+        endnode = rel['end_entity']
+        
+
+        if not 'bidirectional' in rel:
+            return error_helper('Bidirecional property missing for a relation', 400)
+        bidirectional = rel['bidirectional']
+
+        print 'bbbbbb '+bidirectional
+        if bidirectional!='yes' and bidirectional!='no':
+            return error_helper('bidirectional not yes/no for a for a relation', 400)
+        
+        links[linkid] = {'crawl_rel_id':'rel_'+tokenid+'_'+taskname+'_'+str(linkid), 'label':linklabel,'properties':linkprops}        
+        
 
     subgraph['entities'] = nodes
     subgraph['relations'] = links
 
-    data = jsonify(subgraph) 
-
+    data = jsonify(subgraph)
+    
     return data, 201
-
     ##Usage: curl -i -H "Content-Type: application/json" -X POST -d '{"taskname":"wow","description":"Some values!"}' http://localhost:5000/newlinks/pushlinked/?_token=NexusToken2
