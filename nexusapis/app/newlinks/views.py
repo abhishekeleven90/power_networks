@@ -90,34 +90,30 @@ def pushLinked():
 
     if not request.json: ##is a dict!!
         return error_helper("Not JSON Data",400)
+
+    required_master_props = ['taskname', 'description', 'fetchdate', 'sourceurls', 'entities']
+    for prop in required_master_props:
+        if not prop in request.json:
+            return error_helper(str(prop)+" not in json data", 400)    
     
-    if not 'taskname' in request.json:
-        return error_helper("taskname not in json data", 400)
-
-    if not 'description' in request.json:
-        return error_helper("description not in json data", 400)
-
-    if not 'fetchdate' in request.json:
-        return error_helper("fetchdate not in json data", 400)
-
-    if not 'sourceurls' in request.json:
-        return error_helper("sourceurls not in json data", 400)
-
     taskname = request.json['taskname']
 
     ## MAJOR TODO!
+    ## some props are interanally reserved crawl_en_id not allowed for nodes
+    ## what about ternary relations?
+    ## 
     ## check for strings 
     ## validation checks: if task exists, 
     ## ids repeated in nodes in json and in actual 
     ## ids repeated in relations
     ## source_urls known in particular format
     ## fetch date in format
-    ## labels not empty
+    ## allowed labels
     ## props allowed
     ## values all in strings or particular format?
     ## apis to add a new property in allowed dict with its description?
-    ## check if ids are ints 
-    ## check if nodeid already exists in db, or relid
+    ## ids ints?
+    ## check if nodeid already exists in temp graph db, or relid
 
 
     entities = request.json['entities']
@@ -136,57 +132,74 @@ def pushLinked():
     nodes = {}
     links = {}
 
+    ##MAJOR TODO reserved keywords and required keywords list
+    ##MAJOR TODO format and pattern against keywords with regex
+
+    required_endict_props = ['labels','properties','id']
+    reserved_en_props = ['crawl_en_id','resolvedWithUUID','taskname','token','_token','workname','date','time','resolvedDate','resolvedAgainst','verifiedBy','resolvedBy','verifiedDate','update','lastUpdatedBy','lastUpdatedOn']
+    required_en_props = ['name'] ##inside entity['properties']
+
     for en in entities:
+
+        for prop in required_endict_props:
+            if not prop in en:
+                return error_helper(str(prop)+' required attribute missing for an entity', 400) 
+
         #print entities[en]
         nodeid = en['id']
         if nodeid in nodes:
             return error_helper('id repeated under entities',400)
         
-        if not 'labels' in en:
-            return error_helper('Labels list missing for an entity', 400)
         if not len(en['labels'])>0:
             return error_helper('Labels list empty for an entity', 400)
-        if not 'properties' in en:
-            return error_helper('Properties map missing for an entity', 400)
-        if not 'name' in en['properties']:
-            return error_helper('Name property missing for an entity', 400)
-        
+
+        for prop in required_en_props:
+            if not prop in en['properties']:
+                return error_helper(str(prop)+' required property missing for an entity', 400)
+
+        for prop in reserved_en_props:
+            if prop in en['properties']:
+                return error_helper(str(prop)+' reserved property not allowed explicitly for an entity', 400)
+
         nodelabels = en['labels']
         nodeprops = en['properties']
         nodes[nodeid] = {'crawl_en_id':'en_'+tokenid+'_'+taskname+'_'+str(nodeid), 'labels':nodelabels,'properties':nodeprops}
 
+    required_reldict_props = ['label','properties','start_entity','end_entity','bidirectional','id']
+    reserved_rel_props = ['crawl_rel_id','resolvedWithRELID','taskname','token','_token','workname','date','time','resolvedDate','resolvedAgainst','verifiedBy','resolvedBy','verifiedDate','update','lastUpdatedBy','lastUpdatedOn']
+    required_rel_props = [] ##inside entity['properties']
+
     for rel in relations:
+
+        for prop in required_reldict_props:
+            if not prop in rel:
+                return error_helper(str(prop)+' required attribute missing for a relation', 400)
+
         linkid = rel['id']
         if linkid in links:
             return error_helper('id repeated under relations',400)
         
-        if not 'label' in rel:
-            return error_helper('Label missing for a relation', 400)
         linklabel = rel['label']
 
         if len(linklabel)<3:
             return error_helper('Label too short for a relation', 400)
         
-        if not 'properties' in rel:
-            return error_helper('Properties map missing for a relation', 400)
         linkprops = rel['properties']
-
-        if not 'start_entity' in rel:
-            return error_helper('Start entity reference missing for a relation', 400)
         starnode = rel['start_entity']
-        
-        if not 'end_entity' in rel:
-            return error_helper('End entity reference missing for a relation', 400)
         endnode = rel['end_entity']
-        
-
-        if not 'bidirectional' in rel:
-            return error_helper('Bidirecional property missing for a relation', 400)
         bidirectional = rel['bidirectional']
 
         print 'bbbbbb '+bidirectional
         if bidirectional!='yes' and bidirectional!='no':
             return error_helper('bidirectional not yes/no for a for a relation', 400)
+
+        for prop in required_rel_props:
+            if not prop in rel['properties']:
+                return error_helper(str(prop)+' required property missing for an relation', 400)
+
+        for prop in reserved_rel_props:
+            if prop in rel['properties']:
+                return error_helper(str(prop)+' reserved property not allowed explicitly for an relation', 400)
         
         links[linkid] = {'crawl_rel_id':'rel_'+tokenid+'_'+taskname+'_'+str(linkid), 'label':linklabel,'properties':linkprops}        
         
@@ -195,6 +208,6 @@ def pushLinked():
     subgraph['relations'] = links
 
     data = jsonify(subgraph)
-    
-    return data, 201
+
+    return data, 201 ## 201 is for creation!
     ##Usage: curl -i -H "Content-Type: application/json" -X POST -d '{"taskname":"wow","description":"Some values!"}' http://localhost:5000/newlinks/pushlinked/?_token=NexusToken2

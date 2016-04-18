@@ -1,6 +1,4 @@
 from py2neo import Graph, Node, Relationship
-import diff_match_patch
-import pandas as pd
 
 username = 'neo4j'
 password = 'yoyo'
@@ -15,24 +13,10 @@ graph = Graph(con_url)
 def getGraph():
 	return graph
 
-##NOT TO BE USED
-#this is how we use the intenal ids of the graph
-##should we use it?? most people say no
-## anyways, made the method for future use
-## Use : getNodeByInternalId(graph, 152)
-def getNodeByInternalId(graph,id):
-	a = graph.node(id) #getting by id given internally by neo4j
-	a.pull()
-	return a
+def createNodeFromDict(graph, nodedict):
+    node = Node()
 
-
-##NOT TO BE USED
-## similar to above
-## Use : getRelByInternalId(graph, 4)
-def getRelByInternalId(graph,id):
-	a = graph.relationship(id)
-	a.pull()
-	return a
+    pass
 
 def createNodes2(graph):
 	alice = Node("Party", name="Alice")
@@ -47,7 +31,6 @@ def createNodes2(graph):
 	print bob
 	print alice_knows_bob
 	graph.create(alice_knows_bob)
-
 
 def createNodes(graph):
 	from py2neo.cypher import CypherWriter
@@ -92,90 +75,18 @@ def createNodes(graph):
 	graph.create(alice_knows_bob)
 	return old_record,new_record
 
-def diffObjects(str1,str2):
-    diff_obj = SideBySideDiff()
-    result = diff_obj.diff_main(str1, str2)
-    diff_obj.diff_cleanupSemantic(result)
-    oldstr = diff_obj.old_content(result) 
-    newstr = diff_obj.new_content(result)
-    return oldstr,newstr
-
-class SideBySideDiff(diff_match_patch.diff_match_patch):
-
-    def old_content(self, diffs):
-        """
-        Returns HTML representation of 'deletions'
-        """
-        html = []
-        for (flag, data) in diffs:
-            text = (data.replace("&", "&amp;")
-                    .replace("<", "&lt;")
-                    .replace(">", "&gt;")
-                    .replace("\n", "<br>"))
-
-            if flag == self.DIFF_DELETE:
-                html.append("""<del style=\"background:#ffe6e6;
-                    \">%s</del>""" % text)
-            elif flag == self.DIFF_EQUAL:
-                html.append("<span>%s</span>" % text)
-        return "".join(html)
-
-    def new_content(self, diffs):
-        """
-        Returns HTML representation of 'insertions'
-        """
-        html = []
-        for (flag, data) in diffs:
-            text = (data.replace("&", "&amp;")
-                    .replace("<", "&lt;")
-                    .replace(">", "&gt;")
-                    .replace("\n", "<br>"))
-            if flag == self.DIFF_INSERT:
-                html.append("""<ins style=\"background:#e6ffe6;
-                    \">%s</ins>""" % text)
-            elif flag == self.DIFF_EQUAL:
-                html.append("<span>%s</span>" % text)
-        return "".join(html)
-
-def entity(uuid):
-	query = "match (n {uuid:"+str(uuid)+"}) return n"
+def entity(crawl_en_id):
+	query = "match (n {crawl_en_id:"+str(crawl_en_id)+"}) return n"
 	rc = graph.cypher.execute(query)
 	return rc[0][0]
 
-def relation(relid):
-	query = "match ()-[r {relid:"+str(relid)+"}]-() return r"
+def relation(crawl_rel_id):
+	query = "match ()-[r {crawl_rel_id:"+str(crawl_rel_id)+"}]-() return r"
 	#print query
 	rc = graph.cypher.execute(query)
 	#print len(rc)
 	#print rc
 	return rc[0][0]
-
-
-#prev is a Node
-#latest is a Node
-#Usage:
-'''
-alice = Node("Ola","Olap","Olat", name="uinq",uuid=4)
-print alice
-bob = Node("Person","Politician", name="bob",uuid=4)
-print bob
-updatePrev(alice,bob)
-print alice
-'''
-def updatePrev(prev_uuid,latest):
-    prev = entity(prev_uuid)
-    prev_uuid = prev['uuid']
-    prev.labels.clear()
-    prev.properties.clear()
-    for x in latest.labels:
-        prev.labels.add(x)
-    for x in latest.properties: #dont uupdate the uuid
-        if x!= 'uuid':
-            prev[x]=latest[x]
-    prev['uuid'] = prev_uuid
-    prev.push() #also pushed
-    #updated by now
-    print 'The node with uuid '+str(prev_uuid)+' should be update by now'
 
 
 ##example of some text input: (n154346:businessperson:person:politician {name:"Anita",uuid:1234})
@@ -221,17 +132,6 @@ def deserializeNode(nodeText):
 
 
 
-##work to do add a form where they can create a node
-#get a node's page by uuid
-#also get node's relations in form of graph, embed that graph
-#edit a node
-#edit a relation
-#dlete a node
-#delete a relation
-#moderate any change --> how to do that --> where will this lie!
-#Note the diff between now and then
-
-
 ##### temp work start #####
 def node1():
     jindal1 = Node("person",name="Navin Jindal",email="info@support.com")
@@ -247,24 +147,6 @@ def node3():
 
 def orig():
     return entity(25)
-
-def labelsToBeAdded(orig, naya):
-    new_labels = []
-    for x in naya.labels:
-        if x not in orig.labels:
-            new_labels.append(x)
-    return new_labels
-
-def propsDiff(orig,naya):
-    conf_props = []
-    new_props = []
-    for x in naya.properties:
-        if x not in orig.properties:
-            new_props.append(x)
-        else:
-            conf_props.append(x)
-    return conf_props, new_props
-
 
 ### temp work end #####
 
