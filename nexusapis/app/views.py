@@ -14,9 +14,16 @@ def home():
     print request.json
     return jsonify({'message': 'Welcome to Power Nexus APIS'}), 200
 
-@app.route('/security')
+##just a helper api, remove when time: TODO
+@app.route('/security/')
 def security():
     abort(403)
+
+##just a helper api, rmeove when time: TODO
+@app.route('/logout/', methods=['GET'])
+def logout():
+    session.clear()
+    return jsonify({'message': 'Session cleared'}), 200
 
 
 ##@app.errorhandler(404)

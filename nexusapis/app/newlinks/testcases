@@ -1,0 +1,64 @@
+{
+"taskname": "wow",
+"description": "Naveen Jindal Connections",
+"entities": [{"id":"a","name":"a"},{"id":"b","name":"b"}]
+}
+
+
+{
+"taskname": "wow",
+"description": "Naveen Jindal Connections",
+"entities": [{"id":"a","labels":["a","b","c"]},{"id":"b","labels":["a","b","c"]}]
+}
+
+
+{
+"taskname": "njconn1",
+"description": "Naveen Jindal Connections",
+"fetchdate": "01/01/2011",
+"sourceurls": ["wikipedia", "capitalline"],
+"entities": 
+    [
+        {
+            "id":"1",
+            "labels":["person","politician"],
+            "properties":
+                {"name":"Naveen Jindal"}
+        },
+        {
+            "id":"2",
+            "fetchdate": "01/01/2011",
+            "sourceurls": ["wikipedia", "capitalline"],
+            "labels":["organization","politicalparty"],
+            "properties":
+                {"name":"INC"}
+        }
+    ]
+}
+
+
+
+
+{
+"taskname": "njconn1",
+"description": "Naveen Jindal Connections",
+"fetchdate": "01/01/2011",
+"sourceurls": ["wikipedia", "capitalline"],
+"entities": 
+    [
+        {
+            "id":"1",
+            "labels":["person","politician"],
+            "properties":
+                {"name":"Naveen Jindal"}
+        },
+        {
+            "id":"2",
+            "fetchdate": "01/01/2011",
+            "sourceurls": ["wikipedia", "capitalline"],
+            "labels":["organization","politicalparty"],
+            "properties":
+                {"name":"INC"}
+        }
+    ]
+}
