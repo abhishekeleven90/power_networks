@@ -3,6 +3,7 @@ from collections import OrderedDict
 from time import time
 import ast
 import re
+import urllib
 
 def get_uuid_phonetic(propname=None,propvalue=None,label = None,is_phonetic = False):
 
@@ -19,8 +20,8 @@ def get_uuid_phonetic(propname=None,propvalue=None,label = None,is_phonetic = Fa
     else:
         base_url = "http://10.237.27.87:8983/solr/mtp/select?q="
         rest_url = "&wt=python&rows=50000&indent=true"
-        if is_phonetic: propvalue_str = '+AND+phonetic%3A('+propvalue+')'
-        else: propvalue_str = '+AND+propvalue%3A(%2B'+propvalue+')'
+        if is_phonetic: propvalue_str = '+AND+phonetic%3A('+urllib.quote_plus(propvalue)+')'
+        else: propvalue_str = '+AND+propvalue%3A(%2B'+urllib.quote_plus(propvalue)+')'
         label_str = 'label%3A'+label
         propname_str = '+AND+propname%3A'+propname
         arg_url = label_str+propname_str+propvalue_str
@@ -70,13 +71,13 @@ def get_uuid_spellcheck(propname=None,propvalue=None,label=None):
     n_results = d['spellcheck']['suggestions']
     sugg_list = []
     
-    for suggestion in suggestions:
+    for suggestion in d:
         if type(suggestion) == dict:
             sugg_list = sugg_list+suggestion["suggestion"]
 
     #now remove duplicates
     sugg_list = list(OrderedDict.fromkeys(sugg_list))
-
+    uuid_list = []
     for s in sugg_list:
         uuid_list = uuid_list + get_uuid(propname=propname,propvalue = s) 
 
@@ -88,8 +89,8 @@ def get_uuid_spellcheck(propname=None,propvalue=None,label=None):
 def get_uuid(propname,propvalue,label):
 
     uuids1 = get_uuid_phonetic(propname=propname,propvalue = propvalue,label = label,is_phonetic=True)
-    uuids2 = get_uuid_spellcheck(propname=propname,propvalue = propvalue,label = label)
-    results = uuids1 + uuids2
+    #uuids2 = get_uuid_spellcheck(propname=propname,propvalue = propvalue,label = label)
+    results = uuids1
     results = list(OrderedDict.fromkeys(results))
 
     return results
@@ -97,7 +98,7 @@ def get_uuid(propname,propvalue,label):
 def get_uuid_helper(prop_names,prop_values,label):
     results = []
     i = 0
-    for pN,pV,tH in zip(prop_names,prop_values):
+    for pN,pV in zip(prop_names,prop_values):
         l = get_uuid(propname =pN,propvalue = pV,label = label)
         #print "##Prnting output list- get_uuid "
         #print l
@@ -114,15 +115,15 @@ def get_uuid_helper(prop_names,prop_values,label):
 if __name__=="__main__":
     #l = get_uuid()
     #print l
-    test_lab = 'company'
-    test_propN  = ['name','status' ] ##be careful! it takes the order of the first property!
-    test_propV = ['jindal','alive']
+    test_lab = 'businessperson'
+    test_propN  = ['name'] ##be careful! it takes the order of the first property!
+    test_propV = ['mr gautam adani']
     #test_thres = ['0.2','0.5']
     t = time()
     res = get_uuid_helper(test_propN,test_propV,test_lab)
     #print "##Final result:-"
-    #print res
     print "##Num items found - [final] "
     print len(res)
+    #print res
     print "##Total time taken-{} s".format(time() - t)
 
