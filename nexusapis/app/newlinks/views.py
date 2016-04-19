@@ -1,6 +1,7 @@
 from app.newlinks import newlinks
 from flask import render_template, flash, redirect, session, g, request, url_for, abort, jsonify
 from utils_crawler import *
+from app.apigraphdb import *
 
 ##Usage: http://localhost:5000/newlinks/randomrandom/?_token=NexusToken
 ## http://localhost:5000/newlinks/randomrandom?_token=NexusToken
@@ -211,8 +212,13 @@ def pushLinked():
         links[linkid] = {'label':linklabel,'properties':linkprops,'start_entity':startnode, 'end_entity':endnode}        
         
 
+    posted, msg = postSubGraph(getGraph(), nodes, links, tokenid, taskname)
+    if not posted:
+        return error_helper(msg, 400)
+
     subgraph['entities'] = nodes
     subgraph['relations'] = links
+
 
     data = jsonify(subgraph)
 

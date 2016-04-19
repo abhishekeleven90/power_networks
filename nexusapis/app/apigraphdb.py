@@ -90,6 +90,7 @@ def createRels(graph, listofreldicts):
 ## see that rel dicts ids not exist already
 ## see that start id and end id already in graph db or in the node dict provided
 ## only after this is the post/push safe --> can be done
+##TODO: remove token and taskname when not needed
 def isSafePost(graph, listOfNodeDicts, listOfRelDicts, token, taskname):
     
     print '##'
@@ -169,3 +170,30 @@ def testIsSafePost(graph):
     
 ##Usage: nl, rl = testIsSafePost(graph)
 ##Usage: isSafePost(graph, nl, rl, '', '')
+
+
+def postSubGraph(graph, nodes, links, token, taskname):
+    
+    ##make a list of nodes
+    ##make a list of links
+    ##check for isSafePost
+    ##then createNodes
+    ##then create Rels
+
+    nodeList = []
+    for node in nodes:
+        nodeList.append(nodes[node])
+    
+    linkList = []
+    for link in links:
+        linkList.append(links[link])
+
+    safe, msg = isSafePost(graph, nodeList, linkList, token, taskname)
+    
+    if not safe:
+        return safe, msg
+
+    createNodes(graph, nodeList) ##MAJOR TODO: "includeStats": True???
+    createRels(graph, linkList)
+
+    return True, "Success"
