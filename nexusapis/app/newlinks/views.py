@@ -117,6 +117,11 @@ def pushLinked():
     ## check if nodeid already exists in temp graph db, or relid
     ## create indexes and contsraints will have to add an internal label and internal relation label
 
+    ##MAJOR TODO what to do about metadata?
+    ##"description": "Naveen Jindal Connections",
+    ##"fetchdate": "01/01/2011",
+    ##use this metadata
+
 
     entities = request.json['entities']
     relations = []
