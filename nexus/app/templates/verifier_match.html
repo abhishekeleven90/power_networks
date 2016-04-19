@@ -3,16 +3,18 @@
 {% block content %}
     <!--<div class="container">-->
         <br/>
+        <h1>Task ID : {{taskID}}</h1>
         <br/> 
     <!--</div> container-->
-    <h1>To be matched</h1>
+
+    <h3>To be matched</h3>
     {{entity_read(row,True)}}
     <hr/>
 
 
     <form class="form-horizontal" method="post" action={{url_for('verifier.match')}}>
 
-        <h1>From graph</h1>
+        <h3>From graph</h3>
         <br/>
 
         {% for node in graphnodes %}

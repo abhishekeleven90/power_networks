@@ -242,6 +242,18 @@ def checkTaskExists():
 
     return len(df) != 0
 
+def updateRow(tablename, row_id, ):
+    ##redundant code from mapSqlToGraph remove: TODO!
+    from app.dbwork import *
+
+    ##need to modularize and move this code from here! : TODO!
+    meta,ens,rels = crawlerMappings(current_app.config['MAPPINGS']+'/crawlerMap')
+    df = sqlQuerytoDF("UPDATE "+ meta['tablename']+" SET resolved=2 WHERE id="+row_id+";",
+        current_app.config['CRAWL_DBHOST'], current_app.config['CRAWL_DBNAME'],
+        current_app.config['CRAWL_DBUSER'], current_app.config['CRAWL_DBPASSWORD'])
+
+
+
 
 def findNextNodeNumberToResolve():
     ##before calling we know for sure that mapNodes exist!
@@ -265,6 +277,8 @@ def startTask():
     session.pop('resolveNodesOn', None)
     session.pop('resolveRelsOn', None)
     session.pop('taskID', None)
+    session.pop('tablename',None)
+    session.pop('row_id',None)
 
     ##nos. to shwo how many rows left -- notify?
 
@@ -272,13 +286,36 @@ def startTask():
     #temptext = ''
     ##or may be invalidate all 4 vars on this and restart! the task id! TODO!
     if session.get('mapNodes') is not None:
-        print 'in the middle of the task: '+str(session.get('taskName'))  
+        print 'startTask: in the middle of the task: '+str(session.get('taskID'))  
         return redirect(url_for('.runTask'))
 
-    if checkTaskExists():
+    if checkTaskExists(): ##if task exists in crawl db!
         ##TODO: Provide a proceed button here
-        print 'ckecked task exists!!'
-        print 'reeeeeeeeeeeeeediiiiiiirectiiiiing'
+        print 'startTask: ckecked task exists!!'
+
+        ##TODO: what if no row is there? ##checked done!
+        ##call this for the time only, call mapSqlToGraph for the first time only
+        meta, mapNodes, mapRels, resolveNodesOn, resolveRelsOn = mapSqlToGraph(current_app.config['MAPPINGS']+'/crawlerMap')
+        ##won/t be none - mapNodes
+        if mapNodes is None: ##this is just a redundant check!
+            ## 'No pending tasks at all or all resolved. Heading back to startTask'
+            return render_template("temp.html", homeclass="active", 
+        temptext='No pending tasks as of now')
+        else:
+            ##give a new task id also!
+            session['mapNodes']  = mapNodes
+            session['tablename'] = meta['tablename'] ##added to set resolved=1
+            session['row_id'] = str(meta['row_id']) ##added to set resolved=1
+            session['mapRels'] = mapRels
+            taskID = meta['tablename'] + str(meta['row_id']) ##useful logging TODO
+            session['resolveNodesOn'] = resolveNodesOn ##props on which to resolve, map between entity number to which props to resolve
+            session['resolveRelsOn'] = resolveRelsOn
+            session['resolvedNodes'] = {} ##should be a  set? TODO
+            session['resolvedRels'] = {}
+            session['taskID'] = taskID
+            print '\n\nstartTask: Beginning task ID: '+taskID+'\n\n'
+
+        print 'startTask: now redirecting'
         return redirect(url_for('.runTask'))        
     else:
         temptext = 'No pending tasks'
@@ -291,35 +328,30 @@ def startTask():
 def runTask():
     
     if session.get('mapNodes') is None:
-        ##TODO: what if no row is there? ##checked done!
-        ##call this for the time only, call mapSqlToGraph for the first time only
-        meta, mapNodes, mapRels, resolveNodesOn, resolveRelsOn = mapSqlToGraph(current_app.config['MAPPINGS']+'/crawlerMap')
-        ##won/t be none - mapNodes
-        if mapNodes is None: ##this is just a redundant check!
-            ## 'No pending tasks at all or all resolved. Heading back to startTask'
-            return render_template("temp.html", homeclass="active", 
-        temptext='No pending tasks as of now')
-        else:
-            ##give a new task id also!
-            session['mapNodes']  = mapNodes
-            session['mapRels'] = mapRels
-            taskID = meta['tablename'] + str(meta['row_id']) ##useful logging TODO
-            session['resolveNodesOn'] = resolveNodesOn ##props on which to resolve, map between entity number to which props to resolve
-            session['resolveRelsOn'] = resolveRelsOn
-            session['resolvedNodes'] = {} ##should be a  set? TODO
-            session['resolvedRels'] = {}
-            session['taskID'] = taskID
-            print 'Beginning task ID: '+taskID
+        return render_template("temp.html", homeclass="active", temptext='No running tasks! Go to start task and check')       
 
     ##after the outer if mapNodes are not None in session, for sure!
     ##they are in session for sure!
     ##fetch the number in nodes to resolve, if all resolved just pop all and go to start_task
     ## session.pop('username', None)
-    number = findNextNodeNumberToResolve() 
+    number = findNextNodeNumberToResolve()
+    print '\n\n\n runtask: the number :'+str(number)+'\n\n\n'
 
     if number=='all': ##all have been resolved!
         ## pop all, redirect to start_task or resolve rels!
         ## TODO: rels left, remove them only when done with rels !!
+
+
+        ##here is where when all rels have been resolved, all nodes have been resolved that we will set resolved to 1 for the row! rowid and tablename needed!
+        from app.dbwork import updateResolved
+
+
+        print 'runTask: CALLLLLLLLLLING UPDATE resolved!!!!'
+        print session['tablename']
+        print session['row_id']
+
+        updateResolved(session['tablename'], session['row_id'], current_app.config['CRAWL_DBHOST'], current_app.config['CRAWL_DBNAME'],
+        current_app.config['CRAWL_DBUSER'], current_app.config['CRAWL_DBPASSWORD'], resolved=1)
 
         session.pop('mapNodes', None)
         session.pop('mapRels', None)
@@ -328,26 +360,37 @@ def runTask():
         session.pop('resolveNodesOn', None)
         session.pop('resolveRelsOn', None)
         session.pop('taskID', None)
+        session.pop('curr_number',None)
+        session.pop('curr_uuid',None)
+        ##remove the two variables!
+        session.pop('tablename', None)
+        session.pop('row_id', None)
 
         ## 'No pending tasks at all or all resolved. Heading back to startTask'
         return redirect(url_for('.startTask'))
     else:
         ##if a number is returned to resolve call the next two methods! yayy!
+        ##for nodes only! TODO: for relations accordingly!
         session['curr_number'] = number
         return redirect(url_for('.matchNodeNew'))
     
     
-    return render_template("temp.html", homeclass="active", 
-        temptext='Running and resolving flow!')
+    #return render_template("temp.html", homeclass="active", 
+     #   temptext='Running and resolving flow!')
 
 
 ##TODO: shoudlnt the number be in form or something??
 @verifier.route('/matchNodeNew/',methods=["GET","POST"])
 def matchNodeNew():
 
+    if session.get('curr_number') is None:
+         return render_template("temp.html", homeclass="active", temptext='No matching tasks go to start task/run task first!')
+
+
     import app.graphdb as t
 
     ##can get this info: number: from session as in diff!
+
     curr_number = session.get('curr_number')
 
     mapNodes = session.get('mapNodes')
@@ -357,7 +400,7 @@ def matchNodeNew():
     if not request.form:
          ##py2neo object node
 
-        matchingUUIDS = [25,26,27,28]
+        matchingUUIDS = [250,251,252,253,350,351,352,353]
 
 
         ##use apache solr code here
@@ -369,14 +412,14 @@ def matchNodeNew():
         graphnodes = t.getListOfNodes(matchingUUIDS)
 
         return render_template("verifier_match_node.html", homeclass="active",
-            row=curr_node, graphnodes=graphnodes)
+            row=curr_node, graphnodes=graphnodes, taskID = session['taskID'], curr_number = curr_number)
     else:
         ##get the matched_uuid! save it in sessnio or where-ever you want
         #print request.form['match_uuid']
 
         flash(request.form['match_uuid'])
 
-        if request.form['match_uuid']!='NA':            
+        if request.form['match_uuid']!='##NA##':            
             session['curr_uuid'] = request.form['match_uuid']
             return redirect(url_for('.diffPush'))
         else:
@@ -391,14 +434,21 @@ def matchNodeNew():
             resolvedNodes = session.get('resolvedNodes')
             resolvedNodes[curr_number] = curr_node['uuid']
             session['resolvedNodes'] = resolvedNodes
+            print '1. RESOLVED NODES!!!! :: ' + str(session['resolvedNodes'])
 
             ##pop current_number
             #pop curr_uuid
             session.pop('curr_number', None)
             session.pop('curr_uuid', None)
 
+
             flash('Node created with uuid: '+ str(curr_node['uuid']))
-            return render_template("temp.html", homeclass="active",temptext="DIFF DONE!")
+
+            flash('taskID '+str(session['taskID']))
+            flash('resolvedNodes ',session['resolvedNodes'])
+            
+
+            #return render_template("temp.html", homeclass="active",temptext="NEW NODE CREATED DONE!")
             return redirect(url_for('.runTask'))
             ##TODO: second return
 
@@ -406,7 +456,7 @@ def matchNodeNew():
         ##pop session.curr_number here
 
 
-
+        
 
     # ## TODO!!
     # ## form showing all matched uuids
@@ -431,6 +481,10 @@ def matchNodeNew():
 ##two params: number and uuid ?? in session!
 @verifier.route('/diffPush/', methods=["GET","POST"])
 def diffPush():
+
+    if session.get('curr_uuid') is None:
+         return render_template("temp.html", homeclass="active", temptext='No diff tasks go to start task/run task/match task first!')
+
     curr_number = session.get('curr_number')
     curr_uuid = session.get('curr_uuid')
     mapNodes = session.get('mapNodes')
@@ -444,10 +498,10 @@ def diffPush():
     naya = t.deserializeNode(mapNodes[curr_number]) ##from the row
 
     orig.pull()
-    print 'orig: ' + str(orig)
-    print '-------'
-    print 'naya: ' + str(naya)
-    print '-------'
+    ##print 'orig: ' + str(orig)
+    ##print '-------'
+    ##print 'naya: ' + str(naya)
+    ##print '-------'
 
     new_labels = t.labelsToBeAdded(orig,naya) 
     conf_props,new_props = t.propsDiff(orig,naya)
@@ -455,7 +509,7 @@ def diffPush():
     if not request.form:
 
         return render_template("verifier_diff_node.html", homeclass="active",
-            new_labels=new_labels,conf_props=conf_props, new_props=new_props,orig=orig, naya=naya)
+            new_labels=new_labels,conf_props=conf_props, new_props=new_props,orig=orig, naya=naya, taskID = session['taskID'], curr_number = curr_number)
     else:
 
         
@@ -480,12 +534,24 @@ def diffPush():
                 #orig[prop] = request.form[prop]
                 orig[prop] = request.form[prop] ##naya prop/orig prop 
         
-        print orig  
+        ##print orig  
         ##now can push! TODO!
-        ##orig.push()
+        
+
+        orig.push()#3one node resolved! 
+
+        resolvedNodes = session.get('resolvedNodes')
+        resolvedNodes[curr_number] = curr_uuid
+        session['resolvedNodes'] = resolvedNodes
+        print '\n\ndiffpush. RESOLVED NODES!!!! :: ' + str(session['resolvedNodes'])+"\n\n"
+
+        flash('taskID '+str(session['taskID']))
+        flash('resolvedNodes ',session['resolvedNodes'])
+
+        return redirect(url_for('.runTask'))
 
 
-        return render_template("temp.html", homeclass="active",temptext="DIFF DONE!")
+        #return render_template("temp.html", homeclass="active",temptext="DIFF DONE!")
 
 
 
@@ -498,4 +564,3 @@ def diffPush():
     # ##TODO: show a start task button here
     # return render_template("temp.html", homeclass="active", 
     #     temptext='Push something new to '+ str(uuid)+' task completed') ##str beacuse of None
-

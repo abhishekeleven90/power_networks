@@ -41,4 +41,3 @@ def after_request(response):
     return response
 
 from app import views
-

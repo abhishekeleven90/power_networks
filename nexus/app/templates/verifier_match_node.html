@@ -3,16 +3,17 @@
 {% block content %}
     <!--<div class="container">-->
         <br/>
+        <h1>Task ID : {{taskID}} | Node Number : {{curr_number}}</h1>
         <br/> 
     <!--</div> container-->
-    <h1>To be matched</h1>
+    <h3>To be matched</h3>
     {{entity_read(row,True)}}
     <hr/>
 
 
     <form class="form-horizontal" method="post" action={{url_for('verifier.matchNodeNew')}}>
 
-        <h1>From graph</h1>
+        <h3>From graph</h3>
         <br/>
 
         {% for node in graphnodes %}
@@ -28,7 +29,7 @@
             <div class="radio">
                 
                 <!-- Using NA as None is not a NICE string-->
-                <label><input type="radio" name="match_uuid" value="NA"></input> No I don't find the entity here! </label> 
+                <label><input type="radio" name="match_uuid" value="##NA##"></input> No I don't find the entity here! </label> 
 
             </div>
             <hr/>
