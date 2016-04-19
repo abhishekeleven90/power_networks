@@ -114,6 +114,7 @@ def pushLinked():
     ## apis to add a new property in allowed dict with its description?
     ## ids ints?
     ## check if nodeid already exists in temp graph db, or relid
+    ## create indexes and contsraints will have to add an internal label and internal relation label
 
 
     entities = request.json['entities']
@@ -163,7 +164,8 @@ def pushLinked():
 
         nodelabels = en['labels']
         nodeprops = en['properties']
-        nodes[nodeid] = {'crawl_en_id':'en_'+tokenid+'_'+taskname+'_'+str(nodeid), 'labels':nodelabels,'properties':nodeprops}
+        nodeprops['crawl_en_id'] = 'en_'+tokenid+'_'+taskname+'_'+str(nodeid)
+        nodes[nodeid] = {'labels':nodelabels,'properties':nodeprops}
 
     required_reldict_props = ['label','properties','start_entity','end_entity','bidirectional','id']
     reserved_rel_props = ['crawl_rel_id','resolvedWithRELID','taskname','token','_token','workname','date','time','resolvedDate','resolvedAgainst','verifiedBy','resolvedBy','verifiedDate','update','lastUpdatedBy','lastUpdatedOn']
@@ -184,9 +186,6 @@ def pushLinked():
         if len(linklabel)<3:
             return error_helper('Label too short for a relation', 400)
         
-        linkprops = rel['properties']
-        starnode = rel['start_entity']
-        endnode = rel['end_entity']
         bidirectional = rel['bidirectional']
 
         print 'bbbbbb '+bidirectional
@@ -195,13 +194,21 @@ def pushLinked():
 
         for prop in required_rel_props:
             if not prop in rel['properties']:
-                return error_helper(str(prop)+' required property missing for an relation', 400)
+                return error_helper(str(prop)+' required property missing for a relation', 400)
 
         for prop in reserved_rel_props:
             if prop in rel['properties']:
-                return error_helper(str(prop)+' reserved property not allowed explicitly for an relation', 400)
+                return error_helper(str(prop)+' reserved property not allowed explicitly for a relation', 400)
+
+        linkprops = rel['properties']
+        startnode = 'en_'+tokenid+'_'+taskname+'_'+str(rel['start_entity'])
+        endnode = 'en_'+tokenid+'_'+taskname+'_'+str(rel['end_entity'])
+        linkprops['crawl_rel_id'] = 'rel_'+tokenid+'_'+taskname+'_'+str(linkid)
+        linkprops['bidirectional'] = bidirectional
+
         
-        links[linkid] = {'crawl_rel_id':'rel_'+tokenid+'_'+taskname+'_'+str(linkid), 'label':linklabel,'properties':linkprops}        
+        
+        links[linkid] = {'label':linklabel,'properties':linkprops,'start_entity':startnode, 'end_entity':endnode}        
         
 
     subgraph['entities'] = nodes
