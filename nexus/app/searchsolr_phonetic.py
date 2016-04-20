@@ -5,6 +5,20 @@ import ast
 import re
 import urllib
 
+def get_uuid_mtp2(label=None,name=None,alias=None,keyword =None):
+	
+	default_url="http://10.237.27.87:8983/solr/mtp2/select?q=*%3A*&wt=python&rows=50000&indent=true"
+
+	if label == None:
+        print "[get_uuid_mtp2] - No label-returning empty uuid list"
+    	return []
+
+	base_url = "http://10.237.27.87:8983/solr/mtp2/select?q="
+	rest_url = "&wt=python&rows=50000&indent=true"
+	alias_ph_str = urllib.quote_plus('alias_ph:'+alias)
+	keyword_str = 'keywords:'+keyword+')')
+
+
 def get_uuid_phonetic(propname=None,propvalue=None,label = None,is_phonetic = False):
 
     default_url = "http://10.237.27.87:8983/solr/mtp/select?q=*%3A*&wt=python&rows=50000&indent=true"
