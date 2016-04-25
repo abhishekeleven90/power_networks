@@ -70,7 +70,7 @@ def get_uuid_solr(labels=None,name=None,aliases=None,keywords=None,jaro=True):
          else: uuid_list.append(doc['uuid'])
 
     print "##printing df"
-    print df[df['uuid'] == '62458']
+    #print df[df['uuid'] == '62458']
     print "##[get_uuid] - Time taken  -{} s".format(time() - t)
     print "##[get_uuid_solr]- UUid list length -{}".format(len(uuid_list))
 
