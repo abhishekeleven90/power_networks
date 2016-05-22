@@ -16,12 +16,13 @@ abhi7@gmail.com role:7 pw:yoyo
 
 ##graphs
 uuid done let anybody update that ever!
-all labels lowercase
+all labels lowercase - from now on
 all props name lowercase from now
 atleast one label alwaya mandatory for search else it is a bad havoc! will see after this!
 address may change over time?
-assets may change over time?
-
+address is a multiple property
+phone is a multiple property
+assets may change over time
 
 
 ##director sharing graph database main query

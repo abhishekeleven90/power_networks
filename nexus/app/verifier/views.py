@@ -68,7 +68,7 @@ def matchNodeNew():
         return redirect(url_for('.startNodeTask'))
 
     gg = GraphHandle()
-    crawl_node = gg.crawldb.getNodeByID(CRAWL_EN_ID_NAME, session[CRAWL_EN_ID_NAME])
+    crawl_node = gg.crawldb.getNodeByUniqueID(CRAWL_EN_ID_NAME, session[CRAWL_EN_ID_NAME], isIDString=True)
 
     ##TODO: validation as well! 
 
@@ -161,7 +161,7 @@ def diffPush():
 
     curr_uuid = session.get(CURR_UUID)
     crawl_en_id = session.get(CRAWL_EN_ID_NAME)
-    crawl_node = gg.crawldb.getNodeByID(CRAWL_EN_ID_NAME, session[CRAWL_EN_ID_NAME])
+    crawl_node = gg.crawldb.getNodeByUniqueID(CRAWL_EN_ID_NAME, session[CRAWL_EN_ID_NAME], isIDString = True)
    
 
     orig = gg.coredb.entity(curr_uuid)##from the graph

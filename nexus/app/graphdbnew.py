@@ -45,13 +45,102 @@ class GraphDB:
         return a
     
     
-    def getNodeByID(self, idName, idVal):
+    def getNodeByUniqueID(self, idName, idVal, isIDString=False):
         ##TODO: move uuid to props
         query = "match (n {"
-        query = query+ idName+":'"+str(idVal)+"'}) return n"
-        print query
+        if isIDString:
+            query = query+ idName+":'"+str(idVal)+"'}) return n"
+        else:
+            query = query+ idName+":"+str(idVal)+"}) return n"
         rc = self.graph.cypher.execute(query)
         return rc[0][0]
+    
+    def getRelationByUniqueID(self, idName, idVal, isIDString=False):
+        ##TODO: move uuid to props
+        query = "match ()-[r {"
+        if isIDString:
+            query = query+ idName+":'"+str(idVal)+"'}]->() return r"
+        else:
+            query = query+ idName+":"+str(idVal)+"}]->() return r"
+        rc = self.graph.cypher.execute(query)
+        return rc[0][0]
+
+
+    def isPropList(self, node, prop):
+        return type(node[prop]) is list
+    
+    ##has a counter brother in nexusapis flask app    
+    def isValidNonMetaProp(self, propname):
+        if propname[0]=='_' or propname[-1]=='_':
+            return False
+        return True
+    
+    ##copy meta = True
+    def copyNode(self, node, copymeta = True, exceptions = []):
+        #exceptions are the props that should be included no matter what, if they have underscore or not!
+        naya = Node()
+        for label in node.labels:
+            naya.labels.add(label)
+        for prop in exceptions:
+            if prop in node.properties:
+                naya[prop] = node[prop]
+        for prop in node.properties:
+            if not copymeta:
+                if self.isValidNonMetaProp(prop):
+                    naya[prop] = node[prop]
+            else:
+                naya[prop] = node[prop]
+        return naya
+                
+    def copyNodeAsItIs(self, node):
+        return self.copyNode(node)
+        #         naya = Node()
+        #         for label in node.labels:
+        #             naya.labels.add(label)
+        #         for prop in node.properties:
+        #             naya[prop] = node[prop]
+        #         return naya
+    
+    def copyNodeWithoutMeta(self, node, exceptions=[]):
+        return self.copyNode(node, copymeta = False, exceptions = exceptions)
+    
+    def copyRelation(self, rel, copymeta = True, rel_exceptions = [], node_exceptions = []):
+        start_node  = ''
+        end_node = ''
+        
+        if not copymeta:
+            start_node = g.copyNodeWithoutMeta(rel.start_node, exceptions = node_exceptions)
+            end_node = g.copyNodeWithoutMeta(rel.end_node, exceptions = node_exceptions)
+        else:
+            start_node = g.copyNodeAsItIs(rel.start_node)
+            end_node = g.copyNodeAsItIs(rel.end_node)
+            
+        reltype = rel.type
+        nayarel = Relationship(start_node, reltype, end_node)
+        
+        for prop in rel_exceptions:
+            if prop in rel.properties:
+                nayarel[prop] = rel[prop]
+        for prop in rel.properties:
+            if not copymeta:
+                if self.isValidNonMetaProp(prop):
+                    nayarel[prop] = rel[prop]
+            else:
+                nayarel[prop] = rel[prop]
+        return nayarel
+    
+    def copyRelationAsItIs(self, rel):
+        return self.copyRelation(rel)
+        #         start_node = g.copyNodeAsItIs(rel.start_node)
+        #         end_node = g.copyNodeAsItIs(rel.end_node)
+        #         reltype = rel.type
+        #         naya = Relationship(start_node, reltype, end_node)
+        #         for prop in rel.properties:
+        #             naya[prop] = rel[prop]
+        #         return naya
+    
+    def copyRelationWithoutMeta(self, rel, rel_exceptions = [], node_exceptions = []):
+        return self.copyRelation(rel, copymeta = False, rel_exceptions = rel_exceptions, node_exceptions = node_exceptions)
 
     ##example of some text input: (n154346:businessperson:person:politician {name:"Anita",uuid:1234})
     ##Usage: deserializeNode('''(n154346:businessperson:person:politician {name:"Anita",uuid:1234})''')
@@ -93,8 +182,6 @@ class GraphDB:
             node[x] = propsDict[x]
         print node
         return node
-
-
         ##MAJOR TODO:
         ##work to do add a form where they can create a node
         #get a node's page by uuid
@@ -111,25 +198,12 @@ class GraphDB:
 
 
 class CoreGraphDB(GraphDB):
-
-    ##to be used on core graph!
+    
     def entity(self, uuid):
-        ##TODO: move uuid to props
-        query = "match (n {uuid:"+str(uuid)+"}) return n"
-        rc = self.graph.cypher.execute(query)
-        return rc[0][0]
+        return self.getNodeByUniqueID('uuid',uuid) ##isIDString by default false
 
-
-    ##to be used on core graph!
     def relation(self, relid):
-        ##TODO: move relid to props
-        query = "match ()-[r {relid:"+str(relid)+"}]-() return r"
-        #print query
-        rc = self.graph.cypher.execute(query)
-        #print len(rc)
-        #print rc
-        return rc[0][0]
-
+        return self.getRelationByUniqueID('relid', relid)
     
     def getNodeListCore(self, uuid_list):
         ans = []
