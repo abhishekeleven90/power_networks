@@ -1,0 +1,22 @@
+unique key
+submit a json for index as soon as it is touched
+term position in keywords?
+you can define fields
++politician +person
+To remove all:
+bin/solr stop -all ; rm -Rf example/cloud/ 
+Links to read:
+https://cwiki.apache.org/confluence/display/solr/Searching
+https://cwiki.apache.org/confluence/display/solr/The+Standard+Query+Parser#TheStandardQueryParser-SpecifyingTermsfortheStandardQueryParser
+https://cwiki.apache.org/confluence/display/solr/Uploading+Data+with+Index+Handlers#UploadingDatawithIndexHandlers-TransformingandIndexingcustomJSONdata
+name: phonetic and baki sab fuzzy search try naveen~0.2 jindal~0.2 can you? todo: try
+./bin/solr start
+./bin/solr stop -all
+./bin/solr start -p 8989
+
+stored =false good since we only need name and id
+required 
+term vectors
+term positions
+geospatial search
+

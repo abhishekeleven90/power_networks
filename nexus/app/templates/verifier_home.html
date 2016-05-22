@@ -4,9 +4,21 @@
      <div class="starter-template" align="center" >
         <h3>
 
-            Welcome verifier! <br/>
-            Tasks Exist 
-            <a href={{url_for('verifier.startTask')}}>
+            Welcome verifier! <hr/><br/>
+            
+
+            {{unresolvedTotal}} nodes to resolve <br/>
+            {{immediateUnResolvedTotal}} nodes to immediately resolve<br/>
+            <br/>
+
+            {{r_unresolvedTotal}} relations to resolve <br/>
+            {{r_immediateUnResolvedTotal}} relations to immediately resolve<br/>
+
+            <hr/><br/>
+
+
+
+            <a href={{url_for('verifier.startNodeTask')}}>
                     <button type="submit" class="btn btn-primary">Begin!</button>
             </a>
 

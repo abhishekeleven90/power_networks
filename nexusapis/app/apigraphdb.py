@@ -4,26 +4,32 @@ from py2neo.cypher import CreateNode
 username = 'neo4j'
 password = 'yoyo'
 server = 'localhost'
-port = '7474'
+port = '8484'
 con_url = 'http://'+username+':'+password+'@'+server+':'+port+'/db/data/'
 
 graph = Graph(con_url)
 
-#TODO: keep one connection for the entire app or multiple each time??
+#Done: One connection for entire team in the app
 ##Wont use this
 def getGraph():
     return graph
 
-def entity(graph, crawl_en_id):
-    query = "match (n {crawl_en_id:'"+str(crawl_en_id)+"'}) return n"
+##it is for reading an entity!
+##TODO: change name to make more sense!
+##Usage: print entity(graph, '5')
+def entity(graph, _crawl_en_id_):
+    ##TODO: move to some constants file
+    query = "match (n {_crawl_en_id_:'"+str(_crawl_en_id_)+"'}) return n"
     #print query
     rc = graph.cypher.execute(query)
     #print rc
     if len(rc)==0: return None
     return rc[0][0]
 
-def relation(graph, crawl_rel_id):
-    query = "match ()-[r {crawl_rel_id:'"+str(crawl_rel_id)+"'}]-() return r"
+
+##Usage: print relation(graph, '6')
+def relation(graph, _crawl_rel_id_):
+    query = "match ()-[r {_crawl_rel_id_:'"+str(_crawl_rel_id_)+"'}]-() return r"
     print query
     rc = graph.cypher.execute(query)
     #print rc
@@ -31,42 +37,41 @@ def relation(graph, crawl_rel_id):
     return rc[0][0]
 
 
-##Usage: print entity(graph, '5')
-##Usage: print relation(graph, '6')
-
 ##to be called ONLY after safety checks
 def createNodes(graph, listofnodedicts):
     print listofnodedicts
     tx = graph.cypher.begin()
     for currdict in listofnodedicts:
         props = currdict['properties']
-        if not entity(graph, props['crawl_en_id']) is None:
+        if not entity(graph, props['_crawl_en_id_']) is None:
             tx.rollback()
-            return False, "Already existing entity ID, nothing pushed"
-        createsome = CreateNode(*currdict['labels'],**props)
+            ##though wont be used! TODO: rmeove this I think!
+            return False, "Already existing entity ID, nothing pushed" 
+        createsome = CreateNode(*currdict['labels'],**props) ##awesome method! saved time!
         print createsome
         tx.append(createsome)
     print tx.process()
     print tx.commit()
-## createNodes(graph, [{'labels':['p','q','r'], 'properties':{'a':'b','c':'d','crawl_en_id':'399'}}])
+## createNodes(graph, [{'labels':['p','q','r'], 'properties':{'a':'b','c':'d','_crawl_en_id_':'399'}}])
 
 ##to be called ONLY after safety checks
 def createRels(graph, listofreldicts):
     tx = graph.cypher.begin()
     for rel in listofreldicts:
         props = rel['properties']
-        if not relation(graph, props['crawl_rel_id']) is None: ##it will be a redundant check as all checks are done before pushing
+        if not relation(graph, props['_crawl_rel_id_']) is None: ##it will be a redundant check as all checks are done before pushing
             tx.rollback()
             return False, "Already existing relation ID, nothing pushed"
         A = rel['start_entity'] ##will have to modify the ID to suit our needs
         B = rel['end_entity'] ##will have to modify the ID to suit our needs
         C = rel['label']
         D = '{ '
+        ##MAJOR TODO: gget this in a function can be used elsewhere!
         for key in rel['properties']:
             D = D + key + ' : \''+rel['properties'][key]+ '\', '
         D = D[:-2] + ' }' 
         print D
-        statement = 'MATCH (a {crawl_en_id:\'%s\'}), (b {crawl_en_id:\'%s\'}) CREATE (a)-[rtt:%s %s]->(b) return rtt' %(A,B,C,D)
+        statement = 'MATCH (a {_crawl_en_id_:\'%s\'}), (b {_crawl_en_id_:\'%s\'}) CREATE (a)-[rtt:%s %s]->(b) return rtt' %(A,B,C,D)
         print statement
         print tx.append(statement)
     print tx.process()
@@ -78,7 +83,7 @@ def createRels(graph, listofreldicts):
 #             "properties":
 #             {
 #                 "bidirectional": "no",
-#                 "crawl_rel_id": "rel_NexusToken1_njconn1_1",
+#                 "_crawl_rel_id_": "rel_NexusToken1_njconn1_1",
 #                 "startdate": "01/01/2010"
 #             },
 #             "start_entity": "3"
@@ -104,9 +109,9 @@ def isSafePost(graph, listOfNodeDicts, listOfRelDicts, token, taskname):
     currnodekeys = Set()
     for nodedict in listOfNodeDicts:
         ##check if this exist in graphdb
-        if not entity(graph, nodedict['properties']['crawl_en_id']) is None:
-            return False, 'Entity ID: ' + str(nodedict['properties']['crawl_en_id']) + ' already exists in crawl db'
-        currnodekeys.add(str(nodedict['properties']['crawl_en_id']))
+        if not entity(graph, nodedict['properties']['_crawl_en_id_']) is None:
+            return False, 'Entity ID: ' + str(nodedict['properties']['_crawl_en_id_']) + ' already exists in crawl db'
+        currnodekeys.add(str(nodedict['properties']['_crawl_en_id_']))
         
     print currnodekeys
         
@@ -114,8 +119,8 @@ def isSafePost(graph, listOfNodeDicts, listOfRelDicts, token, taskname):
     for reldict in listOfRelDicts:
         
         ##check if this exist in graph db
-        if not relation(graph, reldict['properties']['crawl_rel_id']) is None:
-            return False, 'Relation ID: ' + str(reldict['properties']['crawl_rel_id']) + ' already exists in crawl db'
+        if not relation(graph, reldict['properties']['_crawl_rel_id_']) is None:
+            return False, 'Relation ID: ' + str(reldict['properties']['_crawl_rel_id_']) + ' already exists in crawl db'
         
         ##also check start id in nodedict and graphdb
         print '-------'
@@ -123,12 +128,12 @@ def isSafePost(graph, listOfNodeDicts, listOfRelDicts, token, taskname):
         print reldict['start_entity'] in currnodekeys
         print (entity(graph,reldict['start_entity']) is None)
         if (not str(reldict['start_entity']) in currnodekeys) and (entity(graph,str(reldict['start_entity'])) is None):
-            return False, 'Relation ID: ' + str(reldict['properties']['crawl_rel_id']) + ' has a reference to non-existent Entity ID '+str(reldict['start_entity'])
+            return False, 'Relation ID: ' + str(reldict['properties']['_crawl_rel_id_']) + ' has a reference to non-existent Entity ID '+str(reldict['start_entity'])
         
         ##also check end id in nodedict and graphdb
         if (not str(reldict['end_entity']) in currnodekeys) and (entity(graph,str(reldict['end_entity'])) is None):
-            return False, 'Relation ID: ' + str(reldict['properties']['crawl_rel_id']) + ' has a reference to non-existent Entity ID '+str(reldict['end_entity'])
-        print reldict['properties']['crawl_rel_id']
+            return False, 'Relation ID: ' + str(reldict['properties']['_crawl_rel_id_']) + ' has a reference to non-existent Entity ID '+str(reldict['end_entity'])
+        print reldict['properties']['_crawl_rel_id_']
     return True, "Success"
 
 
@@ -144,7 +149,7 @@ def testIsSafePost(graph):
         currnode['labels'] = ['abcd','xyz']
         currprops = {}
         currprops['name'] = 'name ' + str(startnodeid + i)
-        currprops['crawl_en_id'] = str(startnodeid + i)
+        currprops['_crawl_en_id_'] = str(startnodeid + i)
         currnode['properties'] = currprops
         nodeslist.append(currnode)
     #print nodeslist
@@ -161,7 +166,7 @@ def testIsSafePost(graph):
         currprops = {}
         currprops['startdate'] = '01/01/2000'
         currprops['enddate'] = '10/10/2014'
-        currprops['crawl_rel_id'] = startrelid + i
+        currprops['_crawl_rel_id_'] = startrelid + i
         currrel['properties'] = currprops
         relslist.append(currrel)
     #print relslist

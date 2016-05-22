@@ -2,6 +2,7 @@ from app.newlinks import newlinks
 from flask import render_template, flash, redirect, session, g, request, url_for, abort, jsonify
 from utils_crawler import *
 from app.apigraphdb import *
+from validations import Validate
 
 ##Usage: http://localhost:5000/newlinks/randomrandom/?_token=NexusToken
 ## http://localhost:5000/newlinks/randomrandom?_token=NexusToken
@@ -23,6 +24,9 @@ def home():
 @newlinks.route('/createtask/', methods=['POST'])
 def createTask():
 
+    ##every one has a list of tokens
+    ##use tokens to register tasks
+
     ##for a token --> dict of tasks
     ##for a task --> dict of props
 
@@ -37,6 +41,7 @@ def createTask():
         return jsonify({'message': 'createtask: Cannot create, no taskname given to create'}), 400
 
     old_task = token_task_dict.get(taskname, None)
+
     print old_task
 
     ##if task name already exists against the current token
@@ -90,12 +95,14 @@ def pushLinked():
     print request.json
 
     if not request.json: ##is a dict!!
-        return error_helper("Not JSON Data",400)
+        return error_helper("The request body does not have JSON Data",400)
 
-    required_master_props = ['taskname', 'description', 'fetchdate', 'sourceurls', 'entities']
+    ##removed entities, rels alone can be pushed if previous ids known
+    ##changed name to meta_desc
+    required_master_props = ['taskname', 'meta-description', 'fetchdate', 'sourceurls'] 
     for prop in required_master_props:
         if not prop in request.json:
-            return error_helper(str(prop)+" not in json data", 400)    
+            return error_helper(str(prop)+"property not in json data", 400)    
     
     taskname = request.json['taskname']
 
@@ -123,12 +130,16 @@ def pushLinked():
     ##use this metadata
 
 
+    ##entities must part in request json
     entities = request.json['entities']
+
+    ##can be there or can not be, in json 
     relations = []
     if 'relations' in request.json:
         relations = request.json['relations']
 
     
+    # this is for returning the json to the user! 
     subgraph = {}
     subgraph['_token'] = tokenid
     subgraph['taskname'] = taskname
@@ -140,11 +151,13 @@ def pushLinked():
     links = {}
 
     ##MAJOR TODO reserved keywords and required keywords list
-    ##MAJOR TODO format and pattern against keywords with regex
+    ##MAJOR TODO format and pattern against keywords with regex ??
 
     required_endict_props = ['labels','properties','id']
-    reserved_en_props = ['crawl_en_id','resolvedWithUUID','taskname','token','_token','workname','date','time','resolvedDate','resolvedAgainst','verifiedBy','resolvedBy','verifiedDate','update','lastUpdatedBy','lastUpdatedOn']
+    reserved_en_props = ['crawl_en_id','resolvedWithUUID','taskname','token','_token','workname','date','time','resolvedDate','resolvedAgainst','verifiedBy','resolvedBy','verifiedDate','update','lastUpdatedBy','lastUpdatedOn', '_crawl_en_id_','_token_','_taskname_','_id_','_nodenumber_'] ##_nodeid_ is the node number along with _token_ and _taskname_ will help us in identifying the node! so do not worry!
     required_en_props = ['name'] ##inside entity['properties']
+
+    validate = Validate() ##TODO: move all validations to this class afterwards
 
     for en in entities:
 
@@ -153,7 +166,8 @@ def pushLinked():
                 return error_helper(str(prop)+' required attribute missing for an entity', 400) 
 
         #print entities[en]
-        nodeid = en['id']
+        nodeid = en['id'] ##TODO: check if id is there!
+
         if nodeid in nodes:
             return error_helper('id repeated under entities',400)
         
@@ -168,13 +182,20 @@ def pushLinked():
             if prop in en['properties']:
                 return error_helper(str(prop)+' reserved property not allowed explicitly for an entity', 400)
 
+        allPropnamesValid, prop = validate.checkAllPropnamesValid(en['properties'])
+        if not allPropnamesValid:
+            return error_helper(str(prop)+' cannot begin or end with underscore', 400)
+
         nodelabels = en['labels']
         nodeprops = en['properties']
-        nodeprops['crawl_en_id'] = 'en_'+tokenid+'_'+taskname+'_'+str(nodeid)
+        nodeprops['_crawl_en_id_'] = 'en_'+tokenid+'_'+taskname+'_'+str(nodeid)
+        nodeprops['_token_'] = tokenid
+        nodeprops['_taskname_'] = taskname
+        nodeprops['_nodenumber_'] = nodeid
         nodes[nodeid] = {'labels':nodelabels,'properties':nodeprops}
 
     required_reldict_props = ['label','properties','start_entity','end_entity','bidirectional','id']
-    reserved_rel_props = ['crawl_rel_id','resolvedWithRELID','taskname','token','_token','workname','date','time','resolvedDate','resolvedAgainst','verifiedBy','resolvedBy','verifiedDate','update','lastUpdatedBy','lastUpdatedOn']
+    reserved_rel_props = ['crawl_rel_id','resolvedWithRELID','taskname','token','_token','workname','date','time','resolvedDate','resolvedAgainst','verifiedBy','resolvedBy','verifiedDate','update','lastUpdatedBy','lastUpdatedOn','_crawl_rel_id_','_token_','_taskname_','_id_','_relnumber_'] ##just like the above _nodenumber_
     required_rel_props = [] ##inside entity['properties']
 
     for rel in relations:
@@ -206,10 +227,17 @@ def pushLinked():
             if prop in rel['properties']:
                 return error_helper(str(prop)+' reserved property not allowed explicitly for a relation', 400)
 
+        allPropnamesValid, prop = validate.checkAllPropnamesValid(rel['properties'])
+        if not allPropnamesValid:
+            return error_helper(str(prop)+' cannot begin or end with underscore', 400)
+
         linkprops = rel['properties']
         startnode = 'en_'+tokenid+'_'+taskname+'_'+str(rel['start_entity'])
         endnode = 'en_'+tokenid+'_'+taskname+'_'+str(rel['end_entity'])
-        linkprops['crawl_rel_id'] = 'rel_'+tokenid+'_'+taskname+'_'+str(linkid)
+        linkprops['_crawl_rel_id_'] = 'rel_'+tokenid+'_'+taskname+'_'+str(linkid)
+        linkprops['_token_'] = tokenid
+        linkprops['_taskname_'] = taskname
+        linkprops['_relnumber_'] = linkid
         linkprops['bidirectional'] = bidirectional
 
         
@@ -218,6 +246,7 @@ def pushLinked():
         
 
     posted, msg = postSubGraph(getGraph(), nodes, links, tokenid, taskname)
+    
     if not posted:
         return error_helper(msg, 400)
 
