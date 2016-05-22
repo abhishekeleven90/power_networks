@@ -15,8 +15,8 @@ def show():
 @verifier.route('/startNodeTask/')
 def startNodeTask():
 
-    CRAWL_EN_ID_NAME = current_app.config['CRAWL_EN_ID_NAME']
-    CURR_UUID = 'curr_uuid'
+    CRAWL_EN_ID_NAME = current_app.config['CRAWL_EN_ID_NAME'] ##TODO: move to a constant file?
+    CURR_UUID = 'curr_uuid' ##TODO: move somehwre?
 
     ##TODO: remove when not needed!
     session.pop(CRAWL_EN_ID_NAME, None)
@@ -68,13 +68,14 @@ def matchNodeNew():
         return redirect(url_for('.startNodeTask'))
 
     gg = GraphHandle()
-    crawl_node = gg.crawldb.getNodeByUniqueID(CRAWL_EN_ID_NAME, session[CRAWL_EN_ID_NAME], isIDString=True)
+    crawl_node_original = gg.crawldb.getNodeByUniqueID(CRAWL_EN_ID_NAME, session[CRAWL_EN_ID_NAME], isIDString=True)
+    crawl_node = gg.crawldb.copyNodeWithoutMeta(crawl_node_original) 
 
     ##TODO: validation as well! 
 
     if not request.form:
 
-        matchingUUIDS = [250,251,252,253,350,351,352,353]
+        matchingUUIDS = [41]
 
         ##use apache solr code here
         ##from app.resolver import *      
@@ -112,7 +113,7 @@ def matchNodeNew():
             session.pop(CURR_UUID, None) ##redundant code!
 
             ##updateResolved PART
-            gg.crawldb.setResolvedWithUUID(crawl_node, curr_uuid)
+            gg.crawldb.setResolvedWithUUID(crawl_node_original, curr_uuid) ##change to original
             
             #return render_template("temp.html", homeclass="active",temptext="NEW NODE CREATED DONE!")
             return redirect(url_for('.startNodeTask'))
@@ -161,14 +162,15 @@ def diffPush():
 
     curr_uuid = session.get(CURR_UUID)
     crawl_en_id = session.get(CRAWL_EN_ID_NAME)
-    crawl_node = gg.crawldb.getNodeByUniqueID(CRAWL_EN_ID_NAME, session[CRAWL_EN_ID_NAME], isIDString = True)
+    crawl_node_original = gg.crawldb.getNodeByUniqueID(CRAWL_EN_ID_NAME, session[CRAWL_EN_ID_NAME], isIDString = True)
+    crawl_node = gg.crawldb.copyNodeWithoutMeta(crawl_node_original) 
    
 
     orig = gg.coredb.entity(curr_uuid)##from the graph
     naya = crawl_node ##from the row
 
     orig.pull()
-    naya.pull()
+    #naya.pull() ##wont work now as naya node is not bound now
     ##print 'orig: ' + str(orig)
     ##print '-------'
     ##print 'naya: ' + str(naya)
@@ -214,7 +216,7 @@ def diffPush():
         
         flash(CRAWL_EN_ID_NAME+str(session[CRAWL_EN_ID_NAME]))
 
-        gg.crawldb.setResolvedWithUUID(crawl_node, curr_uuid)
+        gg.crawldb.setResolvedWithUUID(crawl_node_original, curr_uuid)
 
         ##pop session objects
         session.pop(CRAWL_EN_ID_NAME, None)
