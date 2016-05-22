@@ -1,7 +1,10 @@
+#File Use python functions to update the solr index
+#And delete mysql data source or import csv file
+
 import requests 
 import urllib
 import json
-
+import mysqldb
 def delta_import():
 
     delta_url = "http://localhost:8983/solr/mtp2/dataimport?command=delta-import&clean=false&optimize=false"
@@ -34,6 +37,7 @@ def update_index(update_type,index_id=None):
 	if update_type ==2: delta_import()
 	elif update_type == 1: full_import()
 	else: delete_index(index_id)
+
 
 if __name__=="__main__":
 		#update_index(update_type=1)

@@ -96,3 +96,34 @@ def updateResolved(tablename, row_id,ipaddress,database,user,password,resolved=1
     numrows = updateSQL("UPDATE "+tablename+" SET resolved="+str(resolved)+" WHERE id="+str(row_id)+";",ipaddress,database,user,password)
     print "UPDATE "+tablename+" SET resolved="+str(resolved)+" WHERE id="+str(row_id)+";"
     return numrows
+
+
+def del_all_index():
+	import MySQLdb
+
+	db = MySQLdb.connect("10.237.27.67","root","yoyo","power_nexus")
+	cursor = db.connect()
+	cursor.execute('TRUNCATE TABLE entities')
+	db.commit()
+	db.close()
+	return
+
+def add_entry(datavalues = None):
+	import MySQLdb
+
+	if not datavalues:
+		print "Value Error"
+		return
+
+	if type(datavalues) != dict:
+		print "Non dict arg"
+		return
+
+	db = MySQLdb.connect("10.237.27.67","root","yoyo","power_nexus")
+	cursor = db.connect()
+	cursor.execute("INSERT INTO entities(uuid,name,labels,aliases,keywords)\
+					VALUES ('%s','%s','%s','%s')",(datavalues['uuid'],datavalues['name'],))
+	db.commit()
+	db.close()
+	return
+
