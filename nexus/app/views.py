@@ -194,7 +194,8 @@ def profile():
 
 @app.route('/connections/')
 def conn():
-    return render_template("connections.html", homeclass="active") 
+    return render_template("connections.html", homeclass="active")
+
 
 
 

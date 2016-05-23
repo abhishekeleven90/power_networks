@@ -5,6 +5,10 @@ import requests
 import urllib
 import json
 import mysqldb
+from app.constants import SOLR_HOST, SOLR_CORE, SOLR_PORT
+
+##TODO: Use constants that are imported, and test by calling in app route of guests
+
 def delta_import():
 
     delta_url = "http://localhost:8983/solr/mtp2/dataimport?command=delta-import&clean=false&optimize=false"
