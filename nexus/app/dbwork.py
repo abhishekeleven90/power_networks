@@ -2,6 +2,7 @@ from peewee import *
 from app import app
 import pandas as pd
 import MySQLdb as db
+import shlex,subprocess
 
 ##it is just the object it has not been connected!
 mysqldb = MySQLDatabase(app.config['MYSQLDBNAME'], user = app.config['MYSQLDBUSER'], 
@@ -97,7 +98,7 @@ def updateResolved(tablename, row_id,ipaddress,database,user,password,resolved=1
     print "UPDATE "+tablename+" SET resolved="+str(resolved)+" WHERE id="+str(row_id)+";"
     return numrows
 
-
+# Delete all records of power_nexus db entities table
 def del_all_index():
 	import MySQLdb
 
@@ -108,6 +109,18 @@ def del_all_index():
 	db.close()
 	return
 
+# Fill the power_nexus from csv
+def fill_table():
+    ##Assuming entities.csv is in current folder
+    cmd = "mysqlimport --ignore-lines=1 \
+            --fields-terminated-by=, --columns='uuid,name,labels,aliases,keywords' \
+            --local -u root -p power_nexus entities.csv"
+
+    process = subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE)
+    output = process.communicate()[0]
+    return
+
+#Add new entry to power_nexus db
 def add_entry(datavalues = None):
 	import MySQLdb
 
@@ -121,9 +134,13 @@ def add_entry(datavalues = None):
 
 	db = MySQLdb.connect("10.237.27.67","root","yoyo","power_nexus")
 	cursor = db.connect()
-	cursor.execute("INSERT INTO entities(uuid,name,labels,aliases,keywords)\
-					VALUES ('%s','%s','%s','%s')",(datavalues['uuid'],datavalues['name'],))
+	numrows = cursor.execute("INSERT INTO entities(uuid,name,labels,aliases,keywords)\
+					VALUES ('%s','%s','%s','%s')",\
+					(datavalues['uuid'],datavalues['name'],datavalues['labels'],datavalues['aliases'],datavalues['keywords']))
 	db.commit()
 	db.close()
-	return
+	return numrows
 
+
+if __name__ == "__main__":
+	del_all_index()
