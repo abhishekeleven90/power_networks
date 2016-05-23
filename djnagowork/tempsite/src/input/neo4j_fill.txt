@@ -1,25 +1,47 @@
 1. CREATE CONSTRAINT ON (p:party) ASSERT p.id IS UNIQUE
 2. create index on :party(name)
+
+##LOAD PARTIES!
 3. load csv with headers from "file:/home/abhishek/Desktop/project/versions/summer1/djnagowork/tempsite/src/input/partyids.csv" as line
 create (p:party {id:toInt(line.partyid),mynetaname:line.Party}) return p
+
+
+##LOAD STATES!
 4. load csv with headers from "file:/home/abhishek/Desktop/project/versions/summer1/djnagowork/tempsite/src/input/stateids.csv" as line
 create (p:state {id:toInt(line.stateid),mynetaname:line.State,type:line.StateType}) return p
+
+##LOAD Constituencies!!
 5. load csv with headers from "file:/home/abhishek/Desktop/project/versions/summer1/djnagowork/tempsite/src/input/consids.csv" as line
 create (p:constituency {id:toInt(line.constid),mynetaname:line.Constituency}) return p
+
+
+##LOAD RELATIOSN BETWEEN STATES AND CONST
 6. load csv with headers from "file:/home/abhishek/Desktop/project/versions/summer1/djnagowork/tempsite/src/input/lswinners2014_resolved.csv" as line
 match (s:state {id:toInt(line.stateid)}), (c:constituency {id:toInt(line.constid)})
 create (s)<-[:geoBelongs]-(c)
 return s,c
+
+
+##CREATE POLITICIAN, CREATE 2 RELS, REL1 POL AND PARTY, REL2 POL AND Constituencieny 
 7. load csv with headers from "file:/home/abhishek/Desktop/project/versions/summer1/djnagowork/tempsite/src/input/lswinners2014_resolved.csv" as line
 match (c:constituency {id:toInt(line.constid)}),
 (p:party {id:toInt(line.partyid)})
 create (p)<-[:isEmployeeOf {year:2014}]-(pol:politician {name:line.name,mynetaid_ls2014:line.mynetaid}),
 pol-[:foughtFrom {year:2014, won:'y',typeOfElection:'LS'}]->(c)
 return p,pol,c
+
+
+##EACH POLITICIAN AND PERSON SAME
 8. match (n:politician)
 set n:person
 return n
+
+##CREATE LS ID
 9. create (n:LokSabha {id:16, name:'16th Lok Sabha',year:2014}) return n
+
+
 10. create (n:RajyaSabha {id:16, name:'16th Rajya Sabha',year:2014}) return n
+
+##ALL POLITICIANS CURRENT MEMBER OF PARLIAMENT SINCE 2014, WE CAN SAFELY SAY
 11. match (n:politician), (s:LokSabha {id:16})
 create n-[:memberOfParliament {startyear:2014}]->(s)
