@@ -17,9 +17,16 @@ def temp2():
     print 'will be here if all fine'
     return render_template("temp.html", homeclass="active", temptext = 'You are here')
 
-# @guest.route('/temp2/')
-# def temp2():
-#     from app.solr.searchsolr_phonetic import get_uuids
-#     get_uuids()
+@guest.route('/temp3/')
+def temp3():
+    from app.utils.locprocess import getCityState
+    (city,state) = getCityState('pondicherry')
+    return render_template("temp.html", homeclass="active", temptext = city+' '+state)
+
+@guest.route('/viz/')
+def viz():
+    cypher = ''
+    return render_template("temp.html", homeclass="active", temptext = city+' '+state)        
+
 
 
