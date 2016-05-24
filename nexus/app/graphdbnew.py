@@ -280,11 +280,26 @@ class SelectionAlgoGraphDB(GraphDB):
     def __init__(self,username, password, server, port):
         GraphDB.__init__(self,username, password, server, port)
         self.metaprops = {'RESOLVEDUUID':'_resolvedWithUUID_','RESOLVEDRELID':'_resolvedWithRELID_'}
-    
-    def getRandomNode(self):
+        
+    def getFirstUnresolvedNode(self):
         results = []
-        while len(results) == 0:
-            results = self.graph.cypher.execute('MATCH (n) WITH n WHERE rand() < 0.5 return n limit 1')
+        query = 'MATCH (n) where not exists(n.'+self.metaprops['RESOLVEDUUID'] +') ' +' return n limit 1'
+        results = self.graph.cypher.execute(query)
+        if len(results)==0:
+            return None
+        return results[0][0]
+    
+    def getRandomUnresolvedNode(self):
+        results = []
+        count = 0 ## 50  tries
+        query = 'MATCH (n) WITH n WHERE rand() < 0.5 AND not exists(n.'+self.metaprops['RESOLVEDUUID'] +') ' 
+        query = query +' return n limit 1'
+        #print query
+        while len(results) == 0 and count < 50:
+            results = self.graph.cypher.execute(query)
+            count = count + 1
+        if len(results)==0: ##still!
+            return None
         return results[0][0]
     
     def getHighestDegreeNode(self):
@@ -318,8 +333,11 @@ class SelectionAlgoGraphDB(GraphDB):
                 maxdegree = node.degree
                 maxnode = node
         if maxdegree == 0:
-            n,c = self.getHighestDegreeNode()
-            return n,c
+            print '[SelectionAlgoGraphDB : nearest didnt work, working on highest]'
+            maxnode,maxdegree = self.getHighestDegreeNode()
+        if maxdegree == 0:
+            print '[SelectionAlgoGraphDB: highest didnt work, working on first]'
+            maxnode, maxdegree = self.getFirstUnresolvedNode(), 0
         return maxnode, maxdegree
     
     def getNextRelationToResolve(self):
@@ -334,13 +352,13 @@ class SelectionAlgoGraphDB(GraphDB):
         else:
             return results[0][0]
         
-    def countUnresolvedNodes(self):
+    def countUnresolvedNodes(self): ##what is the reslut does not have anything?
         query = 'match n where not exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'return count(n)'
         results = self.graph.cypher.execute(query)
         return results[0][0]
     
-    def countNextNodesToResolve(self):
+    def countNextNodesToResolve(self): ##considers only the nodes that are connected rather than disconncted ones
         query = 'match (n)--(c) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'AND not exists(c.' + self.metaprops['RESOLVEDUUID'] +') ' 
         query = query + 'return count(c)'
@@ -354,7 +372,7 @@ class SelectionAlgoGraphDB(GraphDB):
         return results[0][0]
     
     def countNextRelationsToResolve(self):
-        query = 'match (n)-[r]-(p) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
+        query = 'match (n)-[r]->(p) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'AND exists(p.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'AND not exists(r.' + self.metaprops['RESOLVEDRELID'] +') '
         query = query + 'return count(r)'
