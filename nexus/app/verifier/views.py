@@ -65,7 +65,7 @@ def matchNodeNew():
     CURR_UUID = 'curr_uuid'
 
     if session.get(CRAWL_EN_ID_NAME) is None:
-        return redirect(url_for('.startNodeTask'))
+        return redirect(url_for('.show'))
 
     gg = GraphHandle()
     crawl_node_original = gg.crawldb.getNodeByUniqueID(CRAWL_EN_ID_NAME, session[CRAWL_EN_ID_NAME], isIDString=True)
@@ -75,7 +75,7 @@ def matchNodeNew():
 
     if not request.form:
 
-        matchingUUIDS = [41]
+        matchingUUIDS = [250,251]
 
         ##use apache solr code here
         ##from app.resolver import *      
@@ -116,7 +116,7 @@ def matchNodeNew():
             gg.crawldb.setResolvedWithUUID(crawl_node_original, curr_uuid) ##change to original
             
             #return render_template("temp.html", homeclass="active",temptext="NEW NODE CREATED DONE!")
-            return redirect(url_for('.startNodeTask'))
+            return redirect(url_for('.show'))
             ##TODO: second return
 
 
@@ -222,7 +222,7 @@ def diffPush():
         session.pop(CRAWL_EN_ID_NAME, None)
         session.pop(CURR_UUID, None) ##redundant code!
         
-        return redirect(url_for('.startNodeTask'))
+        return redirect(url_for('.show'))
 
 
         #return render_template("temp.html", homeclass="active",temptext="DIFF DONE!")
@@ -238,3 +238,5 @@ def diffPush():
     # ##TODO: show a start task button here
     # return render_template("temp.html", homeclass="active", 
     #     temptext='Push something new to '+ str(uuid)+' task completed') ##str beacuse of None
+
+    ##TODO: same validation checks like _ for wiki thing too 

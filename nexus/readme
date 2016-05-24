@@ -16,6 +16,7 @@ abhi7@gmail.com role:7 pw:yoyo
 
 ##graphs
 uuid done let anybody update that ever!
+uuid and relid are int and not string for now. dont know for future. shouldnt be a problem.
 all labels lowercase
 all props name lowercase from now
 atleast one label alwaya mandatory for search else it is a bad havoc! will see after this!

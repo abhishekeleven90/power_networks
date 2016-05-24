@@ -6,8 +6,11 @@ import ast
 import re
 import urllib
 import jellyfish as jf
+from app.constants import SOLR_CORE, SOLR_HOST, SOLR_PORT
 
-def get_uuid_solr(labels=None,name=None,aliases=None,keywords=None,jaro=True):
+##TODO: use constants, and test with guest.route
+
+def get_uuids(labels=None,name=None,aliases=None,keywords=None,jaro=True):
 
     default_url="http://10.237.27.87:8983/solr/mtp2/select?q=*%3A*&wt=python&rows=50000&indent=true"
     t = time()
@@ -86,7 +89,7 @@ if __name__=="__main__":
     test_aliases = ['gautam adani']
     #test_thres = ['0.2','0.5']
     t = time()
-    res = get_uuid_solr(labels = test_lab,name = test_name,keywords = test_kw,aliases = test_aliases,jaro=True)
+    res = get_uuids(labels = test_lab,name = test_name,keywords = test_kw,aliases = test_aliases,jaro=True)
     #print "##Final result:-"
     print "##Num items found - [final] "
     print len(res)
