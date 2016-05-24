@@ -341,7 +341,7 @@ class SelectionAlgoGraphDB(GraphDB):
         return maxnode, maxdegree
     
     def getNextRelationToResolve(self):
-        query = 'match (n)-[r]-(p) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
+        query = 'match (n)-[r]->(p) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') ' ##direction included
         query = query + 'AND exists(p.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'AND not exists(r.' + self.metaprops['RESOLVEDRELID'] +') '
         query = query + 'return r limit 1'

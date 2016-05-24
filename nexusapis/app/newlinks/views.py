@@ -83,6 +83,9 @@ def getAllTasks():
 def error_helper(message,statuscode):
     return jsonify({'message':message}), statuscode
 
+
+##MAJOR TODO: refactor code for future
+##TODO: aliases a required property in apis? decision to take.
 @newlinks.route('/pushlinked/', methods=['POST'])
 def pushLinked():
 
@@ -141,7 +144,7 @@ def pushLinked():
     
     # this is for returning the json to the user! 
     subgraph = {}
-    subgraph['_token'] = tokenid
+    subgraph['_token'] = tokenid ##TODO: exatly this? _token! conflict?
     subgraph['taskname'] = taskname
     subgraph['pushtime'] = getTimeNow()
     subgraph['sourceurls'] = request.json['sourceurls']
@@ -216,7 +219,7 @@ def pushLinked():
         bidirectional = rel['bidirectional']
 
         print 'bbbbbb '+bidirectional
-        if bidirectional!='yes' and bidirectional!='no':
+        if bidirectional!='yes' and bidirectional!='no': ##decision taken avoid confusion yes no is default! ##TODO: add rules apis!
             return error_helper('bidirectional not yes/no for a for a relation', 400)
 
         for prop in required_rel_props:
