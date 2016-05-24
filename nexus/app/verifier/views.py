@@ -1,6 +1,6 @@
 from app.verifier import verifier
 from flask import render_template, flash, redirect, session, request, url_for, current_app
-from models import GraphHandle
+from app.models.graphmodels.graph_handle import GraphHandle
 
 @verifier.route('/')
 def show():
