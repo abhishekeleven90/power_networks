@@ -86,6 +86,9 @@ def error_helper(message,statuscode):
 
 ##MAJOR TODO: refactor code for future
 ##TODO: aliases a required property in apis? decision to take.
+##TODO: constraints on json, check if the relations are between correct entities,
+## if the labels are correct, if the props are corrrect, atleast the relations between the labels we want
+##check will help in curning the menance of hyperedge!
 @newlinks.route('/pushlinked/', methods=['POST'])
 def pushLinked():
 

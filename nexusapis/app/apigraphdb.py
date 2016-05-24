@@ -68,7 +68,7 @@ def createRels(graph, listofreldicts):
         D = '{ '
         ##MAJOR TODO: gget this in a function can be used elsewhere!
         for key in rel['properties']:
-            D = D + key + ' : \''+rel['properties'][key]+ '\', '
+            D = D + key + ' : \''+rel['properties'][key]+ '\', ' ##all props as strings? ##type:?? TODO
         D = D[:-2] + ' }' 
         print D
         statement = 'MATCH (a {_crawl_en_id_:\'%s\'}), (b {_crawl_en_id_:\'%s\'}) CREATE (a)-[rtt:%s %s]->(b) return rtt' %(A,B,C,D)

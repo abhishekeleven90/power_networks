@@ -279,6 +279,7 @@ class SelectionAlgoGraphDB(GraphDB):
     
     def __init__(self,username, password, server, port):
         GraphDB.__init__(self,username, password, server, port)
+        ##TODO: move these to constants.py when ipython not required
         self.metaprops = {'RESOLVEDUUID':'_resolvedWithUUID_','RESOLVEDRELID':'_resolvedWithRELID_'}
         
     def getFirstUnresolvedNode(self):
