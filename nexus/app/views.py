@@ -164,8 +164,9 @@ def readEntity(uuid):
     ##get that info and convert into presentable format
     ##show that info
     ## show the graph and connections in pble format? pble = presentatble
-    from graphdb import *
-    node = entity(uuid)
+    from app.models.graphmodels.graphdb import CoreGraphDB
+    gg = CoreGraphDB()
+    node = gg.entity(uuid)
     #3missing is how to better represent it online
     return render_template("entity_read.html", 
         homeclass="active", 
@@ -181,8 +182,9 @@ def readRelation(relid):
     ##get that info and convert into presentable format
     ##show that info
     ##should include a visualization too
-    from graphdb import *
-    rel = relation(relid)
+    from app.models.graphmodels.graphdb import CoreGraphDB
+    gg = CoreGraphDB()
+    rel = gg.relation(relid)
     #missing is how to better represent it online
     return render_template("relation_read.html", homeclass="active", 
         rel=rel);
