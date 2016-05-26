@@ -8,8 +8,8 @@ import socks
 import hashlib
 import pandas as pd
 import peewee
-import gdb2csv as gd
-import search_query as sq
+#import gdb2csv as gd
+#import search_query as sq
 
 def login_required(f):
     @wraps(f)

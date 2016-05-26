@@ -44,10 +44,3 @@ META_TABLE_UUID = 'uuidtable'
 
 ##INDEX TABLE NAMES
 INDEX_TABLE_ENTITIES = 'entities'
-
-
-
-
-
-
-

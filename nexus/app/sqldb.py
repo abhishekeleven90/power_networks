@@ -19,8 +19,8 @@ class SQLDB:
         self.sqldbobj.close()
 
     def cursor(self):
-        self.cursor =  self.sqldbobj.cursor()
-        return self.cursor
+        self.cur =  self.sqldbobj.cursor()
+        return self.cur
 
     ##TODO: execute method?
 
