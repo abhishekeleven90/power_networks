@@ -50,15 +50,5 @@ class GraphHandle():
     def getNodeListCore(self, uuidList):
         return self.coredb.getListOfNodes(uuidList)
 
-    def insertRelHelper(self, crawl_obj):
-        ##crawl_onj is the relation to be created here using the essential copied metadata!
-
-        ##get the start and end nodes
-        ##TODO move the constants somewhere! man! 
-        start_node_uuid = crawl_obj.start_node['_resolvedWithUUID_']
-        end_node_uuid = crawl_obj.end_node['_resolvedWithUUID_']
-
-        return self.coredb.insertCoreRelWrap(crawl_obj, start_node_uuid, end_node_uuid) 
-
 
          

@@ -75,7 +75,7 @@ def matchNodeNew():
 
     if not request.form:
 
-        matchingUUIDS = [250,251]
+        matchingUUIDS = [569]
 
         ##use apache solr code here
         ##from app.resolver import *      
@@ -95,7 +95,7 @@ def matchNodeNew():
 
         if request.form['match_uuid']!='##NA##':            
             session[CURR_UUID] = request.form['match_uuid']
-            return redirect(url_for('.diffPush'))
+            return redirect(url_for('.diffPushGen', kind = 'node'))
 
         else:
 
@@ -309,7 +309,7 @@ def matchRelNew():
 
     if not request.form:
 
-        matchingIDS = [101,102]
+        matchingIDS = [1001]
 
         ##use apache solr code here
         ##from app.resolver import *      
@@ -331,7 +331,7 @@ def matchRelNew():
 
         if request.form['match_relid']!='##NA##':            
             session[CURR_ID] = request.form['match_relid']
-            return redirect(url_for('.diffRelPush'))
+            return redirect(url_for('.diffPushGen', kind = 'relation'))
 
         else:
 
@@ -339,7 +339,7 @@ def matchRelNew():
             ## assuming the curr_relation has a label atleast else no way are we going to isert it! ##TODO a check!!! Can be done at api time too!
             ## create
             ## crawl_obj is the copied object
-            curr_obj = gg.insertRelHelper(crawl_obj)
+            curr_obj = gg.coredb.insertCrawledRelationToCore(crawl_obj)
             curr_id = curr_obj['relid'] ##move outside
 
             flash('Graph object created with id: '+ str(curr_obj['relid']))
@@ -355,3 +355,111 @@ def matchRelNew():
             #return render_template("temp.html", homeclass="active",temptext="NEW NODE CREATED DONE!")
             return redirect(url_for('.show'))
             ##TODO: second return
+
+
+##two params: number and uuid ?? in session!
+@verifier.route('/diffPushGen/<string:kind>', methods=["GET","POST"])
+def diffPushGen(kind='node'):
+
+
+
+    CRAWL_ID_NAME = None ##Property name in crawl graph
+    CURR_ID = None ##Session variable
+
+    from app.constants import CRAWL_EN_ID_NAME, CRAWL_REL_ID_NAME
+    
+    if kind == 'relation':
+        CRAWL_ID_NAME = CRAWL_REL_ID_NAME
+        CURR_ID = 'curr_relid'
+    elif kind == 'node':
+        CURR_ID = 'curr_uuid'
+        CRAWL_ID_NAME = CRAWL_EN_ID_NAME
+    else:
+        return 'kind not defined now', 404 
+
+    
+    if session.get(CURR_ID) is None:
+        return render_template("temp.html", homeclass="active", temptext='No diff tasks go to start task/match task first!')
+
+    gg = GraphHandle()
+
+    curr_id = session.get(CURR_ID)
+    crawl_id = session.get(CRAWL_ID_NAME)
+
+    crawl_obj_original = None
+    crawl_obj = None
+    
+    if kind == 'relation':
+        crawl_obj_original = gg.crawldb.getRelationByUniqueID(CRAWL_ID_NAME, crawl_id, isIDString = True)
+        crawl_obj = gg.crawldb.copyRelationWithEssentialNodeMeta(crawl_obj_original)
+        orig = gg.coredb.relation(curr_id)
+
+    elif kind == 'node':
+        crawl_obj_original = gg.crawldb.getNodeByUniqueID(CRAWL_ID_NAME, crawl_id, isIDString = True)
+        crawl_obj = gg.crawldb.copyNodeWithoutMeta(crawl_obj_original) 
+        orig = gg.coredb.entity(curr_id)
+
+
+    naya = crawl_obj ##from the row
+
+    orig.pull()
+
+    #naya.pull() ##wont work now as naya node is not bound now
+    ##print 'orig: ' + str(orig)
+    ##print '-------'
+    ##print 'naya: ' + str(naya)
+    ##print '-------'
+
+    new_labels = None
+    if kind == 'node':
+        new_labels = gg.coredb.labelsToBeAdded(orig,naya) 
+    conf_props,new_props = gg.coredb.propsDiff(orig,naya)
+
+    if not request.form:
+
+        return render_template("verifier_diff_gen.html", homeclass="active",
+            new_labels=new_labels,conf_props=conf_props, new_props=new_props,orig=orig, naya=naya, crawl_id = session[CRAWL_ID_NAME], kind=kind)
+    else:
+
+        
+        for prop in conf_props:
+            flash(prop+' : '+request.form[prop])
+            ##update this prop in orig graph object!
+            #orig[prop] = request.form[prop]
+            orig[prop] = request.form[prop] ##naya prop/orig prop 
+
+        
+        for label in request.form.getlist('newlabels'):
+            flash('Label: '+str(label))
+            ##add this label to orig!
+            orig.labels.add(label)
+
+        
+        for prop in new_props:
+            value_list = request.form.getlist(prop)
+            if len(value_list)==1: ##as only one value is going to be any way!
+                flash(prop+' : '+str(value_list[0]))
+                ##add this prop to orig graph object!
+                #orig[prop] = request.form[prop]
+                orig[prop] = request.form[prop] ##naya prop/orig prop 
+        
+        ##print orig  
+        ##now can push! TODO!
+        
+
+        orig.push()#3one node resolved! 
+
+        
+        flash(kind+ ' : '+CRAWL_ID_NAME+' : '+ str(session[CRAWL_ID_NAME]))
+
+        if kind == 'relation':
+            gg.crawldb.setResolvedWithRELID(crawl_obj_original, curr_id)
+        elif kind == 'node':
+            gg.crawldb.setResolvedWithUUID(crawl_obj_original, curr_id)
+
+        ##pop session objects
+        session.pop(CRAWL_ID_NAME, None)
+        session.pop(CURR_ID, None) ##redundant code!
+        
+        return redirect(url_for('.show'))
+

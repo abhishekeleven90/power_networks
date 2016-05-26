@@ -19,6 +19,9 @@ class GraphDB:
         self.con_url = 'http://'+username+':'+password+'@'+server+':'+port+'/db/data/' 
         self.graph = Graph(self.con_url)
 
+         ##TODO: move these to constants.py when IPYTHON not required
+        self.metaprops = {'RESOLVEDUUID':'_resolvedWithUUID_','RESOLVEDRELID':'_resolvedWithRELID_'}
+
     #Done: Multiple each time want to ask something
     #Else: works on old data only
     ##Wont use this
@@ -294,15 +297,21 @@ class CoreGraphDB(GraphDB):
         #copy the props
         for prop in rel.properties:
             newrel[prop] = rel[prop]
-        newrel['relid'] = 1001 ##TODO: db work here!
+        newrel['relid'] = 1034 ##TODO: db work here!
         #in the end just copy the new relation id
     
         self.graph.create(newrel) ##create the actual graph object!
         newrel.pull()
         return newrel
+
+    def insertCrawledRelationToCore(self, crawl_rel):
         
+        start_node_uuid = crawl_rel.start_node[self.metaprops['RESOLVEDUUID']]
+        end_node_uuid = crawl_rel.end_node[self.metaprops['RESOLVEDUUID']]
 
+        return self.insertCoreRelWrap(crawl_rel, start_node_uuid, end_node_uuid) 
 
+    
 
 class SelectionAlgoGraphDB(GraphDB):
     
@@ -312,8 +321,7 @@ class SelectionAlgoGraphDB(GraphDB):
 
         GraphDB.__init__(self, username = CRAWL_GRAPH_USER, password = CRAWL_GRAPH_PASSWORD, server = CRAWL_GRAPH_HOST, port = CRAWL_GRAPH_PORT)
 
-        ##TODO: move these to constants.py when IPYTHON not required
-        self.metaprops = {'RESOLVEDUUID':'_resolvedWithUUID_','RESOLVEDRELID':'_resolvedWithRELID_'}
+       
         
     def getFirstUnresolvedNode(self):
         results = []
