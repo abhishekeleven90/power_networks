@@ -240,3 +240,118 @@ def diffPush():
     #     temptext='Push something new to '+ str(uuid)+' task completed') ##str beacuse of None
 
     ##TODO: same validation checks like _ for wiki thing too 
+
+
+
+@verifier.route('/startRelTask/')
+def startRelTask():
+
+    from app.constants import CRAWL_REL_ID_NAME
+    CURR_RELID = 'curr_relid' ##TODO: move somehwre?
+
+    ##TODO: remove when not needed!
+    session.pop(CRAWL_REL_ID_NAME, None)
+    session.pop(CURR_RELID, None)
+
+    ##TODO: check if session vars exist in session directly redirect to runTask
+    if session.get(CRAWL_REL_ID_NAME) is not None:
+        print 'startRelTask: in the middle of a relation resolution task for relation : '+str(session.get(CRAWL_REL_ID_NAME))  
+        return redirect(url_for('.matchRelNew')) ##changed here!
+
+    gg = GraphHandle()
+
+    if gg.areCrawlRelationsLeft(): ##if task exists in crawl db!
+        
+        print 'startRelTask: ckecked relations to resolve exists!!'
+
+        rel = gg.nextRelationToResolve()
+        print rel
+
+        session[CRAWL_REL_ID_NAME] = rel[CRAWL_REL_ID_NAME]
+
+        print '\n\nstartRelTask: Beginning resolution for relation with crawl id: '+rel[CRAWL_REL_ID_NAME]+'\n\n'
+
+
+        print 'startRelTask: now redirecting'
+
+        return redirect(url_for('.matchRelNew'))
+        
+
+    else:
+
+        temptext = 'No pending relations to resolve, sorry'
+    
+    return render_template("temp.html", homeclass="active", 
+        temptext=temptext)
+
+
+
+@verifier.route('/matchRelNew/',methods=["GET","POST"])
+def matchRelNew():
+
+    from app.constants import CRAWL_REL_ID_NAME
+    kind = 'relation'
+    CRAWL_ID_NAME = CRAWL_REL_ID_NAME
+    CURR_ID = 'curr_relid'
+    ##match_uuid. match_relid in different varoables!? TODO
+
+    if session.get(CRAWL_ID_NAME) is None:
+        return redirect(url_for('.show'))
+
+    gg = GraphHandle()
+    crawl_obj_original = gg.crawldb.getRelationByUniqueID(CRAWL_ID_NAME, session[CRAWL_ID_NAME], isIDString = True)
+    ##essential node meta is required when actually creating the node
+    ##also will be required when resolving the relation, though can be taken from original
+    crawl_obj = gg.crawldb.copyRelationWithEssentialNodeMeta(crawl_obj_original)
+    
+
+    ##TODO: validation as well! 
+
+    if not request.form:
+
+        matchingIDS = [101,102]
+
+        ##use apache solr code here
+        ##from app.resolver import *      
+        ##print resolveNode('xx') ##TODO: remove this!
+        ##TODO: this should actaully change acc to the resolve props and show the diffs acc, to the resolve things only!
+    
+        graphobjs = gg.coredb.getRelListCore(matchingIDS) 
+        print 'reeeeeeeeeeeeeeeeeeeeeeeeeeeeel'
+        print graphobjs    
+
+        return render_template("verifier_match_rel.html", homeclass="active",
+            row=crawl_obj, graphobjs=graphobjs, ID = session[CRAWL_ID_NAME], kind = kind)
+    else:
+
+        ##get the matched_uuid! save it in sessnio or where-ever you want
+        #print request.form['match_uuid']
+
+        flash(request.form['match_relid'])
+
+        if request.form['match_relid']!='##NA##':            
+            session[CURR_ID] = request.form['match_relid']
+            return redirect(url_for('.diffRelPush'))
+
+        else:
+
+
+            ## assuming the curr_relation has a label atleast else no way are we going to isert it! ##TODO a check!!! Can be done at api time too!
+            ## create
+            ## crawl_obj is the copied object
+            curr_obj = gg.insertRelHelper(crawl_obj)
+            curr_id = curr_obj['relid'] ##move outside
+
+            flash('Graph object created with id: '+ str(curr_obj['relid']))
+            flash(kind+ ' : '+CRAWL_ID_NAME +' : '+str(session[CRAWL_ID_NAME]))
+
+            ##pop session objects
+            session.pop(CRAWL_ID_NAME, None)
+            session.pop(CURR_ID, None) ##redundant code!
+
+            ##updateResolved PART
+            gg.crawldb.setResolvedWithRELID(crawl_obj_original, curr_id)
+            #change to original            
+            #return render_template("temp.html", homeclass="active",temptext="NEW NODE CREATED DONE!")
+            return redirect(url_for('.show'))
+            ##TODO: second return

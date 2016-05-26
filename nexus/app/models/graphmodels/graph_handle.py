@@ -23,7 +23,7 @@ class GraphHandle():
         return n1 != 0 ##here the first count can work as we just need to select any node
 
     def areCrawlRelationsLeft(self):
-        r1,r2 = self.getRelationStats()
+        r1,r2 = self.getCrawlRelationStats()
         return r2 != 0  ##here the second count works as we just need to select any relation for which the nodes are resolved
 
     def updateCrawlNode(self, node, uuid):
@@ -49,3 +49,16 @@ class GraphHandle():
 
     def getNodeListCore(self, uuidList):
         return self.coredb.getListOfNodes(uuidList)
+
+    def insertRelHelper(self, crawl_obj):
+        ##crawl_onj is the relation to be created here using the essential copied metadata!
+
+        ##get the start and end nodes
+        ##TODO move the constants somewhere! man! 
+        start_node_uuid = crawl_obj.start_node['_resolvedWithUUID_']
+        end_node_uuid = crawl_obj.end_node['_resolvedWithUUID_']
+
+        return self.coredb.insertCoreRelWrap(crawl_obj, start_node_uuid, end_node_uuid) 
+
+
+         

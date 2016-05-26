@@ -30,6 +30,7 @@ CORE_GRAPH_RELID = 'relid'
 
 #CRAWL GRAPH SYMBOLS
 CRAWL_EN_ID_NAME = '_crawl_en_id_'
+CRAWL_REL_ID_NAME = '_crawl_rel_id_'
 
 
 #SOLR CONFIG

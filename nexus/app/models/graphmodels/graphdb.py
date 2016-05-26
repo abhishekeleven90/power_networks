@@ -109,11 +109,11 @@ class GraphDB:
         end_node = ''
         
         if not copymeta:
-            start_node = g.copyNodeWithoutMeta(rel.start_node, exceptions = node_exceptions)
-            end_node = g.copyNodeWithoutMeta(rel.end_node, exceptions = node_exceptions)
+            start_node = self.copyNodeWithoutMeta(rel.start_node, exceptions = node_exceptions)
+            end_node = self.copyNodeWithoutMeta(rel.end_node, exceptions = node_exceptions)
         else:
-            start_node = g.copyNodeAsItIs(rel.start_node)
-            end_node = g.copyNodeAsItIs(rel.end_node)
+            start_node = self.copyNodeAsItIs(rel.start_node)
+            end_node = self.copyNodeAsItIs(rel.end_node)
             
         reltype = rel.type
         nayarel = Relationship(start_node, reltype, end_node)
@@ -215,6 +215,12 @@ class CoreGraphDB(GraphDB):
             ans.append(self.entity(c))
         return ans
 
+    ##TODO: merge getNodeListCore and getRelListCore seem similar!
+    def getRelListCore(self, relid_list):
+        ans = []
+        for c in relid_list:
+            ans.append(self.relation(c))
+        return ans
 
     def labelsToBeAdded(self, orig, naya):
         new_labels = []
@@ -267,15 +273,34 @@ class CoreGraphDB(GraphDB):
         ## use this table
         ## this table inside flasktemp for now
         ## create table uuidtable(uuid bigint(20) not null auto_increment primary key, name varchar(255));
-        from dbwork import createUuid
+        from app.dbwork import createUuid
         uuid = createUuid(node['name'])
         ##TODO: move uuid to props!
-        print 'uuid generated ' +str(uuid)
+        print 'uuid generated ' +str(uuid) #change this code : TODO
         node['uuid'] = uuid
         print node
         self.graph.create(node)
         node.pull()
         return node
+
+    def insertCoreRelWrap(self, rel, start_node_uuid, end_node_uuid):
+
+        start_node = self.entity(start_node_uuid)
+        end_node = self.entity(end_node_uuid)
+
+        #construct the relation object
+        newrel = Relationship(start_node,rel.type,end_node)
+
+        #copy the props
+        for prop in rel.properties:
+            newrel[prop] = rel[prop]
+        newrel['relid'] = 1001 ##TODO: db work here!
+        #in the end just copy the new relation id
+    
+        self.graph.create(newrel) ##create the actual graph object!
+        newrel.pull()
+        return newrel
+        
 
 
 
@@ -388,3 +413,6 @@ class SelectionAlgoGraphDB(GraphDB):
         #print query
         results = self.graph.cypher.execute(query)
         return results[0][0]
+
+    def copyRelationWithEssentialNodeMeta(self, rel):
+        return self.copyRelationWithoutMeta(rel, node_exceptions=[self.metaprops['RESOLVEDUUID']]) 

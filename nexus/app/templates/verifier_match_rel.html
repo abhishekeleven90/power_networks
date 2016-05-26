@@ -1,0 +1,55 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+{% block content %}
+    <!--<div class="container">-->
+        <br/>
+        <h1> Crawl ID : {{ID}} </h1>
+        <h3> kind: {{kind}} </h3>
+        <br/> 
+    <!--</div> container-->
+    <h3>To be matched</h3>
+    <!--if condition here-->
+
+    {{relation_read(row, True, True)}}
+    <hr/>
+
+
+    <form class="form-horizontal" method="post" action={{url_for('verifier.matchRelNew')}}>
+
+        <h3>From graph</h3>
+        <br/>
+
+        {% for obj in graphobjs %}
+        
+            <div class="radio">
+                <label><input type="radio" name="match_relid" value="{{obj.properties['relid']}}"></input> {{obj.properties['relid']}}</label> <!-- AA -->
+            </div>
+
+            {{relation_read(obj,True,False)}}
+
+            <hr/>
+            
+        {% endfor %}
+    
+            <div class="radio">
+                
+                <!-- Using NA as None is not a NICE string-->
+                <label><input type="radio" name="match_relid" value="##NA##"></input> No I don't find the relation here! </label> <!-- AA --> 
+
+            </div>
+            <hr/>
+
+
+        <div class="form-group">
+            <label class="col-md-4 control-label" for=""></label>
+            <div class="col-md-4">
+            <!-- Button -->
+            <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+        </div>
+
+    </form>
+
+
+   
+{% endblock %}
