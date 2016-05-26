@@ -1,5 +1,6 @@
 from app.guest import guest
 from flask import render_template, flash, redirect, session, g, request, url_for, abort
+from app.solr.SolrIndex import *
 
 @guest.route('/')
 def show():
@@ -14,6 +15,8 @@ def temp2():
     #Entity.del_all_entities()
     en = Entity(4,'Kapil','person,politician','Kapil, Thakkar', 'gujrat iit mumbai')
     rows = en.insertEntity()
+    en.name = 'Amartya'
+    en.updateEntity()
     print 'will be here if all fine'
     return render_template("temp.html", homeclass="active", temptext = 'You are here')
 
@@ -28,5 +31,9 @@ def viz():
     cypher = ''
     return render_template("temp.html", homeclass="active", temptext = city+' '+state)        
 
-
-
+@guest.route('/temp4/')
+def solr():
+    delete_index()
+    full_import()
+    print 'will be here if all fine'
+    return render_template("temp.html", homeclass="active", temptext = 'You are here')

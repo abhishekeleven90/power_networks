@@ -25,7 +25,13 @@ class Entity:
 
     def insertEntity(self):
         self.dbwrap.connect()
-        cursor = self.dbwrap.cursor()
+        print (self.dbwrap.cursor)
+        try:
+            cursor = self.dbwrap.cursor()
+        except:
+            print "In insertEntity"
+            print "Cannot get cursor"
+            self.dbwrap.commitAndClose()
         query = "INSERT INTO entities(uuid, name, labels, aliases, keywords) VALUES\
                 ('%s','%s','%s','%s','%s')"\
                 % (self.uuid, self.name, self.labels, self.aliases, self.keywords)
@@ -36,20 +42,35 @@ class Entity:
 
     def updateEntity(self):
         self.dbwrap.connect()
-        cursor = self.dbwrap.cursor()
-        query = ("UPDATE entities SET VALUES (name, labels, aliases, keywords)\
-                =('%s','%s','%s','%s','%s') WHERE uuid = " + self.uuid)\
+        print (self.dbwrap.cursor)
+        try:
+            cursor = self.dbwrap.cursor()
+        except:
+            print "In updateEntity"
+            print "Cannot get cursor"
+            self.dbwrap.commitAndClose()
+
+        query = ("UPDATE entities SET name='%s', labels='%s', aliases='%s', keywords='%s'\
+                 WHERE uuid ='" + str(self.uuid) + "'")\
                 % (self.name, self.labels, self.aliases, self.keywords)
         print query
-        numrows = cursor.execute()
+        numrows = cursor.execute(query)
         self.dbwrap.commitAndClose()
         return numrows
 
-    def getEntity(self):
+    def getEntity(self, uuid):
         self.dbwrap.connect()
         cursor = self.dbwrap.cursor()
-        query = ("SELECT * entities SET VALUES WHERE uuid = " + self.uuid)\
-                % (self.name, self.labels, self.aliases, self.keywords)
+        query = ("SELECT (uuid, name, labels, aliases, keywords) FROM entities WHERE uuid = " + uuid)
         print query
         cursor.execute()
+        results = cursor.fetchAll()
+        for r in results:
+            self.uuid = r[0]
+            self.name = r[1]
+            self.labels = r[2]
+            self.aliases = r[3]
+            self.keywords = r[4]
+
         self.dbwrap.commitAndClose()
+        return

@@ -9,7 +9,7 @@ from app.constants import SOLR_HOST, SOLR_CORE, SOLR_PORT
 
 def delta_import():
 
-    delta_url = "http://"+SOLR_HOST+":"+SOLR_PORT+"/solr/"+SOLR_CORE+"/dataimport?command=delta-import&clean=false&optimize=false"
+    delta_url = "http://"+SOLR_HOST+":"+str(SOLR_PORT)+"/solr/"+SOLR_CORE+"/dataimport?command=delta-import&clean=false&optimize=false"
     r = requests.get(delta_url)
     print r.text
     return
@@ -17,17 +17,23 @@ def delta_import():
 
 def full_import():
     #full-import
-    full_url = "http://"+SOLR_HOST+":"+SOLR_PORT+"/solr/"+SOLR_CORE+"/dataimport?command=full-import&clean=true&optimize=true"
+    full_url = "http://"+SOLR_HOST+":"+str(SOLR_PORT)+"/solr/"+SOLR_CORE+"/dataimport?command=full-import&clean=true&optimize=true"
     r = requests.get(full_url)
     print r.text
     return
 
 
-def delete_index(index_id):
+#If None then full index delete
 
-    delete_url = "http://"+SOLR_HOST+":"+SOLR_PORT+"/solr/"+SOLR_CORE+"/update/json?wt=json"
+def delete_index(index_id=None):
+
+    delete_url = "http://"+SOLR_HOST+":"+str(SOLR_PORT)+"/solr/"+SOLR_CORE+"/update/json?wt=json"
+    if index_id is None: index_id = '*'
     uuid_str = "uuid:{}".format(index_id)
-    headers = {'content-type' : 'text/json'}
+    headers = {
+    'content-type' : 'text/json',
+    'cache-control': "no-cache"
+    }
     data = {"delete": {"query":uuid_str, "commitWithin":500},"commit": {}}
     print data
 
@@ -44,5 +50,5 @@ def update_index(update_type,index_id=None):
 
 
 if __name__ == "__main__":
-        #update_index(update_type=1)
-        update_index(3, 10)
+        delete_index()
+        full_import()
