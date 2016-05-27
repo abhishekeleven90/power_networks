@@ -302,6 +302,7 @@ def matchRelNew():
     crawl_obj_original = gg.crawldb.getRelationByUniqueID(CRAWL_ID_NAME, session[CRAWL_ID_NAME], isIDString = True)
     ##essential node meta is required when actually creating the node
     ##also will be required when resolving the relation, though can be taken from original
+
     crawl_obj = gg.crawldb.copyRelationWithEssentialNodeMeta(crawl_obj_original)
     
 
@@ -309,17 +310,16 @@ def matchRelNew():
 
     if not request.form:
 
-        matchingIDS = [3,4,5,6]
+        graphobjs = gg.matchRelationsInCore(crawl_obj)
 
         ##use apache solr code here
         ##from app.resolver import *      
         ##print resolveNode('xx') ##TODO: remove this!
         ##TODO: this should actaully change acc to the resolve props and show the diffs acc, to the resolve things only!
     
-        graphobjs = gg.coredb.getRelListCore(matchingIDS) 
-        print 'reeeeeeeeeeeeeeeeeeeeeeeeeeeeel'
-        print graphobjs    
-
+        ##no longer needed
+        #graphobjs = gg.coredb.getRelListCore(matchingIDS) 
+        
         return render_template("verifier_match_rel.html", homeclass="active",
             row=crawl_obj, graphobjs=graphobjs, ID = session[CRAWL_ID_NAME], kind = kind)
     else:

@@ -304,7 +304,21 @@ class CoreGraphDB(GraphDB):
     
         self.graph.create(newrel) ##create the actual graph object!
         newrel.pull()
-        return newrel 
+        return newrel
+
+    def searchRelations(self, start_node_uuid, reltype, end_node_uuid,):
+        ##note that the direction has been kept intact
+        ##note that this is very basic search but 
+        ##we wont have much relations between two nodes
+        query = "match (n {uuid:%s})-[r:%s]->(p {uuid:%s}) return r"
+        query = query %(start_node_uuid, reltype, end_node_uuid)
+        results = self.graph.cypher.execute(query)
+        rellist = []
+        for res in results:
+            rellist.append(res[0])
+        return rellist
+
+
 
     
 

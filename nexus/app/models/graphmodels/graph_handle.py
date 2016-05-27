@@ -84,5 +84,19 @@ class GraphHandle():
         return self.coredb.insertCoreRelWrap(crawl_rel, start_node_uuid, end_node_uuid, relid)
 
 
+    def matchRelationsInCore(self, crawl_rel):
+        '''
+            Returns a list of relations that are almost as same as this crawl_rel object from crawldb
+        '''    
+        from app.constants import RESOLVEDWITHUUID, RESOLVEDWITHRELID
+        
+        start_node_uuid = crawl_rel.start_node[RESOLVEDWITHUUID]
+        end_node_uuid = crawl_rel.end_node[RESOLVEDWITHUUID]
+
+        return self.coredb.searchRelations(start_node_uuid, crawl_rel.type, end_node_uuid)
+
+        
+
+
 
          
