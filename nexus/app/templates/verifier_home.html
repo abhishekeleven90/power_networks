@@ -11,7 +11,7 @@
             {{immediateUnResolvedTotal}} connected nodes to immediately resolve<br/>
             <br/>
 
-            <a href={{url_for('verifier.startNodeTask')}}>
+            <a href={{url_for('verifier.startTask', kind = 'node')}}>
                     <button type="submit" class="btn btn-primary">Resolve Nodes!</button>
             </a>
             <br/>
@@ -27,7 +27,7 @@
 
 
 
-            <a href={{url_for('verifier.startRelTask')}}>
+            <a href={{url_for('verifier.startTask', kind = 'relation')}}>
                     <button type="submit" class="btn btn-primary">Resolve Relations!</button>
             </a>
             <br/>

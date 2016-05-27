@@ -3,26 +3,44 @@
 {% block content %}
     <!--<div class="container">-->
         <br/>
-        <h1>Task ID : {{taskID}}</h1>
+        <h1> Crawl ID : {{ID}} </h1>
+        <h3> kind: {{kind}} </h3>
         <br/> 
     <!--</div> container-->
-
     <h3>To be matched</h3>
-    {{entity_read(row,True)}}
+
+    {% if kind == 'node' %}
+        {{entity_read(row,True)}}
+    {% endif %}
+
+
+    {% if kind == 'relation' %}
+        {{relation_read(row, True, True)}}
+    {% endif %}
+
     <hr/>
 
 
-    <form class="form-horizontal" method="post" action={{url_for('verifier.match')}}>
+    <form class="form-horizontal" method="post" action={{url_for('verifier.match', kind = kind)}}>
 
         <h3>From graph</h3>
         <br/>
 
-        {% for node in graphnodes %}
+        {% for obj in graphobjs %}
         
             <div class="radio">
-                <label><input type="radio" name="match_uuid" value="{{node.properties['uuid']}}"></input> {{node.properties['uuid']}}</label>
-            </div>                
-            {{entity_read(node,True)}}
+                <label><input type="radio" name="match_id" value="{{obj.properties[idname]}}"></input> {{obj.properties[idname]}}</label> <!-- AA -->
+            </div>
+
+            {% if kind == 'node' %}
+                {{entity_read(obj,True)}}
+            {% endif %}
+
+
+            {% if kind == 'relation' %}
+                {{relation_read(obj,True,False)}}
+            {% endif %}
+
             <hr/>
             
         {% endfor %}
@@ -30,7 +48,7 @@
             <div class="radio">
                 
                 <!-- Using NA as None is not a NICE string-->
-                <label><input type="radio" name="match_uuid" value="NA"></input> No I don't find the entity here! </label> 
+                <label><input type="radio" name="match_id" value="##NA##"></input> No I don't find the graph object of kind {{kind}} here! </label> <!-- AA --> 
 
             </div>
             <hr/>

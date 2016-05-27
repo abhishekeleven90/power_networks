@@ -30,3 +30,5 @@ MATCH (t:company {cin:'L28920MH1945PLC004520'}),(r:company {cin:'L40101MH1995PLC
 p = shortestPath((t)-[*..30]-(r))
 return p
 
+##delete from uuidtable deletes all rows from relidtable automatically.
+

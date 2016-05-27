@@ -91,3 +91,101 @@
         }
     ]
 }
+
+
+
+
+### After above:
+{
+"taskname": "wow70",
+"meta-description": "Trial",
+"fetchdate": "01/01/2011",
+"sourceurls": ["wikipedia", "capitalline"],
+"entities": 
+    [
+        {
+            "id":"1",
+            "labels":["person","politician","entity"],
+            "properties":
+                {"name":"Narendra Modi", "current":"1"}
+        },
+        {
+            "id":"2",
+            "labels":["organization","politicalparty","nationalparty"],
+            "properties":
+                {"name":"Bhartiya Janata Party", "type":"national"}
+        },
+        {
+            "id":"3",
+            "labels":["person","politician","businessperson"],
+            "properties":
+                {"name":"Amit Shah", "position":"president"}
+        },
+        {
+            "id":"4",
+            "labels":["person","socialworker"],
+            "properties":
+                {"name":"Mrs. Modi","status":"unknown"}
+        },
+        {
+            "id":"5",
+            "labels":["person","politician","businessperson"],
+            "properties":
+                {"name":"Sonia Gandhi"}
+        },
+        {
+            "id":"6",
+            "labels":["person","politician","director"],
+            "properties":
+                {"name":"Rahul Gandhi"}
+        },
+        {
+            "id":"7",
+            "labels":["person","politician","president"],
+            "properties":
+                {"name":"Pranab Mukherjee"}
+        }
+    ],
+"relations":
+    [
+        {
+            "id":"1",
+            "label":"worksIn",
+            "start_entity":"1",
+            "end_entity":"2",
+            "bidirectional":"no",
+            "properties":
+                {"startdate":"01/01/2010", "loyalist":"1"}
+        },
+        {
+            "id":"2",
+            "label":"worksIn",
+            "start_entity":"3",
+            "end_entity":"2",
+            "bidirectional":"no",
+            "properties":
+                {"startdate":"01/01/2010", "loyalist":"0"}
+        },
+        {
+            "id":"3",
+            "label":"spouseOf",
+            "start_entity":"1",
+            "end_entity":"4",
+            "bidirectional":"yes",
+            "properties":
+                {"startdate":"01/01/1990"}
+        },
+        {
+            "id":"4",
+            "label":"childOf",
+            "start_entity":"6",
+            "end_entity":"5",
+            "bidirectional":"no",
+            "properties":
+                {
+                    "startdate":"01/01/1990",
+                    "bloodrelation":"yes"
+                }
+        }
+    ]
+}
