@@ -75,7 +75,7 @@ def matchNodeNew():
 
     if not request.form:
 
-        matchingUUIDS = [569]
+        matchingUUIDS = [60,61,62,63,64,65,66]
 
         ##use apache solr code here
         ##from app.resolver import *      
@@ -102,7 +102,7 @@ def matchNodeNew():
 
             ##assuming the curr_node has name property if not. no way are we going to isert it! ##TODO a check!!!
             ##create
-            curr_node = gg.coredb.insertCoreNodeWrap(crawl_node)
+            curr_node = gg.insertCoreNodeHelper(crawl_node)
             curr_uuid = curr_node['uuid']
 
             flash('Node created with uuid: '+ str(curr_node['uuid']))
@@ -309,7 +309,7 @@ def matchRelNew():
 
     if not request.form:
 
-        matchingIDS = [1001]
+        matchingIDS = [3,4,5,6]
 
         ##use apache solr code here
         ##from app.resolver import *      
@@ -339,7 +339,7 @@ def matchRelNew():
             ## assuming the curr_relation has a label atleast else no way are we going to isert it! ##TODO a check!!! Can be done at api time too!
             ## create
             ## crawl_obj is the copied object
-            curr_obj = gg.coredb.insertCrawledRelationToCore(crawl_obj)
+            curr_obj = gg.insertCoreRelationHelper(crawl_obj)
             curr_id = curr_obj['relid'] ##move outside
 
             flash('Graph object created with id: '+ str(curr_obj['relid']))

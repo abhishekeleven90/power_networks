@@ -22,6 +22,12 @@ class SQLDB:
         self.cur =  self.sqldbobj.cursor()
         return self.cur
 
+    def connectAndCursor(self):
+        import MySQLdb as mysqldb
+        self.sqldbobj = mysqldb.connect(host = self.dbhost, user = self.dbuser, passwd = self.dbpass, db =  self.dbname, port = self.dbport)
+        self.cur =  self.sqldbobj.cursor()
+        return self.cur        
+
     ##TODO: execute method?
 
     ##generic can be used by anyone

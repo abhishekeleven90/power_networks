@@ -33,3 +33,5 @@ MATCH (t:company {cin:'L28920MH1945PLC004520'}),(r:company {cin:'L40101MH1995PLC
 p = shortestPath((t)-[*..30]-(r))
 return p
 
+
+##Don't delete anything from graph without deleting from mysql too at the same time. Infact delete first from mysql, and then from graph, the uuids and relids if the need be.

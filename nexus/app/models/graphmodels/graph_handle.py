@@ -50,5 +50,39 @@ class GraphHandle():
     def getNodeListCore(self, uuidList):
         return self.coredb.getListOfNodes(uuidList)
 
+    def insertCoreNodeHelper(self, node):
+
+        ##a very basic necessity of this! 
+        ##as uuids and graphs are linked
+
+        from app.models.dbmodels.idtables import Entity
+        en = Entity(node['name'])
+        en.create()
+        uuid = en.uuid
+
+        ##TODO: move uuid to props!
+        print 'uuid generated ' +str(uuid) #change this code : TODO
+
+        return self.coredb.insertCoreNodeWrap(node, uuid)
+
+
+    def insertCoreRelationHelper(self, crawl_rel): 
+        ##this relation contains no metadata
+        ##but the start and edn nodes contain metadata for uuids against which resolved
+
+        from app.constants import RESOLVEDWITHUUID, RESOLVEDWITHRELID
+        
+        start_node_uuid = crawl_rel.start_node[RESOLVEDWITHUUID]
+        end_node_uuid = crawl_rel.end_node[RESOLVEDWITHUUID]
+
+        from app.models.dbmodels.idtables import Link
+        link = Link(crawl_rel.type, start_node_uuid, end_node_uuid)
+        link.create()
+        relid = link.relid
+        print '#### inside @@@@@@ relid - means db working fine '+str(relid)
+
+        return self.coredb.insertCoreRelWrap(crawl_rel, start_node_uuid, end_node_uuid, relid)
+
+
 
          

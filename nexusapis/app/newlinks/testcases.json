@@ -1,20 +1,6 @@
 {
-"taskname": "wow",
-"description": "Naveen Jindal Connections",
-"entities": [{"id":"a","name":"a"},{"id":"b","name":"b"}]
-}
-
-
-{
-"taskname": "wow",
-"description": "Naveen Jindal Connections",
-"entities": [{"id":"a","labels":["a","b","c"]},{"id":"b","labels":["a","b","c"]}]
-}
-
-
-{
-"taskname": "njconn1",
-"description": "Naveen Jindal Connections",
+"taskname": "wow77",
+"meta-description": "Trial",
 "fetchdate": "01/01/2011",
 "sourceurls": ["wikipedia", "capitalline"],
 "entities": 
@@ -23,65 +9,43 @@
             "id":"1",
             "labels":["person","politician"],
             "properties":
-                {"name":"Naveen Jindal"}
+                {"name":"Narendra Modi"}
         },
         {
             "id":"2",
-            "fetchdate": "01/01/2011",
-            "sourceurls": ["wikipedia", "capitalline"],
             "labels":["organization","politicalparty"],
             "properties":
-                {"name":"INC"}
-        }
-    ]
-}
-
-
-
-
-{
-"taskname": "njconn1",
-"description": "Naveen Jindal Connections",
-"fetchdate": "01/01/2011",
-"sourceurls": ["wikipedia", "capitalline"],
-"entities": 
-    [
+                {"name":"BJP"}
+        },
         {
-            "id":"1",
+            "id":"3",
             "labels":["person","politician"],
             "properties":
-                {"name":"Naveen Jindal"}
+                {"name":"Amit Shah"}
         },
         {
-            "id":"2",
-            "fetchdate": "01/01/2011",
-            "sourceurls": ["wikipedia", "capitalline"],
-            "labels":["organization","politicalparty"],
+            "id":"4",
+            "labels":["person"],
             "properties":
-                {"name":"INC"}
-        }
-    ]
-}
-
-
-{
-"taskname": "njconn1",
-"description": "Naveen Jindal Connections",
-"fetchdate": "01/01/2011",
-"sourceurls": ["wikipedia", "capitalline"],
-"entities": 
-    [
+                {"name":"Mrs. Modi"}
+        },
         {
-            "id":"1",
+            "id":"5",
             "labels":["person","politician"],
             "properties":
-                {"name":"Naveen Jindal"}
+                {"name":"Sonia Gandhi"}
         },
         {
-            "id":"2",
-            "labels":["organization","politicalparty"],
+            "id":"6",
+            "labels":["person","politician"],
             "properties":
-                {"name":"INC"}
+                {"name":"Rahul Gandhi"}
+        },
+        {
+            "id":"7",
+            "labels":["person","politician","president"],
+            "properties":
+                {"name":"Pranab Mukherjee"}
         }
     ],
 "relations":
@@ -94,42 +58,36 @@
             "bidirectional":"no",
             "properties":
                 {"startdate":"01/01/2010"}
-        }
-    ]
-}
-
-
-##By night
-{
-"taskname": "njconn1",
-"description": "Naveen Jindal Connections",
-"fetchdate": "01/01/2011",
-"sourceurls": ["wikipedia", "capitalline"],
-"entities": 
-    [
-        {
-            "id":"1",
-            "labels":["person","politician"],
-            "properties":
-                {"name":"Naveen Jindal"}
         },
         {
             "id":"2",
-            "labels":["organization","politicalparty"],
-            "properties":
-                {"name":"INC"}
-        }
-    ],
-"relations":
-    [
-        {
-            "id":"1",
             "label":"worksIn",
-            "start_entity":"1",
+            "start_entity":"3",
             "end_entity":"2",
             "bidirectional":"no",
             "properties":
                 {"startdate":"01/01/2010"}
+        },
+        {
+            "id":"3",
+            "label":"spouseOf",
+            "start_entity":"1",
+            "end_entity":"4",
+            "bidirectional":"yes",
+            "properties":
+                {"startdate":"01/01/1990"}
+        },
+        {
+            "id":"4",
+            "label":"childOf",
+            "start_entity":"7",
+            "end_entity":"6",
+            "bidirectional":"no",
+            "properties":
+                {
+                    "startdate":"01/01/1990",
+                    "bloodrelation":"yes"
+                }
         }
     ]
 }

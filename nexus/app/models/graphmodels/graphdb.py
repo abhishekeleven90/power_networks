@@ -270,23 +270,25 @@ class CoreGraphDB(GraphDB):
         #updated by now
         print 'The node with uuid '+str(prev_uuid)+' should be updated by now'
 
-    def insertCoreNodeWrap(self, node):
-        nodeText = node.__str__()
-        node = self.deserializeNode(nodeText)
-        ## use this table
-        ## this table inside flasktemp for now
-        ## create table uuidtable(uuid bigint(20) not null auto_increment primary key, name varchar(255));
-        from app.dbwork import createUuid
-        uuid = createUuid(node['name'])
-        ##TODO: move uuid to props!
-        print 'uuid generated ' +str(uuid) #change this code : TODO
+    def insertCoreNodeWrap(self, node, uuid):
+        
+        node = self.copyNodeAsItIs(node)
+       
+        # nodeText = node.__str__()
+        # node = self.deserializeNode(nodeText)
+        
+        # from app.dbwork import createUuid
+        # uuid = createUuid(node['name'])
+        
         node['uuid'] = uuid
         print node
         self.graph.create(node)
         node.pull()
         return node
 
-    def insertCoreRelWrap(self, rel, start_node_uuid, end_node_uuid):
+    def insertCoreRelWrap(self, rel, start_node_uuid, end_node_uuid, relid):
+
+        print 'inside graph db work - relid ' +str(relid)
 
         start_node = self.entity(start_node_uuid)
         end_node = self.entity(end_node_uuid)
@@ -297,19 +299,12 @@ class CoreGraphDB(GraphDB):
         #copy the props
         for prop in rel.properties:
             newrel[prop] = rel[prop]
-        newrel['relid'] = 1034 ##TODO: db work here!
+        newrel['relid'] = relid ##TODO: db work here!
         #in the end just copy the new relation id
     
         self.graph.create(newrel) ##create the actual graph object!
         newrel.pull()
-        return newrel
-
-    def insertCrawledRelationToCore(self, crawl_rel):
-        
-        start_node_uuid = crawl_rel.start_node[self.metaprops['RESOLVEDUUID']]
-        end_node_uuid = crawl_rel.end_node[self.metaprops['RESOLVEDUUID']]
-
-        return self.insertCoreRelWrap(crawl_rel, start_node_uuid, end_node_uuid) 
+        return newrel 
 
     
 
