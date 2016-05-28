@@ -30,6 +30,9 @@ CORE_GRAPH_RELID = 'relid'
 
 #CRAWL GRAPH SYMBOLS
 CRAWL_EN_ID_NAME = '_crawl_en_id_'
+CRAWL_REL_ID_NAME = '_crawl_rel_id_'
+RESOLVEDWITHUUID = '_resolvedWithUUID_'
+RESOLVEDWITHRELID = '_resolvedWithRELID_'
 
 
 #SOLR CONFIG
@@ -40,6 +43,7 @@ SOLR_CORE = 'mtp2'
 ##META TABLE NAMES
 META_TABLE_USER = 'users'
 META_TABLE_UUID = 'uuidtable'
+META_TABLE_RELID = 'relidtable'
 
 ##INDEX TABLE NAMES
 INDEX_TABLE_ENTITIES = 'entities'
