@@ -1,0 +1,1422 @@
+"ID","state","city","SID"
+0,"Andaman and Nicobar Islands","Nicobar",36
+1,"Andaman and Nicobar Islands","North And Middle Andaman",36
+2,"Andaman and Nicobar Islands","South Andaman",36
+3,"Andhra Pradesh","Adoni",6
+4,"Andhra Pradesh","Amadalavalasa",6
+5,"Andhra Pradesh","Amalapuram",6
+6,"Andhra Pradesh","Anakapalle",6
+7,"Andhra Pradesh","Anantapur",6
+8,"Andhra Pradesh","Badepalle",6
+9,"Andhra Pradesh","Banganapalle",6
+10,"Andhra Pradesh","Bapatla",6
+11,"Andhra Pradesh","Bellampalle",6
+12,"Andhra Pradesh","Bethamcherla",6
+13,"Andhra Pradesh","Bhadrachalam",6
+14,"Andhra Pradesh","Bhainsa",6
+15,"Andhra Pradesh","Bheemunipatnam",6
+16,"Andhra Pradesh","Bhimavaram",6
+17,"Andhra Pradesh","Bhongir",6
+18,"Andhra Pradesh","Bobbili",6
+19,"Andhra Pradesh","Bodhan",6
+20,"Andhra Pradesh","Chapirevula",6
+21,"Andhra Pradesh","Chilakaluripet",6
+22,"Andhra Pradesh","Chirala",6
+23,"Andhra Pradesh","Chittoor",6
+24,"Andhra Pradesh","Cuddapah",6
+25,"Andhra Pradesh","Devarakonda",6
+26,"Andhra Pradesh","Dharmavaram",6
+27,"Andhra Pradesh","Eluru",6
+28,"Andhra Pradesh","Farooqnagar",6
+29,"Andhra Pradesh","Gadwal",6
+30,"Andhra Pradesh","Gooty",6
+31,"Andhra Pradesh","Gudivada",6
+32,"Andhra Pradesh","Gudur",6
+33,"Andhra Pradesh","Guntakal",6
+34,"Andhra Pradesh","Guntur",6
+35,"Andhra Pradesh","Hanuman Junction",6
+36,"Andhra Pradesh","Hindupur",6
+37,"Andhra Pradesh","Ichchapuram",6
+38,"Andhra Pradesh","Jaggaiahpet",6
+39,"Andhra Pradesh","Jagtial",6
+40,"Andhra Pradesh","Jammalamadugu",6
+41,"Andhra Pradesh","Jangaon",6
+42,"Andhra Pradesh","Kadapa",6
+43,"Andhra Pradesh","Kadiri",6
+44,"Andhra Pradesh","Kagaznagar",6
+45,"Andhra Pradesh","Kakinada",6
+46,"Andhra Pradesh","Kalyandurg",6
+47,"Andhra Pradesh","Kamareddy",6
+48,"Andhra Pradesh","Kandukur",6
+49,"Andhra Pradesh","Kavali",6
+50,"Andhra Pradesh","Kodad",6
+51,"Andhra Pradesh","Koratla",6
+52,"Andhra Pradesh","Kothagudem",6
+53,"Andhra Pradesh","Kothapeta",6
+54,"Andhra Pradesh","Kovvur",6
+55,"Andhra Pradesh","Kurnool",6
+56,"Andhra Pradesh","Kyathampalle",6
+57,"Andhra Pradesh","Macherla",6
+58,"Andhra Pradesh","Machilipatnam",6
+59,"Andhra Pradesh","Madanapalle",6
+60,"Andhra Pradesh","Mancherial",6
+61,"Andhra Pradesh","Mandamarri",6
+62,"Andhra Pradesh","Mandapeta",6
+63,"Andhra Pradesh","Mangalagiri",6
+64,"Andhra Pradesh","Manuguru",6
+65,"Andhra Pradesh","Markapur",6
+66,"Andhra Pradesh","Miryalaguda",6
+67,"Andhra Pradesh","Mogalthur",6
+68,"Andhra Pradesh","Nagari",6
+69,"Andhra Pradesh","Nagarkurnool",6
+70,"Andhra Pradesh","Nandyal",6
+71,"Andhra Pradesh","Narasapur",6
+72,"Andhra Pradesh","Narasaraopet",6
+73,"Andhra Pradesh","Narayanpet",6
+74,"Andhra Pradesh","Narsipatnam",6
+75,"Andhra Pradesh","Nellore",6
+76,"Andhra Pradesh","Nidadavole",6
+77,"Andhra Pradesh","Nirmal",6
+78,"Andhra Pradesh","Nuzvid",6
+79,"Andhra Pradesh","Ongole",6
+80,"Andhra Pradesh","Palacole",6
+81,"Andhra Pradesh","Palasa Kasibugga",6
+82,"Andhra Pradesh","Palwancha",6
+83,"Andhra Pradesh","Parvathipuram",6
+84,"Andhra Pradesh","Pedana",6
+85,"Andhra Pradesh","Peddapuram",6
+86,"Andhra Pradesh","Pithapuram",6
+87,"Andhra Pradesh","Pondur",6
+88,"Andhra Pradesh","Ponnur",6
+89,"Andhra Pradesh","Proddatur",6
+90,"Andhra Pradesh","Punganur",6
+91,"Andhra Pradesh","Puttur",6
+92,"Andhra Pradesh","East godavari",6
+93,"Andhra Pradesh","Krishna",6
+94,"Andhra Pradesh","Prakasam",6
+95,"Andhra Pradesh","Sri Potti Sriramulu Nellore",6
+96,"Andhra Pradesh","Srikakulam",6
+97,"Andhra Pradesh","Visakhapatanam",6
+98,"Andhra Pradesh","Vizianagaram",6
+99,"Andhra Pradesh","West Godavari",6
+100,"Andhra Pradesh","YSR district",6
+101,"Arunachal Pradesh","Dibang Valley",17
+102,"Arunachal Pradesh","East Kameng",17
+103,"Arunachal Pradesh","East Siang",17
+104,"Arunachal Pradesh","Kurung Kumey",17
+105,"Arunachal Pradesh","Lohit",17
+106,"Arunachal Pradesh","Lower Dibang Valley",17
+107,"Arunachal Pradesh","Lower Subansiri",17
+108,"Arunachal Pradesh","Papum Pare",17
+109,"Arunachal Pradesh","Tawang",17
+110,"Arunachal Pradesh","Tirap",17
+111,"Arunachal Pradesh","Upper Siang",17
+112,"Arunachal Pradesh","Upper Subansiri",17
+113,"Arunachal Pradesh","West Kameng",17
+114,"Arunachal Pradesh","West Siang",17
+115,"Assam ","Cachar",1
+116,"Assam ","Darrang",1
+117,"Assam ","Dhemaji",1
+118,"Assam ","Dima Hasao",1
+119,"Assam ","Kamrup",1
+120,"Assam ","Karbi Anglong",1
+121,"Assam ","Lakhimpur",1
+122,"Assam ","Sivasagar",1
+123,"Assam ","Sonitpur",1
+124,"Assam ","Tinsukia",1
+125,"Assam ","Abhayapuri",1
+126,"Assam ","Amguri",1
+127,"Assam ","Anandnagaar",1
+128,"Assam ","Barpeta",1
+129,"Assam ","Barpeta Road",1
+130,"Assam ","Bilasipara",1
+131,"Assam ","Bongaigaon",1
+132,"Assam ","Dhekiajuli",1
+133,"Assam ","Dhubri",1
+134,"Assam ","Dibrugarh",1
+135,"Assam ","Digboi",1
+136,"Assam ","Diphu",1
+137,"Assam ","Dispur",1
+138,"Assam ","Duliajan Oil Town",1
+139,"Assam ","Gauripur",1
+140,"Assam ","Goalpara",1
+141,"Assam ","Golaghat",1
+142,"Assam ","Guwahati",1
+143,"Assam ","Haflong",1
+144,"Assam ","Hailakandi",1
+145,"Assam ","Hojai",1
+146,"Assam ","Jorhat",1
+147,"Assam ","Karimganj",1
+148,"Assam ","Kokrajhar",1
+149,"Assam ","Lanka",1
+150,"Assam ","Lumding",1
+151,"Assam ","Mangaldoi",1
+152,"Assam ","Mankachar",1
+153,"Assam ","Margherita",1
+154,"Assam ","Mariani",1
+155,"Assam ","Marigaon",1
+156,"Assam ","Nagaon",1
+157,"Assam ","Nalbari",1
+158,"Assam ","North Lakhimpur",1
+159,"Bihar","Amarpur",18
+160,"Bihar","Araria",18
+161,"Bihar","Areraj",18
+162,"Bihar","Arrah",18
+163,"Bihar","Arwal",18
+164,"Bihar","Asarganj",18
+165,"Bihar","Aurangabad",18
+166,"Bihar","Bagaha",18
+167,"Bihar","Bahadurganj",18
+168,"Bihar","Bairgania",18
+169,"Bihar","Bakhtiarpur",18
+170,"Bihar","Banka",18
+171,"Bihar","Banmankhi Bazar",18
+172,"Bihar","Barahiya",18
+173,"Bihar","Barauli",18
+174,"Bihar","Barbigha",18
+175,"Bihar","Barh",18
+176,"Bihar","Begusarai",18
+177,"Bihar","Behea",18
+178,"Bihar","Bettiah",18
+179,"Bihar","Bhabua",18
+180,"Bihar","Bhagalpur",18
+181,"Bihar","Bhojpur",18
+182,"Bihar","Bihar Sharif",18
+183,"Bihar","Bikramganj",18
+184,"Bihar","Bodh Gaya",18
+185,"Bihar","Buxar",18
+186,"Bihar","Chandan Bara",18
+187,"Bihar","Chanpatia",18
+188,"Bihar","Chhapra",18
+189,"Bihar","Colgong",18
+190,"Bihar","Dalsinghsarai",18
+191,"Bihar","Darbhanga",18
+192,"Bihar","Daudnagar",18
+193,"Bihar","Dehri-on-Sone",18
+194,"Bihar","Dighwara",18
+195,"Bihar","Dumraon",18
+196,"Bihar","East Champaran",18
+197,"Bihar","Fatwah",18
+198,"Bihar","Forbesganj",18
+199,"Bihar","Gaya",18
+200,"Bihar","Gogri Jamalpur",18
+201,"Bihar","Gopalganj",18
+202,"Bihar","Hajipur",18
+203,"Bihar","Hilsa",18
+204,"Bihar","Hisua",18
+205,"Bihar","Islampur",18
+206,"Bihar","Jagdispur",18
+207,"Bihar","Jamalpur",18
+208,"Bihar","Jamui",18
+209,"Bihar","Jehanabad",18
+210,"Bihar","Jhajha",18
+211,"Bihar","Jhanjharpur",18
+212,"Bihar","Jogabani",18
+213,"Bihar","Kaimur",18
+214,"Bihar","Kanti",18
+215,"Bihar","Katihar",18
+216,"Bihar","Khagaria",18
+217,"Bihar","Kharagpur",18
+218,"Bihar","Kishanganj",18
+219,"Bihar","Lakhisarai",18
+220,"Bihar","Lalganj",18
+221,"Bihar","Madhepura",18
+222,"Bihar","Madhubani",18
+223,"Bihar","Maharajganj",18
+224,"Bihar","Mahnar Bazar",18
+225,"Bihar","Makhdumpur",18
+226,"Bihar","Maner",18
+227,"Bihar","Manihari",18
+228,"Bihar","Marhaura",18
+229,"Bihar","Masaurhi",18
+230,"Bihar","Mirganj",18
+231,"Bihar","Mohania",18
+232,"Bihar","Mokama",18
+233,"Bihar","Mokameh",18
+234,"Bihar","Motihari",18
+235,"Bihar","Motipur",18
+236,"Bihar","Munger",18
+237,"Bihar","Murliganj",18
+238,"Bihar","Muzaffarpur",18
+239,"Bihar","Nalanda",18
+240,"Bihar","Narkatiaganj",18
+241,"Bihar","Naugachhia",18
+242,"Bihar","Nawada",18
+243,"Bihar","Nokha",18
+244,"Bihar","Patna",18
+245,"Bihar","Piro",18
+246,"Bihar","Purnia",18
+247,"Bihar","Rohtas",18
+248,"Bihar","Saharsa",18
+249,"Bihar","Samastipur",18
+250,"Bihar","Saran",18
+251,"Bihar","Sheikhpura",18
+252,"Bihar","Sheohar",18
+253,"Bihar","Sitamarhi",18
+254,"Bihar","Siwan",18
+255,"Bihar","Supaul",18
+256,"Bihar","Vaishali",18
+257,"Bihar","West Champaran",18
+258,"Chandigarh","Chandigarh",28
+259,"Chhattisgarh","Ahiwara",11
+260,"Chhattisgarh","Akaltara",11
+261,"Chhattisgarh","Ambagarh Chowki",11
+262,"Chhattisgarh","Ambikapur",11
+263,"Chhattisgarh","Arang",11
+264,"Chhattisgarh","Bade Bacheli",11
+265,"Chhattisgarh","Balod",11
+266,"Chhattisgarh","Baloda Bazar",11
+267,"Chhattisgarh","Bastar",11
+268,"Chhattisgarh","Basna",11
+269,"Chhattisgarh","Bemetra",11
+270,"Chhattisgarh","Bhatapara",11
+271,"Chhattisgarh","Bhilai",11
+272,"Chhattisgarh","Bilaspur",11
+273,"Chhattisgarh","Bijapur",11
+274,"Chhattisgarh","Birgaon",11
+275,"Chhattisgarh","Champa",11
+276,"Chhattisgarh","Chirmiri",11
+277,"Chhattisgarh","Dantewada",11
+278,"Chhattisgarh","Dalli-Rajhara",11
+279,"Chhattisgarh","Dhamtari",11
+280,"Chhattisgarh","Dipka",11
+281,"Chhattisgarh","Dongargarh",11
+282,"Chhattisgarh","Durg-Bhilai Nagar",11
+283,"Chhattisgarh","Gobranawapara",11
+284,"Chhattisgarh","Jagdalpur",11
+285,"Chhattisgarh","Janjgir",11
+286,"Chhattisgarh","Jashpurnagar",11
+287,"Chhattisgarh","Kabirdham",11
+288,"Chhattisgarh","Kanker",11
+289,"Chhattisgarh","Kawardha",11
+290,"Chhattisgarh","Kondagaon",11
+291,"Chhattisgarh","Korba",11
+292,"Chhattisgarh","Koriya",11
+293,"Chhattisgarh","Mahasamund",11
+294,"Chhattisgarh","Mahendragarh",11
+295,"Chhattisgarh","Mungeli",11
+296,"Chhattisgarh","Naila Janjgir",11
+297,"Chhattisgarh","Narayanpur",11
+298,"Chhattisgarh","Raigarh",11
+299,"Chhattisgarh","Raipur",11
+300,"Chhattisgarh","Rajnandgaon",11
+301,"Chhattisgarh","Surguja",11
+302,"Dadra and Nagar Haveli","Amli",21
+303,"Daman and Diu","Daman",29
+304,"Daman and Diu","Diu",29
+305,"Delhi","Central Delhi",27
+306,"Delhi","East Delhi",27
+307,"Delhi","New Delhi",27
+308,"Delhi","New Delhi Central",27
+309,"Delhi","New Delhi South",27
+310,"Delhi","North Delhi",27
+311,"Delhi","North East Delhi",27
+312,"Delhi","North West Delhi",27
+313,"Delhi","South Delhi",27
+314,"Delhi","South West Delhi",27
+315,"Delhi","West Delhi",27
+316,"Goa","Aldona",15
+317,"Goa","Curchorem Cacora",15
+318,"Goa","Goa Velha",15
+319,"Goa","Madgaon",15
+320,"Goa","Mapusa",15
+321,"Goa","Margao",15
+322,"Goa","Marmagao",15
+323,"Goa","North Goa",15
+324,"Goa","Panaji",15
+325,"Goa","South Goa",15
+326,"Gujarat","Adalaj",5
+327,"Gujarat","Adityana",5
+328,"Gujarat","Ahmedabad",5
+329,"Gujarat","Alang",5
+330,"Gujarat","Ambaji",5
+331,"Gujarat","Ambaliyasan",5
+332,"Gujarat","Amreli",5
+333,"Gujarat","Anand",5
+334,"Gujarat","Andada",5
+335,"Gujarat","Anjar",5
+336,"Gujarat","Anklav",5
+337,"Gujarat","Ankleshwar",5
+338,"Gujarat","Antaliya",5
+339,"Gujarat","Arambhada",5
+340,"Gujarat","Atul",5
+341,"Gujarat","Banaskantha",5
+342,"Gujarat","Bharuch",5
+343,"Gujarat","Bhavnagar",5
+344,"Gujarat","Bhuj",5
+345,"Gujarat","Cambay",5
+346,"Gujarat","Dahod",5
+347,"Gujarat","Dang",5
+348,"Gujarat","Deesa",5
+349,"Gujarat","Dehgam",5
+350,"Gujarat","Dharampur",5
+351,"Gujarat","Dholka",5
+352,"Gujarat","Dwarka",5
+353,"Gujarat","Gandhidham",5
+354,"Gujarat","Gandhinagar",5
+355,"Gujarat","Godhra",5
+356,"Gujarat","Himatnagar",5
+357,"Gujarat","Idar",5
+358,"Gujarat","Jamnagar",5
+359,"Gujarat","Junagadh",5
+360,"Gujarat","Kachchh",5
+361,"Gujarat","Kadi",5
+362,"Gujarat","Kalavad",5
+363,"Gujarat","Kalol",5
+364,"Gujarat","Kapadvanj",5
+365,"Gujarat","Karjan",5
+366,"Gujarat","Keshod",5
+367,"Gujarat","Khambhalia",5
+368,"Gujarat","Khambhat",5
+369,"Gujarat","Kheda",5
+370,"Gujarat","Khedbrahma",5
+371,"Gujarat","Kheralu",5
+372,"Gujarat","Kodinar",5
+373,"Gujarat","Lathi",5
+374,"Gujarat","Limbdi",5
+375,"Gujarat","Lunawada",5
+376,"Gujarat","Mahesana",5
+377,"Gujarat","Mahuva",5
+378,"Gujarat","Manavadar",5
+379,"Gujarat","Mandvi",5
+380,"Gujarat","Mangrol",5
+381,"Gujarat","Mansa",5
+382,"Gujarat","Mehmedabad",5
+383,"Gujarat","Mithapur",5
+384,"Gujarat","Modasa",5
+385,"Gujarat","Morvi",5
+386,"Gujarat","Nadiad",5
+387,"Gujarat","Narmada",5
+388,"Gujarat","Navsari",5
+389,"Gujarat","Padra",5
+390,"Gujarat","Palanpur",5
+391,"Gujarat","Palitana",5
+392,"Gujarat","Panchmahal",5
+393,"Gujarat","Pardi",5
+394,"Gujarat","Patan",5
+395,"Gujarat","Petlad",5
+396,"Gujarat","Porbandar",5
+397,"Gujarat","Rajkot",5
+398,"Gujarat","Sabarkantha",5
+399,"Gujarat","Surat",5
+400,"Gujarat","Surendranagar",5
+401,"Gujarat","Tapi",5
+402,"Gujarat","Vadodara",5
+403,"Gujarat","Valsad",5
+404,"Haryana","Ambala",25
+405,"Haryana","Asankhurd",25
+406,"Haryana","Assandh",25
+407,"Haryana","Ateli",25
+408,"Haryana","Babiyal",25
+409,"Haryana","Bahadurgarh",25
+410,"Haryana","Ballabhgarh",25
+411,"Haryana","Barwala",25
+412,"Haryana","Bawal",25
+413,"Haryana","Bhiwani",25
+414,"Haryana","Charkhi Dadri",25
+415,"Haryana","Cheeka",25
+416,"Haryana","Ellenabad",25
+417,"Haryana","Faridabad",25
+418,"Haryana","Fatehabad",25
+419,"Haryana","Ganaur",25
+420,"Haryana","Gharaunda",25
+421,"Haryana","Gohana",25
+422,"Haryana","Gurgaon",25
+423,"Haryana","Haibat(Yamuna Nagar)",25
+424,"Haryana","Hansi",25
+425,"Haryana","Hisar",25
+426,"Haryana","Hodal",25
+427,"Haryana","Jagadhri",25
+428,"Haryana","Jhajjar",25
+429,"Haryana","Jind",25
+430,"Haryana","Kaithal",25
+431,"Haryana","Kalan Wali",25
+432,"Haryana","Kalka",25
+433,"Haryana","Karnal",25
+434,"Haryana","Kurukshetra",25
+435,"Haryana","Ladwa",25
+436,"Haryana","Mahendragarh",25
+437,"Haryana","Mandi Dabwali",25
+438,"Haryana","Manesar",25
+439,"Haryana","Narnaul",25
+440,"Haryana","Narwana",25
+441,"Haryana","Palwal",25
+442,"Haryana","Panchkula",25
+443,"Haryana","Panipat",25
+444,"Haryana","Pehowa",25
+445,"Haryana","Pinjore",25
+446,"Haryana","Panipat",25
+447,"Haryana","Rewari",25
+448,"Haryana","Rohtak",25
+449,"Haryana","Sirsa",25
+450,"Haryana","Sonipat",25
+451,"Haryana","Yamunanagar",25
+452,"Himachal Pradesh","Bilaspur",24
+453,"Himachal Pradesh","Chamba",24
+454,"Himachal Pradesh","Hamirpur",24
+455,"Himachal Pradesh","Kangra",24
+456,"Himachal Pradesh","Kinnaur",24
+457,"Himachal Pradesh","Kullu",24
+458,"Himachal Pradesh","Lahaul and Spiti",24
+459,"Himachal Pradesh","Mandi",24
+460,"Himachal Pradesh","Shimla",24
+461,"Himachal Pradesh","Sirmaur",24
+462,"Himachal Pradesh","Solan",24
+463,"Himachal Pradesh","Una",24
+464,"Jammu and Kashmir","Anantnag",2
+465,"Jammu and Kashmir","Bandipora",2
+466,"Jammu and Kashmir","Baramulla",2
+467,"Jammu and Kashmir","Budgam",2
+468,"Jammu and Kashmir","Doda",2
+469,"Jammu and Kashmir","Jammu",2
+470,"Jammu and Kashmir","Kargil",2
+471,"Jammu and Kashmir","Kathua",2
+472,"Jammu and Kashmir","Kupwara",2
+473,"Jammu and Kashmir","Leh",2
+474,"Jammu and Kashmir","Poonch",2
+475,"Jammu and Kashmir","Pulwama",2
+476,"Jammu and Kashmir","Rajouri",2
+477,"Jammu and Kashmir","Reasi",2
+478,"Jammu and Kashmir","Shopian",2
+479,"Jammu and Kashmir","Srinagar",2
+480,"Jammu and Kashmir","Udhampur",2
+481,"Jharkhand","Amlabad",20
+482,"Jharkhand","Ara",20
+483,"Jharkhand","Barughutu",20
+484,"Jharkhand","Bokaro Steel City",20
+485,"Jharkhand","Chaibasa",20
+486,"Jharkhand","Chakradharpur",20
+487,"Jharkhand","Chandil",20
+488,"Jharkhand","Chandrapura",20
+489,"Jharkhand","Chatra",20
+490,"Jharkhand","Chirkunda",20
+491,"Jharkhand","Churi",20
+492,"Jharkhand","Daltonganj",20
+493,"Jharkhand","Deoghar",20
+494,"Jharkhand","Dhanbad",20
+495,"Jharkhand","Dumka",20
+496,"Jharkhand","East Singhbhum",20
+497,"Jharkhand","Garhwa",20
+498,"Jharkhand","Ghatshila",20
+499,"Jharkhand","Giridih",20
+500,"Jharkhand","Godda",20
+501,"Jharkhand","Gomoh",20
+502,"Jharkhand","Gumia",20
+503,"Jharkhand","Gumla",20
+504,"Jharkhand","Hazaribag",20
+505,"Jharkhand","Hussainabad",20
+506,"Jharkhand","Jamshedpur",20
+507,"Jharkhand","Jamtara",20
+508,"Jharkhand","Jhumri Tilaiya",20
+509,"Jharkhand","Khunti",20
+510,"Jharkhand","Koderma",20
+511,"Jharkhand","Latehar",20
+512,"Jharkhand","Lohardaga",20
+513,"Jharkhand","Madhupur",20
+514,"Jharkhand","Mihijam",20
+515,"Jharkhand","Musabani",20
+516,"Jharkhand","Pakaur",20
+517,"Jharkhand","Patratu",20
+518,"Jharkhand","Palamu",20
+519,"Jharkhand","Phusro",20
+520,"Jharkhand","Ramgarh",20
+521,"Jharkhand","Ranchi",20
+522,"Jharkhand","Sahibganj",20
+523,"Jharkhand","Saraikela Kharsawan",20
+524,"Jharkhand","Simdega",20
+525,"Jharkhand","West Singhbhum",20
+526,"Karnataka","Aalanavara",7
+527,"Karnataka","Adyar",7
+528,"Karnataka","Afzalpura",7
+529,"Karnataka","Alandha",7
+530,"Karnataka","Alur",7
+531,"Karnataka","Ambikaanagara",7
+532,"Karnataka","Anekal",7
+533,"Karnataka","Ankola",7
+534,"Karnataka","Annigeri",7
+535,"Karnataka","Arkalgud",7
+536,"Karnataka","Arsikere",7
+537,"Karnataka","Athni",7
+538,"Karnataka","Aurad",7
+539,"Karnataka","Bagalkot",7
+540,"Karnataka","Bellary",7
+541,"Karnataka","Bangalore",7
+542,"Karnataka","Belgaum",7
+543,"Karnataka","Bengaluru",7
+544,"Karnataka","Bidar",7
+545,"Karnataka","Bijapur",7
+546,"Karnataka","Chamarajanagara",7
+547,"Karnataka","Chikaballapura",7
+548,"Karnataka","Chikkamagalur",7
+549,"Karnataka","Chikkodi",7
+550,"Karnataka","Chinthaamani",7
+551,"Karnataka","Chitradurga",7
+552,"Karnataka","Davanagere",7
+553,"Karnataka","Dharwad",7
+554,"Karnataka","Gadhaga",7
+555,"Karnataka","Gadag",7
+556,"Karnataka","Gokak",7
+557,"Karnataka","Gulbarga",7
+558,"Karnataka","Gundlupet",7
+559,"Karnataka","Hassan",7
+560,"Karnataka","Haveri",7
+561,"Karnataka","Hosapet",7
+562,"Karnataka","Hubbali",7
+563,"Karnataka","Hukkeri",7
+564,"Karnataka","Kaarkala",7
+565,"Karnataka","Kalburgi",7
+566,"Karnataka","Karwar",7
+567,"Karnataka","Kodagu",7
+568,"Karnataka","Kolar",7
+569,"Karnataka","Kota",7
+570,"Karnataka","Koppal",7
+571,"Karnataka","Lakshmishawara",7
+572,"Karnataka","Lingsuguru",7
+573,"Karnataka","Maagadi",7
+574,"Karnataka","Maaluru",7
+575,"Karnataka","Maanvi",7
+576,"Karnataka","Maddhuru",7
+577,"Karnataka","Madhugiri",7
+578,"Karnataka","Madikeri",7
+579,"Karnataka","Mahalingapura",7
+580,"Karnataka","Malavalli",7
+581,"Karnataka","Mandya",7
+582,"Karnataka","Mangalooru",7
+583,"Karnataka","Mudabidri",7
+584,"Karnataka","Mudalagi",7
+585,"Karnataka","Muddebihala",7
+586,"Karnataka","Mudhola",7
+587,"Karnataka","Mulabaagilu",7
+588,"Karnataka","Mundaragi",7
+589,"Karnataka","Mysore",7
+590,"Karnataka","Nanjanagoodu",7
+591,"Karnataka","Nippani",7
+592,"Karnataka","Paavagada",7
+593,"Karnataka","Pereyaapatna",7
+594,"Karnataka","Puthooru",7
+595,"Karnataka","Raichur",7
+596,"Karnataka","Ramanagara",7
+597,"Karnataka","Shimoga",7
+598,"Karnataka","Tumkur",7
+599,"Karnataka","Udupi",7
+600,"Karnataka","Uttara Kannada",7
+601,"Karnataka","Yadgir",7
+602,"Kerala","Adoor",8
+603,"Kerala","Akathiyoor",8
+604,"Kerala","Alappuzha",8
+605,"Kerala","Ancharakandy",8
+606,"Kerala","Aroor",8
+607,"Kerala","Ashtamichira",8
+608,"Kerala","Attingal",8
+609,"Kerala","Avinissery",8
+610,"Kerala","Chalakudy",8
+611,"Kerala","Changanassery",8
+612,"Kerala","Chendamangalam",8
+613,"Kerala","Chengannur",8
+614,"Kerala","Cherthala",8
+615,"Kerala","Cheruthazham",8
+616,"Kerala","Chittur-Thathamangalam",8
+617,"Kerala","Chockli",8
+618,"Kerala","Ernakulam",8
+619,"Kerala","Erattupetta",8
+620,"Kerala","Guruvayoor",8
+621,"Kerala","Idukki",8
+622,"Kerala","Irinjalakuda",8
+623,"Kerala","Kadirur",8
+624,"Kerala","Kalliasseri",8
+625,"Kerala","Kalpetta",8
+626,"Kerala","Kanhangad",8
+627,"Kerala","Kanjikkuzhi",8
+628,"Kerala","Kannur",8
+629,"Kerala","Kasaragod",8
+630,"Kerala","Kayamkulam",8
+631,"Kerala","Kochi",8
+632,"Kerala","Kodungallur",8
+633,"Kerala","Kollam",8
+634,"Kerala","Koothuparamba",8
+635,"Kerala","Kothamangalam",8
+636,"Kerala","Kottayam",8
+637,"Kerala","Kozhikode",8
+638,"Kerala","Kunnamkulam",8
+639,"Kerala","Mahe",8
+640,"Kerala","Malappuram",8
+641,"Kerala","Mattannur",8
+642,"Kerala","Mavelikkara",8
+643,"Kerala","Mavoor",8
+644,"Kerala","Muvattupuzha",8
+645,"Kerala","Nedumangad",8
+646,"Kerala","Neyyattinkara",8
+647,"Kerala","Nilambur",8
+648,"Kerala","Ottappalam",8
+649,"Kerala","Palai",8
+650,"Kerala","Palakkad",8
+651,"Kerala","Panamattom",8
+652,"Kerala","Panniyannur",8
+653,"Kerala","Pappinisseri",8
+654,"Kerala","Paravoor",8
+655,"Kerala","Pathanamthitta",8
+656,"Kerala","Peringathur",8
+657,"Kerala","Perinthalmanna",8
+658,"Kerala","Perumbavoor",8
+659,"Kerala","Ponkunnam",8
+660,"Kerala","Ponnani",8
+661,"Kerala","Punalur",8
+662,"Kerala","Puthuppally",8
+663,"Kerala","Thrissur",8
+664,"Kerala","Wayanad",8
+665,"Lakshadweep","Amini",19
+666,"Lakshadweep","Kavaratti*",19
+667,"Madhya Pradesh","Alirajpur",26
+668,"Madhya Pradesh","Anuppur",26
+669,"Madhya Pradesh","Ashok Nagar",26
+670,"Madhya Pradesh","Badagaon",26
+671,"Madhya Pradesh","Balaghat",26
+672,"Madhya Pradesh","Barwani",26
+673,"Madhya Pradesh","Betul",26
+674,"Madhya Pradesh","Bhind",26
+675,"Madhya Pradesh","Bhopal",26
+676,"Madhya Pradesh","Burhanpur",26
+677,"Madhya Pradesh","Chhatarpur",26
+678,"Madhya Pradesh","Chhindwara",26
+679,"Madhya Pradesh","Chitrakoot",26
+680,"Madhya Pradesh","Dabra",26
+681,"Madhya Pradesh","Damoh",26
+682,"Madhya Pradesh","Datia",26
+683,"Madhya Pradesh","Dewas",26
+684,"Madhya Pradesh","Dhar",26
+685,"Madhya Pradesh","Dindori",26
+686,"Madhya Pradesh","Fatehabad",26
+687,"Madhya Pradesh","Guna",26
+688,"Madhya Pradesh","Gwalior",26
+689,"Madhya Pradesh","Harda",26
+690,"Madhya Pradesh","Hoshangabad",26
+691,"Madhya Pradesh","Indore",26
+692,"Madhya Pradesh","Jabalpur",26
+693,"Madhya Pradesh","Jhabua",26
+694,"Madhya Pradesh","Kailaras",26
+695,"Madhya Pradesh","Katni",26
+696,"Madhya Pradesh","Khandwa",26
+697,"Madhya Pradesh","Khargone",26
+698,"Madhya Pradesh","Khurai",26
+699,"Madhya Pradesh","Kotma",26
+700,"Madhya Pradesh","Lahar",26
+701,"Madhya Pradesh","Lundi",26
+702,"Madhya Pradesh","Maharajpur",26
+703,"Madhya Pradesh","Mahidpur",26
+704,"Madhya Pradesh","Maihar",26
+705,"Madhya Pradesh","Malajkhand",26
+706,"Madhya Pradesh","Mandla",26
+707,"Madhya Pradesh","Manasa",26
+708,"Madhya Pradesh","Manawar",26
+709,"Madhya Pradesh","Mandideep",26
+710,"Madhya Pradesh","Mandla",26
+711,"Madhya Pradesh","Mandsaur",26
+712,"Madhya Pradesh","Mauganj",26
+713,"Madhya Pradesh","Mhow Cantonment",26
+714,"Madhya Pradesh","Mhowgaon",26
+715,"Madhya Pradesh","Morena",26
+716,"Madhya Pradesh","Multai",26
+717,"Madhya Pradesh","Murwara",26
+718,"Madhya Pradesh","Nagda",26
+719,"Madhya Pradesh","Nainpur",26
+720,"Madhya Pradesh","Narsinghgarh",26
+721,"Madhya Pradesh","Narsinghgarh",26
+722,"Madhya Pradesh","Narsinghpur",26
+723,"Madhya Pradesh","Neemuch",26
+724,"Madhya Pradesh","Nepanagar",26
+725,"Madhya Pradesh","Niwari",26
+726,"Madhya Pradesh","Nowgong",26
+727,"Madhya Pradesh","Nowrozabad",26
+728,"Madhya Pradesh","Pachore",26
+729,"Madhya Pradesh","Pali",26
+730,"Madhya Pradesh","Panagar",26
+731,"Madhya Pradesh","Pandhurna",26
+732,"Madhya Pradesh","Panna",26
+733,"Madhya Pradesh","Pasan",26
+734,"Madhya Pradesh","Pipariya",26
+735,"Madhya Pradesh","Pithampur",26
+736,"Madhya Pradesh","Porsa",26
+737,"Madhya Pradesh","Prithvipur",26
+738,"Madhya Pradesh","Raisen",26
+739,"Madhya Pradesh","Rajgarh",26
+740,"Madhya Pradesh","Ratlam",26
+741,"Madhya Pradesh","Rewa",26
+742,"Madhya Pradesh","Sagar",26
+743,"Madhya Pradesh","Satna",26
+744,"Madhya Pradesh","Sehore",26
+745,"Madhya Pradesh","Seoni",26
+746,"Madhya Pradesh","Shahdol",26
+747,"Madhya Pradesh","Shajapur",26
+748,"Madhya Pradesh","Sheopur",26
+749,"Madhya Pradesh","Shivpuri",26
+750,"Madhya Pradesh","Sidhi",26
+751,"Madhya Pradesh","Singrauli",26
+752,"Madhya Pradesh","Tikamgarh",26
+753,"Madhya Pradesh","Ujjain",26
+754,"Madhya Pradesh","Umaria",26
+755,"Madhya Pradesh","Vidisha",26
+756,"Maharashtra","Achalpur",3
+757,"Maharashtra","Ahmednagar",3
+758,"Maharashtra","Ahmedpur",3
+759,"Maharashtra","Ajra",3
+760,"Maharashtra","Akkalkot",3
+761,"Maharashtra","Akola",3
+762,"Maharashtra","Akot",3
+763,"Maharashtra","Alandi",3
+764,"Maharashtra","Alibag",3
+765,"Maharashtra","Amalner",3
+766,"Maharashtra","Ambad",3
+767,"Maharashtra","Ambejogai",3
+768,"Maharashtra","Ambivali Tarf Wankhal",3
+769,"Maharashtra","Amravati",3
+770,"Maharashtra","Anjangaon",3
+771,"Maharashtra","Arvi",3
+772,"Maharashtra","Ashta",3
+773,"Maharashtra","Aurangabad",3
+774,"Maharashtra","Ausa",3
+775,"Maharashtra","Baramati",3
+776,"Maharashtra","Bhandara",3
+777,"Maharashtra","Beed",3
+778,"Maharashtra","Bhiwandi",3
+779,"Maharashtra","Bhusawal",3
+780,"Maharashtra","Buldhana",3
+781,"Maharashtra","Chalisgaon",3
+782,"Maharashtra","Chandrapur",3
+783,"Maharashtra","Chinchani",3
+784,"Maharashtra","Chiplun",3
+785,"Maharashtra","Daund",3
+786,"Maharashtra","Devgarh",3
+787,"Maharashtra","Dhule",3
+788,"Maharashtra","Dombivli",3
+789,"Maharashtra","Durgapur",3
+790,"Maharashtra","Gadchiroli",3
+791,"Maharashtra","Ghatanji",3
+792,"Maharashtra","Gondiya",3
+793,"Maharashtra","Hingoli",3
+794,"Maharashtra","Ichalkaranji",3
+795,"Maharashtra","Jalgaon",3
+796,"Maharashtra","Jalna",3
+797,"Maharashtra","Junnar",3
+798,"Maharashtra","Kalyan",3
+799,"Maharashtra","Kamthi",3
+800,"Maharashtra","Karad",3
+801,"Maharashtra","karjat",3
+802,"Maharashtra","Kolhapur",3
+803,"Maharashtra","Latur",3
+804,"Maharashtra","Loha",3
+805,"Maharashtra","Lonar",3
+806,"Maharashtra","Lonavla",3
+807,"Maharashtra","Mahabaleswar",3
+808,"Maharashtra","Mahad",3
+809,"Maharashtra","Mahuli",3
+810,"Maharashtra","Malegaon",3
+811,"Maharashtra","Malkapur",3
+812,"Maharashtra","Manchar",3
+813,"Maharashtra","Mangalvedhe",3
+814,"Maharashtra","Mangrulpir",3
+815,"Maharashtra","Manjlegaon",3
+816,"Maharashtra","Manmad",3
+817,"Maharashtra","Manwath",3
+818,"Maharashtra","Mehkar",3
+819,"Maharashtra","Mhaswad",3
+820,"Maharashtra","Mira-Bhayandar",3
+821,"Maharashtra","Miraj",3
+822,"Maharashtra","Morshi",3
+823,"Maharashtra","Mukhed",3
+824,"Maharashtra","Mul",3
+825,"Maharashtra","Mumbai",3
+826,"Maharashtra","Murtijapur",3
+827,"Maharashtra","Nagpur",3
+828,"Maharashtra","Nalasopara",3
+829,"Maharashtra","Nanded-Waghala",3
+830,"Maharashtra","Nandgaon",3
+831,"Maharashtra","Nandura",3
+832,"Maharashtra","Nandurbar",3
+833,"Maharashtra","Narkhed",3
+834,"Maharashtra","Nashik",3
+835,"Maharashtra","Navi Mumbai",3
+836,"Maharashtra","Nawapur",3
+837,"Maharashtra","Nilanga",3
+838,"Maharashtra","Osmanabad",3
+839,"Maharashtra","Ozar",3
+840,"Maharashtra","Pachora",3
+841,"Maharashtra","Paithan",3
+842,"Maharashtra","Palghar",3
+843,"Maharashtra","Pandharkaoda",3
+844,"Maharashtra","Pandharpur",3
+845,"Maharashtra","Panvel",3
+846,"Maharashtra","Parbhani",3
+847,"Maharashtra","Parli",3
+848,"Maharashtra","Parola",3
+849,"Maharashtra","Partur",3
+850,"Maharashtra","Pathardi",3
+851,"Maharashtra","Pathri",3
+852,"Maharashtra","Patur",3
+853,"Maharashtra","Pauni",3
+854,"Maharashtra","Pen",3
+855,"Maharashtra","Phaltan",3
+856,"Maharashtra","Pulgaon",3
+857,"Maharashtra","Pune",3
+858,"Maharashtra","Purna",3
+859,"Maharashtra","Pusad",3
+860,"Maharashtra","Raigad",3
+861,"Maharashtra","Ratnagiri",3
+862,"Maharashtra","Sangli",3
+863,"Maharashtra","Satara",3
+864,"Maharashtra","Sindhudurg",3
+865,"Maharashtra","Solapur",3
+866,"Maharashtra","Thane",3
+867,"Maharashtra","Wardha",3
+868,"Maharashtra","Washim",3
+869,"Maharashtra","Yavatmal",3
+870,"Manipur","Bishnupur",32
+871,"Manipur","Chandel",32
+872,"Manipur","Churachandpur",32
+873,"Manipur","Imphal East",32
+874,"Manipur","Imphal West",32
+875,"Manipur","Senapati",32
+876,"Manipur","Tamenglong",32
+877,"Manipur","Thoubal",32
+878,"Manipur","Ukhrul",32
+879,"Meghalaya","East Garo Hills",33
+880,"Meghalaya","East Khasi Hills",33
+881,"Meghalaya","Jaintia Hills",33
+882,"Meghalaya","Ri Bhoi",33
+883,"Meghalaya","South Garo Hills",33
+884,"Meghalaya","West Garo Hills",33
+885,"Meghalaya","West Khasi Hills",33
+886,"Mizoram","Aizawl",13
+887,"Mizoram","Champhai",13
+888,"Mizoram","Kolasib",13
+889,"Mizoram","Lawngtlai",13
+890,"Mizoram","Lunglei",13
+891,"Mizoram","Mamit",13
+892,"Mizoram","Saiha",13
+893,"Mizoram","Serchhip",13
+894,"Nagaland","Dimapur",30
+895,"Nagaland","Kiphire",30
+896,"Nagaland","Kohima",30
+897,"Nagaland","Longleng",30
+898,"Nagaland","Mokokchung",30
+899,"Nagaland","Mon",30
+900,"Nagaland","Peren",30
+901,"Nagaland","Phek",30
+902,"Nagaland","Tuensang",30
+903,"Nagaland","Wokha",30
+904,"Nagaland","Zunheboto",30
+905,"Orissa","Anandapur",22
+906,"Orissa","Angul",22
+907,"Orissa","Anugul",22
+908,"Orissa","Asika",22
+909,"Orissa","Balangir",22
+910,"Orissa","Balasore",22
+911,"Orissa","Baleshwar",22
+912,"Orissa","Bamra",22
+913,"Orissa","Barbil",22
+914,"Orissa","Bargarh",22
+915,"Orissa","Bargarh",22
+916,"Orissa","Baripada",22
+917,"Orissa","Basudebpur",22
+918,"Orissa","Belpahar",22
+919,"Orissa","Berhampur",22
+920,"Orissa","Bhadrak",22
+921,"Orissa","Bhawanipatna",22
+922,"Orissa","Bhuban",22
+923,"Orissa","Bhubaneswar*",22
+924,"Orissa","Biramitrapur",22
+925,"Orissa","Boudh",22
+926,"Orissa","Brahmapur",22
+927,"Orissa","Brajrajnagar",22
+928,"Orissa","Burla",22
+929,"Orissa","Byasanagar",22
+930,"Orissa","Cuttack",22
+931,"Orissa","Debagarh",22
+932,"Orissa","Dhenkanal",22
+933,"Orissa","Deogarh",22
+934,"Orissa","Ganjam",22
+935,"Orissa","Gajapati",22
+936,"Orissa","Gunupur",22
+937,"Orissa","Hinjilicut",22
+938,"Orissa","Jagatsinghapur",22
+939,"Orissa","Jajapur",22
+940,"Orissa","Jaleswar",22
+941,"Orissa","Jatani",22
+942,"Orissa","Jeypur",22
+943,"Orissa","Jharsuguda",22
+944,"Orissa","Joda",22
+945,"Orissa","Kalahandi",22
+946,"Orissa","Kantabanji",22
+947,"Orissa","Karanjia",22
+948,"Orissa","Kendrapara",22
+949,"Orissa","Kendujhar",22
+950,"Orissa","Kandhamal",22
+951,"Orissa","Khordha",22
+952,"Orissa","Koraput",22
+953,"Orissa","Kuchinda",22
+954,"Orissa","Madhyamgram",22
+955,"Orissa","Malkangiri",22
+956,"Orissa","Mayurbhanj",22
+957,"Orissa","Nabarangapur",22
+958,"Orissa","Nayagarh",22
+959,"Orissa","Nuapada",22
+960,"Orissa","Paradip",22
+961,"Orissa","Parlakhemundi",22
+962,"Orissa","Pattamundai",22
+963,"Orissa","Phulabani",22
+964,"Orissa","Puri",22
+965,"Orissa","Rayagada",22
+966,"Orissa","Sambalpur",22
+967,"Orissa","Subarnapur",22
+968,"Orissa","Sundergarh",22
+969,"Pondicherry","Karaikal",34
+970,"Pondicherry","Mahe",34
+971,"Pondicherry","Pondicherry*",34
+972,"Punjab","Ahmedgarh",12
+973,"Punjab","Amritsar",12
+974,"Punjab","Barnala",12
+975,"Punjab","Batala",12
+976,"Punjab","Bathinda",12
+977,"Punjab","Bhagha Purana",12
+978,"Punjab","Budhlada",12
+979,"Punjab","Dasua",12
+980,"Punjab","Dhuri",12
+981,"Punjab","Dinanagar",12
+982,"Punjab","Faridkot",12
+983,"Punjab","Fazilka",12
+984,"Punjab","Firozpur",12
+985,"Punjab","Firozpur Cantt.",12
+986,"Punjab","Fatehgarh Sahib",12
+987,"Punjab","Giddarbaha",12
+988,"Punjab","Gobindgarh",12
+989,"Punjab","Gurdaspur",12
+990,"Punjab","Hoshiarpur",12
+991,"Punjab","Jagraon",12
+992,"Punjab","Jaitu",12
+993,"Punjab","Jalalabad",12
+994,"Punjab","Jalandhar",12
+995,"Punjab","Jalandhar Cantt.",12
+996,"Punjab","Jandiala",12
+997,"Punjab","Kamahi Devi",12
+998,"Punjab","Kapurthala",12
+999,"Punjab","Karoran",12
+1000,"Punjab","Kartarpur",12
+1001,"Punjab","Khanna",12
+1002,"Punjab","Kharar",12
+1003,"Punjab","Kot Kapura",12
+1004,"Punjab","Kurali",12
+1005,"Punjab","Longowal",12
+1006,"Punjab","Ludhiana",12
+1007,"Punjab","Malerkotla",12
+1008,"Punjab","Malout",12
+1009,"Punjab","Mansa",12
+1010,"Punjab","Maur",12
+1011,"Punjab","Moga",12
+1012,"Punjab","Mohali",12
+1013,"Punjab","Morinda",12
+1014,"Punjab","Mukatsar",12
+1015,"Punjab","Mukerian",12
+1016,"Punjab","Muktsar",12
+1017,"Punjab","Nabha",12
+1018,"Punjab","Nakodar",12
+1019,"Punjab","Nangal",12
+1020,"Punjab","Nawanshahr",12
+1021,"Punjab","Pathankot",12
+1022,"Punjab","Patiala",12
+1023,"Punjab","Patran",12
+1024,"Punjab","Patti",12
+1025,"Punjab","Phagwara",12
+1026,"Punjab","Phillaur",12
+1027,"Punjab","Rupnagar",12
+1028,"Punjab","Sangrur",12
+1029,"Punjab","Shahid Bhagat Singh Nagar",12
+1030,"Punjab","Tarn Taran",12
+1031,"Rajasthan","Ajmer",14
+1032,"Rajasthan","Alwar",14
+1033,"Rajasthan","Bali",14
+1034,"Rajasthan","Bandikui",14
+1035,"Rajasthan","Banswara",14
+1036,"Rajasthan","Baran",14
+1037,"Rajasthan","Barmer",14
+1038,"Rajasthan","Beawar",14
+1039,"Rajasthan","Bharatpur",14
+1040,"Rajasthan","Bhilwara",14
+1041,"Rajasthan","Bhinmal",14
+1042,"Rajasthan","Bikaner",14
+1043,"Rajasthan","Bilara",14
+1044,"Rajasthan","Biwani",14
+1045,"Rajasthan","Bundi",14
+1046,"Rajasthan","Chittorgarh",14
+1047,"Rajasthan","Churu",14
+1048,"Rajasthan","Dausa",14
+1049,"Rajasthan","Dholpur",14
+1050,"Rajasthan","Devgarh",14
+1051,"Rajasthan","Dungarpur",14
+1052,"Rajasthan","Falna",14
+1053,"Rajasthan","Fatehpur",14
+1054,"Rajasthan","Ganganagar",14
+1055,"Rajasthan","Hanumangarh",14
+1056,"Rajasthan","Harsawa",14
+1057,"Rajasthan","Jaipur",14
+1058,"Rajasthan","Jaisalmer",14
+1059,"Rajasthan","Jaitaran",14
+1060,"Rajasthan","Jalore",14
+1061,"Rajasthan","Jhalawar",14
+1062,"Rajasthan","Jhunjhunu",14
+1063,"Rajasthan","Jodhpur",14
+1064,"Rajasthan","Karauli",14
+1065,"Rajasthan","Kota",14
+1066,"Rajasthan","Lachhmangarh",14
+1067,"Rajasthan","Ladnu",14
+1068,"Rajasthan","Lakheri",14
+1069,"Rajasthan","Lalsot",14
+1070,"Rajasthan","Losal",14
+1071,"Rajasthan","Mahwa",14
+1072,"Rajasthan","Makrana",14
+1073,"Rajasthan","Malpura",14
+1074,"Rajasthan","Mandalgarh",14
+1075,"Rajasthan","Mandawa",14
+1076,"Rajasthan","Mangrol",14
+1077,"Rajasthan","Merta City",14
+1078,"Rajasthan","Mount Abu",14
+1079,"Rajasthan","Nadbai",14
+1080,"Rajasthan","Nagar",14
+1081,"Rajasthan","Nagaur",14
+1082,"Rajasthan","Nargund",14
+1083,"Rajasthan","Nasirabad",14
+1084,"Rajasthan","Nathdwara",14
+1085,"Rajasthan","Navalgund",14
+1086,"Rajasthan","Nawalgarh",14
+1087,"Rajasthan","Neem-Ka-Thana",14
+1088,"Rajasthan","Nelamangala",14
+1089,"Rajasthan","Nimbahera",14
+1090,"Rajasthan","Niwai",14
+1091,"Rajasthan","Nohar",14
+1092,"Rajasthan","Nokha",14
+1093,"Rajasthan","Pali",14
+1094,"Rajasthan","Phalodi",14
+1095,"Rajasthan","Phulera",14
+1096,"Rajasthan","Pilani",14
+1097,"Rajasthan","Pilibanga",14
+1098,"Rajasthan","Pindwara",14
+1099,"Rajasthan","Pipar City",14
+1100,"Rajasthan","Prantij",14
+1101,"Rajasthan","Pratapgarh",14
+1102,"Rajasthan","Rajsamand",14
+1103,"Rajasthan","Sawai Madhopur",14
+1104,"Rajasthan","Sikar",14
+1105,"Rajasthan","Sirohi",14
+1106,"Rajasthan","Tonk",14
+1107,"Rajasthan","Udaipur",14
+1108,"Sikkim","East Sikkim",31
+1109,"Sikkim","North Sikkim",31
+1110,"Sikkim","South Sikkim",31
+1111,"Sikkim","West Sikkim",31
+1112,"Tamil Nadu","Arakkonam",23
+1113,"Tamil Nadu","Arcot",23
+1114,"Tamil Nadu","Ariyalur",23
+1115,"Tamil Nadu","Aruppukkottai",23
+1116,"Tamil Nadu","Bhavani",23
+1117,"Tamil Nadu","Chengalpattu",23
+1118,"Tamil Nadu","Chennai",23
+1119,"Tamil Nadu","Chinna salem",23
+1120,"Tamil Nadu","Coimbatore",23
+1121,"Tamil Nadu","Coonoor",23
+1122,"Tamil Nadu","Cuddalore",23
+1123,"Tamil Nadu","Dharmapuri",23
+1124,"Tamil Nadu","Dindigul",23
+1125,"Tamil Nadu","Erode",23
+1126,"Tamil Nadu","Gingee",23
+1127,"Tamil Nadu","Gobichettipalayam",23
+1128,"Tamil Nadu","Gudalur",23
+1129,"Tamil Nadu","Gudalur",23
+1130,"Tamil Nadu","Gudalur",23
+1131,"Tamil Nadu","Jayankondam",23
+1132,"Tamil Nadu","Kanchipuram",23
+1133,"Tamil Nadu","Kanyakumari",23
+1134,"Tamil Nadu","Karaikudi",23
+1135,"Tamil Nadu","Karungal",23
+1136,"Tamil Nadu","Karur",23
+1137,"Tamil Nadu","Kollankodu",23
+1138,"Tamil Nadu","Krishnagiri",23
+1139,"Tamil Nadu","Lalgudi",23
+1140,"Tamil Nadu","Madurai",23
+1141,"Tamil Nadu","Nagapattinam",23
+1142,"Tamil Nadu","Nagercoil",23
+1143,"Tamil Nadu","Namagiripettai",23
+1144,"Tamil Nadu","Namakkal",23
+1145,"Tamil Nadu","Nandivaram-Guduvancheri",23
+1146,"Tamil Nadu","Nanjikottai",23
+1147,"Tamil Nadu","Natham",23
+1148,"Tamil Nadu","Nellikuppam",23
+1149,"Tamil Nadu","Neyveli",23
+1150,"Tamil Nadu","Nilgiris",23
+1151,"Tamil Nadu","O' Valley",23
+1152,"Tamil Nadu","Oddanchatram",23
+1153,"Tamil Nadu","P.N.Patti",23
+1154,"Tamil Nadu","Pacode",23
+1155,"Tamil Nadu","Padmanabhapuram",23
+1156,"Tamil Nadu","Palani",23
+1157,"Tamil Nadu","Palladam",23
+1158,"Tamil Nadu","Pallapatti",23
+1159,"Tamil Nadu","Pallikonda",23
+1160,"Tamil Nadu","Panagudi",23
+1161,"Tamil Nadu","Panruti",23
+1162,"Tamil Nadu","Paramakudi",23
+1163,"Tamil Nadu","Parangipettai",23
+1164,"Tamil Nadu","Pattukkottai",23
+1165,"Tamil Nadu","Perambalur",23
+1166,"Tamil Nadu","Peravurani",23
+1167,"Tamil Nadu","Periyakulam",23
+1168,"Tamil Nadu","Periyasemur",23
+1169,"Tamil Nadu","Pernampattu",23
+1170,"Tamil Nadu","Pollachi",23
+1171,"Tamil Nadu","Polur",23
+1172,"Tamil Nadu","Ponneri",23
+1173,"Tamil Nadu","Pudukkottai",23
+1174,"Tamil Nadu","Pudupattinam",23
+1175,"Tamil Nadu","Puliyankudi",23
+1176,"Tamil Nadu","Punjaipugalur",23
+1177,"Tamil Nadu","Ramanathapuram",23
+1178,"Tamil Nadu","Salem",23
+1179,"Tamil Nadu","Sivaganga",23
+1180,"Tamil Nadu","Thanjavur",23
+1181,"Tamil Nadu","Theni",23
+1182,"Tamil Nadu","Tiruchirappalli",23
+1183,"Tamil Nadu","Tirunelveli",23
+1184,"Tamil Nadu","Tiruvallur",23
+1185,"Tamil Nadu","Tiruvannamalai",23
+1186,"Tamil Nadu","Tiruvarur",23
+1187,"Tamil Nadu","Tuticorin",23
+1188,"Tamil Nadu","Vellore",23
+1189,"Tamil Nadu","Villupuram",23
+1190,"Tamil Nadu","Virudhunagar",23
+1191,"Telangana","Adilabad",37
+1192,"Telangana","Hyderabad",37
+1193,"Telangana","Karimnagar",37
+1194,"Telangana","Khammam",37
+1195,"Telangana","Mahbubnagar",37
+1196,"Telangana","Medak",37
+1197,"Telangana","Nalgonda",37
+1198,"Telangana","Nizamabad",37
+1199,"Telangana","Rangareddy",37
+1200,"Telangana","Warangal",37
+1201,"Tripura","Agartala",10
+1202,"Tripura","Badharghat",10
+1203,"Tripura","Dhalai",10
+1204,"Tripura","North Tripura",10
+1205,"Tripura","South Tripura",10
+1206,"Tripura","West Tripura",10
+1207,"Tripura","Dharmanagar",10
+1208,"Tripura","Indranagar",10
+1209,"Tripura","Jogendranagar",10
+1210,"Tripura","Kailasahar",10
+1211,"Tripura","Khowai",10
+1212,"Tripura","Pratapgarh",10
+1213,"Uttar Pradesh","Achhnera",4
+1214,"Uttar Pradesh","Adari",4
+1215,"Uttar Pradesh","Agra",4
+1216,"Uttar Pradesh","Aligarh",4
+1217,"Uttar Pradesh","Allahabad",4
+1218,"Uttar Pradesh","Ambedkar Nagar",4
+1219,"Uttar Pradesh","Amroha",4
+1220,"Uttar Pradesh","Auraiya",4
+1221,"Uttar Pradesh","Azamgarh",4
+1222,"Uttar Pradesh","Badaun",4
+1223,"Uttar Pradesh","Bagpat",4
+1224,"Uttar Pradesh","Bahraich",4
+1225,"Uttar Pradesh","Ballia",4
+1226,"Uttar Pradesh","Balrampur",4
+1227,"Uttar Pradesh","Banda",4
+1228,"Uttar Pradesh","Barabanki",4
+1229,"Uttar Pradesh","Bareilly",4
+1230,"Uttar Pradesh","Bharthana",4
+1231,"Uttar Pradesh","Bijnor",4
+1232,"Uttar Pradesh","Budaun",4
+1233,"Uttar Pradesh","Bulandshahr",4
+1234,"Uttar Pradesh","Chakeri",4
+1235,"Uttar Pradesh","Chandauli",4
+1236,"Uttar Pradesh","Chandausi",4
+1237,"Uttar Pradesh","Charkhari",4
+1238,"Uttar Pradesh","Chitrakoot",4
+1239,"Uttar Pradesh","Dadri",4
+1240,"Uttar Pradesh","Deoria",4
+1241,"Uttar Pradesh","Dhampur",4
+1242,"Uttar Pradesh","Etah",4
+1243,"Uttar Pradesh","Etawah",4
+1244,"Uttar Pradesh","Faizabad",4
+1245,"Uttar Pradesh","Farrukhabad",4
+1246,"Uttar Pradesh","Fatehabad",4
+1247,"Uttar Pradesh","Fatehgarh",4
+1248,"Uttar Pradesh","Fatehpur",4
+1249,"Uttar Pradesh","Fatehpur",4
+1250,"Uttar Pradesh","Fatehpur Chaurasi",4
+1251,"Uttar Pradesh","Fatehpur Sikri",4
+1252,"Uttar Pradesh","Firozabad",4
+1253,"Uttar Pradesh","Ghatampur",4
+1254,"Uttar Pradesh","Gautam Buddha Nagar",4
+1255,"Uttar Pradesh","Ghaziabad",4
+1256,"Uttar Pradesh","Ghazipur",4
+1257,"Uttar Pradesh","Gonda",4
+1258,"Uttar Pradesh","Gorakhpur",4
+1259,"Uttar Pradesh","Greater Noida",4
+1260,"Uttar Pradesh","Hamirpur",4
+1261,"Uttar Pradesh","Hapur",4
+1262,"Uttar Pradesh","Hardoi",4
+1263,"Uttar Pradesh","Hastinapur",4
+1264,"Uttar Pradesh","Hathras",4
+1265,"Uttar Pradesh","Jais",4
+1266,"Uttar Pradesh","Jajmau",4
+1267,"Uttar Pradesh","Jalaun",4
+1268,"Uttar Pradesh","Jaunpur",4
+1269,"Uttar Pradesh","Jhansi",4
+1270,"Uttar Pradesh","Jyotiba Phule Nagar",4
+1271,"Uttar Pradesh","Kannauj",4
+1272,"Uttar Pradesh","Kalpi",4
+1273,"Uttar Pradesh","Kanpur",4
+1274,"Uttar Pradesh","Kanpur Nagar",4
+1275,"Uttar Pradesh","Kaushambi",4
+1276,"Uttar Pradesh","Kheri",4
+1277,"Uttar Pradesh","Kota",4
+1278,"Uttar Pradesh","Kulpahar",4
+1279,"Uttar Pradesh","Kushinagar",4
+1280,"Uttar Pradesh","Laharpur",4
+1281,"Uttar Pradesh","Lakhimpur",4
+1282,"Uttar Pradesh","Lal Gopalganj Nindaura",4
+1283,"Uttar Pradesh","Lalganj",4
+1284,"Uttar Pradesh","Lalitpur",4
+1285,"Uttar Pradesh","Lar",4
+1286,"Uttar Pradesh","Loni",4
+1287,"Uttar Pradesh","Lucknow",4
+1288,"Uttar Pradesh","Mahoba",4
+1289,"Uttar Pradesh","Maharajganj",4
+1290,"Uttar Pradesh","Mainpuri",4
+1291,"Uttar Pradesh","Mathura",4
+1292,"Uttar Pradesh","Mau",4
+1293,"Uttar Pradesh","Meerut",4
+1294,"Uttar Pradesh","Mirzapur",4
+1295,"Uttar Pradesh","Modinagar",4
+1296,"Uttar Pradesh","Moradabad",4
+1297,"Uttar Pradesh","Muradnagar",4
+1298,"Uttar Pradesh","Muzaffarnagar",4
+1299,"Uttar Pradesh","Nagina",4
+1300,"Uttar Pradesh","Najibabad",4
+1301,"Uttar Pradesh","Nakur",4
+1302,"Uttar Pradesh","Nanpara",4
+1303,"Uttar Pradesh","Naraura",4
+1304,"Uttar Pradesh","Naugawan Sadat",4
+1305,"Uttar Pradesh","Nautanwa",4
+1306,"Uttar Pradesh","Nawabganj",4
+1307,"Uttar Pradesh","Nehtaur",4
+1308,"Uttar Pradesh","Noida",4
+1309,"Uttar Pradesh","Noorpur",4
+1310,"Uttar Pradesh","Obra",4
+1311,"Uttar Pradesh","Orai",4
+1312,"Uttar Pradesh","Padrauna",4
+1313,"Uttar Pradesh","Palia Kalan",4
+1314,"Uttar Pradesh","Parasi",4
+1315,"Uttar Pradesh","Phulpur",4
+1316,"Uttar Pradesh","Pihani",4
+1317,"Uttar Pradesh","Pilibhit",4
+1318,"Uttar Pradesh","Pilkhuwa",4
+1319,"Uttar Pradesh","Powayan",4
+1320,"Uttar Pradesh","Pratapgarh",4
+1321,"Uttar Pradesh","Pukhrayan",4
+1322,"Uttar Pradesh","Puranpur",4
+1323,"Uttar Pradesh","Purquazi",4
+1324,"Uttar Pradesh","Purwa",4
+1325,"Uttar Pradesh","Raebareli",4
+1326,"Uttar Pradesh","Ramabai Nagar",4
+1327,"Uttar Pradesh","Rampur",4
+1328,"Uttar Pradesh","Saharanpur",4
+1329,"Uttar Pradesh","Sant Kabir Nagar",4
+1330,"Uttar Pradesh","Sant Ravidas Nagar",4
+1331,"Uttar Pradesh","Shahjahanpur",4
+1332,"Uttar Pradesh","Shravasti",4
+1333,"Uttar Pradesh","Siddharthnagar",4
+1334,"Uttar Pradesh","Sitapur",4
+1335,"Uttar Pradesh","Sonbhadra",4
+1336,"Uttar Pradesh","Sultanpur",4
+1337,"Uttar Pradesh","Unnao",4
+1338,"Uttar Pradesh","Varanasi",4
+1339,"Uttarakhand","Almora",16
+1340,"Uttarakhand","Bageshwar",16
+1341,"Uttarakhand","Bazpur",16
+1342,"Uttarakhand","Berinag",16
+1343,"Uttarakhand","Chamoli",16
+1344,"Uttarakhand","Chamba",16
+1345,"Uttarakhand","Champawat",16
+1346,"Uttarakhand","Chaukori",16
+1347,"Uttarakhand","Dehradun",16
+1348,"Uttarakhand","Haldwani",16
+1349,"Uttarakhand","Haridwar",16
+1350,"Uttarakhand","Jaspur",16
+1351,"Uttarakhand","Kanda",16
+1352,"Uttarakhand","Kashipur",16
+1353,"Uttarakhand","kichha",16
+1354,"Uttarakhand","Kotdwara",16
+1355,"Uttarakhand","Manglaur",16
+1356,"Uttarakhand","Mussoorie",16
+1357,"Uttarakhand","Nagla",16
+1358,"Uttarakhand","Nainital",16
+1359,"Uttarakhand","Pauri",16
+1360,"Uttarakhand","Pithoragarh",16
+1361,"Uttarakhand","Rudraprayag",16
+1362,"Uttarakhand","Tehri Garhwal",16
+1363,"Uttarakhand","Udham Singh Nagar",16
+1364,"Uttarakhand","Uttarkashi",16
+1365,"West Bengal","Adra",9
+1366,"West Bengal","Alipurduar",9
+1367,"West Bengal","Arambagh",9
+1368,"West Bengal","Asansol",9
+1369,"West Bengal","Baharampur",9
+1370,"West Bengal","Bally",9
+1371,"West Bengal","Balurghat",9
+1372,"West Bengal","Bankura",9
+1373,"West Bengal","Barakar",9
+1374,"West Bengal","Barasat",9
+1375,"West Bengal","Bardhaman",9
+1376,"West Bengal","Barrackpur",9
+1377,"West Bengal","Bidhan Nagar",9
+1378,"West Bengal","Birbhum",9
+1379,"West Bengal","Chinsura",9
+1380,"West Bengal","Contai",9
+1381,"West Bengal","Cooch Behar",9
+1382,"West Bengal","Dakshin Dinajpur",9
+1383,"West Bengal","Dalkhola",9
+1384,"West Bengal","Darjeeling",9
+1385,"West Bengal","Dhulian",9
+1386,"West Bengal","Dumdum",9
+1387,"West Bengal","Durgapur",9
+1388,"West Bengal","Habra*",9
+1389,"West Bengal","Haldia",9
+1390,"West Bengal","Howrah",9
+1391,"West Bengal","Hugli-Chuchura",9
+1392,"West Bengal","Islampur",9
+1393,"West Bengal","Jalpaiguri",9
+1394,"West Bengal","Jhargram",9
+1395,"West Bengal","Kalimpong",9
+1396,"West Bengal","Kharagpur",9
+1397,"West Bengal","Kolkata",9
+1398,"West Bengal","Konnagar",9
+1399,"West Bengal","Krishnanagar",9
+1400,"West Bengal","Mainaguri",9
+1401,"West Bengal","Mal",9
+1402,"West Bengal","Maldah",9
+1403,"West Bengal","Mathabhanga",9
+1404,"West Bengal","Medinipur",9
+1405,"West Bengal","Memari",9
+1406,"West Bengal","Monoharpur",9
+1407,"West Bengal","Murshidabad",9
+1408,"West Bengal","Nabadwip",9
+1409,"West Bengal","Nadia",9
+1410,"West Bengal","Naihati",9
+1411,"West Bengal","Panchla",9
+1412,"West Bengal","Pandua",9
+1413,"West Bengal","Paschim Punropara",9
+1414,"West Bengal","Purulia",9
+1415,"West Bengal","North 24 Parganas",9
+1416,"West Bengal","Paschim Medinipur",9
+1417,"West Bengal","Purba Medinipur",9
+1418,"West Bengal","Purulia",9
+1419,"West Bengal","South 24 Parganas",9
+1420,"West Bengal","Uttar Dinajpur",9
