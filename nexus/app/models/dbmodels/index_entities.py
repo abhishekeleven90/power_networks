@@ -4,7 +4,7 @@ from app.sqldb import IndexSQLDB
 
 class Entity:
 
-    def __init__(self, uuid, name, labels, aliases, keywords, lastmodified=None):
+    def __init__(self, uuid="", name="", labels="", aliases="", keywords="", lastmodified=None):
         self.uuid = uuid
         self.name = name
         self.labels = labels
@@ -61,10 +61,10 @@ class Entity:
     def getEntity(self, uuid):
         self.dbwrap.connect()
         cursor = self.dbwrap.cursor()
-        query = ("SELECT (uuid, name, labels, aliases, keywords) FROM entities WHERE uuid = " + uuid)
+        query = ("SELECT uuid, name, labels, aliases, keywords FROM entities WHERE uuid = '{}'".format(uuid))
         print query
-        cursor.execute()
-        results = cursor.fetchAll()
+        cursor.execute(query)
+        results = cursor.fetchall()
         for r in results:
             self.uuid = r[0]
             self.name = r[1]
