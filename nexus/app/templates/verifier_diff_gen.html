@@ -74,6 +74,9 @@
 
 
             {% for prop in conf_props%}
+
+                {% set origprop, nayaprop = diffObjects(orig[prop], naya[prop]) %}
+            
                 <tr>
                     <td>
                        
@@ -81,7 +84,7 @@
                         <label>   
                             <!--checked is very imp very very imp!-->
                             <!-- else null goes or nothing goes and that creates a problem! -->
-                            <input type="radio" name="{{prop}}" value="{{orig[prop]}}" checked=""></input> {{prop}}: <b>{{orig[prop]}}</b>
+                            <input type="radio" name="{{prop}}" value="{{orig[prop]}}" checked=""></input> {{prop}}: <b>{{origprop | safe}}</b>
                         </label>
                     </div>                    
                      
@@ -91,7 +94,7 @@
 
                         <div class="radio">
                             <label>
-                                <input type="radio" name="{{prop}}" value="{{naya[prop]}}"></input> {{prop}}: <b>{{naya[prop]}}</b>
+                                <input type="radio" name="{{prop}}" value="{{naya[prop]}}"></input> {{prop}}: <b>{{nayaprop | safe}}</b>
                             </label>
                         </div>
 

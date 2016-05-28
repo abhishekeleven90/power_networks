@@ -1,61 +1,6 @@
 <!-- extend base layout -->
 {% extends "base.html" %}
 {% block content %}
-    <!-- <div class="starter-template" align="center" >
-        {{temptext|safe}}
-     -->
 
 
-    <form class="form-horizontal" method="post" action={{url_for('verifier.temp')}}>
-            <!-- Form Name -->
-            <legend>
-                <h2>Merge Nodes / New Nodes</h2>
-            </legend>
-
-            {{ form.hidden_tag() }}
-
- <div class="form-group"> 
-    <label class="control-label col-sm-2">New Labels</label>
-    <div class="col-sm-offset-2 col-sm-10">
-            {{form.labels()}}
-    </div>
-  </div>
-
-
-  <div class="form-group"> 
-    <label class="control-label col-sm-2">New Props</label>
-    <div class="col-sm-offset-2 col-sm-10">
-            {{form.new_props()}}
-    </div>
-  </div>
-
-
-{{form.conf_props}}
-
-
-    <div class="form-group">
-        <label class="col-md-4 control-label" for=""></label>
-        <div class="col-md-4">
-            <!-- Button -->
-            
-            {% for prop in form.conf_props %}
-                {% set p = (RadioField)prop %}
-                {{p}}
-                <br/>
-            {% endfor %}
-
-            <button type="submit" class="btn btn-default">Submit</button>
-        </div>
-    </div>
-</form>
-
-
-
-
-
-
-
-<!-- 
-
-</div> -->
 {% endblock %}
