@@ -18,9 +18,16 @@ class GraphHandle():
     def getCrawlRelationStats(self):
         return self.crawldb.countUnresolvedRelations(), self.crawldb.countNextRelationsToResolve()
 
+    def getCrawlHyperEdgeNodeStats(self):
+        return self.crawldb.countUnresolvedHyperEdgeNodes(), self.crawldb.countNextHyperEdgeNodesToResolve()
+
     def areCrawlNodesLeft(self):
         n1,n2 = self.getCrawlNodeStats()
         return n1 != 0 ##here the first count can work as we just need to select any node
+
+    def areCrawlHyperEdgeNodesLeft(self):
+        n1,n2 = self.getCrawlHyperEdgeNodeStats()
+        return n1 != 0 ##here the first count can work as we just need to select any hyper edge node
 
     def areCrawlRelationsLeft(self):
         r1,r2 = self.getCrawlRelationStats()
@@ -34,12 +41,14 @@ class GraphHandle():
 
     def nextNodeToResolve(self):
         #TODO: remove prints
-        print self.crawldb
-        print 'graph object'
-        print self.crawldb.graph
         node, degree =  self.crawldb.getNearestBestNode()
-        node2, degree2 =  self.crawldb.getHighestDegreeNode()
-        print 'node'
+        print node
+        return node ##returns a type py2neo.Node, can be None
+
+    def nextHyperEdgeNodeToResolve(self):
+        #TODO: remove prints
+        node =  self.crawldb.getNearestBestHyperEdgeNode()
+        print 'hyperedgenode selected'
         print node
         return node ##returns a type py2neo.Node, can be None
 
@@ -94,11 +103,28 @@ class GraphHandle():
 
         return self.coredb.searchRelations(start_node_uuid, crawl_rel.type, end_node_uuid)
 
+
+    def matchHyperEdgeNodesInCore(self, crawl_obj):
+        '''
+            Returns a list of hyperedge nodes that are almost as same as this crawl_obj object from crawldb
+        '''    
+        from app.constants import RESOLVEDWITHUUID, RESOLVEDWITHRELID, RESOLVEDWITHHENID
+
+        return [] ##for now
+        
+        start_node_uuid = crawl_rel.start_node[RESOLVEDWITHUUID]
+        end_node_uuid = crawl_rel.end_node[RESOLVEDWITHUUID]
+
+        return self.coredb.searchRelations(start_node_uuid, crawl_rel.type, end_node_uuid)
+
+
     def getTwoVars(self, kind): ##kind is kind of task
         CRAWL_ID_NAME = None ##Property name in crawl graph
         CURR_ID = None ##Session variable
 
-        from app.constants import CRAWL_EN_ID_NAME, CRAWL_REL_ID_NAME
+        from app.constants import CRAWL_EN_ID_NAME, CRAWL_REL_ID_NAME, CRAWL_HEN_ID_NAME
+
+        ##TODO: curr_id using getCoreIDName
         
         if kind == 'relation':
             CRAWL_ID_NAME = CRAWL_REL_ID_NAME
@@ -106,6 +132,9 @@ class GraphHandle():
         elif kind == 'node':
             CURR_ID = 'curr_uuid'
             CRAWL_ID_NAME = CRAWL_EN_ID_NAME
+        elif kind == 'hyperedgenode':
+            CURR_ID = 'curr_henid'
+            CRAWL_ID_NAME = CRAWL_HEN_ID_NAME
 
         return CRAWL_ID_NAME, CURR_ID
 
@@ -118,6 +147,8 @@ class GraphHandle():
             ans = self.areCrawlNodesLeft() 
         elif kind=='relation':
             ans = self.areCrawlRelationsLeft()
+        elif kind == 'hyperedgenode':
+            ans = self.areCrawlHyperEdgeNodesLeft()
 
         return ans
 
@@ -134,7 +165,9 @@ class GraphHandle():
         if kind == 'relation':
             graphobj =  self.nextRelationToResolve()
         elif kind == 'node':
-            graphobj =  self.nextNodeToResolve() 
+            graphobj =  self.nextNodeToResolve()
+        elif kind == 'hyperedgenode':
+            graphobj = self.nextHyperEdgeNodeToResolve() 
         
         return graphobj
 
@@ -149,7 +182,9 @@ class GraphHandle():
         if kind == 'relation':
             return self.crawldb.getRelationByUniqueID(id_prop, id_val, isIDString)
         elif kind == 'node':
-            return self.crawldb.getNodeByUniqueID(id_prop, id_val, isIDString)
+            return self.crawldb.getNodeByUniqueID('entity', id_prop, id_val, isIDString)
+        elif kind == 'hyperedgenode':
+            return self.crawldb.getNodeByUniqueID('hyperedgenode',id_prop,id_val, isIDString)
 
         return None
 
@@ -165,7 +200,7 @@ class GraphHandle():
 
         if kind == 'relation':
             return self.crawldb.copyRelationWithEssentialNodeMeta(crawl_obj_original)
-        elif kind == 'node':
+        elif kind == 'node' or kind == 'hyperedgenode':
             return self.crawldb.copyNodeWithoutMeta(crawl_obj_original)
 
         return None
@@ -183,8 +218,10 @@ class GraphHandle():
         if kind == 'relation':
             return self.matchRelationsInCore(crawl_obj)
         elif kind == 'node':
-            matchingUUIDS = [67, 68, 69, 70, 71, 72, 73]
-            return self.coredb.getNodeListCore(matchingUUIDS) 
+            matchingUUIDS = [67, 68, 73, 74, 75, 76, 77]
+            return self.coredb.getNodeListCore(matchingUUIDS)
+        elif kind == 'hyperedgenode':
+            return self.matchHyperEdgeNodesInCore(crawl_obj)
 
         return None #or an empty list?
 
@@ -203,6 +240,8 @@ class GraphHandle():
         elif kind == 'relation':
             curr_obj = self.insertCoreRelationHelper(crawl_obj)
             return curr_obj['relid']
+        elif kind == 'hyperedgenode':
+            curr_obj = self.insertCoreHyperEdgeNodeHelper(crawl_obj)
 
         return None
 
@@ -231,9 +270,18 @@ class GraphHandle():
         elif kind == 'relation':
             return 'relid'
         elif kind == 'hyperedge':
-            return 'hyperedgeid'
+            return 'henid'
 
         return None
+
+    def getDirectlyConnectedEntities(self, kind, graphobj):
+
+        if kind == 'hyperedgenode':
+            from app.constants import CRAWL_HEN_ID_NAME, LABEL_HYPEREDGE_NODE
+            return self.crawldb.getDirectlyConnectedEntities(CRAWL_HEN_ID_NAME, graphobj[CRAWL_HEN_ID_NAME], LABEL_HYPEREDGE_NODE, isIDString = True)
+
+        return None
+
 
 
 

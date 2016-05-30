@@ -1,0 +1,93 @@
+{
+"taskname": "wow70",
+"meta-description": "Trial",
+"fetchdate": "01/01/2011",
+"sourceurls": ["wikipedia", "capitalline"],
+"entities": 
+    [
+        {
+            "id":"1",
+            "labels":["person","politician","entity"],
+            "properties":
+                {"name":"Narendra Modi"}
+        },
+        {
+            "id":"2",
+            "labels":["organization","politicalparty","nationalparty","entity"],
+            "properties":
+                {"name":"Bhartiya Janta Party"}
+        },
+        {
+            "id":"3",
+            "labels":["constituency", "entity"],
+            "properties":
+                {"name":"Varanasi"}
+        },
+        {
+            "id":"4",
+            "labels":["state","entity","IndianState"],
+            "properties":
+                {"name":"UttarPradesh"}
+        },
+        {
+            "id":"5",
+            "labels":["hyperedgenode","participationInElections"],
+            "properties":
+                {"result":"won"}
+        },
+        {
+            "id":"6",
+            "labels":["LokSabhaElections","NationalIndianElections","IndianElections","Elections","entity"],
+            "properties":
+                {"year":"2014","name":"Lok Sabha 2014","startdate":"01/01/2014"}
+        },
+        {
+            "id":"7",
+            "labels":["ConstitutionBody","Lok Sabha","IndianConstitutionBody","NationalIndianConstitutionBody","entity"],
+            "properties":
+                {"year":"2014","number":"16","name":"16th Lok Sabha"}
+        }
+    ],
+"relations":
+    [
+        {
+            "id":"1",
+            "label":"worksIn",
+            "start_entity":"1",
+            "end_entity":"2",
+            "bidirectional":"no",
+            "properties":
+                {"startdate":"01/01/2010", "loyalist":"1"}
+        },
+        {
+            "id":"2",
+            "label":"geoBelongs",
+            "start_entity":"3",
+            "end_entity":"4",
+            "bidirectional":"no",
+            "properties":
+                {}
+        },
+        {
+            "id":"3",
+            "label":"foughtFromConstituency",
+            "start_entity":"5",
+            "end_entity":"3",
+            "bidirectional":"no",
+            "properties":
+                {}
+        },
+        {
+            "id":"4",
+            "label":"foughtFromParty",
+            "start_entity":"5",
+            "end_entity":"2",
+            "bidirectional":"no",
+            "properties":
+                {
+                    
+                }
+        }
+    ]
+    
+}

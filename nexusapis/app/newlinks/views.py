@@ -137,7 +137,7 @@ def pushLinked():
 
 
     ##entities must part in request json
-    entities = request.json['entities']
+    entities = request.json['entities'] ##MAJOR TODO: change this to nodes
 
     ##can be there or can not be, in json 
     relations = []
@@ -163,9 +163,13 @@ def pushLinked():
     reserved_en_props = ['crawl_en_id','resolvedWithUUID','taskname','token','_token','workname','date','time','resolvedDate','resolvedAgainst','verifiedBy','resolvedBy','verifiedDate','update','lastUpdatedBy','lastUpdatedOn', '_crawl_en_id_','_token_','_taskname_','_id_','_nodenumber_'] ##_nodeid_ is the node number along with _token_ and _taskname_ will help us in identifying the node! so do not worry!
     required_en_props = ['name'] ##inside entity['properties']
 
+
     validate = Validate() ##TODO: move all validations to this class afterwards
 
     for en in entities:
+
+        if not validate.validateNodeIsEntityOrHyperedge(en):
+            return error_helper('a node must have either entity or hyperedgenode as a label and not both', 400) 
 
         for prop in required_endict_props:
             if not prop in en:
@@ -181,7 +185,7 @@ def pushLinked():
             return error_helper('Labels list empty for an entity', 400)
 
         for prop in required_en_props:
-            if not prop in en['properties']:
+            if (not prop in en['properties']) and ('hyperedgenode' not in en['labels']) : ##patch for allowing hyperedgenode, checked doesnt affect anything else
                 return error_helper(str(prop)+' required property missing for an entity', 400)
 
         for prop in reserved_en_props:
@@ -195,7 +199,7 @@ def pushLinked():
         nodelabels = en['labels']
         nodeprops = en['properties']
         nodeprops['_crawl_en_id_'] = 'en_'+tokenid+'_'+taskname+'_'+str(nodeid)
-        nodeprops['_token_'] = tokenid
+        nodeprops['_token_'] = tokenid ##TODO: if you change this!, will have to change code for entity_read macro.
         nodeprops['_taskname_'] = taskname
         nodeprops['_nodenumber_'] = nodeid
         nodes[nodeid] = {'labels':nodelabels,'properties':nodeprops}

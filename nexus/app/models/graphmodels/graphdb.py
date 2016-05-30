@@ -20,7 +20,12 @@ class GraphDB:
         self.graph = Graph(self.con_url)
 
          ##TODO: move these to constants.py when IPYTHON not required
-        self.metaprops = {'RESOLVEDUUID':'_resolvedWithUUID_','RESOLVEDRELID':'_resolvedWithRELID_'}
+        self.metaprops = {
+        'RESOLVEDUUID':'_resolvedWithUUID_',
+        'RESOLVEDRELID':'_resolvedWithRELID_',
+        'RESOLVEDHENID':'_resolvedWithHENID_', ##for hyper edge node
+        'RESOLVEDHERID':'_resolvedWithHERID_', ##for hyper edge relation
+        }
 
     #Done: Multiple each time want to ask something
     #Else: works on old data only
@@ -48,9 +53,9 @@ class GraphDB:
         return a
     
     
-    def getNodeByUniqueID(self, idName, idVal, isIDString=False):
+    def getNodeByUniqueID(self, uniquelabel, idName, idVal, isIDString=False):
         ##TODO: move uuid to props
-        query = "match (n {"
+        query = "match (n:"+uniquelabel+" {"
         if isIDString:
             query = query+ idName+":'"+str(idVal)+"'}) return n"
         else:
@@ -145,6 +150,27 @@ class GraphDB:
     def copyRelationWithoutMeta(self, rel, rel_exceptions = [], node_exceptions = []):
         return self.copyRelation(rel, copymeta = False, rel_exceptions = rel_exceptions, node_exceptions = node_exceptions)
 
+    def getDirectlyConnectedEntities(self, idname, idval, uniquelabel, isIDString = True):
+        '''
+            given idname like uuid, henid and uniquelabel like entity or hyperedgenode
+            gives us the connected uuids of connected node
+            returns nodes which have uuids only
+            note: works for hyperedgenodes only for now
+            #TODO: extend so that this info can be shown on view page
+        '''
+        from app.constants import LABEL_ENTITY
+        invertedComma = ''
+        if isIDString:
+            invertedComma = "'"
+        query = "match (n:%s {%s:%s%s%s})-[]-(p:%s) return distinct(p)"
+        query = query %(uniquelabel, idname, invertedComma, idval, invertedComma, LABEL_ENTITY)
+        results = self.graph.cypher.execute(query)
+        enlist = []
+        for res in results:
+            enlist.append(res[0])
+        return enlist
+
+
     ##example of some text input: (n154346:businessperson:person:politician {name:"Anita",uuid:1234})
     ##Usage: deserializeNode('''(n154346:businessperson:person:politician {name:"Anita",uuid:1234})''')
     def deserializeNode(self, nodeText):
@@ -207,10 +233,13 @@ class CoreGraphDB(GraphDB):
         GraphDB.__init__(self, username = CORE_GRAPH_USER, password = CORE_GRAPH_PASSWORD, server = CORE_GRAPH_HOST, port = CORE_GRAPH_PORT)
     
     def entity(self, uuid):
-        return self.getNodeByUniqueID('uuid',uuid) ##isIDString by default false
+        return self.getNodeByUniqueID('entity','uuid',uuid) ##isIDString by default false
 
     def relation(self, relid):
         return self.getRelationByUniqueID('relid', relid)
+
+    def hyperedgenode(self, henid):
+        return self.getNodeByUniqueID('entity','henid',henid) ##isIDString by default false    
     
     def getNodeListCore(self, uuid_list):
         ans = []
@@ -239,6 +268,17 @@ class CoreGraphDB(GraphDB):
             if x not in orig.properties:
                 new_props.append(x)
             else:
+                # if orig[x] != naya[x]: 
+                ##exactly equal prop! TODO: if all props equal -> empty,
+
+                #TODO:
+                ## then submit doesnt allow to go any further
+                ##will have to check no new labels, no new props, no new conf props, 
+                ##go to next method, that is show-->home page of verifier
+                ##no point in any clicks
+
+                ##TODO: disallow some props to come?
+                #conf_props.append(x)
                 conf_props.append(x)
         return conf_props, new_props
 
@@ -333,17 +373,19 @@ class SelectionAlgoGraphDB(GraphDB):
        
         
     def getFirstUnresolvedNode(self):
+        from app.constants import LABEL_ENTITY
         results = []
-        query = 'MATCH (n) where not exists(n.'+self.metaprops['RESOLVEDUUID'] +') ' +' return n limit 1'
+        query = 'MATCH (n:'+LABEL_ENTITY+') where not exists(n.'+self.metaprops['RESOLVEDUUID'] +') ' +' return n limit 1'
         results = self.graph.cypher.execute(query)
         if len(results)==0:
             return None
         return results[0][0]
     
     def getRandomUnresolvedNode(self):
+        from app.constants import LABEL_ENTITY
         results = []
         count = 0 ## 50  tries
-        query = 'MATCH (n) WITH n WHERE rand() < 0.5 AND not exists(n.'+self.metaprops['RESOLVEDUUID'] +') ' 
+        query = 'MATCH (n:'+LABEL_ENTITY+') WITH n WHERE rand() < 0.5 AND not exists(n.'+self.metaprops['RESOLVEDUUID'] +') ' 
         query = query +' return n limit 1'
         #print query
         while len(results) == 0 and count < 50:
@@ -354,9 +396,11 @@ class SelectionAlgoGraphDB(GraphDB):
         return results[0][0]
     
     def getHighestDegreeNode(self):
+        from app.constants import LABEL_ENTITY
         ##TODO: get resolvedwithUUID out!
-        query = 'start n = node(*) match (n)--(c) where not exists(n.'+self.metaprops['RESOLVEDUUID'] +') '
+        query = 'start n = node(*) match (n:'+LABEL_ENTITY+')--(c) where not exists(n.'+self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'return n, count(*) as connections order by connections desc limit 1'
+        ##note that according to this query, c can be a hyperedge node too.
         #print query
         results = self.graph.cypher.execute(query)
         if len(results)==0: 
@@ -373,8 +417,10 @@ class SelectionAlgoGraphDB(GraphDB):
         rel.push()
         
     def getNearestBestNode(self):
-        query = 'match (n)--(c) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
+        from app.constants import LABEL_ENTITY
+        query = 'match (n:'+LABEL_ENTITY+')--(c:'+LABEL_ENTITY+') where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'AND not exists(c.' + self.metaprops['RESOLVEDUUID'] +') ' 
+        #query = query + "AND not '"+HYPEREDGE_NODE_LABEL+"'' in labels(c) " 
         query = query + 'return c'
         maxdegree = 0
         maxnode = None
@@ -392,7 +438,8 @@ class SelectionAlgoGraphDB(GraphDB):
         return maxnode, maxdegree
     
     def getNextRelationToResolve(self):
-        query = 'match (n)-[r]->(p) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') ' ##direction included
+        ##TODO: use constant here for entity
+        query = 'match (n:entity)-[r]->(p:entity) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') ' ##direction included
         query = query + 'AND exists(p.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'AND not exists(r.' + self.metaprops['RESOLVEDRELID'] +') '
         query = query + 'return r limit 1'
@@ -402,28 +449,62 @@ class SelectionAlgoGraphDB(GraphDB):
             return None
         else:
             return results[0][0]
+
+    def getNearestBestHyperEdgeNode(self):
+        from app.constants import LABEL_HYPEREDGE_NODE, LABEL_ENTITY
+        query = 'match (n:'+LABEL_ENTITY+')--(c:'+LABEL_HYPEREDGE_NODE+') where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
+        query = query + 'AND not exists(c.' + self.metaprops['RESOLVEDHENID'] +') ' 
+        query = query + 'return c limit 1' ##distinct c or unique c?
+        results = self.graph.cypher.execute(query)
+        if len(results)==0:
+            return None
+        else:
+            return results[0][0]
+        
         
     def countUnresolvedNodes(self): ##what is the reslut does not have anything?
-        query = 'match n where not exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
+        from app.constants import LABEL_ENTITY
+        query = 'match (n:'+LABEL_ENTITY+') where not exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'return count(n)'
         results = self.graph.cypher.execute(query)
         return results[0][0]
     
     def countNextNodesToResolve(self): ##considers only the nodes that are connected rather than disconncted ones
-        query = 'match (n)--(c) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
+        from app.constants import LABEL_ENTITY
+        query = 'match (n:'+LABEL_ENTITY+')--(c:'+LABEL_ENTITY+') where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'AND not exists(c.' + self.metaprops['RESOLVEDUUID'] +') ' 
         query = query + 'return count(c)'
         results = self.graph.cypher.execute(query)
         return results[0][0]
+
+    def countUnresolvedHyperEdgeNodes(self):
+        '''counts the number of hyperedgenodes in current crawled graph that have to be resolved'''
+        from app.constants import LABEL_HYPEREDGE_NODE
+        query = 'match (n:'+LABEL_HYPEREDGE_NODE+') where not exists(n.' + self.metaprops['RESOLVEDHENID'] +') '
+        query = query + 'return count(n)'
+        results = self.graph.cypher.execute(query)
+        return results[0][0]
+
+    def countNextHyperEdgeNodesToResolve(self): ##considers only the nodes that are connected rather than disconncted ones
+        from app.constants import LABEL_HYPEREDGE_NODE, LABEL_ENTITY
+        query = 'match (n:'+LABEL_ENTITY+')--(c:'+LABEL_HYPEREDGE_NODE+') where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
+        query = query + 'AND not exists(c.' + self.metaprops['RESOLVEDHENID'] +') ' 
+        query = query + 'return count(distinct c)'
+        results = self.graph.cypher.execute(query)
+        return results[0][0]
     
     def countUnresolvedRelations(self):
-        query = 'match ()-[r]->() where not exists(r.' + self.metaprops['RESOLVEDRELID'] +') '
+        ##TODO: use constant here for entity
+        ##only this one would have been affacted since hyperedgelink has been introduced
+        from app.constants import LABEL_ENTITY
+        query = 'match (:entity)-[r]->(:entity) where not exists(r.' + self.metaprops['RESOLVEDRELID'] +') '
         query = query + 'return count(r)'
         results = self.graph.cypher.execute(query)
         return results[0][0]
     
     def countNextRelationsToResolve(self):
-        query = 'match (n)-[r]->(p) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
+        ##TODO: use constant here for entity
+        query = 'match (n:entity)-[r]->(p:entity) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'AND exists(p.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'AND not exists(r.' + self.metaprops['RESOLVEDRELID'] +') '
         query = query + 'return count(r)'

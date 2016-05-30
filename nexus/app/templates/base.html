@@ -1,3 +1,25 @@
+{% macro node_short_desc(node) %}
+
+
+    {% if '_token_' in node.properties %} <!--if from crawldb graph -->
+              {% set connectedidname = '_resolvedWithUUID_' %} 
+    {% else %}
+              {% set connectedidname = 'uuid' %}
+    {% endif %}
+
+
+  
+    <a href="{{url_for('readEntity',uuid=node[connectedidname]| int)}}"> {{node['name']}} : {{node[connectedidname]}}</a> : 
+    [
+        {% for label in node.labels %}
+            {{label}},
+        {% endfor %}
+    ]
+
+  
+{% endmacro %}
+
+
 {% macro entity_read(node,verifier) %}
     
     <div class="row">
@@ -9,11 +31,23 @@
 <p class=" text-info">May 05,2014,03:00 pm </p>
       </div>!-->
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
-   
-   
+
+
+          {% if 'entity' in node.labels %}
+              {% set idname = 'uuid' %}
+              {% set IDNAME = 'UUID' %}
+              {% set nodename = node.properties['name']%}
+          {% elif 'hyperedgenode' in node.labels %}
+              {% set idname = 'henid' %}
+              {% set IDNAME = 'HYPER-EDGE-NODE ID' %}
+              {% set nodename = 'HYPER-EDGE-NODE'%}
+          {% endif %}
+
+
+        
           <div class="panel panel-info">
             <div class="panel-heading">
-              <h3 class="panel-title">{{ node.properties['name'] }}:{{node.properties['uuid']}}</h3>
+              <h3 class="panel-title">{{nodename}} : {{node.properties[idname]}}</h3>
             </div>
             <div class="panel-body">
               <div class="row">
@@ -45,15 +79,34 @@
 
                         </td>
                       </tr>
-                          {% if not verifier %}
-                          <tr>
-                            <td><b>UUID</b></td>
-                            <td>{{node.properties['uuid']}}</td>
-                          </tr>
-                          {% endif %}
+                          
+                      {% if not verifier %}
+                        <tr>
+                            <td><b>{{IDNAME}}</b></td>
+                            <td>{{node.properties[idname]}}</td>
+                        </tr>
+                      {% endif %}
+
+
+
+                      {% if 'hyperedgenode' in node.labels %}
+                            <tr>
+                                <td><b>Connected Entities</b></td>
+                                <td>
+                                  {% for en in connected_ens %}
+
+                                      {{node_short_desc(en)}}<hr/>
+
+                                  {% endfor %}
+                              
+                                </td>
+                            </tr>
+                      {% endif %}
+
+
 
                       {% for prop in node.properties %}
-                        {% if prop != 'uuid' %}
+                        {% if prop != idname %}
                           <tr>
                             <td><b>{{prop}}</b></td>
                             <td>{{node.properties[prop]}}</td>
@@ -65,11 +118,13 @@
                   </table>
                   
                   {% if not verifier %}
-                  <a href="#" class="btn btn-primary">Edit info</a>
+                          
+                          <a href="#" class="btn btn-primary">Edit info</a>
 
-                  <a href="#" class="btn btn-primary">Request Delete</a>
+                          <a href="#" class="btn btn-primary">Request Delete</a>
                   
-                  <a href="#" class="btn btn-primary">View Connections</a>
+                          <a href="#" class="btn btn-primary">View Connections</a>
+
                   {% endif %}
 
                 </div>
@@ -211,6 +266,8 @@
                   <a href="#" class="btn btn-primary">Edit Relation</a>
 
                   <a href="#" class="btn btn-primary">Request Delete</a>
+
+                  <a href="#" class="btn btn-primary">Request Delete</a> <!--TODO:  When showing hyperedge resolution, why not this! -->                  
 
                   {% endif %}
 
