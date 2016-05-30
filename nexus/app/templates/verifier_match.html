@@ -18,6 +18,11 @@
         {{relation_read(row, True, True)}}
     {% endif %}
 
+    {% if kind == 'hyperedgenode' %}
+        {{entity_read(row,True)}}
+    {% endif %}
+
+
     <hr/>
 
 
@@ -39,6 +44,10 @@
 
             {% if kind == 'relation' %}
                 {{relation_read(obj,True,False)}}
+            {% endif %}
+
+            {% if kind == 'hyperedgenode' %}
+                {{entity_read(obj,True)}}
             {% endif %}
 
             <hr/>

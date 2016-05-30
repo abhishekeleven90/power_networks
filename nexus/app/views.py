@@ -152,8 +152,6 @@ def get_current_user_role():
                flash(u"Error in the %s field - %s" % (getattr(form, field).label.text,error))
 '''
 
-'''work during extension'''
-'''it's offciial we have uuids for nodes and relids for relation, not uniform??'''
 #show the page about this entity
 #show an edit button on that page if the user is logged in, or route to log in page, how to remember?
 #the int works fine here
@@ -189,6 +187,22 @@ def readRelation(relid):
     return render_template("relation_read.html", homeclass="active", 
         rel=rel);
 
+@app.route('/hyperedgenode/<int:henid>/')
+def readHyperEdgeNode(henid):
+    ##read about the hyperedge node from the graph db
+    ##get that info and convert into presentable format
+    ##show that info
+    ## show the graph and connections in pble format? pble = presentatble
+    from app.models.graphmodels.graphdb import CoreGraphDB
+    gg = CoreGraphDB()
+    node = gg.hyperedgenode(henid)
+    #3missing is how to better represent it online
+    return render_template("entity_read.html", 
+        homeclass="active", 
+        uuid=str(uuid),
+        entity=str(node),node=node)
+
+##TODO: all three read functions can be confined in one i think and shouldn't be an issue but the file name would change for all
 
 @app.route('/profile/')
 def profile():
@@ -197,7 +211,6 @@ def profile():
 @app.route('/connections/')
 def conn():
     return render_template("connections.html", homeclass="active")
-
 
 
 

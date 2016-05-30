@@ -9,7 +9,11 @@ def show():
     gg = GraphHandle()
     unresolvedTotal, immediateUnResolvedTotal = gg.getCrawlNodeStats()
     r_unresolvedTotal, r_immediateUnResolvedTotal = gg.getCrawlRelationStats()
-    return render_template("verifier_home.html", homeclass="active",unresolvedTotal = unresolvedTotal, immediateUnResolvedTotal = immediateUnResolvedTotal, r_unresolvedTotal = r_unresolvedTotal, r_immediateUnResolvedTotal = r_immediateUnResolvedTotal)
+    h_unresolvedTotal, h_immediateUnResolvedTotal = gg.getCrawlHyperEdgeNodeStats()
+    return render_template("verifier_home.html", homeclass="active",
+        unresolvedTotal = unresolvedTotal, immediateUnResolvedTotal = immediateUnResolvedTotal, 
+        r_unresolvedTotal = r_unresolvedTotal, r_immediateUnResolvedTotal = r_immediateUnResolvedTotal,
+        h_unresolvedTotal = h_unresolvedTotal, h_immediateUnResolvedTotal = h_immediateUnResolvedTotal)
 
 
 @verifier.route('/startTask/<string:kind>/')
@@ -72,9 +76,11 @@ def match(kind='node'):
     if not request.form:
 
         graphobjs = gg.matchPossibleObjects(kind, crawl_obj)
+        connected_ens = gg.getDirectlyConnectedEntities(kind, crawl_obj_original) ##will be none if not hyperedgenode for now
 
         return render_template("verifier_match.html", homeclass="active",
-            row=crawl_obj, graphobjs=graphobjs, ID = session[CRAWL_ID_NAME], kind = kind, idname = gg.getCoreIDName(kind))
+            row=crawl_obj, graphobjs=graphobjs, ID = session[CRAWL_ID_NAME], kind = kind, 
+            idname = gg.getCoreIDName(kind), connected_ens = connected_ens)
     else:
 
         ##TODO: change this name in html file
@@ -143,7 +149,7 @@ def diffPushGen(kind='node'):
         orig = gg.coredb.relation(curr_id)
 
     elif kind == 'node':
-        crawl_obj_original = gg.crawldb.getNodeByUniqueID(CRAWL_ID_NAME, crawl_id, isIDString = True)
+        crawl_obj_original = gg.crawldb.getNodeByUniqueID('entity',CRAWL_ID_NAME, crawl_id, isIDString = True)
         crawl_obj = gg.crawldb.copyNodeWithoutMeta(crawl_obj_original) 
         orig = gg.coredb.entity(curr_id)
 

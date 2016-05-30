@@ -31,8 +31,12 @@ CORE_GRAPH_RELID = 'relid'
 #CRAWL GRAPH SYMBOLS
 CRAWL_EN_ID_NAME = '_crawl_en_id_'
 CRAWL_REL_ID_NAME = '_crawl_rel_id_'
+CRAWL_HEN_ID_NAME = '_crawl_en_id_' ##TODO: for now will have to change to give this some good id, but will have to change in api too.
 RESOLVEDWITHUUID = '_resolvedWithUUID_'
 RESOLVEDWITHRELID = '_resolvedWithRELID_'
+RESOLVEDWITHHENID = '_resolvedWithHENID_'
+LABEL_HYPEREDGE_NODE = 'hyperedgenode'
+LABEL_ENTITY = 'entity'
 
 
 #SOLR CONFIG

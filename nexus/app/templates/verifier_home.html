@@ -9,7 +9,6 @@
 
             {{unresolvedTotal}} nodes to resolve in total <br/>
             {{immediateUnResolvedTotal}} connected nodes to immediately resolve<br/>
-            <br/>
 
             <a href={{url_for('verifier.startTask', kind = 'node')}}>
                     <button type="submit" class="btn btn-primary">Resolve Nodes!</button>
@@ -22,7 +21,6 @@
             {{r_immediateUnResolvedTotal}} relations to immediately resolve<br/>
 
             <br/>
-            <br/>
 
 
 
@@ -32,6 +30,20 @@
             </a>
             <br/>
             <hr/>
+
+
+            {{h_unresolvedTotal}} hyper-edge-nodes to resolve <br/>
+            {{h_immediateUnResolvedTotal}} hyper-edge-nodes to immediately resolve<br/>
+
+            <br/>
+
+
+
+
+            <a href={{url_for('verifier.startTask', kind = 'hyperedgenode')}}>
+                    <button type="submit" class="btn btn-primary">Resolve Hyper-Edge-Nodes!</button>
+            </a>
+            <br/>
             
         </h3>
 

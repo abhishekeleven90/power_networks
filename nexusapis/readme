@@ -35,3 +35,4 @@ return p
 
 
 ##Don't delete anything from graph without deleting from mysql too at the same time. Infact delete first from mysql, and then from graph, the uuids and relids if the need be.
+##use http://jsonlint.com/ whenever want to validate json format

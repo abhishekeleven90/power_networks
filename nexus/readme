@@ -31,4 +31,9 @@ p = shortestPath((t)-[*..30]-(r))
 return p
 
 ##delete from uuidtable deletes all rows from relidtable automatically.
+##all entities to have entity as a label, helps in querying easlily
+##all hyperedgenodes to have label hyperedgenode
+
+##all the hyperrels are first level rels from participating entities
+##that is from pol -- fourghtfromconstituency, foughtfromparty, memberof, foughtineletcions and from other entities too
 
