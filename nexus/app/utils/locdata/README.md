@@ -11,6 +11,17 @@ cities_all.csv - whizz api all major cities statewise
 India_State_District_SubDistrict - Indian States district subdistrict (Not used)
 README.md - this readme file
 
+Cities with Same Names
+==============================
+Islampur - Bihar's Islampur stored as Nalanda. WB's Islampur as Uttar Dinajpur.
+Durgapur - Maharashtra's Durgapur stored as is. WB's Durgapur stored as Bardhaman.
+Aurangabad - Both Aurangabad in Maharashtra and Bihar is stored as is.
+Bilaspur - Both Bilaspur is stored as is.
+Chamba - Chamba in Himachal Pradesh is stored as is. Chamba UK is stored as Tehri Garhwal
+Fatehabad - Recorded as Agra in UP. Recorded as is for MP and Haryana.
+Kharagpur - Recorded as Munger in Bihar. West Medinipur in WB.
+Kota - Kota in Rajasthan stored as is. Kota in UP is stored as SOnbhadra, and in Karnataka as Udupi.
+Udaipur - There is no mention of Udaipur of Tripura in the original list.
 Other Info
 =============================
 google_cities_nodups created from google_cities removing the duplicates.

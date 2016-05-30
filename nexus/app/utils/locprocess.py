@@ -6,7 +6,7 @@ import json
 from termcolor import colored
 from googlemaps.exceptions import Timeout, TransportError, ApiError
 from time import sleep
-
+import sys
 
 def getCityState(address):
     if type(address) != str:
@@ -66,7 +66,10 @@ def getCityStateByPin(pincode):
 
 
 if __name__ == "__main__":
-    c, s = getCityState('Andaman and Nicobar Islands South Andaman')
+    address = sys.argv[1]+' ' + sys.argv[2]
+    print address
+    if len(sys.argv) > 1: c, s = getCityState(address)
+    else: c, s = getCityState('Madhya Pradesh Fatehabad')
     #c, s = getCityStateByPin('700065')
     print c
     print s
