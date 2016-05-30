@@ -30,7 +30,22 @@ def temp3():
 
 @guest.route('/viz/')
 def viz():
-    cypher = ''
+    ##get cypher from request.args['cypher']
+
+    ## use constant variables
+
+    ##cypher variable is the one having query
+    ##task 1 validate if query is read query - at start assume the query is valid
+
+    ##### any validation function can be moved to graphdb.py later to see if the query is read or not.
+    ##### use cypher card  : http://neo4j.com/docs/cypher-refcard/current/
+    #####  CREATE, MERGE, DELETE, REMOVE, SET, INDEX, LOAD, LOAD CSV, CONSTRAINT, any case
+    ##### nodes return, mandatory
+
+    ##task 2 fecth the results of the query
+    ##task 3 show on viz.html or something
+
+    ##to decide: post or not?
     return render_template("temp.html", homeclass="active", temptext = city+' '+state)        
 
 @guest.route('/temp4/')
