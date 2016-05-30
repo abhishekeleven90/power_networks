@@ -44,7 +44,7 @@ class Link: ##chossing this name instead of a relation
         self.dbwrap = MetaSQLDB()
 
     def create(self):
-        query = "insert into relidtable(reltype, startuuid, enduuid ) values('%s', %s, %s);"
+        query = "insert into relidtable(reltype, startuuid, enduuid ) values('%s', %s, %s);" ##TODO use constant name of table? here?
         query = query %(self.reltype, self.startuuid, self.enduuid)
         
 
@@ -55,5 +55,30 @@ class Link: ##chossing this name instead of a relation
 
         print numrows
 
-class HyperEdge:
-    pass
+class HyperEdgeNode:
+
+    # CREATE TABLE henidtable(
+    # henid bigint( 20 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    # labels text
+    # )
+
+    def __init__(self, labels): 
+        ##for the sake of completion for now just writing the labels for now for this
+
+        self.henid = None
+        self.labels = labels ##TODO: Comma separated list
+        from app.constants import META_TABLE_HENID
+        self.tablename  = META_TABLE_HENID
+        self.dbwrap = MetaSQLDB()
+
+    def create(self):
+        query = "insert into henidtable(labels) values('%s');" ##TODO use constant name of table? here?
+        query = query %(self.labels)
+        
+
+        cursor = self.dbwrap.connectAndCursor()
+        numrows = cursor.execute(query)
+        self.henid =  cursor.lastrowid
+        self.dbwrap.commitAndClose() ##what if something breaks? TODO!
+
+        print numrows    

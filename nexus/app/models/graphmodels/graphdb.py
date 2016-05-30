@@ -239,7 +239,7 @@ class CoreGraphDB(GraphDB):
         return self.getRelationByUniqueID('relid', relid)
 
     def hyperedgenode(self, henid):
-        return self.getNodeByUniqueID('entity','henid',henid) ##isIDString by default false    
+        return self.getNodeByUniqueID('hyperedgenode','henid',henid) ##isIDString by default false    
     
     def getNodeListCore(self, uuid_list):
         ans = []
@@ -310,21 +310,21 @@ class CoreGraphDB(GraphDB):
         #updated by now
         print 'The node with uuid '+str(prev_uuid)+' should be updated by now'
 
-    def insertCoreNodeWrap(self, node, uuid):
-        
+    def insertCoreNodeWrapGeneric(self, node, idprop, idval):
         node = self.copyNodeAsItIs(node)
-       
-        # nodeText = node.__str__()
-        # node = self.deserializeNode(nodeText)
-        
-        # from app.dbwork import createUuid
-        # uuid = createUuid(node['name'])
-        
-        node['uuid'] = uuid
+        node[idprop] = idval
         print node
         self.graph.create(node)
         node.pull()
         return node
+
+    def insertCoreNodeWrap(self, node, uuid):
+        from app.constants import CORE_GRAPH_UUID
+        return self.insertCoreNodeWrapGeneric(node, CORE_GRAPH_UUID, uuid)
+
+    def insertCoreHyperEdgeNodeWrap(self, hyperedgenode, henid):
+        from app.constants import CORE_GRAPH_HENID
+        return self.insertCoreNodeWrapGeneric(hyperedgenode, CORE_GRAPH_HENID, henid)
 
     def insertCoreRelWrap(self, rel, start_node_uuid, end_node_uuid, relid):
 
@@ -411,6 +411,10 @@ class SelectionAlgoGraphDB(GraphDB):
     def setResolvedWithUUID(self, node, uuid):
         node.properties[self.metaprops['RESOLVEDUUID']] = uuid
         node.push()
+
+    def setResolvedWithHENID(self, hyperedgenode, henid):
+        hyperedgenode.properties[self.metaprops['RESOLVEDHENID']] = henid
+        hyperedgenode.push()
         
     def setResolvedWithRELID(self, rel, relid):
         rel.properties[self.metaprops['RESOLVEDRELID']] = relid
@@ -487,9 +491,28 @@ class SelectionAlgoGraphDB(GraphDB):
 
     def countNextHyperEdgeNodesToResolve(self): ##considers only the nodes that are connected rather than disconncted ones
         from app.constants import LABEL_HYPEREDGE_NODE, LABEL_ENTITY
+        RESOLVEDHENID = self.metaprops['RESOLVEDHENID']
+        RESOLVEDUUID = self.metaprops['RESOLVEDUUID']
+        query = 'match (c:%s) where not exists(c.%s) with c' 
+        query = query + ' match (n:%s)--(c) where not exists(n.%s) with c, count(n) as countn'
+        query = query + ' where countn <> 0 return count(distinct c) '
+        query = query %(LABEL_HYPEREDGE_NODE, RESOLVEDHENID, LABEL_ENTITY, RESOLVEDUUID)
+        print 'hhhhhhhhhhhh'
+        print query
+        results = self.graph.cypher.execute(query)
+        count =  results[0][0]
+        return self.countUnresolvedHyperEdgeNodes() - count
+
+
+    #temp, remove, TODO
+    def countNotNextHENToResolve(self):
+
+        from app.constants import LABEL_HYPEREDGE_NODE, LABEL_ENTITY
         query = 'match (n:'+LABEL_ENTITY+')--(c:'+LABEL_HYPEREDGE_NODE+') where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'AND not exists(c.' + self.metaprops['RESOLVEDHENID'] +') ' 
         query = query + 'return count(distinct c)'
+        print 'hhhhhhhhhhhh'
+        print query
         results = self.graph.cypher.execute(query)
         return results[0][0]
     
@@ -514,3 +537,29 @@ class SelectionAlgoGraphDB(GraphDB):
 
     def copyRelationWithEssentialNodeMeta(self, rel):
         return self.copyRelationWithoutMeta(rel, node_exceptions=[self.metaprops['RESOLVEDUUID']]) 
+
+
+
+class GraphObject():
+
+    def __init__(self, coredb):
+        self.coredb = coredb
+        self.crawldb = crawldb
+        ##so can handle graphdb throough that
+
+    def getCoreIDName(self): ##could have been class method as such but still ok
+        pass
+
+    def getCrawlIDName(self):
+        pass
+
+    def getDirectlyConnectedEntities(self):
+        pass
+
+    def setResolvedWithID(self, curr_id):
+        ##only on crawldb
+        pass
+
+    def insertCoreGraphObjectHelper(self):
+        pass
+
