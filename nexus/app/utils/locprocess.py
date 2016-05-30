@@ -31,7 +31,7 @@ def getCityState(address):
         print colored("fatal: Network Error!", 'red')
         exit(1)
 
-    # print loc
+    #print loc
     results = loc[0]["address_components"]
     print results
     try:
@@ -66,7 +66,7 @@ def getCityStateByPin(pincode):
 
 
 if __name__ == "__main__":
-    c, s = getCityState('West Bengal Kolkata')
+    c, s = getCityState('Andaman and Nicobar Islands South Andaman')
     #c, s = getCityStateByPin('700065')
     print c
     print s

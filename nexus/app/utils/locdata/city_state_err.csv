@@ -1,0 +1,16 @@
+,"ID","address_used","error","city","state","Remarks"
+0,14,"Andhra Pradesh Bhainsa","list index out of range","Adilabad","Telangana","given to telangana after split"
+1,17,"Andhra Pradesh Bhongir","list index out of range","Nalgonda","Telangana",
+2,47,"Andhra Pradesh Kamareddy","list index out of range","Nizamabad","Telangana",
+3,51,"Andhra Pradesh Koratla","list index out of range","Karimanagar","Telangana",
+4,61,"Andhra Pradesh Mandamarri","list index out of range","Adilabad","Telangana",
+5,104,"Arunachal Pradesh Kurung Kumey","list index out of range","Kurung Kumey","Arunachal Pradesh","not in google maps"
+6,294,"Chhattisgarh Mahendragarh","list index out of range","Koriya","Chhattisgarh","it is manendragarh not mahendragarh!"
+7,423,"Haryana Haibat(Yamuna Nagar)","list index out of range","Yamuna Nagar","Haryana","city name ambiguity"
+8,526,"Karnataka Aalanavara","list index out of range","Aalanavara","Karnataka","too small city to be listed"
+9,529,"Karnataka Alandha","list index out of range","Alandha","Karnataka","too small city to be listed"
+10,701,"Madhya Pradesh Lundi","list index out of range","Lundi","Madhya Pradesh","too small city to be listed"
+11,954,"Orissa Madhyamgram","list index out of range","North 24 parganas","West Bengal","it is not in orissa!"
+12,1085,"Rajasthan Navalgund","list index out of range","Dharwad","Karnataka","it is not in rajasthan!"
+13,1088,"Rajasthan Nelamangala","list index out of range","Bangalore Rural","Karnataka",
+14,1100,"Rajasthan Prantij","list index out of range","Sabarkatha","Gujarat",

@@ -1,0 +1,1380 @@
+,"SID","city","id"
+0,1,"Nicobar",0
+1,1,"North and Middle Andaman",1
+2,1,"South Andaman",2
+3,2,"Kurnool",3
+4,2,"Srikakulam",4
+5,2,"East Godavari",5
+6,2,"Vishakhapatnam",6
+7,2,"Anantapuram",7
+8,2,"Guntur",8
+9,2,"Kurnool",9
+10,2,"Guntur",10
+11,2,"Prakasam",11
+12,2,"Kurnool",12
+13,31,"Khammam",13
+14,2,"Vishakhapatnam",14
+15,2,"West Godavari",15
+16,2,"Vizianagaram",16
+17,2,"Nizamabad",17
+18,2,"Kurnool",18
+19,2,"Guntur",19
+20,2,"Prakasam",20
+21,2,"Chittoor",21
+22,2,"Kadapa",22
+23,2,"Chittoor",23
+24,2,"Anantapuram",24
+25,2,"West Godavari",25
+26,31,"Mahabubnagar",26
+27,31,"Mahabubnagar",27
+28,2,"Anantapuram",28
+29,2,"Krishna",29
+30,2,"Nellore",30
+31,2,"Anantapuram",31
+32,2,"Guntur",32
+33,2,"Krishna",33
+34,2,"Anantapuram",34
+35,2,"Srikakulam",35
+36,2,"Krishna",36
+37,31,"Karimnagar",37
+38,2,"Kadapa",38
+39,2,"Adilabad",39
+40,2,"Kadapa",40
+41,2,"Anantapuram",41
+42,31,"Adilabad",42
+43,2,"East Godavari",43
+44,2,"Anantapuram",44
+45,2,"Prakasam",45
+46,2,"Nellore",46
+47,31,"Nalgonda",47
+48,2,"West Godavari",48
+49,2,"East Godavari",49
+50,2,"West Godavari",50
+51,2,"Kurnool",51
+52,2,"Chittoor",52
+53,2,"Guntur",53
+54,2,"Krishna",54
+55,2,"Chittoor",55
+56,31,"Adilabad",56
+57,2,"East Godavari",57
+58,2,"Guntur",58
+59,31,"Khammam",59
+60,2,"Prakasam",60
+61,31,"Nalgonda",61
+62,2,"West Godavari",62
+63,2,"Chittoor",63
+64,31,"Mahabubnagar",64
+65,2,"Kurnool",65
+66,2,"West Godavari",66
+67,2,"Guntur",67
+68,2,"Mahabubnagar",68
+69,2,"Vishakhapatnam",69
+70,2,"Nellore",70
+71,2,"West Godavari",71
+72,2,"Krishna",72
+73,2,"Krishna",73
+74,2,"Prakasam",74
+75,2,"West Godavari",75
+76,2,"Srikakulam",76
+77,31,"Khammam",77
+78,2,"Vizianagaram",78
+79,2,"Krishna",79
+80,2,"East Godavari",80
+81,2,"East Godavari",81
+82,2,"Prakasam",82
+83,2,"Guntur",83
+84,2,"Kadapa",84
+85,2,"Chittoor",85
+86,2,"Chittoor",86
+87,2,"East Godavari",87
+88,2,"Krishna",88
+89,2,"Prakasam",89
+90,2,"Nellore",90
+91,2,"Srikakulam",91
+92,2,"Vishakhapatnam",92
+93,2,"Vizianagaram",93
+94,2,"West Godavari",94
+95,2,"Kadapa",95
+96,3,"East Siang",98
+97,3,"Lohit",99
+98,3,"Lower Dibang Valley",100
+99,3,"Tirap",104
+100,4,"Cachar",109
+101,4,"Darrang",110
+102,4,"Dhemaji",111
+103,4,"Dima Hasao",112
+104,4,"Kamrup",113
+105,4,"Karbi Anglong",114
+106,4,"Lakhimpur",115
+107,4,"Sivasagar",116
+108,4,"Sonitpur",117
+109,4,"Tinsukia",118
+110,4,"Bongaigaon",119
+111,4,"Sonitpur",120
+112,4,"Dhubri",121
+113,4,"Barpeta",122
+114,4,"Barpeta",123
+115,4,"Dhubri",124
+116,4,"Bongaigaon",125
+117,4,"Sonitpur",126
+118,4,"Dhubri",127
+119,4,"Dibrugarh",128
+120,4,"Tinsukia",129
+121,4,"Karbi Anglong",130
+122,4,"Kamrup",131
+123,4,"Dibrugarh",132
+124,4,"Dhubri",133
+125,4,"Goalpara",134
+126,4,"Golaghat",135
+127,4,"Kamrup",136
+128,4,"Dima Hasao",137
+129,4,"Hailakandi",138
+130,4,"Nagaon",139
+131,4,"Jorhat",140
+132,4,"Karimganj",141
+133,4,"Kokrajhar",142
+134,4,"Nagaon",143
+135,4,"Nagaon",144
+136,4,"Darrang",145
+137,4,"Dhubri",146
+138,4,"Tinsukia",147
+139,4,"Jorhat",148
+140,4,"Morigaon",149
+141,4,"Nagaon",150
+142,4,"Nalbari",151
+143,4,"Lakhimpur",152
+144,5,"Banka",153
+145,5,"Araria",154
+146,5,"Purvi Champaran",155
+147,5,"Bhojpur",156
+148,5,"Bhojpur",157
+149,5,"Munger",158
+150,5,"Aurangabad",159
+151,5,"Gaya",160
+152,5,"Kishanganj",161
+153,5,"Sitamarhi",162
+154,5,"Saharsa",163
+155,5,"Banka",164
+156,5,"Purnia",165
+157,5,"Lakhisarai",166
+158,5,"Gopalganj",167
+159,5,"Sheikhpura",168
+160,5,"Patna",169
+161,5,"Begusarai",170
+162,5,"Bhojpur",171
+163,5,"Pashchim Champaran",172
+164,5,"Kaimur",173
+165,5,"Bhagalpur",174
+166,5,"Bhojpur",175
+167,5,"Nalanda",176
+168,5,"Rohtas",177
+169,5,"Gaya",178
+170,5,"Buxar",179
+171,5,"Purvi Champaran",180
+172,5,"Pashchim Champaran",181
+173,5,"Saran",182
+174,5,"Bhagalpur",183
+175,5,"Samastipur",184
+176,5,"Darbhanga",185
+177,5,"Aurangabad",186
+178,5,"Rohtas",187
+179,5,"Saran",188
+180,5,"Buxar",189
+181,5,"Purvi Champaran",190
+182,5,"Patna",191
+183,5,"Araria",192
+184,5,"Gaya",193
+185,5,"Khagaria",194
+186,5,"Gopalganj",195
+187,5,"Katihar",196
+188,5,"Nalanda",197
+189,5,"Nawada",198
+190,5,"Nalanda",199
+191,5,"Bhojpur",200
+192,5,"Munger",201
+193,5,"Jamui",202
+194,5,"Jehanabad",203
+195,5,"Jamui",204
+196,5,"Madhubani",205
+197,5,"Araria",206
+198,5,"Kaimur",207
+199,5,"Muzaffarpur",208
+200,5,"Katihar",209
+201,5,"Khagaria",210
+202,5,"Munger",211
+203,5,"Kishanganj",212
+204,5,"Lakhisarai",213
+205,5,"Vaishali",214
+206,5,"Madhepura",215
+207,5,"Madhubani",216
+208,5,"Siwan",217
+209,5,"Vaishali",218
+210,5,"Jehanabad",219
+211,5,"Patna",220
+212,5,"Katihar",221
+213,5,"Saran",222
+214,5,"Patna",223
+215,5,"Gopalganj",224
+216,5,"Kaimur",225
+217,5,"Patna",226
+218,5,"Patna",227
+219,5,"Purvi Champaran",228
+220,5,"Muzaffarpur",229
+221,5,"Munger",230
+222,5,"Madhepura",231
+223,5,"Muzaffarpur",232
+224,5,"Nalanda",233
+225,5,"Pashchim Champaran",234
+226,5,"Bhagalpur",235
+227,5,"Nawada",236
+228,5,"Rohtas",237
+229,5,"Patna",238
+230,5,"Bhojpur",239
+231,5,"Purnia",240
+232,5,"Rohtas",241
+233,5,"Saharsa",242
+234,5,"Samastipur",243
+235,5,"Saran",244
+236,5,"Sheikhpura",245
+237,5,"Sheohar",246
+238,5,"Sitamarhi",247
+239,5,"Siwan",248
+240,5,"Supaul",249
+241,5,"Muzaffarpur",250
+242,5,"Pashchim Champaran",251
+243,6,"Chandigarh",252
+244,7,"Durg",253
+245,7,"Janjgir-Champa",254
+246,7,"Rajnandgaon",255
+247,7,"Surguja",256
+248,7,"Raipur",257
+249,7,"Dantewada",258
+250,7,"Durg",259
+251,7,"Raipur",260
+252,7,"Bastar",261
+253,7,"Mahasamund",262
+254,7,"Raipur",263
+255,7,"Raipur",264
+256,7,"Durg",265
+257,7,"Bilaspur",266
+258,7,"Dantewada",267
+259,7,"Raipur",268
+260,7,"Janjgir-Champa",269
+261,7,"Koriya",270
+262,7,"Dantewada",271
+263,7,"Durg",272
+264,7,"Dhamtari",273
+265,7,"Korba",274
+266,7,"Rajnandgaon",275
+267,7,"Durg",276
+268,7,"Raipur",277
+269,7,"Bastar",278
+270,7,"Janjgir-Champa",279
+271,7,"Jashpur",280
+272,7,"Kawardha",281
+273,7,"Kanker",282
+274,7,"Kawardha",283
+275,7,"Kondagaon",284
+276,7,"Korba",285
+277,7,"Koriya",286
+278,7,"Mahasamund",287
+279,7,"Bilaspur",288
+280,7,"Janjgir-Champa",289
+281,7,"Kondagaon",290
+282,7,"Raigarh",291
+283,7,"Raipur",292
+284,7,"Rajnandgaon",293
+285,7,"Surguja",294
+286,8,"Dadra and Nagar Haveli",295
+287,9,"Daman",296
+288,9,"Diu",297
+289,10,"Delhi",298
+290,10,"Delhi",299
+291,10,"Delhi",300
+292,10,"Delhi",301
+293,10,"Delhi",302
+294,10,"Delhi",303
+295,10,"Delhi",304
+296,10,"Delhi",305
+297,10,"Delhi",306
+298,10,"Delhi",307
+299,10,"Delhi",308
+300,11,"Aldona",309
+301,11,"Curchorem Cacora",310
+302,11,"Goa Velha",311
+303,11,"Madgaon",312
+304,11,"Mapusa",313
+305,11,"Margao",314
+306,11,"Marmagao",315
+307,11,"North Goa",316
+308,11,"Panaji",317
+309,11,"South Goa",318
+310,12,"Gandhinagar",319
+311,12,"Porbandar",320
+312,12,"Ahmedabad",321
+313,12,"Bhavnagar",322
+314,12,"Banaskantha",323
+315,12,"Mehsana",324
+316,12,"Amreli",325
+317,12,"Anand",326
+318,12,"Bharuch",327
+319,12,"Kutch",328
+320,12,"Anand",329
+321,12,"Bharuch",330
+322,12,"Amreli",331
+323,12,"Jamnagar",332
+324,12,"Valsad",333
+325,12,"Banaskantha",334
+326,12,"Bharuch",335
+327,12,"Bhavnagar",336
+328,12,"Kutch",337
+329,12,"Anand",338
+330,12,"Dahod",339
+331,12,"Dang",340
+332,12,"Banaskantha",341
+333,12,"Gandhinagar",342
+334,12,"Valsad",343
+335,12,"Ahmedabad",344
+336,12,"Jamnagar",345
+337,12,"Kutch",346
+338,12,"Gandhinagar",347
+339,12,"Panchmahal",348
+340,12,"Sabarkatha",349
+341,12,"Sabarkatha",350
+342,12,"Jamnagar",351
+343,12,"Junagadh",352
+344,12,"Kutch",353
+345,12,"Mehsana",354
+346,12,"Jamnagar",355
+347,12,"Panchmahal",356
+348,12,"Kheda",357
+349,12,"Vadodara",358
+350,12,"Junagadh",359
+351,12,"Jamnagar",360
+352,12,"Anand",361
+353,12,"Kheda",362
+354,12,"Sabarkatha",363
+355,12,"Mehsana",364
+356,12,"Junagadh",365
+357,12,"Amreli",366
+358,12,"Surendranagar",367
+359,12,"Panchmahal",368
+360,12,"Mehsana",369
+361,12,"Bhavnagar",370
+362,12,"Junagadh",371
+363,12,"Kutch",372
+364,12,"Junagadh",373
+365,12,"Gandhinagar",374
+366,12,"Kheda",375
+367,12,"Jamnagar",376
+368,12,"Aravalli",377
+369,12,"Morbi",378
+370,12,"Kheda",379
+371,12,"Narmada",380
+372,12,"Navsari",381
+373,12,"Vadodara",382
+374,12,"Banaskantha",383
+375,12,"Bhavnagar",384
+376,12,"Panchmahal",385
+377,12,"Valsad",386
+378,12,"Patan",387
+379,12,"Anand",388
+380,12,"Porbandar",389
+381,12,"Rajkot",390
+382,12,"Sabarkatha",391
+383,12,"Surat",392
+384,12,"Surendranagar",393
+385,12,"Tapi",394
+386,12,"Vadodara",395
+387,12,"Valsad",396
+388,13,"Ambala",397
+389,13,"Panipat",398
+390,13,"Karnal",399
+391,13,"Mahendragarh",400
+392,13,"Hisar",401
+393,13,"Jhajjar",402
+394,13,"Faridabad",403
+395,13,"Hisar",404
+396,13,"Rewari",405
+397,13,"Bhiwani",406
+398,13,"Bhiwani",407
+399,13,"Kaithal",408
+400,13,"Sirsa",409
+401,13,"Faridabad",410
+402,13,"Fatehabad",411
+403,13,"Sonepat",412
+404,13,"Karnal",413
+405,13,"Sonepat",414
+406,13,"Gurgaon",415
+407,13,"Hisar",416
+408,13,"Hisar",417
+409,13,"Palwal",418
+410,13,"Yamuna Nagar",419
+411,13,"Jhajjar",420
+412,13,"Jind",421
+413,13,"Kaithal",422
+414,13,"Sirsa",423
+415,13,"Panchkula",424
+416,13,"Karnal",425
+417,13,"Kurukshetra",426
+418,13,"Hisar",427
+419,13,"Mahendragarh",428
+420,13,"Sirsa",429
+421,13,"Gurgaon",430
+422,13,"Mahendragarh",431
+423,13,"Jind",432
+424,13,"Palwal",433
+425,13,"Panchkula",434
+426,13,"Panipat",435
+427,13,"Kurukshetra",436
+428,13,"Panchkula",437
+429,13,"Panipat",438
+430,13,"Rewari",439
+431,13,"Rohtak",440
+432,13,"Sirsa",441
+433,13,"Sonepat",442
+434,13,"Yamuna Nagar",443
+435,14,"Bilaspur",444
+436,14,"Chamba",445
+437,14,"Hamirpur",446
+438,14,"Kangra",447
+439,14,"Kinnaur",448
+440,14,"Kullu",449
+441,14,"Lahaul And Spiti",450
+442,14,"Mandi",451
+443,14,"Shimla",452
+444,14,"Sirmaur",453
+445,14,"Solan",454
+446,14,"Una",455
+447,15,"Bokaro",473
+448,15,"Ranchi",474
+449,15,"Ramgarh",475
+450,15,"Bokaro",476
+451,15,"West Singhbhum",477
+452,15,"West Singhbhum",478
+453,15,"Seraikela Kharsawan",479
+454,15,"Bokaro",480
+455,15,"Chatra",481
+456,15,"Dhanbad",482
+457,15,"Ranchi",483
+458,15,"Palamu",484
+459,15,"Deoghar",485
+460,15,"Dhanbad",486
+461,15,"Dumka",487
+462,15,"East Singhbhum",488
+463,15,"Garhwa",489
+464,15,"East Singhbhum",490
+465,15,"Giridih",491
+466,15,"Godda",492
+467,15,"Dhanbad",493
+468,15,"Bokaro",494
+469,15,"Gumla",495
+470,15,"Hazaribagh",496
+471,15,"Palamu",497
+472,15,"East Singhbhum",498
+473,15,"Jamtara",499
+474,15,"Koderma",500
+475,15,"Khunti",501
+476,15,"Koderma",502
+477,15,"Latehar",503
+478,15,"Lohardaga",504
+479,15,"Deoghar",505
+480,15,"Bardhaman",506
+481,15,"East Singhbhum",507
+482,15,"Pakur",508
+483,15,"Ramgarh",509
+484,15,"Palamu",510
+485,15,"Bokaro",511
+486,15,"Ramgarh",512
+487,15,"Ranchi",513
+488,15,"Sahibganj",514
+489,15,"Seraikela Kharsawan",515
+490,15,"Simdega",516
+491,15,"West Singhbhum",517
+492,16,"Dakshina Kannada",518
+493,16,"Gulbarga",519
+494,16,"Hassan",520
+495,16,"Uttara Kannada",521
+496,16,"Bangalore Urban",522
+497,16,"Uttara Kannada",523
+498,16,"Dharwad",524
+499,16,"Hassan",525
+500,16,"Hassan",526
+501,16,"Belagavi",527
+502,16,"Bidar",528
+503,16,"Bagalkot",529
+504,16,"Bellary",530
+505,16,"Bangalore Urban",531
+506,16,"Belagavi",532
+507,16,"Bangalore Urban",533
+508,16,"Bidar",534
+509,16,"Bijapur",535
+510,16,"Chamarajanagar",536
+511,16,"Chikballapur",537
+512,16,"Chikkamagaluru",538
+513,16,"Belagavi",539
+514,16,"Chikballapur",540
+515,16,"Chitradurga",541
+516,16,"Davanagere",542
+517,16,"Dharwad",543
+518,16,"Gadag",544
+519,16,"Gadag",545
+520,16,"Belagavi",546
+521,16,"Gulbarga",547
+522,16,"Chamarajanagar",548
+523,16,"Hassan",549
+524,16,"Haveri",550
+525,16,"Bellary",551
+526,16,"Dharwad",552
+527,16,"Belagavi",553
+528,16,"Udupi",554
+529,16,"Gulbarga",555
+530,16,"Uttara Kannada",556
+531,16,"Kodagu",557
+532,16,"Kolar",558
+533,16,"Udupi",559
+534,16,"Koppal",560
+535,16,"Belagavi",561
+536,16,"Raichur",562
+537,16,"Ramanagara",563
+538,16,"Dakshina Kannada",564
+539,16,"Raichur",565
+540,16,"Mandya",566
+541,16,"Tumkur",567
+542,16,"Kodagu",568
+543,16,"Bagalkot",569
+544,16,"Mandya",570
+545,16,"Mandya",571
+546,16,"Dakshina Kannada",572
+547,16,"Dakshina Kannada",573
+548,16,"Belagavi",574
+549,16,"Bijapur",575
+550,16,"Bagalkot",576
+551,16,"Kolar",577
+552,16,"Gadag",578
+553,16,"Mysuru",579
+554,16,"Mysuru",580
+555,16,"Gulbarga",581
+556,16,"Tumkur",582
+557,16,"Mysuru",583
+558,16,"Dakshina Kannada",584
+559,16,"Raichur",585
+560,16,"Ramanagara",586
+561,16,"Shimoga",587
+562,16,"Tumkur",588
+563,16,"Udupi",589
+564,16,"Uttara Kannada",590
+565,16,"Yadgir",591
+566,17,"Pathanamthitta",592
+567,17,"Thrissur",593
+568,17,"Alappuzha",594
+569,17,"Kannur",595
+570,17,"Kozhikode",596
+571,17,"Thrissur",597
+572,17,"Thiruvananthapuram",598
+573,17,"Thrissur",599
+574,17,"Thrissur",600
+575,17,"Kottayam",601
+576,17,"Ernakulam",602
+577,17,"Alappuzha",603
+578,17,"Alappuzha",604
+579,17,"Kannur",605
+580,17,"Palakkad",606
+581,17,"Kannur",607
+582,17,"Ernakulam",608
+583,17,"Kottayam",609
+584,17,"Thrissur",610
+585,17,"Idukki",611
+586,17,"Thrissur",612
+587,17,"Kannur",613
+588,17,"Kannur",614
+589,17,"Wayanad",615
+590,17,"Kasaragod",616
+591,17,"Alappuzha",617
+592,17,"Kannur",618
+593,17,"Kasaragod",619
+594,17,"Alappuzha",620
+595,17,"Ernakulam",621
+596,17,"Thrissur",622
+597,17,"Kollam",623
+598,17,"Kannur",624
+599,17,"Ernakulam",625
+600,17,"Kottayam",626
+601,17,"Kozhikode",627
+602,17,"Thrissur",628
+603,26,"Mahe",629
+604,17,"Malappuram",630
+605,17,"Kannur",631
+606,17,"Alappuzha",632
+607,17,"Kozhikode",633
+608,17,"Ernakulam",634
+609,17,"Thiruvananthapuram",635
+610,17,"Thiruvananthapuram",636
+611,17,"Malappuram",637
+612,17,"Palakkad",638
+613,17,"Kottayam",639
+614,17,"Palakkad",640
+615,17,"Kottayam",641
+616,17,"Kannur",642
+617,17,"Kannur",643
+618,17,"Kollam",644
+619,17,"Pathanamthitta",645
+620,17,"Kannur",646
+621,17,"Malappuram",647
+622,17,"Ernakulam",648
+623,17,"Kottayam",649
+624,17,"Malappuram",650
+625,17,"Kollam",651
+626,17,"Kottayam",652
+627,17,"Thrissur",653
+628,17,"Wayanad",654
+629,18,"Kavaratti",656
+630,19,"Jhabua",657
+631,19,"Anuppur",658
+632,19,"Ashoknagar",659
+633,19,"Tikamgarh",660
+634,19,"Balaghat",661
+635,19,"Barwani",662
+636,19,"Betul",663
+637,19,"Bhind",664
+638,19,"Bhopal",665
+639,19,"Burhanpur",666
+640,19,"Chhatarpur",667
+641,19,"Chhindwara",668
+642,19,"Satna",669
+643,19,"Gwalior",670
+644,19,"Damoh",671
+645,19,"Datia",672
+646,19,"Dewas",673
+647,19,"Dhar",674
+648,19,"Dindori",675
+649,19,"Fatehabad",676
+650,19,"Guna",677
+651,19,"Gwalior",678
+652,19,"Harda",679
+653,19,"Hoshangabad",680
+654,19,"Indore",681
+655,19,"Jabalpur",682
+656,19,"Jhabua",683
+657,19,"Morena",684
+658,19,"Katni",685
+659,19,"Khandwa",686
+660,19,"Khargone",687
+661,19,"Sagar",688
+662,19,"Anuppur",689
+663,19,"Bhind",690
+664,19,"Chhatarpur",691
+665,19,"Ashoknagar",692
+666,19,"Satna",693
+667,19,"Balaghat",694
+668,19,"Mandla",695
+669,19,"Neemuch",696
+670,19,"Dhar",697
+671,19,"Raisen",698
+672,19,"Mandla",699
+673,19,"Mandsaur",700
+674,19,"Rewa",701
+675,19,"Indore",702
+676,19,"Indore",703
+677,19,"Morena",704
+678,19,"Betul",705
+679,19,"Katni",706
+680,19,"Ujjain",707
+681,19,"Mandla",708
+682,19,"Rajgarh",709
+683,19,"Rajgarh",710
+684,19,"Narsinghpur",711
+685,19,"Neemuch",712
+686,19,"Khandwa",713
+687,19,"Tikamgarh",714
+688,19,"Chhatarpur",715
+689,19,"Umaria",716
+690,19,"Rajgarh",717
+691,19,"Umaria",718
+692,19,"Jabalpur",719
+693,19,"Chhindwara",720
+694,19,"Panna",721
+695,19,"Anuppur",722
+696,19,"Hoshangabad",723
+697,19,"Indore",724
+698,19,"Morena",725
+699,19,"Tikamgarh",726
+700,19,"Raisen",727
+701,19,"Rajgarh",728
+702,19,"Ratlam",729
+703,19,"Rewa",730
+704,19,"Sagar",731
+705,19,"Satna",732
+706,19,"Sehore",733
+707,19,"Seoni",734
+708,19,"Shahdol",735
+709,19,"Shajapur",736
+710,19,"Sheopur",737
+711,19,"Shivpuri",738
+712,19,"Sidhi",739
+713,19,"Singrauli",740
+714,19,"Tikamgarh",741
+715,19,"Ujjain",742
+716,19,"Umaria",743
+717,19,"Vidisha",744
+718,20,"Amravati",745
+719,20,"Ahmednagar",746
+720,20,"Latur",747
+721,20,"Sindhudurg",748
+722,20,"Solapur",749
+723,20,"Akola",750
+724,20,"Akola",751
+725,20,"Pune",752
+726,20,"Raigad",753
+727,20,"Beed",754
+728,20,"Solapur",755
+729,20,"Beed",756
+730,20,"Raigad",757
+731,20,"Amravati",758
+732,20,"Solapur",759
+733,20,"Wardha",760
+734,20,"Sangli",761
+735,20,"Aurangabad",762
+736,20,"Latur",763
+737,20,"Pune",764
+738,20,"Bhandara",765
+739,20,"Beed",766
+740,20,"Thane",767
+741,20,"Jalgaon",768
+742,20,"Buldhana",769
+743,20,"Jalgaon",770
+744,20,"Chandrapur",771
+745,20,"Thane",772
+746,20,"Ratnagiri",773
+747,20,"Pune",774
+748,20,"Sindhudurg",775
+749,20,"Dhule",776
+750,20,"Thane",777
+751,20,"Ahmednagar",778
+752,20,"Gadchiroli",779
+753,20,"Yavatmal",780
+754,20,"Gondia",781
+755,20,"Hingoli",782
+756,20,"Kolhapur",783
+757,20,"Jalgaon",784
+758,20,"Jalna",785
+759,20,"Pune",786
+760,20,"Thane",787
+761,20,"Nagpur",788
+762,20,"Satara",789
+763,20,"Raigad",790
+764,20,"Kolhapur",791
+765,20,"Latur",792
+766,20,"Nanded",793
+767,20,"Buldhana",794
+768,20,"Pune",795
+769,20,"Satara",796
+770,20,"Raigad",797
+771,20,"Thane",798
+772,20,"Nashik",799
+773,20,"Buldhana",800
+774,20,"Pune",801
+775,20,"Solapur",802
+776,20,"Washim",803
+777,20,"Beed",804
+778,20,"Nashik",805
+779,20,"Parbhani",806
+780,20,"Buldhana",807
+781,20,"Satara",808
+782,20,"Thane",809
+783,20,"Sangli",810
+784,20,"Amravati",811
+785,20,"Nanded",812
+786,20,"Chandrapur",813
+787,20,"Mumbai",814
+788,20,"Akola",815
+789,20,"Nagpur",816
+790,20,"Thane",817
+791,20,"Nanded",818
+792,20,"Raigad",819
+793,20,"Buldhana",820
+794,20,"Nandurbar",821
+795,20,"Solapur",822
+796,20,"Nashik",823
+797,20,"Thane",824
+798,20,"Nandurbar",825
+799,20,"Latur",826
+800,20,"Osmanabad",827
+801,20,"Nashik",828
+802,20,"Jalgaon",829
+803,20,"Aurangabad",830
+804,20,"Palghar",831
+805,20,"Yavatmal",832
+806,20,"Solapur",833
+807,20,"Raigad",834
+808,20,"Parbhani",835
+809,20,"Beed",836
+810,20,"Jalgaon",837
+811,20,"Jalna",838
+812,20,"Ahmednagar",839
+813,20,"Parbhani",840
+814,20,"Akola",841
+815,20,"Bhandara",842
+816,20,"Raigad",843
+817,20,"Satara",844
+818,20,"Wardha",845
+819,20,"Pune",846
+820,20,"Parbhani",847
+821,20,"Yavatmal",848
+822,20,"Raigad",849
+823,20,"Ratnagiri",850
+824,20,"Sangli",851
+825,20,"Satara",852
+826,20,"Sindhudurg",853
+827,20,"Solapur",854
+828,20,"Thane",855
+829,20,"Wardha",856
+830,20,"Washim",857
+831,20,"Yavatmal",858
+832,21,"Bishnupur",859
+833,21,"Chandel",860
+834,21,"Churachandpur",861
+835,21,"Imphal East",862
+836,21,"Imphal West",863
+837,21,"Senapati",864
+838,21,"Tamenglong",865
+839,21,"Thoubal",866
+840,21,"Ukhrul",867
+841,22,"East Garo Hills",868
+842,22,"East Khasi Hills",869
+843,22,"West Jaintia Hills",870
+844,22,"Ri-Bhoi",871
+845,22,"South Garo Hills",872
+846,22,"West Garo Hills",873
+847,22,"West Khasi Hills",874
+848,23,"Aizawl",875
+849,23,"Champhai",876
+850,23,"Kolasib",877
+851,23,"Lawngtlai",878
+852,23,"Lunglei",879
+853,23,"Mamit",880
+854,23,"Saiha",881
+855,23,"Serchhip",882
+856,24,"Dimapur",883
+857,24,"Kiphire",884
+858,24,"Kohima",885
+859,24,"Longleng",886
+860,24,"Mokokchung",887
+861,24,"Mon",888
+862,24,"Peren",889
+863,24,"Phek",890
+864,24,"Tuensang",891
+865,24,"Wokha",892
+866,24,"Zunheboto",893
+867,25,"Kendujhar",894
+868,25,"Angul",895
+869,25,"Angul",896
+870,25,"Ganjam",897
+871,25,"Balangir",898
+872,25,"Balasore",899
+873,25,"Balasore",900
+874,25,"Sundargarh",901
+875,25,"Kendujhar",902
+876,25,"Bargarh",903
+877,25,"Bargarh",904
+878,25,"Mayurbhanj",905
+879,25,"Bhadrak",906
+880,25,"Jharsuguda",907
+881,25,"Ganjam",908
+882,25,"Bhadrak",909
+883,25,"Kalahandi",910
+884,25,"Dhenkanal",911
+885,25,"Khordha",912
+886,25,"Sundargarh",913
+887,25,"Boudh",914
+888,25,"Ganjam",915
+889,25,"Jharsuguda",916
+890,25,"Sambalpur",917
+891,25,"Jajpur",918
+892,25,"Cuttack",919
+893,25,"Deogarh",920
+894,25,"Dhenkanal",921
+895,25,"Deogarh",922
+896,25,"Ganjam",923
+897,25,"Gajapati",924
+898,25,"Rayagada",925
+899,25,"Ganjam",926
+900,25,"Jagatsinghpur",927
+901,25,"Jajpur",928
+902,25,"Balasore",929
+903,25,"Khordha",930
+904,25,"Koraput",931
+905,25,"Jharsuguda",932
+906,25,"Kendujhar",933
+907,25,"Kalahandi",934
+908,25,"Balangir",935
+909,25,"Mayurbhanj",936
+910,25,"Kendrapara",937
+911,25,"Kendujhar",938
+912,25,"Kandhamal",939
+913,25,"Khordha",940
+914,25,"Koraput",941
+915,25,"Sambalpur",942
+916,25,"Malkangiri",943
+917,25,"Mayurbhanj",944
+918,25,"Nabarangpur",945
+919,25,"Nayagarh",946
+920,25,"Nuapada",947
+921,25,"Jagatsinghpur",948
+922,25,"Gajapati",949
+923,25,"Kendrapara",950
+924,25,"Kandhamal",951
+925,25,"Puri",952
+926,25,"Rayagada",953
+927,25,"Sambalpur",954
+928,25,"Subarnapur",955
+929,25,"Sundargarh",956
+930,26,"Karaikal",957
+931,26,"Mahe",958
+932,26,"Pondicherry",959
+933,27,"Sangrur",960
+934,27,"Amritsar",961
+935,27,"Barnala",962
+936,27,"Gurdaspur",963
+937,27,"Bathinda",964
+938,27,"Moga",965
+939,27,"Mansa",966
+940,27,"Hoshiarpur",967
+941,27,"Sangrur",968
+942,27,"Gurdaspur",969
+943,27,"Faridkot",970
+944,27,"Fazilka",971
+945,27,"Ferozepur",972
+946,27,"Ferozepur",973
+947,27,"Fatehgarh Sahib",974
+948,27,"Sri Muktsar Sahib",975
+949,27,"Ludhiana",976
+950,27,"Gurdaspur",977
+951,27,"Hoshiarpur",978
+952,27,"Ludhiana",979
+953,27,"Faridkot",980
+954,27,"Fazilka",981
+955,27,"Jalandhar",982
+956,27,"Jalandhar",983
+957,27,"Jalandhar",984
+958,27,"Hoshiarpur",985
+959,27,"Kapurthala",986
+960,27,"Sahibzada Ajit Singh Nagar",987
+961,27,"Jalandhar",988
+962,27,"Ludhiana",989
+963,27,"Sahibzada Ajit Singh Nagar",990
+964,27,"Faridkot",991
+965,27,"Sahibzada Ajit Singh Nagar",992
+966,27,"Sangrur",993
+967,27,"Ludhiana",994
+968,27,"Sangrur",995
+969,27,"Sri Muktsar Sahib",996
+970,27,"Mansa",997
+971,27,"Bathinda",998
+972,27,"Moga",999
+973,27,"Sahibzada Ajit Singh Nagar",1000
+974,27,"Rupnagar",1001
+975,27,"Sri Muktsar Sahib",1002
+976,27,"Hoshiarpur",1003
+977,27,"Sri Muktsar Sahib",1004
+978,27,"Patiala",1005
+979,27,"Jalandhar",1006
+980,27,"Rupnagar",1007
+981,27,"Shaheed Bhagat Singh Nagar",1008
+982,27,"Pathankot",1009
+983,27,"Patiala",1010
+984,27,"Patiala",1011
+985,27,"Tarn Taran",1012
+986,27,"Kapurthala",1013
+987,27,"Jalandhar",1014
+988,27,"Rupnagar",1015
+989,27,"Sangrur",1016
+990,27,"Shaheed Bhagat Singh Nagar",1017
+991,27,"Tarn Taran",1018
+992,28,"Ajmer",1019
+993,28,"Alwar",1020
+994,28,"Pali",1021
+995,28,"Dausa",1022
+996,28,"Banswara",1023
+997,28,"Baran",1024
+998,28,"Barmer",1025
+999,28,"Ajmer",1026
+1000,28,"Bharatpur",1027
+1001,28,"Bhilwara",1028
+1002,28,"Jalore",1029
+1003,28,"Bikaner",1030
+1004,28,"Jodhpur",1031
+1005,28,"Alwar",1032
+1006,28,"Bundi",1033
+1007,28,"Chittaurgarh",1034
+1008,28,"Churu",1035
+1009,28,"Dausa",1036
+1010,28,"Dhaulpur",1037
+1011,28,"Pali",1038
+1012,28,"Dungarpur",1039
+1013,28,"Pali",1040
+1014,28,"Sikar",1041
+1015,28,"Sri Ganganagar",1042
+1016,28,"Hanumangarh",1043
+1017,28,"Sikar",1044
+1018,28,"Jaipur",1045
+1019,28,"Jaisalmer",1046
+1020,28,"Pali",1047
+1021,28,"Jalore",1048
+1022,28,"Jhalawar",1049
+1023,28,"Jhunjhunu",1050
+1024,28,"Jodhpur",1051
+1025,28,"Karauli",1052
+1026,28,"Kota",1053
+1027,28,"Alwar",1054
+1028,28,"Nagaur",1055
+1029,28,"Bundi",1056
+1030,28,"Dausa",1057
+1031,28,"Sikar",1058
+1032,28,"Dausa",1059
+1033,28,"Nagaur",1060
+1034,28,"Tonk",1061
+1035,28,"Bhilwara",1062
+1036,28,"Jhunjhunu",1063
+1037,28,"Baran",1064
+1038,28,"Nagaur",1065
+1039,28,"Sirohi",1066
+1040,28,"Bharatpur",1067
+1041,28,"Bharatpur",1068
+1042,28,"Nagaur",1069
+1043,16,"Gadag",1070
+1044,28,"Ajmer",1071
+1045,28,"Rajsamand",1072
+1046,28,"Jhunjhunu",1073
+1047,28,"Sikar",1074
+1048,28,"Chittaurgarh",1075
+1049,28,"Tonk",1076
+1050,28,"Hanumangarh",1077
+1051,28,"Bikaner",1078
+1052,28,"Pali",1079
+1053,28,"Nagaur",1080
+1054,28,"Jaipur",1081
+1055,28,"Jhunjhunu",1082
+1056,28,"Hanumangarh",1083
+1057,28,"Sirohi",1084
+1058,28,"Jodhpur",1085
+1059,28,"Pratapgarh",1086
+1060,28,"Rajsamand",1087
+1061,28,"Sawai Madhopur",1088
+1062,28,"Sikar",1089
+1063,28,"Sirohi",1090
+1064,28,"Tonk",1091
+1065,28,"Udaipur",1092
+1066,29,"East Sikkim",1093
+1067,29,"North Sikkim",1094
+1068,29,"South Sikkim",1095
+1069,29,"West Sikkim",1096
+1070,30,"Vellore",1097
+1071,30,"Vellore",1098
+1072,30,"Ariyalur",1099
+1073,30,"Virudhunagar",1100
+1074,30,"Erode",1101
+1075,30,"Kanchipuram",1102
+1076,30,"Chennai",1103
+1077,30,"Villupuram",1104
+1078,30,"Coimbatore",1105
+1079,30,"Nilgiris",1106
+1080,30,"Cuddalore",1107
+1081,30,"Dharmapuri",1108
+1082,30,"Dindigul",1109
+1083,30,"Erode",1110
+1084,30,"Villupuram",1111
+1085,30,"Erode",1112
+1086,30,"Coimbatore",1113
+1087,30,"Coimbatore",1114
+1088,30,"Coimbatore",1115
+1089,30,"Ariyalur",1116
+1090,30,"Kanchipuram",1117
+1091,30,"Kanyakumari",1118
+1092,30,"Sivaganga",1119
+1093,30,"Kanyakumari",1120
+1094,30,"Karur",1121
+1095,30,"Kanyakumari",1122
+1096,30,"Krishnagiri",1123
+1097,30,"Tiruchirappalli",1124
+1098,30,"Madurai",1125
+1099,30,"Nagapattinam",1126
+1100,30,"Kanyakumari",1127
+1101,30,"Namakkal",1128
+1102,30,"Namakkal",1129
+1103,30,"Kanchipuram",1130
+1104,30,"Thanjavur",1131
+1105,30,"Dindigul",1132
+1106,30,"Cuddalore",1133
+1107,30,"Cuddalore",1134
+1108,30,"Nilgiris",1135
+1109,30,"Nilgiris",1136
+1110,30,"Dindigul",1137
+1111,30,"Salem",1138
+1112,30,"Kanyakumari",1139
+1113,30,"Kanyakumari",1140
+1114,30,"Dindigul",1141
+1115,30,"Tiruppur",1142
+1116,30,"Karur",1143
+1117,30,"Vellore",1144
+1118,30,"Tirunelveli",1145
+1119,30,"Cuddalore",1146
+1120,30,"Ramanathapuram",1147
+1121,30,"Cuddalore",1148
+1122,30,"Thanjavur",1149
+1123,30,"Perambalur",1150
+1124,30,"Thanjavur",1151
+1125,30,"Theni",1152
+1126,30,"Erode",1153
+1127,30,"Vellore",1154
+1128,30,"Coimbatore",1155
+1129,30,"Tiruvannamalai",1156
+1130,30,"Tiruvallur",1157
+1131,30,"Pudukkottai",1158
+1132,30,"Kanchipuram",1159
+1133,30,"Tirunelveli",1160
+1134,30,"Karur",1161
+1135,30,"Coimbatore",1162
+1136,30,"Salem",1163
+1137,30,"Sivaganga",1164
+1138,30,"Thanjavur",1165
+1139,30,"Theni",1166
+1140,30,"Tiruchirappalli",1167
+1141,30,"Tirunelveli",1168
+1142,30,"Tiruvallur",1169
+1143,30,"Tiruvannamalai",1170
+1144,30,"Thiruvarur",1171
+1145,30,"Thoothukudi",1172
+1146,30,"Vellore",1173
+1147,30,"Villupuram",1174
+1148,30,"Virudhunagar",1175
+1149,31,"Adilabad",1176
+1150,31,"Hyderabad",1177
+1151,31,"Karimnagar",1178
+1152,31,"Khammam",1179
+1153,31,"Mahabubnagar",1180
+1154,31,"Medak",1181
+1155,31,"Nalgonda",1182
+1156,31,"Nizamabad",1183
+1157,31,"Ranga Reddy",1184
+1158,31,"Warangal",1185
+1159,32,"West Tripura",1186
+1160,32,"West Tripura",1187
+1161,32,"Dhalai",1188
+1162,32,"North Tripura",1189
+1163,32,"South Tripura",1190
+1164,32,"West Tripura",1191
+1165,32,"North Tripura",1192
+1166,32,"West Tripura",1193
+1167,32,"West Tripura",1194
+1168,32,"North Tripura",1195
+1169,32,"West Tripura",1196
+1170,32,"West Tripura",1197
+1171,33,"Mathura",1198
+1172,33,"Mau",1199
+1173,33,"Agra",1200
+1174,33,"Aligarh",1201
+1175,33,"Allahabad",1202
+1176,33,"Ambedkar Nagar",1203
+1177,33,"Amroha",1204
+1178,33,"Auraiya",1205
+1179,33,"Azamgarh",1206
+1180,33,"Badaun",1207
+1181,33,"Bagpat",1208
+1182,33,"Bahraich",1209
+1183,33,"Ballia",1210
+1184,33,"Balrampur",1211
+1185,33,"Banda",1212
+1186,33,"Barabanki",1213
+1187,33,"Bareilly",1214
+1188,33,"Etawah",1215
+1189,33,"Bijnor",1216
+1190,33,"Badaun",1217
+1191,33,"Bulandshahar",1218
+1192,33,"Etah",1219
+1193,33,"Chandauli",1220
+1194,33,"Sambhal",1221
+1195,33,"Mahoba",1222
+1196,33,"Chitrakoot",1223
+1197,33,"Gautam Buddh Nagar",1224
+1198,33,"Deoria",1225
+1199,33,"Bijnor",1226
+1200,33,"Etah",1227
+1201,33,"Etawah",1228
+1202,33,"Faizabad",1229
+1203,33,"Farrukhabad",1230
+1204,33,"Agra",1231
+1205,33,"Farrukhabad",1232
+1206,33,"Fatehpur",1233
+1207,33,"Fatehpur",1234
+1208,33,"Unnao",1235
+1209,33,"Agra",1236
+1210,33,"Firozabad",1237
+1211,33,"Kanpur Nagar",1238
+1212,33,"Gautam Buddh Nagar",1239
+1213,33,"Ghaziabad",1240
+1214,33,"Ghazipur",1241
+1215,33,"Gonda",1242
+1216,33,"Gorakhpur",1243
+1217,33,"Gautam Buddh Nagar",1244
+1218,33,"Hamirpur",1245
+1219,33,"Ghaziabad",1246
+1220,33,"Hardoi",1247
+1221,33,"Meerut",1248
+1222,33,"Hathras",1249
+1223,33,"Rae Bareli",1250
+1224,33,"Hardoi",1251
+1225,33,"Jalaun",1252
+1226,33,"Jaunpur",1253
+1227,33,"Jhansi",1254
+1228,33,"Amroha",1255
+1229,33,"Kannauj",1256
+1230,33,"Jalaun",1257
+1231,33,"Kanpur Nagar",1258
+1232,33,"Kanpur Nagar",1259
+1233,33,"Kaushambi",1260
+1234,33,"Lakhimpur Kheri",1261
+1235,33,"Sonbhadra",1262
+1236,33,"Mahoba",1263
+1237,33,"Kushinagar",1264
+1238,33,"Sitapur",1265
+1239,33,"Lakhimpur Kheri",1266
+1240,33,"Pratapgarh",1267
+1241,33,"Mirzapur",1268
+1242,33,"Lalitpur",1269
+1243,33,"Deoria",1270
+1244,33,"Ghaziabad",1271
+1245,33,"Lucknow",1272
+1246,33,"Mahoba",1273
+1247,33,"Maharajganj",1274
+1248,33,"Mainpuri",1275
+1249,33,"Mathura",1276
+1250,33,"Mau",1277
+1251,33,"Meerut",1278
+1252,33,"Mirzapur",1279
+1253,33,"Ghaziabad",1280
+1254,33,"Moradabad",1281
+1255,33,"Ghaziabad",1282
+1256,33,"Muzaffarnagar",1283
+1257,33,"Bijnor",1284
+1258,33,"Bijnor",1285
+1259,33,"Saharanpur",1286
+1260,33,"Bahraich",1287
+1261,33,"Bulandshahar",1288
+1262,33,"Amroha",1289
+1263,33,"Maharajganj",1290
+1264,33,"Gonda",1291
+1265,33,"Bijnor",1292
+1266,33,"Gautam Buddh Nagar",1293
+1267,33,"Bijnor",1294
+1268,33,"Sonbhadra",1295
+1269,33,"Jalaun",1296
+1270,33,"Kushinagar",1297
+1271,33,"Lakhimpur Kheri",1298
+1272,33,"Sonbhadra",1299
+1273,33,"Allahabad",1300
+1274,33,"Hardoi",1301
+1275,33,"Pilibhit",1302
+1276,33,"Hapur",1303
+1277,33,"Shahjahanpur",1304
+1278,33,"Pratapgarh",1305
+1279,33,"Kanpur Dehat",1306
+1280,33,"Pilibhit",1307
+1281,33,"Muzaffarnagar",1308
+1282,33,"Unnao",1309
+1283,33,"Rae Bareli",1310
+1284,33,"Kanpur Dehat",1311
+1285,33,"Rampur",1312
+1286,33,"Saharanpur",1313
+1287,33,"Sant Kabir Nagar",1314
+1288,33,"Sant Ravidas Nagar",1315
+1289,33,"Shahjahanpur",1316
+1290,33,"Shrawasti",1317
+1291,33,"Siddharthnagar",1318
+1292,33,"Sitapur",1319
+1293,33,"Sonbhadra",1320
+1294,33,"Sultanpur",1321
+1295,33,"Unnao",1322
+1296,33,"Varanasi",1323
+1297,34,"Almora",1324
+1298,34,"Bageshwar",1325
+1299,34,"Udham Singh Nagar",1326
+1300,34,"Pithoragharh",1327
+1301,34,"Chamoli",1328
+1302,34,"Tehri Garhwal",1329
+1303,34,"Champawat",1330
+1304,34,"Pithoragarh",1331
+1305,34,"Dehradun",1332
+1306,34,"Nainital",1333
+1307,34,"Haridwar",1334
+1308,34,"Udham Singh Nagar",1335
+1309,34,"Bageshwar",1336
+1310,34,"Udham Singh Nagar",1337
+1311,34,"Udham Singh Nagar",1338
+1312,34,"Pauri Garhwal",1339
+1313,34,"Haridwar",1340
+1314,34,"Dehradun",1341
+1315,34,"Udham Singh Nagar",1342
+1316,34,"Nainital",1343
+1317,34,"Pauri Garhwal",1344
+1318,34,"Pithoragharh",1345
+1319,34,"Rudraprayag",1346
+1320,34,"Tehri Garhwal",1347
+1321,34,"Udham Singh Nagar",1348
+1322,34,"Uttarkashi",1349
+1323,35,"Purulia",1350
+1324,35,"Jalpaiguri",1351
+1325,35,"Hooghly",1352
+1326,35,"Bardhaman",1353
+1327,35,"Hooghly",1354
+1328,35,"Howrah",1355
+1329,35,"Dakshin Dinajpur",1356
+1330,35,"Bankura",1357
+1331,35,"Bardhaman",1358
+1332,35,"South 24 Parganas",1359
+1333,35,"Bardhaman",1360
+1334,35,"North 24 Parganas",1361
+1335,35,"Darjeeling",1362
+1336,35,"Birbhum",1363
+1337,35,"Hooghly",1364
+1338,35,"Purba Medinipur",1365
+1339,35,"Cooch Behar",1366
+1340,35,"Dakshin Dinajpur",1367
+1341,35,"Uttar Dinajpur",1368
+1342,35,"Darjeeling",1369
+1343,35,"Murshidabad",1370
+1344,35,"Kolkata",1371
+1345,35,"Bardhaman",1372
+1346,35,"North 24 Parganas",1373
+1347,35,"Purba Medinipur",1374
+1348,35,"Howrah",1375
+1349,35,"Hooghly",1376
+1350,35,"Uttar Dinajpur",1377
+1351,35,"Jalpaiguri",1378
+1352,35,"West Medinipur",1379
+1353,35,"Darjeeling",1380
+1354,35,"West Medinipur",1381
+1355,35,"Kolkata",1382
+1356,35,"Hooghly",1383
+1357,35,"Nadia",1384
+1358,35,"Jalpaiguri",1385
+1359,35,"Jalpaiguri",1386
+1360,35,"Malda",1387
+1361,35,"Cooch Behar",1388
+1362,35,"West Medinipur",1389
+1363,35,"Bardhaman",1390
+1364,35,"Birbhum",1391
+1365,35,"Murshidabad",1392
+1366,35,"Nadia",1393
+1367,35,"North 24 Parganas",1394
+1368,35,"North 24 Parganas",1395
+1369,35,"Howrah",1396
+1370,35,"Hooghly",1397
+1371,35,"Murshidabad",1398
+1372,35,"Purulia",1399
+1373,35,"North 24 Parganas",1400
+1374,35,"West Medinipur",1401
+1375,35,"Purba Medinipur",1402
+1376,35,"Purulia",1403
+1377,35,"South 24 Parganas",1404
+1378,35,"Uttar Dinajpur",1405
