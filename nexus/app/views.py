@@ -108,22 +108,22 @@ def temp():
     return render_template("temp.html", homeclass="active", temptext=str(nayaperson.id)+" "
         +str(naya_kitty.id))
 
-@app.route('/search/', methods = ['GET','POST'])
+@app.route('/search/', methods = ['POST'])
 def search():
-    print 'inside method'
-    name = request.form['query']
-    print 'query not printed'
-    print name
+    print 'inside method rrrrrrrrrrrrrrrrrrrrrr'
+    name = request.form.get('query')
+    rows = request.form.get('rows')
+    labels = request.form.get('labels')
+    keywords = request.form.get('keywords')
+    print name, rows, labels, keywords
     from app.solr.searchsolr_phonetic import get_uuids
-    uuids = get_uuids(name=name, rows=10, aliases = [name], keywords = ['iit'])
-    return render_template("search_results.html",searchtext="Here!!", uuids= uuids)
+    uuids = get_uuids(name=name, rows=10, aliases = [name], keywords = [])
+    return render_template("search_results.html", uuids= uuids, name=name)
+
 
 @app.route('/advsearch/', methods = ['GET','POST'])
 def advsearch():
     name = request.form['query']
-    rows = request.form['rows']
-    labels = request.form['labels']
-    keywords = request.form['keywords']
     print name
     from app.solr.searchsolr_phonetic import get_uuids
     uuids = get_uuids(name=name, rows=10, aliases = [name], keywords = ['iit'])

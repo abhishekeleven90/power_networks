@@ -33,6 +33,18 @@
             <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js">
             </script>
             <![endif]-->
+
+
+            <!--body scripts -->
+            <script src="{{ url_for('static', filename='js/jquery.min.js') }}">
+                    </script>
+            <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}">
+                    </script>
+                    <!--//-->
+            <script src="{{ url_for('static', filename='js/ie10-viewport-bug-workaround.js') }}">
+                    </script>
+            <!--body scripts -->
+
         {% endblock %}
     </head>
     <body>
@@ -151,15 +163,6 @@
                     </footer>
                 </div>
 
-                {%block bodyscripts%}
-                    <script src="{{ url_for('static', filename='js/jquery.min.js') }}">
-                    </script>
-                    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}">
-                    </script>
-                    <!--//-->
-                    <script src="{{ url_for('static', filename='js/ie10-viewport-bug-workaround.js') }}">
-                    </script>
-                {%endblock%}
             
 
         {% endblock %}

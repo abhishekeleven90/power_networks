@@ -9,6 +9,17 @@
 
 <link href="{{ url_for('static', filename='css/advanced_search.css') }}" rel="stylesheet">
 
+ <script src="{{ url_for('static', filename='js/jquery.min.js') }}">
+                    </script>
+
+<script>
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.document.location = $(this).data("href");
+    });
+});
+</script>
+
 
 {%endblock%}
 
@@ -24,16 +35,23 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
+            <form class="form-horizontal" role="form" method="post" action={{url_for('search')}}>
             <div class="input-group" id="adv-search">
                 
-                <input type="text" class="form-control" placeholder="Search for snippets" name="name"/>
+                <input type="text" class="form-control" placeholder="Search for snippets" name="query" value = "{{name}}"/>
 
                 <div class="input-group-btn">
                     <div class="btn-group" role="group">
                         <div class="dropdown dropdown-lg">
+                            
+                            
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+
+
                             <div class="dropdown-menu dropdown-menu-right" role="menu">
-                                <form class="form-horizontal" role="form">
+
+
+                                
                                   
                                   <div class="form-group">
                                     <label for="rows">Number of Results</label>
@@ -61,19 +79,22 @@
 
 
 
-                                  <button type="submit" class="btn btn-primary">
-                                    <span class="glyphicon glyphicon-star" >
-                                    </span>
-                                  </button>
-                                </form>
+                                          <button type="submit" class="btn btn-primary">
+                                            <span class="glyphicon glyphicon-star" >
+                                            </span>
+                                          </button>
+                                
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary">
+
+                        <button type="submit" class="btn btn-primary">
                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                         </button>
+
                     </div>
                 </div>
             </div>
+            </form>
           </div>
         </div>
     </div>
@@ -102,7 +123,8 @@
         </tr>
 
         {% for uuid in uuids %}
-        <tr>
+
+        <tr class='clickable-row' data-href="{{url_for('readEntity',uuid=uuid|int)}}">
             <td>
                     {{uuid}}
             </td>
