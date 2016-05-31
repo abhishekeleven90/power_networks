@@ -11,9 +11,9 @@ from app.constants import SOLR_CORE, SOLR_HOST, SOLR_PORT
 ##TODO: use constants, and test with guest.route
 
 
-def get_uuids(labels=None, name=None, aliases=None, keywords=None, jaro=True):
+def get_uuids(labels=['person'], name=None, aliases=None, keywords=None, jaro=True, rows= 100):
 
-    default_url="http://"+SOLR_HOST+":"+SOLR_PORT+"/solr/"+SOLR_CORE+"/select?q=*%3A*\
+    default_url="http://"+str(SOLR_HOST)+":"+str(SOLR_PORT)+"/solr/"+str(SOLR_CORE)+"/select?q=*%3A*\
             &wt=python&rows=50000&indent=true"
     t = time()
 
@@ -25,8 +25,8 @@ def get_uuids(labels=None, name=None, aliases=None, keywords=None, jaro=True):
         print "[get_uuid_solr] - No name-returning empty uuid list"
         return []
 
-    base_url = "http://"+SOLR_HOST+":"+SOLR_PORT+"/solr/"+"/select?q="
-    rest_url = "&wt=python&rows=50000&indent=true"
+    base_url = "http://"+str(SOLR_HOST)+":"+str(SOLR_PORT)+"/solr/"+str(SOLR_CORE)+"/select?q="
+    rest_url = "&wt=python&rows="+str(rows)+"&indent=true"
     label_str = 'labels%3A('+urllib.quote_plus(' '.join(labels)) + ')'
 
     if aliases is None or aliases == []:

@@ -1,0 +1,124 @@
+<!-- extend base layout -->
+
+{% extends "basic.html" %}
+
+
+{% block head %}
+
+{{ super() }}
+
+<link href="{{ url_for('static', filename='css/advanced_search.css') }}" rel="stylesheet">
+
+
+{%endblock%}
+
+{% block content %}
+
+
+
+<br/>
+<br/>
+<br/>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="input-group" id="adv-search">
+                
+                <input type="text" class="form-control" placeholder="Search for snippets" name="name"/>
+
+                <div class="input-group-btn">
+                    <div class="btn-group" role="group">
+                        <div class="dropdown dropdown-lg">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                            <div class="dropdown-menu dropdown-menu-right" role="menu">
+                                <form class="form-horizontal" role="form">
+                                  
+                                  <div class="form-group">
+                                    <label for="rows">Number of Results</label>
+                                    <select class="form-control" name="rows">
+                                        <option value="10" selected>10 Results</option>
+                                        <option value="20">20 Results</option>
+                                        <option value="50">50 Results</option>
+                                        <option value="70">70 Results</option>
+                                        <option value="100">100 Results</option>
+                                    </select>
+                                  </div>
+
+
+                                  <div class="form-group">
+                                    <label for="labels">Labels (Spaces in between)</label>
+                                    <input class="form-control" type="text" name="labels"/>
+                                  </div>
+
+
+
+                                  <div class="form-group">
+                                    <label for="keywords">Keywords (Spaces in between)</label>
+                                    <input class="form-control" type="text" name = "keywords"/>
+                                  </div>
+
+
+
+                                  <button type="submit" class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-star" >
+                                    </span>
+                                  </button>
+                                </form>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary">
+                           <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <br/>
+    <br/>
+    <br/>
+
+    <table class="table table-hover">
+        <tr>
+            <td>
+                <b>
+                    uuid
+                </b>
+            </td>
+            <td>
+                <b>
+                    name
+                </b>
+            </td>
+            <td>
+                <b>
+                    labels
+                </b>
+            </td>
+        </tr>
+
+        {% for uuid in uuids %}
+        <tr>
+            <td>
+                    {{uuid}}
+            </td>
+            <td>
+                    No Name
+            </td>
+            <td>
+                    No labels
+            </td>
+        </tr>            
+        {% endfor %}
+    </table>
+</div>
+
+
+
+    
+
+{% endblock %}

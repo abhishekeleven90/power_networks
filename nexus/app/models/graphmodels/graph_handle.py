@@ -130,12 +130,16 @@ class GraphHandle():
         '''    
         from app.constants import RESOLVEDWITHUUID, RESOLVEDWITHRELID, RESOLVEDWITHHENID
 
-        return [] ##for now
-        
-        start_node_uuid = crawl_rel.start_node[RESOLVEDWITHUUID]
-        end_node_uuid = crawl_rel.end_node[RESOLVEDWITHUUID]
+        ens = self.getDirectlyConnectedEntitiesCrawl('hyperedgenode', crawl_obj)
 
-        return self.coredb.searchRelations(start_node_uuid, crawl_rel.type, end_node_uuid)
+        print ens
+
+        enuuids = []
+
+        for en in ens:
+            enuuids.append(en[RESOLVEDWITHUUID])
+
+        return self.coredb.searchHyperEdgeNodes(crawl_obj.labels, enuuids)
 
 
     def getTwoVars(self, kind): ##kind is kind of task
@@ -301,11 +305,19 @@ class GraphHandle():
 
         return None
 
-    def getDirectlyConnectedEntities(self, kind, graphobj):
+    def getDirectlyConnectedEntitiesCrawl(self, kind, graphobj):
 
         if kind == 'hyperedgenode':
             from app.constants import CRAWL_HEN_ID_NAME, LABEL_HYPEREDGE_NODE
             return self.crawldb.getDirectlyConnectedEntities(CRAWL_HEN_ID_NAME, graphobj[CRAWL_HEN_ID_NAME], LABEL_HYPEREDGE_NODE, isIDString = True)
+
+        return None
+
+    def getDirectlyConnectedEntitiesCore(self, kind, graphobj):
+
+        if kind == 'hyperedgenode':
+            from app.constants import CORE_GRAPH_UUID, LABEL_HYPEREDGE_NODE
+            return self.crawldb.getDirectlyConnectedEntities(CORE_GRAPH_UUID, graphobj[CORE_GRAPH_UUID], LABEL_HYPEREDGE_NODE, isIDString = True)
 
         return None
 

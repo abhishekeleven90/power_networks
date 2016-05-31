@@ -1,3 +1,5 @@
+{% extends "basic.html" %}
+
 {% macro node_short_desc(node) %}
 
 
@@ -17,7 +19,7 @@
     ]
 
   
-{% endmacro %}
+{% endmacro %}  
 
 
 {% macro entity_read(node,verifier) %}
@@ -282,6 +284,3 @@
       </div>
 
 {% endmacro %}
-
-
-{% block htmlall %} {% endblock %}

@@ -1,20 +1,7 @@
 <!-- extend base layout -->
-{% extends "base.html" %}
+{% extends "basic.html" %}
 {% block content %}
-{% if n_results == 0 %}
-<div class="starter-template" align="center" >
-    <h2>No Results!!!</h2>
-</div>
-{% else %}
-<ul>
-{% for i in range(n_results) %}
-<li>
-<div class="starter-template" align="center" >
-    <h2>{{table_title[i]}}</h2>
-    <p class="lead">{{df_list[i]|safe}}</p>
-</div>
-</li>
-{% endfor %}
-</ul>
-{% endif %}
+
+    {{searchtext | safe}
+
 {% endblock %}
