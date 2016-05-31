@@ -108,20 +108,15 @@ def temp():
     return render_template("temp.html", homeclass="active", temptext=str(nayaperson.id)+" "
         +str(naya_kitty.id))
 
-@app.route('/search/')
+@app.route('/search/', methods = ['GET','POST'])
 def search():
-    query = request.args.get('query')
-    labs = ["Party","Politician"] # tables to search in
-    thres = [0.6,0.6]
-    #for lab in labs:
-    #    df = gcd.get_gdb_entity(query,lab) #check party name
-    #    df_html = df.to_html(classes="table")
-    #    if not df.empty:
-    #        df_list.append(df_html)
-    #        table_titles.append(lab)
-    df_list,table_titles = gd.get_gdb_entity(query,labs,thres)
-    print "Length of table titles-{}".format(len(table_titles))
-    return render_template("search.html",table_title=table_titles,df_list = df_list,n_results = len(table_titles))
+    print 'inside method'
+    name = request.form['query']
+    print 'query not printed'
+    print name
+    from app.solr.searchsolr_phonetic import get_uuids
+    uuids = get_uuids(name=name, rows=10, aliases = [name], keywords = ['iit'])
+    return render_template("search_results.html",searchtext="Here!!", uuids= uuids)
 
 @app.route('/read/<label>',methods = ['GET'])
 def read_gdb(label):

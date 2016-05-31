@@ -76,7 +76,7 @@ def match(kind='node'):
     if not request.form:
 
         graphobjs = gg.matchPossibleObjects(kind, crawl_obj)
-        connected_ens = gg.getDirectlyConnectedEntities(kind, crawl_obj_original) ##will be none if not hyperedgenode for now
+        connected_ens = gg.getDirectlyConnectedEntitiesCrawl(kind, crawl_obj_original) ##will be none if not hyperedgenode for now
 
         return render_template("verifier_match.html", homeclass="active",
             row=crawl_obj, graphobjs=graphobjs, ID = session[CRAWL_ID_NAME], kind = kind, 
@@ -96,6 +96,10 @@ def match(kind='node'):
             ## create
             ## crawl_obj is the copied object
             curr_id = gg.insertCoreGraphObjectHelper(kind, crawl_obj)
+
+            ##MAJOR MAJOR TODO: if we are creating a hyperedgenode, we can directly also push all its relations! assuming all things are validated.
+            ##if we are creating a node, all its relations that are connected to resolved nodes can all be pushed as such, saves a lot of time.
+            ##again assuming that we have validated graph objects. 
 
             flash('Graph object created with id: '+ str(curr_id))
             flash(kind+ ' : '+CRAWL_ID_NAME +' : '+str(session[CRAWL_ID_NAME]))
