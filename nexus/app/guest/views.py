@@ -46,7 +46,8 @@ def viz():
     ##task 3 show on viz.html or something
 
     ##to decide: post or not?
-    return render_template("temp.html", homeclass="active", temptext = city+' '+state)        
+    cypher = 'MATCH (n)-[r]->(m) RETURN n,r,m LIMIT 50'
+    return render_template("viz.html", homeclass="active", temptext=cypher)
 
 @guest.route('/temp4/')
 def solr():
