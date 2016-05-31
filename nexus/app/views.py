@@ -118,6 +118,20 @@ def search():
     uuids = get_uuids(name=name, rows=10, aliases = [name], keywords = ['iit'])
     return render_template("search_results.html",searchtext="Here!!", uuids= uuids)
 
+@app.route('/advsearch/', methods = ['GET','POST'])
+def advsearch():
+    name = request.form['query']
+    rows = request.form['rows']
+    labels = request.form['labels']
+    keywords = request.form['keywords']
+    print name
+    from app.solr.searchsolr_phonetic import get_uuids
+    uuids = get_uuids(name=name, rows=10, aliases = [name], keywords = ['iit'])
+    return render_template("search_results.html",searchtext="Here!!", uuids= uuids)
+
+
+
+
 @app.route('/read/<label>',methods = ['GET'])
 def read_gdb(label):
     node_list = ['Party','Politician']

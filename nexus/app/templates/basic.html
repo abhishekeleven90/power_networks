@@ -138,16 +138,18 @@
 
                         <hr/>
 
-                        {% endblock %}
+                    {% endblock %}
 
                 </div>
 
-                <footer>
-                    {% block footer %}
-                        <p class="text-center">© ICTD Lab, IIT-Delhi 2015
-                         </p>
-                    {% endblock %}
-                </footer>
+                <div>
+                    <footer>
+                        {% block footer %}
+                            <p class="text-center">© ICTD Lab, IIT-Delhi 2015
+                             </p>
+                        {% endblock %}
+                    </footer>
+                </div>
 
                 {%block bodyscripts%}
                     <script src="{{ url_for('static', filename='js/jquery.min.js') }}">

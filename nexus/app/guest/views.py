@@ -47,7 +47,8 @@ def viz():
 
     ##to decide: post or not?
     cypher = 'MATCH (n)-[r]->(m) RETURN n,r,m LIMIT 50'
-    return render_template("viz.html", homeclass="active", temptext=cypher)
+    ## TODO: constants
+    return render_template("viz2.html", homeclass="active", temptext=cypher)
 
 @guest.route('/temp4/')
 def solr():
