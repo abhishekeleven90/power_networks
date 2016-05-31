@@ -27,6 +27,7 @@ CRAWL_GRAPH_PASSWORD = 'yoyo'
 #CORE_GRAPH_SYMBOLS
 CORE_GRAPH_UUID = 'uuid'
 CORE_GRAPH_RELID = 'relid'
+CORE_GRAPH_HENID = 'henid'
 
 #CRAWL GRAPH SYMBOLS
 CRAWL_EN_ID_NAME = '_crawl_en_id_'
@@ -48,6 +49,7 @@ SOLR_CORE = 'mtp2'
 META_TABLE_USER = 'users'
 META_TABLE_UUID = 'uuidtable'
 META_TABLE_RELID = 'relidtable'
+META_TABLE_HENID = 'henidtable'
 
 ##INDEX TABLE NAMES
 INDEX_TABLE_ENTITIES = 'entities'

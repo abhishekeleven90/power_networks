@@ -74,6 +74,26 @@ class GraphHandle():
 
         return self.coredb.insertCoreNodeWrap(node, uuid)
 
+    def insertCoreHyperEdgeNodeHelper(self, node):   
+
+        ##a very basic necessity of this! 
+        ##as henids and graphs are linked
+
+        ##todo: a table for hyperedgenodes, labels, connected entities
+        from app.models.dbmodels.idtables import HyperEdgeNode
+        labels  = ''
+        for label in node.labels:
+            labels = labels + str(label) + ', '
+        hen = HyperEdgeNode(labels)
+        hen.create()
+        henid = hen.henid
+
+        ##TODO: move uuid to props!
+
+        print 'henid generated ' +str(henid) #change this code : TODO
+
+        return self.coredb.insertCoreHyperEdgeNodeWrap(node, henid)
+
 
     def insertCoreRelationHelper(self, crawl_rel): 
         ##this relation contains no metadata
@@ -218,7 +238,7 @@ class GraphHandle():
         if kind == 'relation':
             return self.matchRelationsInCore(crawl_obj)
         elif kind == 'node':
-            matchingUUIDS = [67, 68, 73, 74, 75, 76, 77]
+            matchingUUIDS = [67, 68, 74, 75, 76, 77]
             return self.coredb.getNodeListCore(matchingUUIDS)
         elif kind == 'hyperedgenode':
             return self.matchHyperEdgeNodesInCore(crawl_obj)
@@ -242,6 +262,7 @@ class GraphHandle():
             return curr_obj['relid']
         elif kind == 'hyperedgenode':
             curr_obj = self.insertCoreHyperEdgeNodeHelper(crawl_obj)
+            return curr_obj['henid']
 
         return None
 
@@ -255,10 +276,16 @@ class GraphHandle():
             self.crawldb.setResolvedWithUUID(crawl_obj_original, curr_id)
         elif kind == 'relation':
             self.crawldb.setResolvedWithRELID(crawl_obj_original, curr_id)
+        elif kind == 'hyperedgenode':
+            self.crawldb.setResolvedWithHENID(crawl_obj_original, curr_id)
         return
         #doesn't return anything just sets resolved ID
 
     def getCoreIDName(self, kind):
+
+        ##after seeing all this i think there should have been three class node, link, hyperedgenode and they should have these recurring functions
+        ##on which we could directly call these methods
+        ##else this is becoming a pain in the neck as the code is growing
 
         '''
             given a kind, returns the core id name for that graph object
@@ -281,6 +308,32 @@ class GraphHandle():
             return self.crawldb.getDirectlyConnectedEntities(CRAWL_HEN_ID_NAME, graphobj[CRAWL_HEN_ID_NAME], LABEL_HYPEREDGE_NODE, isIDString = True)
 
         return None
+
+    def getOriginalCoreObject(self, kind, curr_id):
+
+        orig = None
+
+        if kind == 'relation':
+            orig = self.coredb.relation(curr_id)
+
+        elif kind == 'node':
+            orig = self.coredb.entity(curr_id)
+
+        elif kind == 'hyperedgenode':
+            orig = self.coredb.hyperedgenode(curr_id)
+
+        return orig
+
+    def getNewLabelsAndPropsDiff(self, kind, orig, naya):
+
+        new_labels = None
+
+        if kind == 'node': ##hen can only have two labels thats it!
+            new_labels = self.coredb.labelsToBeAdded(orig,naya)
+
+        conf_props,new_props = self.coredb.propsDiff(orig,naya)
+
+        return new_labels, conf_props, new_props
 
 
 

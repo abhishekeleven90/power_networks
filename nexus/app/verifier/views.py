@@ -114,60 +114,29 @@ def match(kind='node'):
 @verifier.route('/diffPushGen/<string:kind>/', methods=["GET","POST"])
 def diffPushGen(kind='node'):
 
-    ##TODO: move all logic code to graph_handle as with the odr two
-
-
-    CRAWL_ID_NAME = None ##Property name in crawl graph
-    CURR_ID = None ##Session variable
-
-    from app.constants import CRAWL_EN_ID_NAME, CRAWL_REL_ID_NAME
-    
-    if kind == 'relation':
-        CRAWL_ID_NAME = CRAWL_REL_ID_NAME
-        CURR_ID = 'curr_relid'
-    elif kind == 'node':
-        CURR_ID = 'curr_uuid'
-        CRAWL_ID_NAME = CRAWL_EN_ID_NAME
-    else:
-        return 'kind not defined now', 404 
+    gg = GraphHandle()
+    CRAWL_ID_NAME, CURR_ID  = gg.getTwoVars(kind)
 
     
     if session.get(CURR_ID) is None:
         return render_template("temp.html", homeclass="active", temptext='No diff tasks go to start task/match task first!')
 
-    gg = GraphHandle()
-
+    
     curr_id = session.get(CURR_ID)
     crawl_id = session.get(CRAWL_ID_NAME)
 
-    crawl_obj_original = None
-    crawl_obj = None
     
-    if kind == 'relation':
-        crawl_obj_original = gg.crawldb.getRelationByUniqueID(CRAWL_ID_NAME, crawl_id, isIDString = True)
-        crawl_obj = gg.crawldb.copyRelationWithEssentialNodeMeta(crawl_obj_original)
-        orig = gg.coredb.relation(curr_id)
+    crawl_obj_original = gg.getCrawlObjectByID(kind, CRAWL_ID_NAME, session[CRAWL_ID_NAME], isIDString = True)
+    crawl_obj = gg.copyCrawlObject(kind, crawl_obj_original)
+    
 
-    elif kind == 'node':
-        crawl_obj_original = gg.crawldb.getNodeByUniqueID('entity',CRAWL_ID_NAME, crawl_id, isIDString = True)
-        crawl_obj = gg.crawldb.copyNodeWithoutMeta(crawl_obj_original) 
-        orig = gg.coredb.entity(curr_id)
-
-
-    naya = crawl_obj ##from the row
-
+    naya = crawl_obj
+    orig = gg.getOriginalCoreObject(kind, curr_id)
     orig.pull()
 
-    #naya.pull() ##wont work now as naya node is not bound now
-    ##print 'orig: ' + str(orig)
-    ##print '-------'
-    ##print 'naya: ' + str(naya)
-    ##print '-------'
-
-    new_labels = None
-    if kind == 'node':
-        new_labels = gg.coredb.labelsToBeAdded(orig,naya) 
-    conf_props,new_props = gg.coredb.propsDiff(orig,naya)
+    
+    new_labels, conf_props, new_props = gg.getNewLabelsAndPropsDiff(kind, orig, naya)
+    
 
     if not request.form:
 
@@ -197,35 +166,20 @@ def diffPushGen(kind='node'):
                 #orig[prop] = request.form[prop]
                 orig[prop] = request.form[prop] ##naya prop/orig prop 
         
-        ##print orig  
-        ##now can push! TODO!
         
 
-        orig.push()#3one node resolved! 
+        orig.push()#one graph object resolved! 
 
         
         flash(kind+ ' : '+CRAWL_ID_NAME+' : '+ str(session[CRAWL_ID_NAME]))
 
-        if kind == 'relation':
-            gg.crawldb.setResolvedWithRELID(crawl_obj_original, curr_id)
-        elif kind == 'node':
-            gg.crawldb.setResolvedWithUUID(crawl_obj_original, curr_id)
+        gg.setResolvedWithID(kind, crawl_obj_original, curr_id)
 
         ##pop session objects
         session.pop(CRAWL_ID_NAME, None)
-        session.pop(CURR_ID, None) ##redundant code!
+        session.pop(CURR_ID, None)
         
         return redirect(url_for('.show'))
-
-        # #uuid = request.args.get('uuid') ##not working at all since immutable
-        # #push something to this uuid here!
-
-        # ##some mechanism will give us a new py2neo node ---> after the selection of the diffs, based on labels, props, etc.
-        # ##we will write a method to push that new py2neo node if uuid exists!
-
-        # ##TODO: show a start task button here
-        # return render_template("temp.html", homeclass="active", 
-        #     temptext='Push something new to '+ str(uuid)+' task completed') ##str beacuse of None
 
         ##TODO: same validation checks like _ for wiki thing too 
 
