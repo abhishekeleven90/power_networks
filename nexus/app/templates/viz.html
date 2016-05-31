@@ -81,6 +81,15 @@
 <script src="{{url_for('static', filename='js/plugins/sigma.renderers.edgeLabels/sigma.canvas.edges.labels.curve.js')}}"></script>
 <script src="{{url_for('static', filename='js/plugins/sigma.renderers.edgeLabels/sigma.canvas.edges.labels.curvedArrow.js')}}"></script>
 <script src="{{url_for('static', filename='js/plugins/sigma.exporters.svg/sigma.exporters.svg.js')}}"></script>
+<script src="{{url_for('static', filename='js/plugins/sigma.layouts.forceAtlas2/worker.js')}}"></script>
+<script src="{{url_for('static', filename='js/plugins/sigma.layouts.forceAtlas2/supervisor.js')}}"></script>
+<script src="{{url_for('static', filename='js/plugins/sigma.layouts.forceLink/supervisor.js')}}"></script>
+<script src="{{url_for('static', filename='js/plugins/sigma.layouts.forceLink/worker.js')}}"></script>
+<script src="{{url_for('static', filename='js/plugins/sigma.plugins.animate/sigma.plugins.animate.js')}}"></script>
+<script src="{{url_for('static', filename='js/plugins/sigma.plugins.filter/sigma.plugins.filter.js')}}"></script>
+<script src="{{url_for('static', filename='js/plugins/sigma.plugins.tooltips/sigma.plugins.tooltips.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
+
 
 <div id="container">
     <style>
@@ -217,17 +226,8 @@
     <div id="graph-container"></div>
 </div>
 
-<script src="{{url_for('static', filename='js/plugins/sigma.layouts.forceAtlas2/worker.js')}}"></script>
-<script src="{{url_for('static', filename='js/plugins/sigma.layouts.forceAtlas2/supervisor.js')}}"></script>
-<script src="{{url_for('static', filename='js/plugins/sigma.layouts.forceLink/supervisor.js')}}"></script>
-<script src="{{url_for('static', filename='js/plugins/sigma.layouts.forceLink/worker.js')}}"></script>
-<script src="{{url_for('static', filename='js/plugins/sigma.plugins.animate/sigma.plugins.animate.js')}}"></script>
-<script src="{{url_for('static', filename='js/plugins/sigma.plugins.filter/sigma.plugins.filter.js')}}"></script>
-<script src="{{url_for('static', filename='js/plugins/sigma.plugins.tooltips/sigma.plugins.tooltips.js')}}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
-
 <script type="application/javascript">
-    var cyphertext='{{temptext|e}}'
+    var cyphertext='{{temptext|safe}}'
     var initSigma = new sigma ({renderer: {
         container: document.getElementById('graph-container'),
         type: 'canvas'
@@ -344,7 +344,7 @@
     }  
     
     sigma.neo4j.cypher(
-            { url: 'http://localhost:7474', user: 'neo4j', password: 'admin' },
+            { url: 'http://10.192.52.26:7474', user: 'neo4j', password: 'admin' },
             cyphertext,
             initSigma,
             customiseGraph,
