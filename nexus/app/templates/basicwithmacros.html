@@ -1,0 +1,286 @@
+{% extends "basic.html" %}
+
+{% macro node_short_desc(node) %}
+
+
+    {% if '_token_' in node.properties %} <!--if from crawldb graph -->
+              {% set connectedidname = '_resolvedWithUUID_' %} 
+    {% else %}
+              {% set connectedidname = 'uuid' %}
+    {% endif %}
+
+
+  
+    <a href="{{url_for('readEntity',uuid=node[connectedidname]| int)}}"> {{node['name']}} : {{node[connectedidname]}}</a> : 
+    [
+        {% for label in node.labels %}
+            {{label}},
+        {% endfor %}
+    ]
+
+  
+{% endmacro %}
+
+
+{% macro entity_read(node,verifier) %}
+    
+    <div class="row">
+      <!--<div class="col-md-5  toppad  pull-right col-md-offset-3 ">
+           <A href="edit.html" >Edit Profile</A>
+
+        <A href="edit.html" >Logout</A>
+       <br>
+<p class=" text-info">May 05,2014,03:00 pm </p>
+      </div>!-->
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
+
+
+          {% if 'entity' in node.labels %}
+              {% set idname = 'uuid' %}
+              {% set IDNAME = 'UUID' %}
+              {% set nodename = node.properties['name']%}
+          {% elif 'hyperedgenode' in node.labels %}
+              {% set idname = 'henid' %}
+              {% set IDNAME = 'HYPER-EDGE-NODE ID' %}
+              {% set nodename = 'HYPER-EDGE-NODE'%}
+          {% endif %}
+
+
+        
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">{{nodename}} : {{node.properties[idname]}}</h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-3 col-lg-3 " align="center"> <img alt="{{node.properties['name']}}" style="padding-top: 5px" class="img-responsive pull-xs-left" src="http://cdn2.saveritemedical.com/product-default.jpg"> </div>
+                
+                <!--<div class="col-xs-10 col-sm-10 hidden-md hidden-lg"> <br>
+                  <dl>
+                    <dt>DEPARTMENT:</dt>
+                    <dd>Administrator</dd>
+                    <dt>HIRE DATE</dt>
+                    <dd>11/12/2013</dd>
+                    <dt>DATE OF BIRTH</dt>
+                       <dd>11/12/2013</dd>
+                    <dt>GENDER</dt>
+                    <dd>Male</dd>
+                  </dl>
+                </div>-->
+                <div class=" col-md-9 col-lg-9 "> 
+                  <table class="table table-user-information">
+                    <tbody>
+                        <tr>
+                        <td><b>Labels</b></td>
+                        <td>
+
+                          <!--TODO: REMOVE THE COMMA-->
+                          {% for label in node.labels %}
+                            {{label}},
+                          {% endfor %}
+
+                        </td>
+                      </tr>
+                          
+                      {% if not verifier %}
+                        <tr>
+                            <td><b>{{IDNAME}}</b></td>
+                            <td>{{node.properties[idname]}}</td>
+                        </tr>
+                      {% endif %}
+
+
+
+                      {% if 'hyperedgenode' in node.labels %}
+                            <tr>
+                                <td><b>Connected Entities</b></td>
+                                <td>
+                                  {% for en in connected_ens %}
+
+                                      {{node_short_desc(en)}}<hr/>
+
+                                  {% endfor %}
+                              
+                                </td>
+                            </tr>
+                      {% endif %}
+
+
+
+                      {% for prop in node.properties %}
+                        {% if prop != idname %}
+                          <tr>
+                            <td><b>{{prop}}</b></td>
+                            <td>{{node.properties[prop]}}</td>
+                          </tr>
+                        {% endif %}
+                      {% endfor %}
+                     
+                    </tbody>
+                  </table>
+                  
+                  {% if not verifier %}
+                          
+                          <a href="#" class="btn btn-primary">Edit info</a>
+
+                          <a href="#" class="btn btn-primary">Request Delete</a>
+                  
+                          <a href="#" class="btn btn-primary">View Connections</a>
+
+                  {% endif %}
+
+                </div>
+              </div>
+            </div>
+                 <div class="panel-footer">
+                        <!--<a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-envelope"></i></a>
+                        <span class="pull-right">
+                            <a href="edit.html" data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
+                            <a data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
+                        </span>-->
+                    </div>
+            
+          </div>
+        </div>
+      </div>
+    
+{% endmacro %}
+
+
+
+{% macro relation_read(rel, verifier, fromcrawldb) %} <!-- TODO add verifier variable -->
+
+<div class="row">
+
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
+   
+   
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">Relationship ID : {{rel.properties['relid']}} </h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-3 col-lg-3 " align="center"> <img alt="{{rel.type}}" style="padding-top: 5px" class="img-responsive pull-xs-left" src="http://cdn2.saveritemedical.com/product-default.jpg"> </div>
+                
+                <div class=" col-md-9 col-lg-9 "> 
+                  <table class="table table-user-information">
+                    <tbody>
+                         <tr>
+                            <td><b>REL-ID</b></td>
+                            <td>{{rel.properties['relid']}}</td>
+                         </tr>
+
+
+                      <tr>
+                        <td><b>Type</b></td>
+                        <td>
+                            {{rel.type}}
+                        </td>
+                      </tr>
+
+
+                     <tr>
+                        <td>
+                          <b>
+                            Start Entity UUID
+                          </b>
+                        </td>
+
+
+
+                        <td>
+
+
+                          {% if not fromcrawldb %}
+                          
+                          <a href="{{url_for('readEntity',uuid=rel.start_node.properties['uuid']|int )}}">
+                              {{rel.start_node.properties['uuid']}} : {{rel.start_node.properties['name']}} 
+                          </a> 
+
+                          {% endif %}
+
+                          {% if fromcrawldb %}
+                          
+                          <!--TODO: get the constant _resolvedWIth_ out -->
+                          <a href="{{url_for('readEntity',uuid=rel.start_node.properties['_resolvedWithUUID_']| int)}}">
+                              {{rel.start_node.properties['_resolvedWithUUID_']}} : {{rel.start_node.properties['name']}} 
+                          </a> 
+                          
+                          {% endif %}
+
+                          <br/> 
+                          [
+                            {% for label in rel.start_node.labels %}
+                             {{label}} ,
+                            {% endfor %} 
+                          ]
+
+
+                        </td>
+                     </tr>
+
+                     <tr>
+                        <td>
+                          <b>
+                            End Entity UUID
+                          </b>
+                        </td>
+
+                        <td>
+
+                          {% if not fromcrawldb %}
+                          
+                          <a href="{{url_for('readEntity',uuid=rel.end_node.properties['uuid'])}}">
+                              {{rel.end_node.properties['uuid']}} : {{rel.end_node.properties['name']}} 
+                          </a> 
+
+                          {% endif %}
+
+                          {% if fromcrawldb %}
+                          
+                          <!--TODO: get the constant _resolvedWIth_ out -->
+                          <a href="{{url_for('readEntity',uuid=rel.end_node.properties['_resolvedWithUUID_'])}}">
+                              {{rel.end_node.properties['_resolvedWithUUID_']}} : {{rel.end_node.properties['name']}} 
+                          </a> 
+                          
+                          {% endif %}
+
+
+                        </td>
+                     </tr>
+
+                      {% for prop in rel.properties %}
+                        {% if prop != 'relid' %}
+                          <tr>
+                            <td><b>{{prop}}</b></td>
+                            <td>{{rel.properties[prop]}}</td>
+                          </tr>
+                        {% endif %}
+                      {% endfor %}
+                     
+                    </tbody>
+                  </table>
+
+
+                  {% if not verifier %}
+                  
+                  <a href="#" class="btn btn-primary">Edit Relation</a>
+
+                  <a href="#" class="btn btn-primary">Request Delete</a>
+
+                  <a href="#" class="btn btn-primary">Request Delete</a> <!--TODO:  When showing hyperedge resolution, why not this! -->                  
+
+                  {% endif %}
+
+                </div>
+              </div>
+            </div>
+                 <div class="panel-footer">
+                    </div>
+            
+          </div>
+        </div>
+      </div>
+
+{% endmacro %}

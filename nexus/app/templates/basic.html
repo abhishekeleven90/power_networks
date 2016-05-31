@@ -1,0 +1,165 @@
+{% block macros %} {% endblock %}
+
+<!DOCTYPE html>
+<!-- saved from url=(0050)http://getbootstrap.com/examples/starter-template/ -->
+<html lang="en">
+    <head>
+        {% block head %}
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <script async="" src="{{ url_for('static', filename='js/stats.js') }}">
+            </script>
+            <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta name="description" content="">
+            <meta name="author" content="">
+            <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+            <title>Power Nexus</title>
+            <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+                    {% if signincss %}
+                        <link href="{{ url_for('static', filename='css/signin.css') }}" rel="stylesheet">
+                    {% endif %}
+            <link href="{{ url_for('static', filename='css/starter-template.css') }}" rel="stylesheet">
+            <!--[if lt IE 9]>
+            <script src="../../assets/js/ie8-responsive-file-warning.js">
+            </script>
+            <![endif]-->
+            <script src="{{ url_for('static', filename='js/ie-emulation-modes-warning.js') }}">
+            </script>
+            <!--//-->
+            <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js">
+            </script>
+            <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js">
+            </script>
+            <![endif]-->
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}
+
+
+            {% block nav %}
+                <nav class="navbar navbar-inverse navbar-fixed-top">
+                    <div class="container" style="min-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation
+                            </span>
+                            <span class="icon-bar">
+                            </span>
+                            <span class="icon-bar">
+                            </span>
+                            <span class="icon-bar">
+                            </span>
+                            </button>
+                            <a class="navbar-brand" href="#">Power Elites
+                            </a>
+                        </div>
+                        <div id="navbar" class="collapse navbar-collapse">
+                            <ul class="nav navbar-nav navbar-left">
+                                <li class="{{homeclass}}">
+                                    <a href="{{ url_for('home') }}">Home
+                                    </a>
+                                </li>
+                                <li class="{{exploreclass}}">
+                                    <a href="">Explore
+                                    </a>
+                                </li>
+                                <li class="{{helpclass}}">
+                                    <a href="">Help
+                                    </a>
+                                </li>
+                                <li class="{{aboutclass}}">
+                                    <a href="">About
+                                    </a>
+                                </li>
+                                <li class="{{contactclass}}">
+                                    <a href="">Contact
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav navbar-nav navbar-right">
+                                {% if session.userid %}
+                                <li class="{{loginclass}}">
+                                    <a>{{session.userid}}</a>
+                                </li>
+                                {% endif %}
+
+                                <li class="{{loginclass}}">
+                                    {% if not session.userid %}
+                                    <a href="{{ url_for('login') }}">Login</a>
+                                    {% else %}
+                                    <a href="{{ url_for('logout') }}">Logout</a>
+                                    {% endif %}
+                                </li>
+                                {% if not session.userid %}
+                                <li class="{{signupclass}}">
+                                    <a href="{{ url_for('signup') }}">Sign up
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                            <form class="navbar-form navbar-right" role="search" method="POST" action = "{{ url_for('search')}}">
+                                <div class="form-group">
+                                    <input type="text" name = "query" class="form-control" placeholder="Search">
+                                </div>
+                                <input type="submit" class="btn btn-default" value="Go!">
+                            </form>
+                        </div>
+                        <!--//-->
+                    </div>
+                </nav>
+            {% endblock %}
+
+
+            
+                <div class="container" min-height="100%">
+
+                    {% block container %}
+
+                        <!--handle flash content here-->    
+                        {% with msgs = get_flashed_messages() %}
+                            {% if msgs %}
+                                {% for msg in msgs %}
+                                    <div class="alert alert-warning alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span> 
+                                        </button>
+                                        <p>{{ msg }}</p>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+
+
+                        {% block content %}{% endblock %}
+                        <!--flash code ends-->
+
+                        <hr/>
+
+                        {% endblock %}
+
+                </div>
+
+                <footer>
+                    {% block footer %}
+                        <p class="text-center">© ICTD Lab, IIT-Delhi 2015
+                         </p>
+                    {% endblock %}
+                </footer>
+
+                {%block bodyscripts%}
+                    <script src="{{ url_for('static', filename='js/jquery.min.js') }}">
+                    </script>
+                    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}">
+                    </script>
+                    <!--//-->
+                    <script src="{{ url_for('static', filename='js/ie10-viewport-bug-workaround.js') }}">
+                    </script>
+                {%endblock%}
+            
+
+        {% endblock %}
+    </body>
+</html>
