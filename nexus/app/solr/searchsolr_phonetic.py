@@ -11,7 +11,7 @@ from app.constants import SOLR_CORE, SOLR_HOST, SOLR_PORT
 ##TODO: use constants, and test with guest.route
 
 
-def get_uuids(labels=['person'], name=None, aliases=None, keywords=None, jaro=True, rows= 100):
+def get_uuids(labels=['entity'], name=None, aliases=None, keywords=None, jaro=False, rows= 100):
 
     default_url="http://"+str(SOLR_HOST)+":"+str(SOLR_PORT)+"/solr/"+str(SOLR_CORE)+"/select?q=*%3A*\
             &wt=python&rows=50000&indent=true"

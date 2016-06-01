@@ -117,7 +117,7 @@ def search():
     keywords = request.form.get('keywords')
     print name, rows, labels, keywords
     from app.solr.searchsolr_phonetic import get_uuids
-    uuids = get_uuids(name=name, rows=10, aliases = [name], keywords = [])
+    uuids = get_uuids(name=name, rows=rows, aliases = [name], keywords = [])
     return render_template("search_results.html", uuids= uuids, name=name)
 
 
