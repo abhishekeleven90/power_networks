@@ -121,39 +121,6 @@ def search():
     return render_template("search_results.html", uuids= uuids, name=name)
 
 
-@app.route('/advsearch/', methods = ['GET','POST'])
-def advsearch():
-    name = request.form['query']
-    print name
-    from app.solr.searchsolr_phonetic import get_uuids
-    uuids = get_uuids(name=name, rows=10, aliases = [name], keywords = ['iit'])
-    return render_template("search_results.html",searchtext="Here!!", uuids= uuids)
-
-
-
-
-@app.route('/read/<label>',methods = ['GET'])
-def read_gdb(label):
-    node_list = ['Party','Politician']
-    if label not in node_list:
-        return abort(404)
-    print "Printing request arguments"
-    print request.args
-    df = gd.get_gdb_entity_simple(label,request.args)
-    return df.to_html()
-
-@app.route('/rel/<label>',methods = ['GET'])
-def rel_gdb(label):
-    rel_list = ['test_rel']
-    if label not in rel_list: return abort(404)
-    print "Printing request arguments"
-    print request.args
-    df = gd.get_gdb_rel_simple(label,request.args)
-    return df.to_html()
-
-def get_current_user_role():
-    return 'admin'
-
 #Moved to forms.py
 '''def form_error_helper(form):
     for field, errors in form.errors.items():
@@ -220,6 +187,36 @@ def profile():
 @app.route('/connections/')
 def conn():
     return render_template("connections.html", homeclass="active")
+
+@app.route('/trial/')
+def trial():
+    
+    from app.models.dbmodels.idtables import Entity, Link
+    from app.models.graphmodels.graphdb import CoreGraphDB
+
+    coredb = CoreGraphDB()
+
+    results = coredb.graph.cypher.execute('match n return id(n)')
+
+    for res in results:
+        currid =  res[0]
+        #print currid
+
+        currnode = coredb.getNodeByInternalId(currid)
+        
+        #print currnode['uuid']
+
+        en = Entity(currnode['name'])
+        en.create()
+        currnode['uuid'] = en.uuid
+        print 'id: '+str(currid) + '; '+ 'uuid: '+str(currnode['uuid'])
+
+        # currnode.push()
+
+    return 'done'
+
+
+
 
 
 

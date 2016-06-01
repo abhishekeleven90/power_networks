@@ -37,3 +37,13 @@ return p
 ##all the hyperrels are first level rels from participating entities
 ##that is from pol -- fourghtfromconstituency, foughtfromparty, memberof, foughtineletcions and from other entities too
 
+
+##neo4j start setup uuids
+create (n:_uuid_:_relid_:_meta_ {metaid:1, nextmetaid:2, nextuuid:1, nextrelid:1}) return n
+match (n:company), (u:_uuid_) set n.uuid = u.nextuuid, u.nextuuid = u.nextuuid + 1
+match (n:businessperson), (u:_meta_ {metaid:1}) set n.uuid = u.nextuuid, u.nextuuid = u.nextuuid + 1
+
+match (n)-[r]->(p), (u:_meta_ {metaid:1}) set r.relid = u.nextrelid, u.nextrelid = u.nextrelid + 1
+
+match (n:entity) return n.uuid, n.name
+
