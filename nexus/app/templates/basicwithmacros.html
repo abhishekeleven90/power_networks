@@ -1,5 +1,12 @@
 {% extends "basic.html" %}
 
+
+{% macro list2csv(list) %}
+  {% for  item in list%}
+    {{item}},
+  {% endfor %}
+{% endmacro %}
+
 {% macro node_short_desc(node) %}
 
 
@@ -124,8 +131,19 @@
                           <a href="#" class="btn btn-primary">Edit info</a>
 
                           <a href="#" class="btn btn-primary">Request Delete</a>
+
+                          <br/>
+                          <br/>
+
+                          <form role="form" action="{{url_for('guest.viz')}}" method="POST">
+
+                            <input type="hidden" name="query" value="match (n:entity {uuid:{{node['uuid']}}})-[r]-(p) return n,r,p"/>
                   
-                          <a href="#" class="btn btn-primary">View Connections</a>
+                          <button type="submit" class="btn btn-primary">
+                            View Connections
+                          </button>
+
+                        </form>
 
                   {% endif %}
 

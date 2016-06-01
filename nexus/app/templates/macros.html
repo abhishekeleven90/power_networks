@@ -1,3 +1,6 @@
+
+
+
 {% macro node_short_desc(node) %}
 
 
@@ -123,7 +126,7 @@
 
                           <a href="#" class="btn btn-primary">Request Delete</a>
                   
-                          <a href="#" class="btn btn-primary">View Connections</a>
+                          <a href="{{url_for(guest.viz)}}" class="btn btn-primary">View Connections</a>
 
                   {% endif %}
 

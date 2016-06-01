@@ -51,12 +51,18 @@ def viz():
     cypher = request.form.get('query')
     print cypher
 
+    from app.constants import CORE_GRAPH_HOST, CORE_GRAPH_PASSWORD, CORE_GRAPH_PORT, CORE_GRAPH_USER
+
     ## TODO: constants
     if isValidCypher(cypher):
-        return render_template("viz2.html", homeclass="active", temptext=cypher)
+        return render_template("viz2.html", homeclass="active", temptext=cypher, 
+            CORE_GRAPH_HOST =CORE_GRAPH_HOST, CORE_GRAPH_PASSWORD = CORE_GRAPH_PASSWORD, 
+            CORE_GRAPH_PORT = CORE_GRAPH_PORT, CORE_GRAPH_USER = CORE_GRAPH_USER)
     else:
         flash('Invalid query')
-        return render_template("viz2.html", homeclass="active", temptext='')
+        return render_template("viz2.html", homeclass="active", temptext='', 
+            CORE_GRAPH_HOST =CORE_GRAPH_HOST, CORE_GRAPH_PASSWORD = CORE_GRAPH_PASSWORD, 
+            CORE_GRAPH_PORT = CORE_GRAPH_PORT, CORE_GRAPH_USER = CORE_GRAPH_USER)
 
 @guest.route('/temp4/')
 def solr():

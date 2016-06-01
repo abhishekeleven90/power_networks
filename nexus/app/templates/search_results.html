@@ -1,6 +1,6 @@
 <!-- extend base layout -->
 
-{% extends "basic.html" %}
+{% extends "basicwithmacros.html" %}
 
 
 {% block head %}
@@ -14,7 +14,8 @@
 <script>
 jQuery(document).ready(function($) {
     $(".clickable-row").click(function() {
-        window.document.location = $(this).data("href");
+        var url = $(this).data("href");
+        window.open(url, '_blank');
     });
 });
 </script>
@@ -121,17 +122,17 @@ jQuery(document).ready(function($) {
             </td>
         </tr>
 
-        {% for uuid in uuids %}
+        {% for node in nodes %}
 
-        <tr class='clickable-row' data-href="{{url_for('readEntity',uuid=uuid|int)}}">
+        <tr class='clickable-row' data-href="{{url_for('readEntity',uuid=node['uuid']|int)}}">
             <td>
-                    {{uuid}}
+                    {{node['uuid']}}
             </td>
             <td>
-                    No Name
+                    {{node['name']}}
             </td>
             <td>
-                    No labels
+                    {{list2csv(node.labels)}}
             </td>
         </tr>            
         {% endfor %}

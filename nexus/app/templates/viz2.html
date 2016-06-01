@@ -371,7 +371,7 @@
     }  
     
     sigma.neo4j.cypher(
-            { url: 'http://localhost:7474', user: 'neo4j', password: 'admin' },
+            { url: 'http://{{CORE_GRAPH_HOST}}:{{CORE_GRAPH_PORT}}', user: '{{CORE_GRAPH_USER}}', password: 'CORE_GRAPH_PASSWORD' },
             cyphertext,
             initSigma,
             customiseGraph,
