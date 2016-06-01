@@ -3,7 +3,7 @@ from app.sqldb import MetaSQLDB
 
 class Entity:
 
-    ## create table uuidtable(uuid bigint(20) not null auto_increment primary key, name varchar(255));
+    ## CREATE TABLE uuidtable(uuid bigint( 20 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,name varchar( 3000 ));
     ## very very important BIGINT!
 
     def __init__(self, name):
@@ -15,7 +15,7 @@ class Entity:
         self.dbwrap = MetaSQLDB()
 
     def create(self):
-        query = "insert into uuidtable(name) values('%s');"
+        query = 'insert into uuidtable(name) values("%s");'
         query = query %(self.name)
         
 
@@ -24,12 +24,12 @@ class Entity:
         self.uuid =  cursor.lastrowid
         self.dbwrap.commitAndClose() ##what if something breaks? TODO!
 
-        print numrows
+        return numrows
 
 class Link: ##chossing this name instead of a relation
     ## startnode and ennode can be foregin keys here constraints
     ## finally the table query! 
-    ## create table relidtable(relid bigint(20) not null auto_increment primary key, reltype varchar(255), startuuid bigint(20), enduuid bigint(20), foreign key (startuuid) references uuidtable(uuid) on delete cascade on update cascade,  foreign key (enduuid) references uuidtable(uuid) on delete cascade on update cascade); 
+    ## create table relidtable(relid bigint(20) not null auto_increment primary key, reltype varchar(1000), startuuid bigint(20), enduuid bigint(20), foreign key (startuuid) references uuidtable(uuid) on delete cascade on update cascade,  foreign key (enduuid) references uuidtable(uuid) on delete cascade on update cascade); 
 
 
 

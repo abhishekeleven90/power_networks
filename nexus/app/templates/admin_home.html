@@ -1,0 +1,51 @@
+<!-- extend base layout -->
+{% extends "basic.html" %}
+{% block content %}
+     <div class="starter-template" align="center" >
+        <h3>
+
+            Welcome admin! <hr/><br/>
+
+
+            
+
+            
+
+            <a href={{url_for('admin.deleteallsolr')}}>
+                    <button type="submit" class="btn btn-primary">Delete all solr indices!</button>
+            </a>
+
+            <br/>
+            <hr/>
+
+
+            
+            <br/>
+
+
+
+
+            <a href={{url_for('admin.fullimportsolr')}}>
+                    <button type="submit" class="btn btn-primary">Full import all solr indices!</button>
+            </a>
+            <br/>
+            <hr/>
+
+
+            
+            <br/>
+
+            <br/>
+            
+        </h3>
+
+        
+
+    </div>
+     
+
+
+<!-- 
+
+</div> -->
+{% endblock %}
