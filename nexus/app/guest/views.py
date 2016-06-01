@@ -28,7 +28,7 @@ def temp3():
     (city,state) = getCityState('pondicherry')
     return render_template("temp.html", homeclass="active", temptext=city+' '+state)
 
-@guest.route('/viz/')
+@guest.route('/viz/', methods=['GET', 'POST'])
 def viz():
     ##get cypher from request.args['cypher']
 
@@ -46,9 +46,17 @@ def viz():
     ##task 3 show on viz.html or something
 
     ##to decide: post or not?
-    cypher = 'MATCH (n)-[r]->(m) RETURN n,r,m LIMIT 50'
+    from app.utils.validate_cypher import isValidCypher
+
+    cypher = request.form.get('query')
+    print cypher
+
     ## TODO: constants
-    return render_template("viz2.html", homeclass="active", temptext=cypher)
+    if isValidCypher(cypher):
+        return render_template("viz2.html", homeclass="active", temptext=cypher)
+    else:
+        flash('Invalid query')
+        return render_template("viz2.html", homeclass="active", temptext='')
 
 @guest.route('/temp4/')
 def solr():
