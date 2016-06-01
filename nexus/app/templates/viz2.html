@@ -93,15 +93,21 @@
 <script src="{{url_for('static', filename='js/plugins/sigma.plugins.filter/sigma.plugins.filter.js')}}"></script>
 <script src="{{url_for('static', filename='js/plugins/sigma.plugins.tooltips/sigma.plugins.tooltips.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
-
 <style>
-        #graph-container {
-            top: 0;
+      #graph-container {
+            top: 80px;
             bottom: 0;
             left: 0;
             right: 0;
             position: absolute;
         }
+       #container {
+           height: 100%; 
+           width: 100%;
+           min-height: 80%;
+           min-width: 80%;
+           border: 10px;
+       }
      .sigma-tooltip {
        max-width: 300px;
        max-height: 400px;
@@ -224,18 +230,16 @@
        width: 160px;
     }
 
-    </style>
-
+</style>
 {% endblock %} <!--head-->
 
-{% block content %}
+{% block container %}
 
-  {{super()}}
+{{super()}}
+<div id="container">
 
- 
-      
-      <div id="graph-container"></div>
-
+<div id="graph-container"></div>
+</div>
 
 
 
@@ -357,7 +361,7 @@
     }  
     
     sigma.neo4j.cypher(
-            { url: 'http://localhost:7474', user: 'neo4j', password: 'yoyo' },
+            { url: 'http://localhost:7474', user: 'neo4j', password: 'admin' },
             cyphertext,
             initSigma,
             customiseGraph,
