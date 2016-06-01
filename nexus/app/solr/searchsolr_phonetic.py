@@ -50,16 +50,17 @@ def get_uuids(labels=['entity'], name=None, aliases=None,
             keywords_new.append('+'.join([x+'~' for x in re.findall("[\w]+", k)]))
         keyword_str = 'keywords%3A(' + '+'.join(keywords_new) + ')'
 
-    multiValued_str = [w for w in [alias_ph_str, alias_f_str, keyword_str,
-         label_str] if w != '']
+    multiValued_str = [w for w in [alias_ph_str, alias_f_str, keyword_str
+         ] if w != '']
     multiValued_str = '+'.join(multiValued_str)
-    final_query_str = '+AND+'.join([label_str, multiValued_str])
+    final_query_str = [w for w in [label_str, multiValued_str]
+            if w != '']
+    final_query_str = '+AND+'.join(final_query_str)
 
     query = base_url+final_query_str+rest_url
     print "[get_uuid_solr] - printing query "
     print query
     r = rq.get(query)
-
     d = ast.literal_eval(r.text)
     n_results = d['response']['numFound']
     docs = d['response']['docs']
