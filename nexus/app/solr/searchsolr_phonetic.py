@@ -11,15 +11,18 @@ from app.constants import SOLR_CORE, SOLR_HOST, SOLR_PORT
 ##TODO: use constants, and test with guest.route
 
 
-def get_uuids(labels=['entity'], name=None, aliases=None, keywords=None, jaro=False, rows= 100):
+def get_uuids(labels=['entity'], name=None, aliases=None,
+        keywords=None, jaro=False, rows=100):
 
-    default_url="http://"+str(SOLR_HOST)+":"+str(SOLR_PORT)+"/solr/"+str(SOLR_CORE)+"/select?q=*%3A*\
-            &wt=python&rows=50000&indent=true"
+    #default_url="http://"+str(SOLR_HOST)+":"+str(SOLR_PORT)+"/solr/"+str(SOLR_CORE)+"/select?q=*%3A*\
+    #        &wt=python&rows=50000&indent=true"
     t = time()
 
     if labels is None or labels == []:
-        print "[get_uuid_solr] - No labels-returning empty uuid list"
-        return []
+        print "No labels"
+        label_str = ''
+    else:
+        label_str = 'labels%3A('+urllib.quote_plus(' '.join(labels)) + ')'
 
     if name is None:
         print "[get_uuid_solr] - No name-returning empty uuid list"
@@ -27,7 +30,6 @@ def get_uuids(labels=['entity'], name=None, aliases=None, keywords=None, jaro=Fa
 
     base_url = "http://"+str(SOLR_HOST)+":"+str(SOLR_PORT)+"/solr/"+str(SOLR_CORE)+"/select?q="
     rest_url = "&wt=python&rows="+str(rows)+"&indent=true"
-    label_str = 'labels%3A('+urllib.quote_plus(' '.join(labels)) + ')'
 
     if aliases is None or aliases == []:
         alias_ph_str = ''
@@ -48,7 +50,9 @@ def get_uuids(labels=['entity'], name=None, aliases=None, keywords=None, jaro=Fa
             keywords_new.append('+'.join([x+'~' for x in re.findall("[\w]+", k)]))
         keyword_str = 'keywords%3A(' + '+'.join(keywords_new) + ')'
 
-    multiValued_str = '+'.join([alias_ph_str, alias_f_str, keyword_str])
+    multiValued_str = [w for w in [alias_ph_str, alias_f_str, keyword_str,
+         label_str] if w != '']
+    multiValued_str = '+'.join(multiValued_str)
     final_query_str = '+AND+'.join([label_str, multiValued_str])
 
     query = base_url+final_query_str+rest_url
@@ -77,6 +81,7 @@ def get_uuids(labels=['entity'], name=None, aliases=None, keywords=None, jaro=Fa
     print "##printing df"
     #print df[df['uuid'] == '62458']
     print "##[get_uuid] - Time taken  -{} s".format(time() - t)
+    print "##[get_uuid] - No. of results from solr -{}".format(n_results)
     print "##[get_uuid_solr]- UUid list length -{}".format(len(uuid_list))
 
     return uuid_list

@@ -12,7 +12,7 @@ def delta_import():
     delta_url = "http://"+SOLR_HOST+":"+str(SOLR_PORT)+"/solr/"+SOLR_CORE+"/dataimport?command=delta-import&clean=false&optimize=false"
     r = requests.get(delta_url)
     print r.text
-    return
+    return r.text
 
 
 def full_import():
@@ -20,7 +20,7 @@ def full_import():
     full_url = "http://"+SOLR_HOST+":"+str(SOLR_PORT)+"/solr/"+SOLR_CORE+"/dataimport?command=full-import&clean=true&optimize=true"
     r = requests.get(full_url)
     print r.text
-    return
+    return r.text
 
 
 #If None then full index delete
