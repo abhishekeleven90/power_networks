@@ -93,15 +93,20 @@
 <script src="{{url_for('static', filename='js/plugins/sigma.plugins.filter/sigma.plugins.filter.js')}}"></script>
 <script src="{{url_for('static', filename='js/plugins/sigma.plugins.tooltips/sigma.plugins.tooltips.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
-
 <style>
-        #graph-container {
-            top: 0;
+      #graph-container {
+            top: 80px;
             bottom: 0;
             left: 0;
             right: 0;
             position: absolute;
         }
+      #container {
+           height: 1000px;
+           width: 1000px;
+           border: 10px;
+           position: relative;    
+       }
      .sigma-tooltip {
        max-width: 300px;
        max-height: 400px;
@@ -224,18 +229,27 @@
        width: 160px;
     }
 
-    </style>
-
+</style>
 {% endblock %} <!--head-->
 
-{% block content %}
+{% block container %}
 
-  {{super()}}
+{{super()}}
 
- 
-      
-      <div id="graph-container"></div>
+<div class="container" id="textarea-container">
+    <p>Enter cypher query below (Read queries only)</p>
+    <form role="form" action="{{url_for('guest.viz')}}" method="POST">
+        <div class="form-group">
+            <textarea class="form-control" rows="1" name="query" id="comment" value="{{name}}"></textarea>
+        </div>
+        <input type="submit" class="btn btn-default" value="Go!">
 
+    </form>
+</div>
+
+<div id="container">
+    <div id="graph-container"></div>
+</div>
 
 
 
@@ -357,7 +371,7 @@
     }  
     
     sigma.neo4j.cypher(
-            { url: 'http://localhost:7474', user: 'neo4j', password: 'yoyo' },
+            { url: 'http://localhost:7474', user: 'neo4j', password: 'admin' },
             cyphertext,
             initSigma,
             customiseGraph,
