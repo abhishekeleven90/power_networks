@@ -13,3 +13,7 @@ class NexusToken():
         bits = bits+userid
         bits = ''.join(random.sample(bits,len(bits)))
         return hashlib.md5( str(random.getrandbits(256)) ).hexdigest()
+
+    def getMD5(self, strgiven):
+        import hashlib
+        return hashlib.md5(str(strgiven)).hexdigest()        
