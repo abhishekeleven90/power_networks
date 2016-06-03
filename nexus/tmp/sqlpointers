@@ -61,6 +61,8 @@ for TASKUSERS:
 
 add a user to a task
 if the task iscrawled = 0 cannot add any other user
+task and user both primary key together - change if not done
+whenever a task ic created by an owner -  also add that user to the task here
 
 ----------------------------------------------------------
 for TASKLOG: do this work in the last: moderate imp
