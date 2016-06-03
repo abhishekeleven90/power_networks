@@ -1,3 +1,11 @@
+CREATE TABLE IF NOT EXISTS `users` (
+  `userid` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` int(11) NOT NULL,
+  `apikey` varchar(255) NOT NULL,
+  `keyenabled` int(11) NOT NULL,
+  PRIMARY KEY (`userid`)
+);
 
 INSERT INTO `users` (`userid`, `password`, `role`, `apikey`,`keyenabled`) VALUES
 ('abhi1@gmail.com', '48dc8d29308eb256edc76f25def07251', 1, 'token1', 0),
@@ -7,6 +15,12 @@ INSERT INTO `users` (`userid`, `password`, `role`, `apikey`,`keyenabled`) VALUES
 ('abhi5@gmail.com', '48dc8d29308eb256edc76f25def07251', 5, 'token5', 1),
 ('abhi6@gmail.com', '48dc8d29308eb256edc76f25def07251', 6, 'token6', 1),
 ('abhi7@gmail.com', '48dc8d29308eb256edc76f25def07251', 7, 'token7', 1);
+
+CREATE TABLE IF NOT EXISTS `uuidtable` (
+  `uuid` int(11) NOT NULL,
+  `name` varchar(3000) DEFAULT NULL,
+  PRIMARY KEY (`uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 create table relidtable(
@@ -18,26 +32,13 @@ create table relidtable(
   foreign key (enduuid) references uuidtable(uuid) on delete cascade on update cascade); 
 
 
-CREATE TABLE IF NOT EXISTS `users` (
-  `userid` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `role` int(11) NOT NULL,
-  `apikey` varchar(255) NOT NULL,
-  `keyenabled` int(11) NOT NULL,
-  PRIMARY KEY (`userid`)
-);
-
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `uuidtable`
 --
 
-CREATE TABLE IF NOT EXISTS `uuidtable` (
-  `uuid` int(11) NOT NULL,
-  `name` varchar(3000) DEFAULT NULL,
-  PRIMARY KEY (`uuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 
 CREATE TABLE `tasks` (

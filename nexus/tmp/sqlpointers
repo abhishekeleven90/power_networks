@@ -1,4 +1,4 @@
------------------------------------------------
+-------------------------------------------------
 dont make classes for relidtable an uuidtable
 
 let's try to keep as object oriented as possible
@@ -119,14 +119,4 @@ for a change id generate list of strings for changes done :
 
 given a node uuid - get the list of strings for the latestchangeid -changeid is auto inc so obvsly the higest in such a case is the best
 -------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
 
