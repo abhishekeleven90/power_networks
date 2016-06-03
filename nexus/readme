@@ -47,3 +47,11 @@ match (n)-[r]->(p), (u:_meta_ {metaid:1}) set r.relid = u.nextrelid, u.nextrelid
 
 match (n:entity) return n.uuid, n.name
 
+##to dump all uuida nd relids
+##match (start:entity)-[r]->(end:entity) return r.relid, type(r), start.uuid, end.uuid
+
+## copy from same folder into mysql csvname and tablename same: mysqlimport --ignore-lines=1 --fields-terminated-by=, --columns='uuid,name' --local -u root -p flasktemp uuidtable.csv
+
+## mysqlimport --ignore-lines=1 --fields-terminated-by=, --columns='relid,reltype,startuuid,enduuid' --local -u root -p flasktemp relidtable.csv
+
+

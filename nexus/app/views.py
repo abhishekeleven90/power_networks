@@ -113,13 +113,27 @@ def search():
     print 'inside method rrrrrrrrrrrrrrrrrrrrrr'
     name = request.form.get('query')
     rows = request.form.get('rows')
+
     if rows is None or rows == '':
         rows = 10
+    
     labels = request.form.get('labels')
+    if labels is None or labels =='':
+        labels = ['entity']
+    else:
+        labels = labels.split(' ')
+
     keywords = request.form.get('keywords')
+    if keywords is None or keywords =='':
+        keywords = []
+    else:
+        keywords = keywords.split(' ')
+
+
+    print keywords
     print name, rows, labels, keywords
     from app.solr.searchsolr_phonetic import get_uuids
-    uuids = get_uuids(name=name, rows=rows, aliases = [name], keywords = [])
+    uuids = get_uuids(name=name, labels=labels, rows=rows, aliases = [name], keywords = keywords)
     from app.models.graphmodels.graphdb import CoreGraphDB
     coredb = CoreGraphDB()
     nodes = coredb.getNodeListCore(uuids)
