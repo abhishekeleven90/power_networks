@@ -1,4 +1,5 @@
 import sys
+from neo4j_query_type import isReadorWrite
 #given a cypher string return True/False accordingly
 
 
@@ -13,12 +14,16 @@ def isValidCypher(text):
         print "No return keyword in query"
         return False
 
-    invalid_keywords = ['CREATE', 'MERGE', 'DELETE', 'REMOVE', 'SET',
-            'INDEX', 'LOAD', 'LOAD CSV', 'CONSTRAINT']
+    #invalid_keywords = ['CREATE', 'MERGE', 'DELETE', 'REMOVE', 'SET',
+    #        'INDEX', 'LOAD', 'LOAD CSV', 'CONSTRAINT']
 
-    if any([word.lower() in text.lower() for word in invalid_keywords]):
-        print "Your query contains an invalid keyword"
+    #if any([word.lower() in text.lower() for word in invalid_keywords]):
+    #    print "Your query contains an invalid keyword"
+    #    return False
+
+    if isReadorWrite(text) == 1:
         return False
+
     return True
 
 if __name__ == "__main__":
