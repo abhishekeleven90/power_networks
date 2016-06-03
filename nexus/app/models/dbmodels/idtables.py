@@ -3,8 +3,11 @@ from app.sqldb import MetaSQLDB
 
 class Entity:
 
-    ## CREATE TABLE uuidtable(uuid bigint( 20 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,name varchar( 3000 ));
-    ## very very important BIGINT!
+    ## CREATE TABLE uuidtable(uuid int NOT NULL PRIMARY KEY ,name varchar( 3000 ));
+    ## mysqlimport --ignore-lines=1 --fields-terminated-by=, --columns='uuid,name' --local -u root -p flasktemp uuidtable.csv
+    ## MOST IMP THING while importing: keep the csvname same as tablename
+    ## keeping int now
+    ## match (n:entity) return n.uuid as uuid, n.name as name
 
     def __init__(self, name):
         self.uuid = None
@@ -29,8 +32,9 @@ class Entity:
 class Link: ##chossing this name instead of a relation
     ## startnode and ennode can be foregin keys here constraints
     ## finally the table query! 
-    ## create table relidtable(relid bigint(20) not null auto_increment primary key, reltype varchar(1000), startuuid bigint(20), enduuid bigint(20), foreign key (startuuid) references uuidtable(uuid) on delete cascade on update cascade,  foreign key (enduuid) references uuidtable(uuid) on delete cascade on update cascade); 
-
+    ## create table relidtable(relid int not null primary key, reltype varchar(1000), startuuid int, enduuid int, foreign key (startuuid) references uuidtable(uuid) on delete cascade on update cascade,  foreign key (enduuid) references uuidtable(uuid) on delete cascade on update cascade); 
+    ## mysqlimport --ignore-lines=1 --fields-terminated-by=, --columns='relid,reltype,startuuid,enduuid' --local -u root -p flasktemp relidtable.csv
+    ## match (start:entity)-[r]->(end:entity) return r.relid as relid, type(r) as reltype, start.uuid as startuuid, end.uuid as enduuid
 
 
     def __init__(self, reltype, startuuid, enduuid):
