@@ -1,28 +1,28 @@
-,id,name
-0,96,Dibang Valley
-1,97,East Kameng
-2,101,Lower Subansiri
-3,102,Papum Pare
-4,103,Tawang
-5,105,Upper Siang
-6,106,Upper Subansiri
-7,107,West Kameng
-8,108,West Siang
-9,456,Anantnag
-10,457,Bandipora
-11,458,Baramulla
-12,459,Budgam
-13,460,Doda
-14,461,Jammu
-15,462,Kargil
-16,463,Kathua
-17,464,Kupwara
-18,465,Leh
-19,466,Poonch
-20,467,Pulwama
-21,468,Rajouri
-22,469,Reasi
-23,470,Shopian
-24,471,Srinagar
-25,472,Udhampur
-26,655,Lakshadweep
+,"id","name",,
+0,96,"Dibang Valley",,"Arunachal"
+1,97,"East Kameng",,"Arunachal"
+2,101,"Lower Subansiri",,"Arunachal"
+3,102,"Papum Pare",,"Arunachal"
+4,103,"Tawang",,"Arunachal"
+5,105,"Upper Siang",,"Arunachal"
+6,106,"Upper Subansiri",,"Arunachal"
+7,107,"West Kameng",,"Arunachal"
+8,108,"West Siang",,"Arunachal"
+9,456,"Anantnag",,"J&K"
+10,457,"Bandipora",,"J&K"
+11,458,"Baramulla",,"J&K"
+12,459,"Budgam",,"J&K"
+13,460,"Doda",,"J&K"
+14,461,"Jammu",,"J&K"
+15,462,"Kargil",,"J&K"
+16,463,"Kathua",,"J&K"
+17,464,"Kupwara",,"J&K"
+18,465,"Leh",,"J&K"
+19,466,"Poonch",,"J&K"
+20,467,"Pulwama",,"J&K"
+21,468,"Rajouri",,"J&K"
+22,469,"Reasi",,"J&K"
+23,470,"Shopian",,"J&K"
+24,471,"Srinagar",,"J&K"
+25,472,"Udhampur",,"J&K"
+26,655,"Lakshadweep","done","Lakshadweep"
