@@ -9,17 +9,17 @@ basically create/insert and read methods are very common
 ------------------------
 for Users:
 
-1. create a user: 
+1. create a user:(create) 
 given userid, password - convert to token in your model - classwritten in utils, role integer, token call method in utils,  keyenabled by default 1 for role >=2 only
 
 add later: as soon as a user is created also add a row to tasks with iscrawled 0 - individual task
 
 2. escalalate/demote a user
-update to new role given userid
+update to new role given userid  (role_update)
 
-3. get user object given userid
+3. get user object given userid (get object)
 
-4. validate user and password : password given will be simple, use token utils
+4. validate user and password : password given will be simple, use token utils (validate)
 
 5. all the above things will be easy if you can use a self introspective algo which when called update - automatically makes the update easier by reading the object
 
