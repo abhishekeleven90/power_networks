@@ -59,20 +59,57 @@ class GraphHandle():
     def getNodeListCore(self, uuidList):
         return self.coredb.getListOfNodes(uuidList)
 
+
+    def deltaIndexDBHelper(self):
+        from app.solr.SolrIndex import delta_import
+        delta_import()
+
+
+    def insertToIndexDBHelper(self, uuid):
+        name, labels, aliases, keywords = self.coredb.generateIndexData(uuid)
+        from app.models.dbmodels.index_entities import Entity
+        en = Entity(uuid=uuid, name=name, aliases=aliases, keywords =keywords, labels= labels)
+        rows =  str(en.insertEntity())
+        self.deltaIndexDBHelper()
+        return rows
+
+    def updateIndexDBHelper(self, uuid):
+        name, labels, aliases, keywords = self.coredb.generateIndexData(uuid)
+        from app.models.dbmodels.index_entities import Entity
+        en= Entity()
+        en.getEntity(uuid)
+        en.name = name
+        en.labels = labels
+        en.aliases = aliases
+        en.keywords = keywords
+        rows = str(en.updateEntity())
+        self.deltaIndexDBHelper()
+        return rows
+
     def insertCoreNodeHelper(self, node):
-
         ##a very basic necessity of this! 
-        ##as uuids and graphs are linked
+        ##as uuids and graphs are linked 
 
-        from app.models.dbmodels.idtables import Entity
-        en = Entity(node['name'])
+        uuid = self.coredb.generateNewUUID()
+        #in case of any mishap: 
+        #first check: match (n:_meta_ {metaid:1}) return n.nextuuid
+        #match (n:_meta_ {metaid:1}) set n.nextuuid = n.nextuuid -1 return n.nextuuid
+
+        from app.models.dbmodels.uuidtable import UUIDTable
+        en = UUIDTable(uuid=uuid, name=node['name'])
         en.create()
-        uuid = en.uuid
-
+        
         ##TODO: move uuid to props!
         print 'uuid generated ' +str(uuid) #change this code : TODO
 
-        return self.coredb.insertCoreNodeWrap(node, uuid)
+        nayanode =  self.coredb.insertCoreNodeWrap(node, uuid)
+
+        ##at this point the node is inserted in db and neo4j
+        ##have to insert changes to index db
+
+        print self.insertToIndexDBHelper(uuid) +' rows added for uuid '+str(uuid)
+        return nayanode
+
 
     def insertCoreHyperEdgeNodeHelper(self, node):   
 
@@ -100,17 +137,51 @@ class GraphHandle():
         ##but the start and edn nodes contain metadata for uuids against which resolved
 
         from app.constants import RESOLVEDWITHUUID, RESOLVEDWITHRELID
-        
         start_node_uuid = crawl_rel.start_node[RESOLVEDWITHUUID]
         end_node_uuid = crawl_rel.end_node[RESOLVEDWITHUUID]
 
-        from app.models.dbmodels.idtables import Link
-        link = Link(crawl_rel.type, start_node_uuid, end_node_uuid)
-        link.create()
-        relid = link.relid
-        
-        return self.coredb.insertCoreRelWrap(crawl_rel, start_node_uuid, end_node_uuid, relid)
+        relid = self.coredb.generateNewRELID() 
+        print 'relid generated ' +str(relid) #change this code : TODO
 
+        from app.models.dbmodels.relidtable import RELIDTable
+        link = RELIDTable(relid, crawl_rel.type, start_node_uuid, end_node_uuid)
+        link.create()
+
+        nayarel =  self.coredb.insertCoreRelWrap(crawl_rel, start_node_uuid, end_node_uuid, relid)
+
+        ##now adding the touched entities to index db for solr
+        print self.updateIndexDBHelper(start_node_uuid) +' rows added for uuid '+str(start_node_uuid)
+        
+        print self.updateIndexDBHelper(end_node_uuid) +' rows added for uuid '+str(end_node_uuid)
+
+        return nayarel
+
+    def matchNodesInCore(self, crawl_obj_original):
+
+        
+        ##use the crawl object original - and generate search query to get
+        ##keywords aliases labels name 
+        from app.constants import CRAWL_EN_ID_NAME
+        print 'This will be the search query!!!!!!' ##TODO:remove
+        name, labels, aliases, keywords = self.crawldb.generateSearchData(CRAWL_EN_ID_NAME, crawl_obj_original[CRAWL_EN_ID_NAME],
+            True, getList = True)
+
+        print name
+        print aliases
+        print labels
+        print keywords
+
+        from app.solr.searchsolr_phonetic import get_uuids
+        matchingUUIDS = get_uuids(labels=labels, name=name, aliases = aliases, keywords=keywords)
+        print  matchingUUIDS
+
+        if len(matchingUUIDS)>50: ##to show first 50 results
+            matchingUUIDS = matchingUUIDS[:50]
+
+        ##remove this to have search for you!
+        matchingUUIDS = [154293, 154294]
+
+        return self.coredb.getNodeListCore(matchingUUIDS)
 
     def matchRelationsInCore(self, crawl_rel):
         '''
@@ -229,7 +300,7 @@ class GraphHandle():
 
         return None
 
-    def matchPossibleObjects(self, kind, crawl_obj):
+    def matchPossibleObjects(self, kind, crawl_obj, crawl_obj_original):
         
         '''
             the heart and soul of the verifier task
@@ -242,8 +313,7 @@ class GraphHandle():
         if kind == 'relation':
             return self.matchRelationsInCore(crawl_obj)
         elif kind == 'node':
-            matchingUUIDS = [67, 68, 74, 75, 76, 77]
-            return self.coredb.getNodeListCore(matchingUUIDS)
+            return self.matchNodesInCore(crawl_obj_original)
         elif kind == 'hyperedgenode':
             return self.matchHyperEdgeNodesInCore(crawl_obj)
 

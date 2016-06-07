@@ -41,6 +41,12 @@ class SideBySideDiff(diff_match_patch.diff_match_patch):
 
 def diffObjects(str1,str2):
     diff_obj = SideBySideDiff()
+    if type(str1) is list:
+        import json
+        str1 = json.dumps(str1)
+    if type(str2) is list:
+        import json
+        str2 = json.dumps(str2)
     result = diff_obj.diff_main(str1, str2)
     diff_obj.diff_cleanupSemantic(result)
     oldstr = diff_obj.old_content(result) 

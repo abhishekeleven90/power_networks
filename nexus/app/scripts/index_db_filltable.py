@@ -3,7 +3,7 @@ import shlex,subprocess
 def fill_table(path):
     ##Assuming entities.csv is in current folder
     cmd = '''mysqlimport --ignore-lines=1 \
-            --fields-terminated-by=, --fields-enclosed-by=\\" --columns='uuid,name,labels,aliases,keywords' \
+            --fields-terminated-by=; --fields-enclosed-by=\\" --columns='uuid,name,labels,aliases,keywords' \
             --local -u nexus -h 10.237.27.67 -p power_nexus '''+path
 
     process = subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE)

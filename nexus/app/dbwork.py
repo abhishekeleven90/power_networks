@@ -15,18 +15,6 @@ class BaseModel(Model):
     class Meta:
         database = mysqldb
 
-class Person(BaseModel):
-    name = CharField()
-
-    class Meta:
-        db_table = 'person'
-
-class Pet(BaseModel):
-    ownerid = ForeignKeyField(db_column='ownerid', rel_model=Person, to_field='id')
-    type = CharField()
-
-    class Meta:
-        db_table = 'pet'
 
 class Users(BaseModel):
     password = CharField(null=True)

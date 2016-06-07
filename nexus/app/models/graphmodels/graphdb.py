@@ -150,7 +150,7 @@ class GraphDB:
     def copyRelationWithoutMeta(self, rel, rel_exceptions = [], node_exceptions = []):
         return self.copyRelation(rel, copymeta = False, rel_exceptions = rel_exceptions, node_exceptions = node_exceptions)
 
-    def getDirectlyConnectedEntities(self, idname, idval, uniquelabel, isIDString = True):
+    def getDirectlyConnectedEntities(self, idname, idval, uniquelabel='', isIDString = True):
         '''
             given idname like uuid, henid and uniquelabel like entity or hyperedgenode
             gives us the connected nodes of this node
@@ -221,8 +221,83 @@ class GraphDB:
         #delete a relation
         #moderate any change --> how to do that --> where will this lie!
         #Note the diff between now and then
+
+    def processString(self, currvalue):
+        currvalue = str(currvalue)
+        currvalue = currvalue.replace("'",'')
+        currvalue = currvalue.replace('"','')
+        currvalue = currvalue.replace(',','')
+        currvalue = currvalue.replace(';','')
+        currvalue = currvalue.replace('`','')
+        return currvalue
+
+    def generateSearchData(self, idname, idval, isIDString, getList=False):
+
+        comp = self.getNodeByUniqueID('entity', idname, idval, isIDString)
+        ##comp is the node in question
         
-    
+        keywords = ''
+        labels = ''
+        aliases_to_return = ''
+
+        if getList:
+            keywords = []
+            labels = []
+            aliases_to_return = []
+
+        quotes = "" ##the ' wre  reudundant from beginning
+
+        for prop in comp.properties:
+            ##begins with underscore ignore
+            if prop!='uuid' and prop!='aliases' and prop[0]!='_':
+                currvalue = str(comp.properties[prop])
+                currvalue = self.processString(currvalue)
+                if prop!='uuid' and len(currvalue)>3:
+                    if not getList:
+                        keywords = keywords + quotes +currvalue + quotes+","
+                    else:
+                        keywords.append(currvalue)
+
+        neighbours  = self.getDirectlyConnectedEntities(idname, idval, 
+            'entity', isIDString)
+
+        for rel in neighbours:
+            currvalue = str(rel.properties['name'])
+            currvalue = self.processString(currvalue)
+            if not getList:
+                keywords = keywords + quotes +rel.properties['name'] + quotes+","
+            else:
+                keywords.append(rel.properties['name'])
+        # keywords = keywords + '"'
+
+        # labels = ''
+        for label in list(comp.labels):
+            if not getList:
+                labels = labels + quotes + label + quotes+","
+            else:
+                labels.append(label)
+        # labels=labels + '"'
+        
+        aliases = comp['aliases']
+        
+        if aliases is None or aliases == []:
+            aliases = [comp['name']]
+
+        # aliases_to_return = '"'
+        # aliases_to_return = ''
+
+        for alias in aliases:
+            if not getList:
+                aliases_to_return = aliases_to_return + quotes +alias + quotes+","
+            else:
+                aliases_to_return.append(alias)
+        # aliases =aliases_to_return + '"'
+        
+        # name = '"'+comp.properties['name']+'"'
+        name = comp.properties['name']
+        
+        return name, labels, aliases_to_return, keywords
+
 
 class CoreGraphDB(GraphDB):
 
@@ -374,6 +449,61 @@ class CoreGraphDB(GraphDB):
         for res in results:
             henlist.append(res[0])
         return henlist
+
+    def generateNewUUID(self):
+        results = self.graph.cypher.execute('match (n:_meta_ {metaid:1}) with n,n.nextuuid as nextuuid set n.nextuuid=n.nextuuid+1 return nextuuid')
+        return results[0][0]
+    
+    def generateNewRELID(self):
+        results = self.graph.cypher.execute('match (n:_meta_ {metaid:1}) with n,n.nextrelid as nextrelid set n.nextrelid=n.nextrelid+1 return nextrelid')
+        return results[0][0]
+
+    def generateIndexData(self, uuid):
+
+        '''
+            As soon as you update en entity or insert an entity, call this to get the change on props
+            As soon as you create a rel and you know the startuuid and newuuid, call this on both
+            Use this to update the concerned entities in indexdb for solr
+        '''
+
+        ##MAJOR TODO: change to use seatchdata
+        return self.generateSearchData('uuid', uuid, False)
+        
+        # q = "MATCH (p:entity {uuid:"+str(uuid)+"}) RETURN p"
+        # keywords = '"'
+        # comp = graph.cypher.execute(q)
+        # comp = comp[0][0]
+        # for prop in comp.properties:
+        #     if prop!='uuid' and prop!='aliases':
+        #         currvalue = str(comp.properties[prop])
+        #         currvalue = processString(currvalue)
+        #         if prop!='uuid' and len(currvalue)>3:
+        #             keywords = keywords + "'" +currvalue + "',"
+            
+        
+        # q = "match (n:entity {uuid:"+str(uuid)+"})-[r]-(p) return distinct(p)"
+        # rels = graph.cypher.execute(q)
+        # for rel in rels:
+        #     rel =  rel[0]
+        #     currvalue = str(rel.properties['name'])
+        #     currvalue = processString(currvalue)
+        #     keywords = keywords + "'" +rel.properties['name'] + "',"
+        # keywords = keywords + '"'
+        
+        # labels = '"'
+        # for label in list(comp.labels):
+        #     labels = labels +"'"+label + "',"
+        # labels=labels + '"'
+        
+        # aliases = comp['aliases']
+        # aliases_to_return = '"'
+        # for alias in aliases:
+        #     aliases_to_return = aliases_to_return + "'" +alias + "',"
+        # aliases =aliases_to_return + '"'
+        
+        # name = '"'+comp.properties['name']+'"'
+        
+        # return name, labels, aliases, keywords
     
 
 class SelectionAlgoGraphDB(GraphDB):

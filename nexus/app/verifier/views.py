@@ -75,7 +75,7 @@ def match(kind='node'):
 
     if not request.form:
 
-        graphobjs = gg.matchPossibleObjects(kind, crawl_obj)
+        graphobjs = gg.matchPossibleObjects(kind, crawl_obj, crawl_obj_original)
         connected_ens = gg.getDirectlyConnectedEntitiesCrawl(kind, crawl_obj_original) ##will be none if not hyperedgenode for now
 
         return render_template("verifier_match.html", homeclass="active",
@@ -150,10 +150,22 @@ def diffPushGen(kind='node'):
 
         
         for prop in conf_props:
-            flash(prop+' : '+request.form[prop])
+
+            tosave = str(request.form[prop])
+
+            if (type(orig[prop]) is list) or (type(naya[prop]) is list): ##assuming both are list type only when in conflict
+                import json
+                print type(request.form[prop])
+                print request.form[prop]
+                #json.loads?
+                from ast import literal_eval
+                tosave = literal_eval(request.form[prop])
+
+
+            flash(prop+' : '+str(tosave))
             ##update this prop in orig graph object!
             #orig[prop] = request.form[prop]
-            orig[prop] = request.form[prop] ##naya prop/orig prop 
+            orig[prop] = tosave ##naya prop/orig prop 
 
         
         for label in request.form.getlist('newlabels'):
@@ -165,6 +177,11 @@ def diffPushGen(kind='node'):
         for prop in new_props:
             value_list = request.form.getlist(prop)
             if len(value_list)==1: ##as only one value is going to be any way!
+                tosave = str(request.form[prop])
+                
+                if type(naya[prop]) is list:
+                    from ast import literal_eval
+                    tosave = literal_eval(request.form[prop])
                 flash(prop+' : '+str(value_list[0]))
                 ##add this prop to orig graph object!
                 #orig[prop] = request.form[prop]
@@ -176,6 +193,13 @@ def diffPushGen(kind='node'):
 
         
         flash(kind+ ' : '+CRAWL_ID_NAME+' : '+ str(session[CRAWL_ID_NAME]))
+
+        
+
+
+        if kind=='node':
+            #will be called when node's props are changed to update the row
+            gg.updateIndexDBHelper(curr_id)
 
         gg.setResolvedWithID(kind, crawl_obj_original, curr_id)
 

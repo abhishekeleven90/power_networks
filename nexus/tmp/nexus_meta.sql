@@ -27,9 +27,9 @@ INSERT INTO `users` (`userid`, `password`, `role`, `apikey`,`keyenabled`) VALUES
 
 create table relidtable(
   relid int not null primary key, 
-  reltype varchar(1000), 
-  startuuid int, 
-  enduuid int, 
+  reltype varchar(1000) not null, 
+  startuuid int not null, 
+  enduuid int not null, 
   foreign key (startuuid) references uuidtable(uuid) on delete cascade on update cascade,  
   foreign key (enduuid) references uuidtable(uuid) on delete cascade on update cascade); 
 
