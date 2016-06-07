@@ -86,3 +86,4 @@ class HyperEdgeNode:
         self.dbwrap.commitAndClose() ##what if something breaks? TODO!
 
         print numrows    
+

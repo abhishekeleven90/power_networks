@@ -22,6 +22,25 @@ def temp2():
     print 'will be here if all fine'
     return render_template("temp.html", homeclass="active", temptext ='You are here '+en2.name+' '+en2.labels)
 
+@guest.route('/meta/')
+def meta():
+    from app.models.dbmodels.user import User
+    print 'should work fine'
+    usr = User('amartya', 'yummytummy', 5)
+    usr.insert()
+    usr2 = User('abhishek', 'zzzzzz')
+    usr2.insert()
+    usr2.password = 'wewrerw'
+    usr2.update('password')
+    print usr2.validateUser('yummytummy')
+    usr2.role = 3
+    usr2.keyEnabled = 1
+    usr2.update('all')
+
+    print 'will be here if all fine'
+    return render_template("temp.html", homeclass="active", temptext='You are here ' + usr.userid + ' ' + usr2.userid)
+
+
 @guest.route('/temp3/')
 def temp3():
     from app.utils.locprocess import getCityState

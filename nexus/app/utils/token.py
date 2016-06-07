@@ -1,6 +1,6 @@
 class NexusToken():
 
-    def __init__():
+    def __init__(self):
         '''nothing to do'''
         pass
 
