@@ -86,6 +86,18 @@ def match(kind='node'):
         ##TODO: change this name in html file
         flash(request.form['match_id']) 
 
+        
+        if request.form['match_id']=='##ID##':
+            idval = request.form['input_id']
+            print 'IDVALLlllllll'
+            print idval
+            ##TODO: validatiopn if such id for this kind exists
+            if idval is None or idval.strip() == '':
+                flash('nothing given in id text box')
+                return redirect(url_for('.match', kind = kind))
+            session[CURR_ID] = request.form['input_id']
+            return redirect(url_for('.diffPushGen', kind = kind))
+
         if request.form['match_id']!='##NA##':            
             session[CURR_ID] = request.form['match_id']
             return redirect(url_for('.diffPushGen', kind = kind))

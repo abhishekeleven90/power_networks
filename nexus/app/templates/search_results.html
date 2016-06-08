@@ -120,20 +120,18 @@ jQuery(document).ready(function($) {
                     labels
                 </b>
             </td>
+            <td>
+                <b>
+                    aliases
+                </b>
+            </td>
+
         </tr>
 
         {% for node in nodes %}
 
         <tr class='clickable-row' data-href="{{url_for('readEntity',uuid=node['uuid']|int)}}">
-            <td>
-                    {{node['uuid']}}
-            </td>
-            <td>
-                    {{node['name']}}
-            </td>
-            <td>
-                    {{list2csv(node.labels)}}
-            </td>
+            {{printRowNode(node)}}
         </tr>            
         {% endfor %}
     </table>

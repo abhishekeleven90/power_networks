@@ -15,17 +15,9 @@
 
 <h4> Core Graph Object Meta </h4><hr/>
 <b>UUID :</b> {{orig['uuid']}}<br/>
-<b>Labels :</b> 
+<b>Labels : </b> {{list2csv(orig.labels)}}<br/> 
 
-{%for label in orig.labels%}
-    {{label}}, 
-{% endfor %} <br/>
-
-<b>Aliases :</b> 
-
-{%for alias in orig['aliases']%}
-    {{alias}}, 
-{% endfor %} <br/>
+<b>Aliases :</b> {{list2csv(orig['aliases'])}} <br/>
 
 
 <br/>
