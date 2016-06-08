@@ -161,7 +161,11 @@ def pushLinked():
 
     required_endict_props = ['labels','properties','id']
     reserved_en_props = ['crawl_en_id','resolvedWithUUID','taskname','token','_token','workname','date','time','resolvedDate','resolvedAgainst','verifiedBy','resolvedBy','verifiedDate','update','lastUpdatedBy','lastUpdatedOn', '_crawl_en_id_','_token_','_taskname_','_id_','_nodenumber_'] ##_nodeid_ is the node number along with _token_ and _taskname_ will help us in identifying the node! so do not worry!
-    required_en_props = ['name','aliases'] ##inside entity['properties']
+    
+    ## ALIASES CODE
+    # required_en_props = ['name','aliases'] ##inside entity['properties']
+
+    required_en_props = ['name'] ##inside entity['properties']
 
 
     validate = Validate() ##TODO: move all validations to this class afterwards
@@ -188,9 +192,10 @@ def pushLinked():
             if (not prop in en['properties']) and ('hyperedgenode' not in en['labels']) : ##patch for allowing hyperedgenode, checked doesnt affect anything else
                 return error_helper(str(prop)+' required property missing for an entity', 400)
 
-        if not len(en['properties']['aliases'])>0:
-            return error_helper('aliases list empty for an entity', 400)
-        ##TODO: how to verify if the name is in aliases? 
+        ## ALIASES CODE
+        # if not len(en['properties']['aliases'])>0:
+        #     return error_helper('aliases list empty for an entity', 400)
+        # ##TODO: how to verify if the name is in aliases? 
 
         for prop in reserved_en_props:
             if prop in en['properties']:
@@ -207,12 +212,17 @@ def pushLinked():
         nodelabels = en['labels']
         nodeprops = {}
         for prop in en['properties']:
-            if prop != 'aliases':
-                ##for all MV -- json.loads? or somehting else?
-                nodeprops[prop] = en['properties'][prop]
-        nodeprops['aliases'] = []
-        for val in en['properties']['aliases']:
-            nodeprops['aliases'].append(val)
+            
+            # if prop != 'aliases': ##ALIASES CODE
+
+
+            ##for all MV -- json.loads? or somehting else?
+            nodeprops[prop] = en['properties'][prop]
+
+        ### ALIASES CODE      
+        # nodeprops['aliases'] = []
+        # for val in en['properties']['aliases']:
+        #     nodeprops['aliases'].append(val)
 
         # nodeprops = en['properties']
         nodeprops['_crawl_en_id_'] = 'en_'+tokenid+'_'+taskname+'_'+str(nodeid)

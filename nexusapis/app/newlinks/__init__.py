@@ -15,7 +15,7 @@ def before_request():
 @newlinks.after_request
 def after_request(response):
     print "new links apis bye!!!"
-    print g.db ## this object exists!!
+    #print g.db ## this object exists!!
     return response   
 
 from app.newlinks import views 

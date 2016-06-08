@@ -222,16 +222,10 @@ class GraphDB:
         #moderate any change --> how to do that --> where will this lie!
         #Note the diff between now and then
 
-    def processString(self, currvalue):
-        currvalue = str(currvalue)
-        currvalue = currvalue.replace("'",'')
-        currvalue = currvalue.replace('"','')
-        currvalue = currvalue.replace(',','')
-        currvalue = currvalue.replace(';','')
-        currvalue = currvalue.replace('`','')
-        return currvalue
-
     def generateSearchData(self, idname, idval, isIDString, getList=False):
+
+        from app.utils.commonutils import Utils
+        utils  = Utils()
 
         comp = self.getNodeByUniqueID('entity', idname, idval, isIDString)
         ##comp is the node in question
@@ -251,7 +245,7 @@ class GraphDB:
             ##begins with underscore ignore
             if prop!='uuid' and prop!='aliases' and prop[0]!='_':
                 currvalue = str(comp.properties[prop])
-                currvalue = self.processString(currvalue)
+                currvalue = utils.processString(currvalue)
                 if prop!='uuid' and len(currvalue)>3:
                     if not getList:
                         keywords = keywords + quotes +currvalue + quotes+","
@@ -263,7 +257,7 @@ class GraphDB:
 
         for rel in neighbours:
             currvalue = str(rel.properties['name'])
-            currvalue = self.processString(currvalue)
+            currvalue = utils.processString(currvalue)
             if not getList:
                 keywords = keywords + quotes +rel.properties['name'] + quotes+","
             else:
@@ -337,9 +331,17 @@ class CoreGraphDB(GraphDB):
         return new_labels
 
     def propsDiff(self, orig, naya):
+        from app.constants import MVPLIST
         conf_props = []
         new_props = []
+        #mvp_props = []
         for x in naya.properties:
+
+            # if x in MVPLIST: 
+            #     if type(naya[x]) is list:
+            #     mvp_props.append(x)
+
+
             if x not in orig.properties:
                 new_props.append(x)
             else:
@@ -355,7 +357,7 @@ class CoreGraphDB(GraphDB):
                 ##TODO: disallow some props to come?
                 #conf_props.append(x)
                 conf_props.append(x)
-        return conf_props, new_props
+        return conf_props, new_props #mvp_props
 
 
     #prev is a Node

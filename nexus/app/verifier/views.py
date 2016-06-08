@@ -148,18 +148,26 @@ def diffPushGen(kind='node'):
             new_labels=new_labels,conf_props=conf_props, new_props=new_props,orig=orig, naya=naya, crawl_id = session[CRAWL_ID_NAME], kind=kind)
     else:
 
+        from app.constants import MVPLIST
+        from app.utils.commonutils import Utils
+        utils = Utils()
+
         
         for prop in conf_props:
 
             tosave = str(request.form[prop])
 
-            if (type(orig[prop]) is list) or (type(naya[prop]) is list): ##assuming both are list type only when in conflict
-                import json
-                print type(request.form[prop])
-                print request.form[prop]
-                #json.loads?
-                from ast import literal_eval
-                tosave = literal_eval(request.form[prop])
+            
+            ##the following code just checks if the props in conflict are list
+            ##then we choose one of them, convert them to list and push
+            ##but this seems to be a bad idea
+            ##so commenting out
+
+            
+
+
+
+
 
 
             flash(prop+' : '+str(tosave))
@@ -175,17 +183,31 @@ def diffPushGen(kind='node'):
 
         
         for prop in new_props:
+            
             value_list = request.form.getlist(prop)
+            
             if len(value_list)==1: ##as only one value is going to be any way!
+
                 tosave = str(request.form[prop])
                 
-                if type(naya[prop]) is list:
-                    from ast import literal_eval
-                    tosave = literal_eval(request.form[prop])
+               
+
+
                 flash(prop+' : '+str(value_list[0]))
                 ##add this prop to orig graph object!
                 #orig[prop] = request.form[prop]
-                orig[prop] = request.form[prop] ##naya prop/orig prop 
+                orig[prop] = tosave ##naya prop/orig prop 
+
+
+
+        ##name with alias patch
+        aliascopy = utils.copyListOfStrings(orig['aliases']) 
+        for alias in request.form.getlist('addtoalias'):
+            flash('addtoalias: '+str(alias))
+            alias = utils.processString(alias)
+            if alias not in aliascopy:
+                aliascopy.append(alias)
+        orig['aliases'] = aliascopy
         
         
 

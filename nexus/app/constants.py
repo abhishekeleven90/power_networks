@@ -68,5 +68,10 @@ META_TABLE_HENID = 'henidtable'
 ##INDEX TABLE NAMES
 INDEX_TABLE_ENTITIES = 'entities'
 
+##MULTI-VALUED PROP
+##contains for both nodes and rels overall
+MVPLIST = ["aliases","phones","addresses"]
+##TODO: add to api validation
+
 ##GOOGLE MAPS API KEY
 APIKEY="AIzaSyALThUkSSrl0qMGPnaewBghOhkA81vDQHk"

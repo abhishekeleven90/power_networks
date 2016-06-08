@@ -39,7 +39,6 @@ app.register_blueprint(newlinks, url_prefix='/newlinks')
 app.config.from_object('config')
 
 from peewee import *
-from dbwork import *
 
 
 # Request handlers -- these two hooks are provided by flask and we will use them
@@ -51,15 +50,13 @@ def before_request():
     ##you need to get which url from some custom object flask may provide
     ##raise permission denied error
     print 'power nexus apis hi'
-    g.db = dbwork.dbobject()
-    g.db.connect()
-    g.user = None ##Session related
+    
     ##adding for neo4j graph
 
 @app.after_request
 def after_request(response):
     print 'power nexus apis bye'
-    g.db.close()
+    #g.db.close()
     return response
 
 from app import views

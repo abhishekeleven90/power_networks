@@ -179,7 +179,7 @@ class GraphHandle():
             matchingUUIDS = matchingUUIDS[:50]
 
         ##remove this to have search for you!
-        matchingUUIDS = [154293, 154294]
+        #matchingUUIDS = [154293, 154294]
 
         return self.coredb.getNodeListCore(matchingUUIDS)
 

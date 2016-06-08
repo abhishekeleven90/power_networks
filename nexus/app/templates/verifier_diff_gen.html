@@ -2,14 +2,33 @@
 {% extends "basicwithmacros.html" %}
 {% block content %}
 
-<br/>
-<h1> Crawl ID : {{crawl_id}} </h1>
-<h1> Kind: {{kind}} </h1>
-<br/>
+
 
 
 <div class="starter-template" align="center" >
 
+<br/>
+<h4> Crawl Object Meta </h4><hr/>
+<b>Crawl ID :</b> {{crawl_id}}<br/>
+<b>Kind :</b> {{kind}}
+<br/><br/>
+
+<h4> Core Graph Object Meta </h4><hr/>
+<b>UUID :</b> {{orig['uuid']}}<br/>
+<b>Labels :</b> 
+
+{%for label in orig.labels%}
+    {{label}}, 
+{% endfor %} <br/>
+
+<b>Aliases :</b> 
+
+{%for alias in orig['aliases']%}
+    {{alias}}, 
+{% endfor %} <br/>
+
+
+<br/>
 
 <form class="form-horizontal" method="post" action={{url_for('verifier.diffPushGen', kind=kind)}}>
     
@@ -70,16 +89,22 @@
                     <td>
                         <b>New</b>
                     </td>
+                    <td>
+                        <b>Extra Info</b>
+                    </td>
                 </tr>
 
 
             {% for prop in conf_props%}
 
                 {% set origprop, nayaprop = diffObjects(orig[prop], naya[prop]) %}
+
+
+
             
                 <tr>
-                    <td>
-                       
+
+                    <td>   
                     <div class="radio">
                         <label>   
                             <!--checked is very imp very very imp!-->
@@ -87,18 +112,27 @@
                             <input type="radio" name="{{prop}}" value="{{orig[prop]}}" checked=""></input> {{prop}}: <b>{{origprop | safe}}</b>
                         </label>
                     </div>                    
-                     
-
                     </td>
-                    <td>
 
+
+
+                    <td>
                         <div class="radio">
                             <label>
                                 <input type="radio" name="{{prop}}" value="{{naya[prop]}}"></input> {{prop}}: <b>{{nayaprop | safe}}</b>
                             </label>
                         </div>
+                    </td>
+                    
 
-
+                    <td>
+                    {% if prop == 'name'%}
+                    
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="addtoalias" value="{{naya[prop]}}"></input> Add <b>{{naya[prop]}}</b> to aliases </label>
+                        </div class="checkbox">
+                    
+                    {% endif %}
                     </td>
 
                 </tr>
