@@ -37,6 +37,8 @@ CRAWL_GRAPH_HOST = 'localhost'
 CRAWL_GRAPH_USER = 'neo4j'
 CRAWL_GRAPH_PORT = '8484' ##for http this is
 CRAWL_GRAPH_PASSWORD = 'yoyo'
+CRAWL_LOCK_LIMIT = 60 ##seconds
+CRAWl_JOB_INTERVAL = 10 ##seocnds
 
 #CORE_GRAPH_SYMBOLS
 CORE_GRAPH_UUID = 'uuid'

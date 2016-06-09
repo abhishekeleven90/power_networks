@@ -39,21 +39,49 @@ class GraphHandle():
     def updateCrawlRelation(self, rel, uuid):
         self.crawldb.setResolvedWithRELID(self, rel, relid)
 
-    def nextNodeToResolve(self):
-        #TODO: remove prints
-        node, degree =  self.crawldb.getNearestBestNode()
-        print node
-        return node ##returns a type py2neo.Node, can be None
+    def nextNodeToResolve(self, userid):
 
-    def nextHyperEdgeNodeToResolve(self):
+        ##can put a check here to see if all nodes locked at moment
+        ##dont proceed further
+
+        # ##no longer would be required
+        # count = self.crawldb.countNotLockedUnresolvedNodes() 
+        # if count == 0:
+        #     return None
+
+        node, degree =  self.crawldb.getNearestBestNode()
+        
+        if node is None:
+            ##all nodes resolved or locked -  by new changes
+            ##no node to resolve
+            return node ##returns a type py2neo.Node, can be None
+
+        node = self.crawldb.lockObject(node, userid)
+
+        if node is None:
+            ##was already locked if goes in this condition
+            node = self.nextNodeToResolve(userid)
+            return node
+
+        return node
+
+    def nextHyperEdgeNodeToResolve(self, userid):
         #TODO: remove prints
         node =  self.crawldb.getNearestBestHyperEdgeNode()
         print 'hyperedgenode selected'
         print node
         return node ##returns a type py2neo.Node, can be None
 
-    def nextRelationToResolve(self):
+    def nextRelationToResolve(self, userid):
         rel =  self.crawldb.getNextRelationToResolve()
+        if rel is None:
+            return rel
+        
+        rel = self.crawldb.lockObject(rel, userid)
+        if rel is None:
+            rel = self.nextRelationToResolve(userid)
+            return rel
+        
         return rel ##returns a type py2neo.relation, can be None
 
     def getNodeListCore(self, uuidList):
@@ -247,7 +275,7 @@ class GraphHandle():
 
         return ans
 
-    def nextTaskToResolve(self, kind):
+    def nextTaskToResolve(self, kind, userid):
 
         '''
             given a kind - node, relation, hyperedge
@@ -258,11 +286,11 @@ class GraphHandle():
         graphobj = None
 
         if kind == 'relation':
-            graphobj =  self.nextRelationToResolve()
+            graphobj =  self.nextRelationToResolve(userid)
         elif kind == 'node':
-            graphobj =  self.nextNodeToResolve()
+            graphobj =  self.nextNodeToResolve(userid)
         elif kind == 'hyperedgenode':
-            graphobj = self.nextHyperEdgeNodeToResolve() 
+            graphobj = self.nextHyperEdgeNodeToResolve(userid) 
         
         return graphobj
 
@@ -416,6 +444,13 @@ class GraphHandle():
         conf_props,new_props = self.coredb.propsDiff(orig,naya)
 
         return new_labels, conf_props, new_props
+
+    def checkLockProperties(self, crawl_obj_original, userid):
+        if crawl_obj_original.properties.get('_lockedby_') is None:
+            return "none" ##locked by none
+        if crawl_obj_original.properties.get('_lockedby_') != userid:
+            return "other" ##locked by other
+
 
 
 

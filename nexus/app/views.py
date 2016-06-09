@@ -242,12 +242,14 @@ def background():
 
 def alarm(time, sched):
     from datetime import datetime, timedelta
+    from app.models.graphmodels.graphdb import SelectionAlgoGraphDB
+    from app.constants import CRAWl_JOB_INTERVAL
+
     print('JOB! This job was scheduled at %s.' % time)
 
-    from app.models.graphmodels.graphdb import SelectionAlgoGraphDB
     gg = SelectionAlgoGraphDB()
     print str(gg.releaseLocks())+' crawl verifier locks released in this cycle'
-    alarm_time = datetime.now() + timedelta(seconds=300) ## 5 mins
+    alarm_time = datetime.now() + timedelta(seconds=CRAWl_JOB_INTERVAL)
 
     sched.add_job(alarm, 'date', run_date=alarm_time, args=[datetime.now(), sched])
 

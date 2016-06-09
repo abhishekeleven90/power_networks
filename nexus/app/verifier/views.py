@@ -7,6 +7,18 @@ def show():
     # have a verifier page!
     # show the begin task button!
     gg = GraphHandle()
+
+    
+    # #adding here too, so that whenever I am here, new thing starts always!
+    # ##TODO: can we show pending tasks?
+    
+    # CRAWL_ID_NAME, CURR_ID  = gg.getTwoVars(kind)
+
+    # ##This is needed whenever a new task is started
+    # ##Task would mean anything node resolution, rel resolution, or hyperedge resolution
+    # session.pop(CRAWL_ID_NAME, None)
+    # session.pop(CURR_ID, None)
+
     unresolvedTotal, immediateUnResolvedTotal = gg.getCrawlNodeStats()
     r_unresolvedTotal, r_immediateUnResolvedTotal = gg.getCrawlRelationStats()
     h_unresolvedTotal, h_immediateUnResolvedTotal = gg.getCrawlHyperEdgeNodeStats()
@@ -37,7 +49,7 @@ def startTask(kind='node'):
         
         print 'startTask: ckecked tasks to resolve exist for kind'+kind+'!!'
 
-        graphobj = gg.nextTaskToResolve(kind)
+        graphobj = gg.nextTaskToResolve(kind, session.get('userid'))
 
         print graphobj
 
@@ -64,6 +76,15 @@ def match(kind='node'):
         return redirect(url_for('.show'))
 
     crawl_obj_original = gg.getCrawlObjectByID(kind, CRAWL_ID_NAME, session[CRAWL_ID_NAME], isIDString = True)
+
+
+    lockprop = gg.checkLockProperties(crawl_obj_original, session.get('userid'))
+    if lockprop == 'none':
+        return render_template("temp.html", homeclass="active", temptext="Graph object's lock has aready been removed. Begin again")
+    if lockprop == 'other':
+        return render_template("temp.html", homeclass="active", temptext="Graph object's lock has been locked by someone else in due time. Begin again")
+
+
 
     ##essential node meta is required when actually creating the node
     ##also will be required when resolving the relation, though can be taken from original
@@ -143,6 +164,23 @@ def diffPushGen(kind='node'):
 
     
     crawl_obj_original = gg.getCrawlObjectByID(kind, CRAWL_ID_NAME, session[CRAWL_ID_NAME], isIDString = True)
+
+    ##here we check if actually the node is locked
+    ##only then proceed
+
+    ##TODO: check if same user locked, and lock by same user
+    ##TODO: relations too, keep as general as possible
+    ##remove locks from general nodes too
+    ##let the code be fixed then we can copy code to match too
+    ##change the count in the view too
+
+    lockprop = gg.checkLockProperties(crawl_obj_original, session.get('userid'))
+    if lockprop == 'none':
+        return render_template("temp.html", homeclass="active", temptext="Graph object's lock has aready been removed. Begin again")
+    if lockprop == 'other':
+        return render_template("temp.html", homeclass="active", temptext="Graph object's lock has been locked by someone else in due time. Begin again")
+
+
     crawl_obj = gg.copyCrawlObject(kind, crawl_obj_original)
     
 
@@ -220,7 +258,6 @@ def diffPushGen(kind='node'):
             if alias not in aliascopy:
                 aliascopy.append(alias)
         orig['aliases'] = aliascopy
-        
         
 
         orig.push()#one graph object resolved! 
