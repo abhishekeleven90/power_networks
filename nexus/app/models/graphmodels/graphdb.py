@@ -567,11 +567,13 @@ class SelectionAlgoGraphDB(GraphDB):
         rel.push()
         
     def getNearestBestNode(self):
+        ##will have to chamnge in three functions
         from app.constants import LABEL_ENTITY
         query = 'match (n:'+LABEL_ENTITY+')--(c:'+LABEL_ENTITY+') where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'AND not exists(c.' + self.metaprops['RESOLVEDUUID'] +') ' 
         #query = query + "AND not '"+HYPEREDGE_NODE_LABEL+"'' in labels(c) " 
-        query = query + 'return c'
+        query = query + 'return c'  
+        print 'query1: '+query
         maxdegree = 0
         maxnode = None
         for node in self.graph.cypher.execute(query):
@@ -586,7 +588,28 @@ class SelectionAlgoGraphDB(GraphDB):
             print '[SelectionAlgoGraphDB: highest didnt work, working on first]'
             maxnode, maxdegree = self.getFirstUnresolvedNode(), 0
         return maxnode, maxdegree
-    
+
+    '''
+    match (n {_crawl_en_id_:'en_NexusToken2_wow98_5'}) where not exists(n._lockedby_) with n 
+    set n._lockedby_ = 'abhiagar90@gmail.com', n._lockedat_=timestamp() return n'''
+
+    '''
+    match (n) where exists(n._lockedby_) and (timestamp()-n._lockedat_) > 300 * 1000 remove n._lockedby_, n._lockedat_ return n
+    '''
+
+    def lockNode(self, node, userid):
+        query = "match(n {_crawl_en_id_:'%s'}) where not exists(n._lockedby_) with n set n._lockedby_ = '%s', n._lockedat_=timestamp() return n"
+        query = query %(node['_crawl_en_id_'], userid)
+        results  = self.graph.cypher.execute(query)
+        if len(results)==0:
+            return None
+        return results[0][0]
+
+    def releaseLocks(self):
+        query = "match (n) where exists(n._lockedby_) and (timestamp()-n._lockedat_) > 300 * 1000 remove n._lockedby_, n._lockedat_ return count(n)"
+        results  = self.graph.cypher.execute(query)
+        return results[0][0]
+        
     def getNextRelationToResolve(self):
         ##TODO: use constant here for entity
         query = 'match (n:entity)-[r]->(p:entity) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') ' ##direction included
