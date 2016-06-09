@@ -56,14 +56,6 @@ match (n:entity) return n.uuid, n.name
 
 
 
-INSERT INTO `users` (`userid`, `password`, `role`, `apikey`,`keyenabled`) VALUES
-('abhi1@gmail.com', '48dc8d29308eb256edc76f25def07251', 1, 'token1', 0),
-('abhi2@gmail.com', '48dc8d29308eb256edc76f25def07251', 2, 'token2', 1),
-('abhi3@gmail.com', '48dc8d29308eb256edc76f25def07251', 3, 'token3', 1),
-('abhi4@gmail.com', '48dc8d29308eb256edc76f25def07251', 4, 'token4', 1),
-('abhi5@gmail.com', '48dc8d29308eb256edc76f25def07251', 5, 'token5', 1),
-('abhi6@gmail.com', '48dc8d29308eb256edc76f25def07251', 6, 'token6', 1),
-('abhi7@gmail.com', '48dc8d29308eb256edc76f25def07251', 7, 'token7', 1);
 
 apikey is not going to be unique is the takeaway !!
 

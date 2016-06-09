@@ -1,3 +1,4 @@
+
 CREATE TABLE IF NOT EXISTS `users` (
   `userid` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -123,3 +124,4 @@ CREATE TABLE `relidprops` (
   foreign key (`changeid`) references `changetable`(`changeid`) on delete cascade on update cascade,
   foreign key (`relid`) references `relidtable`(`relid`) on delete cascade on update cascade
 );
+
