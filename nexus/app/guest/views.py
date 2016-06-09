@@ -22,8 +22,73 @@ def temp2():
     print 'will be here if all fine'
     return render_template("temp.html", homeclass="active", temptext ='You are here '+en2.name+' '+en2.labels)
 
-@guest.route('/meta/')
-def meta():
+@guest.route('/uuid/')
+def uuid():
+    print 'should work fine'
+    from app.models.dbmodels.uuid import UuidTable, UuidLabels, UuidProps
+    #First check reltable
+    #r = UuidTable(1111111, name='Abhishek')
+    #r.create()
+    #r2 = UuidTable.getUuid(1111111)
+    #r2.name = 'AJAY'
+    #r2.update('name')
+    #print r2
+
+    #Second check rellabels
+    #r = UuidLabels(changeid=2, uuid=1111111, label='gigi', changetype=1)
+    #r.create()
+    #r2 = UuidLabels(changeid=2, uuid=1111111, label='aa', changetype=1)
+    #r2.create()
+    #r3 = UuidLabels.getUuidLabels(2)
+    #print r3
+
+    #Last, check relprops
+    r = UuidProps(changeid=2, uuid=1111111, propname='nana',
+                  newpropvalue='wer', changetype=0)
+    r.create()
+    r2 = UuidProps(changeid=2, uuid=1111111, propname='mama',
+                   oldpropvalue='ert', newpropvalue='ort', changetype=1)
+    r2.create()
+    r3 = UuidProps.getUuidProps(2)
+    print r3
+    print 'should be here if all works fine'
+    return render_template("temp.html", homeclass="active", temptext='You are here ' + str(r3))
+
+
+@guest.route('/rel/')
+def rel():
+    #First check reltable
+    print 'should work fine'
+    from app.models.dbmodels.relid import RelIdTable, RelLabels, RelProps
+    #r = RelIdTable(1111111, reltype='works_in', startuuid = 10, enduuid=2)
+    #r.create()
+    #r2 = RelIdTable.getRel(1111111)
+    #r2.startuuid = 1
+    #r2.reltype = 'jingalala'
+    #r2.update('all')
+
+    #Second check rellabels
+    #r = RelLabels(changeid=2, relid=1111111, label='gigi', changetype=1)
+    #r.create()
+    #r2 = RelLabels(changeid=2, relid=1111111, label='aa', changetype=1)
+    #r2.create()
+    #r3 = RelLabels.getRelLabels(2)
+    #print r3
+
+    #Last, check relprops
+    r = RelProps(changeid=2, relid=1111111, propname='nana',
+                 newpropvalue='wer', changetype=0)
+    r.create()
+    r2 = RelProps(changeid=2, relid=1111111, propname='mama',
+                  oldpropvalue='ert', newpropvalue='ort', changetype=1)
+    r2.create()
+    r3 = RelProps.getRelProps(2)
+    print r3
+    print 'should be here if all works fine'
+    return render_template("temp.html", homeclass="active", temptext='You are here ' + str(r3))
+
+@guest.route('/user/')
+def user():
     from app.models.dbmodels.user import User
     print 'should work fine'
     usr = User('amartya', 'yummytummy', 5)
@@ -39,6 +104,51 @@ def meta():
 
     print 'will be here if all fine'
     return render_template("temp.html", homeclass="active", temptext='You are here ' + usr.userid + ' ' + usr2.userid)
+
+@guest.route('/tasks/')
+def tasks():
+    from app.models.dbmodels.tasks import Tasks, Taskusers, Tasklog
+    print 'should work fine'
+    ## Tasks class
+    #task = Tasks('abhi1@gmail.com', 'yummytummy', 'yummytummydesc')
+    #task.create()
+    #task2 = Tasks('abhi7@gmail.com', 'zzzzzz')
+    #task2.create()
+    #print task2.taskid
+    #task2.name = 'abhishekzzzz'
+    #task2.description = 'new desc'
+    #task2.update('all')
+    #task2.description = 'more new desc'
+    #task2.update('description')
+    #task = Tasks.getTask(6)
+    #print task.ownerid
+
+    ## Taskusers class
+    tuser = Taskusers(7, 'abhi7@gmail.com')
+    tuser.create()
+
+    ## Tasklogs class
+    #tlog = Tasklog(9, 'abhishek', 'hifive', 'fatafati')
+    #tlog.create()
+    #tlog = Tasklog.getTasklog('abhishek', 9)
+    #print tlog.description
+
+    tusr = Taskusers(taskid=7)
+    print tusr.getListFromDB('taskid')
+    print 'will be here if all fine'
+    return render_template("temp.html", homeclass="active", temptext='You are here')
+
+@guest.route('/changeitem/')
+def changeitem():
+    from app.models.dbmodels.change import ChangeItem
+    print 'should work fine'
+    #chg = ChangeItem(6, pushedby='abhi1@gmail.com', verifiedby='abhi7@gmail.com')
+    #chg.insert()
+    chg2 = ChangeItem.getChangeItem(2)
+    print chg2
+    print 'will be here if all fine'
+    return render_template("temp.html", homeclass="active", temptext='You are here ' + str(chg2))
+
 
 
 @guest.route('/temp3/')

@@ -62,7 +62,7 @@ class User:
         except:
             print "[User object] In update"
             print "Cannot get cursor"
-            self.dbwrap.commitAndClosall
+            self.dbwrap.commitAndClose()
         base_query = "UPDATE " + META_TABLE_USER + " SET "
         rest_query = " WHERE userid= '"+str(self.userid) + "'"
         if column == "all":
