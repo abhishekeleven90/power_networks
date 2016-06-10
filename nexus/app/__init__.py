@@ -45,3 +45,5 @@ from app import views
 
 from app.utils.diffcolors import diffObjects
 app.jinja_env.globals.update(diffObjects=diffObjects)
+
+

@@ -222,16 +222,10 @@ class GraphDB:
         #moderate any change --> how to do that --> where will this lie!
         #Note the diff between now and then
 
-    def processString(self, currvalue):
-        currvalue = str(currvalue)
-        currvalue = currvalue.replace("'",'')
-        currvalue = currvalue.replace('"','')
-        currvalue = currvalue.replace(',','')
-        currvalue = currvalue.replace(';','')
-        currvalue = currvalue.replace('`','')
-        return currvalue
-
     def generateSearchData(self, idname, idval, isIDString, getList=False):
+
+        from app.utils.commonutils import Utils
+        utils  = Utils()
 
         comp = self.getNodeByUniqueID('entity', idname, idval, isIDString)
         ##comp is the node in question
@@ -251,7 +245,7 @@ class GraphDB:
             ##begins with underscore ignore
             if prop!='uuid' and prop!='aliases' and prop[0]!='_':
                 currvalue = str(comp.properties[prop])
-                currvalue = self.processString(currvalue)
+                currvalue = utils.processString(currvalue)
                 if prop!='uuid' and len(currvalue)>3:
                     if not getList:
                         keywords = keywords + quotes +currvalue + quotes+","
@@ -263,7 +257,7 @@ class GraphDB:
 
         for rel in neighbours:
             currvalue = str(rel.properties['name'])
-            currvalue = self.processString(currvalue)
+            currvalue = utils.processString(currvalue)
             if not getList:
                 keywords = keywords + quotes +rel.properties['name'] + quotes+","
             else:
@@ -337,9 +331,17 @@ class CoreGraphDB(GraphDB):
         return new_labels
 
     def propsDiff(self, orig, naya):
+        from app.constants import MVPLIST
         conf_props = []
         new_props = []
+        #mvp_props = []
         for x in naya.properties:
+
+            # if x in MVPLIST: 
+            #     if type(naya[x]) is list:
+            #     mvp_props.append(x)
+
+
             if x not in orig.properties:
                 new_props.append(x)
             else:
@@ -355,7 +357,7 @@ class CoreGraphDB(GraphDB):
                 ##TODO: disallow some props to come?
                 #conf_props.append(x)
                 conf_props.append(x)
-        return conf_props, new_props
+        return conf_props, new_props #mvp_props
 
 
     #prev is a Node
@@ -519,7 +521,9 @@ class SelectionAlgoGraphDB(GraphDB):
     def getFirstUnresolvedNode(self):
         from app.constants import LABEL_ENTITY
         results = []
-        query = 'MATCH (n:'+LABEL_ENTITY+') where not exists(n.'+self.metaprops['RESOLVEDUUID'] +') ' +' return n limit 1'
+        query = 'MATCH (n:'+LABEL_ENTITY+') where not exists(n.'+self.metaprops['RESOLVEDUUID'] +') '
+        query = query + 'AND not exists(n._lockedby_) ' 
+        query = query +' return n limit 1'
         results = self.graph.cypher.execute(query)
         if len(results)==0:
             return None
@@ -530,6 +534,7 @@ class SelectionAlgoGraphDB(GraphDB):
         results = []
         count = 0 ## 50  tries
         query = 'MATCH (n:'+LABEL_ENTITY+') WITH n WHERE rand() < 0.5 AND not exists(n.'+self.metaprops['RESOLVEDUUID'] +') ' 
+        query = query + 'AND not exists(c._lockedby_) '
         query = query +' return n limit 1'
         #print query
         while len(results) == 0 and count < 50:
@@ -543,6 +548,7 @@ class SelectionAlgoGraphDB(GraphDB):
         from app.constants import LABEL_ENTITY
         ##TODO: get resolvedwithUUID out!
         query = 'start n = node(*) match (n:'+LABEL_ENTITY+')--(c) where not exists(n.'+self.metaprops['RESOLVEDUUID'] +') '
+        query = query + 'AND not exists(n._lockedby_) '
         query = query + 'return n, count(*) as connections order by connections desc limit 1'
         ##note that according to this query, c can be a hyperedge node too.
         #print query
@@ -555,6 +561,7 @@ class SelectionAlgoGraphDB(GraphDB):
     def setResolvedWithUUID(self, node, uuid):
         node.properties[self.metaprops['RESOLVEDUUID']] = uuid
         node.push()
+        node = self.unlockObject(node)
 
     def setResolvedWithHENID(self, hyperedgenode, henid):
         hyperedgenode.properties[self.metaprops['RESOLVEDHENID']] = henid
@@ -563,13 +570,17 @@ class SelectionAlgoGraphDB(GraphDB):
     def setResolvedWithRELID(self, rel, relid):
         rel.properties[self.metaprops['RESOLVEDRELID']] = relid
         rel.push()
+        rel = self.unlockObject(rel)
         
     def getNearestBestNode(self):
+        ##will have to chamnge in three functions
         from app.constants import LABEL_ENTITY
         query = 'match (n:'+LABEL_ENTITY+')--(c:'+LABEL_ENTITY+') where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
-        query = query + 'AND not exists(c.' + self.metaprops['RESOLVEDUUID'] +') ' 
+        query = query + 'AND not exists(c.' + self.metaprops['RESOLVEDUUID'] +') '
+        query = query + 'AND not exists(c._lockedby_) ' 
         #query = query + "AND not '"+HYPEREDGE_NODE_LABEL+"'' in labels(c) " 
-        query = query + 'return c'
+        query = query + 'return c'  
+        print 'query1: '+query
         maxdegree = 0
         maxnode = None
         for node in self.graph.cypher.execute(query):
@@ -584,12 +595,95 @@ class SelectionAlgoGraphDB(GraphDB):
             print '[SelectionAlgoGraphDB: highest didnt work, working on first]'
             maxnode, maxdegree = self.getFirstUnresolvedNode(), 0
         return maxnode, maxdegree
-    
+
+    '''
+    match (n {_crawl_en_id_:'en_NexusToken2_wow98_5'}) where not exists(n._lockedby_) with n 
+    set n._lockedby_ = 'abhiagar90@gmail.com', n._lockedat_=timestamp() return n'''
+
+    '''
+    match (n) where exists(n._lockedby_) and (timestamp()-n._lockedat_) > 300 * 1000 remove n._lockedby_, n._lockedat_ return n
+    '''
+
+    # def lockNode(self, node, userid):
+    #     query = "match (n {_crawl_en_id_:'%s'}) where not exists(n._lockedby_) with n set n._lockedby_ = '%s', n._lockedat_=timestamp() return n"
+    #     query = query %(node['_crawl_en_id_'], userid)
+    #     results  = self.graph.cypher.execute(query)
+    #     if len(results)==0:
+    #         return None
+    #     return results[0][0]
+
+    def lockObject(self, graphobject, userid):
+
+        '''generic code given graphobject and userid, 
+        locks it. But if already locked returns None else returns update graphobject'''
+
+        if str(type(graphobject)).find('Relationship')!=-1:
+            kind = 'relation'
+
+        if str(type(graphobject)).find('Node')!=-1:
+            kind = 'node'
+
+        propdict = "{%s:'%s'}"
+        objmatch = ''
+
+        
+        if kind == 'node':
+            propdict = propdict %('_crawl_en_id_',graphobject['_crawl_en_id_'])
+            objmatch = "(n %s)"
+            objmatch = objmatch %(propdict)
+        if kind == 'relation':
+            propdict = propdict %('_crawl_rel_id_',graphobject['_crawl_rel_id_'])
+            objmatch = "()-[n %s]-()"
+            objmatch = objmatch %(propdict)
+            
+        #print objmatch
+            
+        
+        query = "match %s where not exists(n._lockedby_) with n set n._lockedby_ = '%s', n._lockedat_=timestamp() return n"
+        query = query %(objmatch, userid)
+        #print query
+        results  = self.graph.cypher.execute(query)
+
+        if len(results)==0:
+            return None
+
+        return results[0][0]
+
+    def unlockObject(self, graphobject):
+        graphobject.properties['_lockedby_'] = None
+        graphobject.properties['_lockedat_'] = None
+        graphobject.push()
+        return graphobject
+
+    def releaseLocks(self):
+        from app.constants import CRAWL_LOCK_LIMIT
+        query = "match (n) where exists(n._lockedby_) and (timestamp()-n._lockedat_) > %s * 1000 remove n._lockedby_, n._lockedat_ return count(n)"
+        query = query %(str(CRAWL_LOCK_LIMIT))
+        results  = self.graph.cypher.execute(query)
+        nodecount = results[0][0]
+
+        query = "match ()-[n]->() where exists(n._lockedby_) and (timestamp()-n._lockedat_) > %s * 1000 remove n._lockedby_, n._lockedat_ return count(n)"
+        query = query %(str(CRAWL_LOCK_LIMIT))
+        results  = self.graph.cypher.execute(query)
+        relcount = results[0][0]
+
+        return nodecount, relcount
+
+    def checkIfNodeLocked(self, node):
+        query = "match (n {_crawl_en_id_:'%s'}) where exists(n._lockedby_) and (timestamp()-n._lockedat_) > %s * 1000 remove n._lockedby_, n._lockedat_ return count(n)"
+        pass
+
+    def countNotLockedUnresolvedNodes(self):
+        query = "match (n) where not exists(n._lockedby_) and not exists(n._resolvedWithUUID_) return count(n)"
+        results  = self.graph.cypher.execute(query)
+        return results[0][0]        
+        
     def getNextRelationToResolve(self):
         ##TODO: use constant here for entity
         query = 'match (n:entity)-[r]->(p:entity) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') ' ##direction included
         query = query + 'AND exists(p.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'AND not exists(r.' + self.metaprops['RESOLVEDRELID'] +') '
+        query = query + 'AND not exists(r._lockedby_) '
         query = query + 'return r limit 1'
         #print query
         results = self.graph.cypher.execute(query)

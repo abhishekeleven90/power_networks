@@ -1,6 +1,5 @@
 from app import app
 from flask import render_template, flash, redirect, session, g, request, url_for, abort, jsonify
-from dbwork import *
 
 ##Usage: curl -i http://localhost:5000/
 @app.route('/')

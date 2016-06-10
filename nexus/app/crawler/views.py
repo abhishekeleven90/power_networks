@@ -1,13 +1,8 @@
 from app.crawler import crawler
-from flask import render_template, flash, redirect, session, request, url_for, current_app
+from flask import render_template, flash, redirect, session, request, url_for, abort
 from app.models.dbmodels.tasks import Tasks, Tasklog, Taskusers
+from app.forms import EditEntityForm, form_error_helper
 
-
-@crawler.route('/')
-def crawler_home():
-
-    ##TODO - set up variables and render user homepage
-    return
 
 ##Show add task page
 @crawler.route('/addtask/', methods=['GET', 'POST'])
@@ -31,3 +26,6 @@ def newtask():
     return
 
 
+@crawler.route('/')
+def show():
+    return render_template("crawler_home.html", homeclass="active", temptext='crawler')

@@ -59,4 +59,6 @@ match (n:entity) return n.uuid, n.name
 
 apikey is not going to be unique is the takeaway !!
 
+ mysqlimport --ignore-lines=1 --fields-terminated-by=, --columns='uuid,name' --local -u root -p powernexus uuids.csv
+
 

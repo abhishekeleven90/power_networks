@@ -31,28 +31,77 @@
         <h3>From graph</h3>
         <br/>
 
-        {% for obj in graphobjs %}
-        
-            <div class="radio">
-                <label><input type="radio" name="match_id" value="{{obj.properties[idname]}}"></input> {{obj.properties[idname]}}</label> <!-- AA -->
-            </div>
+        {% if kind == 'node' %}
+            <table class="table table-hover">
+                    <tr>
+                        
+                        <td>
+                            <b>
+                                uuid
+                            </b>
+                        </td>
+                        <td>
+                            <b>
+                                name
+                            </b>
+                        </td>
+                        <td>
+                            <b>
+                                labels
+                            </b>
+                        </td>
+                        <td>
+                            <b>
+                                aliases
+                            </b>
+                        </td>
+                        <td>
+                            <b>
+                                select
+                            </b>
+                        </td>
+                    </tr>
 
-            {% if kind == 'node' %}
-                {{entity_read(obj,True)}}
-            {% endif %}
+                    {% for obj in graphobjs %}
+                    <tr>
+                        
+
+                        {{printRowNode(obj)}}
+
+                        <td>
+                            <div class="radio">
+                                <label><input type="radio" name="match_id" value="{{obj.properties[idname]}}"></input> </label>
+                            </div>
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+
+            </table>
 
 
-            {% if kind == 'relation' %}
-                {{relation_read(obj,True,False)}}
-            {% endif %}
+        {% else %}        
 
-            {% if kind == 'hyperedgenode' %}
-                {{entity_read(obj,True)}}
-            {% endif %}
-
-            <hr/>
+            {% for obj in graphobjs %}
+                 
             
-        {% endfor %}
+                <div class="radio">
+                    <label><input type="radio" name="match_id" value="{{obj.properties[idname]}}"></input> {{obj.properties[idname]}}</label> <!-- AA -->
+                </div>
+
+
+                {% if kind == 'relation' %}
+                    {{relation_read(obj,True,False)}}
+                {% endif %}
+
+                {% if kind == 'hyperedgenode' %}
+                    {{entity_read(obj,True)}}
+                {% endif %}
+
+                    <hr/>     
+            {% endfor %}
+
+        {% endif %}
     
             <div class="radio">
                 
@@ -60,6 +109,26 @@
                 <label><input type="radio" name="match_id" value="##NA##"></input> No I don't find the graph object of kind {{kind}} here! </label> <!-- AA --> 
 
             </div>
+            <hr/>
+
+            <div class="radio">
+                
+                
+                <label><input type="radio" name="match_id" value="##ID##"></input> Will enter my own ID for kind {{kind}}:  </label> <!-- AA --> 
+
+                <label><input type="text" name="input_id"/></label> <!-- AA --> 
+
+            </div>
+<!-- 
+            <div class="text">
+                
+                
+                
+
+            </div> -->
+
+
+
             <hr/>
 
 

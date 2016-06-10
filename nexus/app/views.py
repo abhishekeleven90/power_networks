@@ -235,6 +235,33 @@ def trial():
     return 'done'
 
 
+@app.before_first_request
+def background():
+    startBackGroundJob()
+    pass
+
+def alarm(time, sched):
+    from datetime import datetime, timedelta
+    from app.models.graphmodels.graphdb import SelectionAlgoGraphDB
+    from app.constants import CRAWl_JOB_INTERVAL
+
+    print('JOB! This job was scheduled at %s.' % time)
+
+    gg = SelectionAlgoGraphDB()
+    print str(gg.releaseLocks())+' crawl verifier locks released in this cycle'
+    alarm_time = datetime.now() + timedelta(seconds=CRAWl_JOB_INTERVAL)
+
+    sched.add_job(alarm, 'date', run_date=alarm_time, args=[datetime.now(), sched])
+
+def startBackGroundJob():
+    from apscheduler.schedulers.background import BackgroundScheduler
+    sched = BackgroundScheduler()
+    sched.start()
+    from datetime import datetime
+    alarm(datetime.now(),sched)
+
+
+
 
 
 

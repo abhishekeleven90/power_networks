@@ -7,6 +7,29 @@
   {% endfor %}
 {% endmacro %}
 
+
+{% macro printRowNode(node) %}
+
+  <td>
+        <a href="{{url_for('readEntity',uuid=node['uuid']| int)}}"  target="_blank">
+          {{node['uuid']}}
+        </a>
+  </td>
+  
+  <td>
+          {{node['name']}}
+  </td>
+  
+  <td>
+          {{list2csv(node.labels)}}
+  </td>
+
+  <td>
+          {{list2csv(node['aliases'])}}
+  </td>
+
+{% endmacro %}
+
 {% macro node_short_desc(node) %}
 
 
