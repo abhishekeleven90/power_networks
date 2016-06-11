@@ -108,9 +108,13 @@ def temp():
     return render_template("temp.html", homeclass="active", temptext=str(nayaperson.id)+" "
         +str(naya_kitty.id))
 
-@app.route('/search/', methods = ['POST'])
+@app.route('/search/', methods = ['GET','POST'])
 def search():
+
     name = request.form.get('query')
+    if name is None or name == '':
+        return render_template("search_results.html", uuids= [], name='', nodes = [], labelstr ='', keywordstr = '', numrows = 10)
+        
     rows = request.form.get('rows')
 
     if rows is None or rows == '':
@@ -118,6 +122,7 @@ def search():
     
     ##TODO: more validation for labels
     labelstr = request.form.get('labels')
+
     labels = ''
     if labelstr is None or labelstr =='':
         labels = ['entity']
