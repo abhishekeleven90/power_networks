@@ -1,0 +1,23 @@
+<!-- extend base layout -->
+{% extends "basicwithmacros.html" %}
+{% block content %}
+<div class="starter-template" align="center" >
+
+    <h4>You already have tasks in session. Resume them or Clear them.</h4>
+
+    <a href={{url_for('verifier.beginagain', choice = 'resume', kind=kind )}}>
+                    <button type="submit" class="btn btn-primary">Resume Task!</button>
+    </a>
+
+    <br/>
+    <br/>
+
+    <a href={{url_for('verifier.beginagain', choice = 'releaseall', kind=kind )}}>
+                    <button type="submit" class="btn btn-primary">Release all locks and restart!</button>
+    </a>
+
+
+</div>
+
+   
+{% endblock %}

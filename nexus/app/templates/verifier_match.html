@@ -1,6 +1,42 @@
 <!-- extend base layout -->
-{% extends "basicwithmacros.html" %}
+{% extends "verifier_common.html" %}
+
+{% block contentinner %}
+
+    <!-- 
+        Why buttons? Since they do not conflict with form.
+        Also, this way just click above and the uuid list changes for us.
+        This is a good way, dont change it.
+    -->
+        
+        <a href={{ url_for( 'verifier.match', kind = kind) }}>
+
+                    <button type="submit" class="btn btn-primary">No post algo!</button>
+        </a>
+
+        <a href={{ url_for( 'verifier.match', kind = kind, postalgo = "waterman") }}>
+
+                    <button type="submit"  class="btn btn-primary">Waterman!</button>
+        </a>
+        
+        <a href={{ url_for( 'verifier.match', kind = kind, postalgo = "jaro" ) }}>
+                    <button type="submit" class="btn btn-primary">Jaro!</button>
+        </a>
+
+        {{super()}}
+
+{% endblock %}
+
+
 {% block content %}
+
+
+
+
+<div class="starter-template" align="center" >
+
+    {{super()}}
+
     <!--<div class="container">-->
         <br/>
         <h1> Crawl ID : {{ID}} </h1>
@@ -26,8 +62,30 @@
     <hr/>
 
 
-    <form class="form-horizontal" method="post" action={{url_for('verifier.match', kind = kind)}}>
 
+    <form id="matchform" class="form-horizontal" method="post" action={{url_for('verifier.match', kind = kind)}}>
+
+    <input type="hidden" name="##crawl_id##" value="{{ID}}"/>
+    <input type="hidden" name="##kind##" value="{{kind}}"/>
+
+
+     <!-- <h3>Choose post algo: </h3>
+     
+     <label><input type="radio" name="postalgo" value="none"></input> None </label>
+
+     <label><input type="radio" name="postalgo" value="jaro"></input> Jaro </label>
+
+     <label><input type="radio" name="postalgo" value="waterman"></input> Waterman </label>
+
+     <button type="submit" name="submit" class="btn btn-default" value="algo">Go Now!</button> -->
+
+</div>
+
+
+
+     <hr/>
+
+        
         <h3>From graph</h3>
         <br/>
 
@@ -111,6 +169,7 @@
             </div>
             <hr/>
 
+            {% if kind  == 'node' %} <!-- patch to not allow user to enter IDs for relations --> <!-- as relations have been handled only after nodes, relations are always absolutely resolved -->
             <div class="radio">
                 
                 
@@ -119,29 +178,20 @@
                 <label><input type="text" name="input_id"/></label> <!-- AA --> 
 
             </div>
-<!-- 
-            <div class="text">
-                
-                
-                
-
-            </div> -->
-
-
 
             <hr/>
-
+            {% endif %}
 
         <div class="form-group">
             <label class="col-md-4 control-label" for=""></label>
             <div class="col-md-4">
             <!-- Button -->
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button type="submit" name="submit" class="btn btn-default" value="submit">Submit</button>
             </div>
         </div>
 
     </form>
 
-
+</div>
    
 {% endblock %}

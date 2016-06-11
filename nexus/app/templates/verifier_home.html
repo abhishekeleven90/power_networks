@@ -7,8 +7,11 @@
             Welcome verifier! <hr/><br/>
             
 
-            {{unresolvedTotal}} nodes to resolve in total <br/>
-            {{immediateUnResolvedTotal}} connected nodes to immediately resolve<br/>
+            {{unresolvedTotal}} nodes to resolve in total (locked and unlocked) <br/>
+
+            {{unlockedUnresolvedTotal}} unlocked, unresolved nodes (connected and nonconnected)<br/>
+
+            {{immediateUnResolvedTotal}} connected nodes to immediately resolve (unlocked, connected, unresolved)<br/><br/>
 
             <a href={{url_for('verifier.startTask', kind = 'node')}}>
                     <button type="submit" class="btn btn-primary">Resolve Nodes!</button>
@@ -17,7 +20,8 @@
             <hr/>
 
 
-            {{r_unresolvedTotal}} relations to resolve <br/>
+            {{r_unresolvedTotal}} relations to resolve(locked and unlocked) <br/>
+            {{r_beingResolved}} relations being resolved(locked and being resolved) <br/>
             {{r_immediateUnResolvedTotal}} relations to immediately resolve<br/>
 
             <br/>
@@ -32,7 +36,7 @@
             <hr/>
 
 
-            {{h_unresolvedTotal}} hyper-edge-nodes to resolve <br/>
+           <!--  {{h_unresolvedTotal}} hyper-edge-nodes to resolve <br/>
             {{h_immediateUnResolvedTotal}} hyper-edge-nodes to immediately resolve<br/>
 
             <br/>
@@ -43,7 +47,7 @@
             <a href={{url_for('verifier.startTask', kind = 'hyperedgenode')}}>
                     <button type="submit" class="btn btn-primary">Resolve Hyper-Edge-Nodes!</button>
             </a>
-            <br/>
+            <br/> -->
             
         </h3>
 

@@ -19,13 +19,59 @@ def show():
     # session.pop(CRAWL_ID_NAME, None)
     # session.pop(CURR_ID, None)
 
-    unresolvedTotal, immediateUnResolvedTotal = gg.getCrawlNodeStats()
-    r_unresolvedTotal, r_immediateUnResolvedTotal = gg.getCrawlRelationStats()
+    unresolvedTotal, unlockedUnresolvedTotal, immediateUnResolvedTotal = gg.getCrawlNodeStats()
+
+    r_unresolvedTotal, r_beingResolved, r_immediateUnResolvedTotal = gg.getCrawlRelationStats()
+
     h_unresolvedTotal, h_immediateUnResolvedTotal = gg.getCrawlHyperEdgeNodeStats()
+
     return render_template("verifier_home.html", homeclass="active",
-        unresolvedTotal = unresolvedTotal, immediateUnResolvedTotal = immediateUnResolvedTotal, 
+        unlockedUnresolvedTotal = unlockedUnresolvedTotal,unresolvedTotal = unresolvedTotal, immediateUnResolvedTotal = immediateUnResolvedTotal, 
         r_unresolvedTotal = r_unresolvedTotal, r_immediateUnResolvedTotal = r_immediateUnResolvedTotal,
-        h_unresolvedTotal = h_unresolvedTotal, h_immediateUnResolvedTotal = h_immediateUnResolvedTotal)
+        r_beingResolved = r_beingResolved, h_unresolvedTotal = h_unresolvedTotal, h_immediateUnResolvedTotal = h_immediateUnResolvedTotal)
+
+
+@verifier.route('/beginagain/<string:choice>/<string:kind>/')
+def beginagain(choice, kind):
+
+    gg = GraphHandle()
+
+    CRAWL_ID_NAME, CURR_ID  = gg.getTwoVars(kind)
+
+    if session.get(CRAWL_ID_NAME) is None:
+        flash("You don't have any on-going tasks. Redirecting to start page.")
+        return redirect(url_for('.show'))
+
+    if choice == 'options':
+        flash('Selected options')
+        return render_template("verifier_begin_again.html", homeclass="active", kind=kind)
+
+    elif choice == 'resume':
+
+        flash('Selected resume') 
+
+        if session.get(CRAWL_ID_NAME) is None:
+            return redirect(url_for('.show'))
+
+        if session.get(CURR_ID) is None:
+            return redirect(url_for('.match', kind=kind))
+
+        return redirect(url_for('.diffPushGen', kind=kind))
+    
+    elif choice == 'releaseall':
+        flash('Selected releaseall')
+        ##TODO: you have userid, clear all locks for that userid, irrespective of time
+        flash('Locks will be released by bot. Clearing the session variables')
+ 
+        session.pop(CURR_ID, None)
+        session.pop(CRAWL_ID_NAME, None)
+        session.pop('kind',None)
+
+        return redirect(url_for('.show'))
+    else:
+        flash('Not a valid option in beginagain!')
+        return render_template("temp.html", homeclass="active", temptext='Not a valid option')
+
 
 
 @verifier.route('/startTask/<string:kind>/')
@@ -33,13 +79,27 @@ def startTask(kind='node'):
 
     gg = GraphHandle()
 
+    allVars = gg.getAllVars()
+    flag = False
+    retKind = None
+    
+    for (var,retkind) in allVars:
+        if session.get(var) is not None:
+            flash('You already have ongoing tasks in your session. Redirecting to beginagain.')
+            return redirect(url_for('.beginagain', kind = retkind, choice = "options"))
+
     CRAWL_ID_NAME, CURR_ID  = gg.getTwoVars(kind)
 
     ##This is needed whenever a new task is started
-    ##Task would mean anything node resolution, rel resolution, or hyperedge resolution
-    session.pop(CRAWL_ID_NAME, None)
-    session.pop(CURR_ID, None)
+    for (var,retkind) in allVars:
+        ## imp
+        ## so baiscally when a new task is started old task gets stale.
+        ## so if you are on old task page, that could create a problem
+        ## that is why the checks are for crawl_id, kind, and curr_id in match/diff
+        session.pop(var, None)
+    session.pop('kind', None)
 
+    ##Obsolete now TODO: remove
     ##TODO: check if session vars exist in session directly redirect to runTask
     if session.get(CRAWL_ID_NAME) is not None:
         print 'startTask: in the middle of a resolution task of kind '+kind+' for graph object : '+str(session.get(CRAWL_ID_NAME))  
@@ -51,9 +111,8 @@ def startTask(kind='node'):
 
         graphobj = gg.nextTaskToResolve(kind, session.get('userid'))
 
-        print graphobj
-
         session[CRAWL_ID_NAME] = graphobj[CRAWL_ID_NAME]
+        session['kind'] = kind ##adding kind to session as well. 
 
         print '\n\nstartTask: Beginning resolution for graph obj with crawl id: '+graphobj[CRAWL_ID_NAME]+'\n\n'
         print 'startTask: now redirecting'
@@ -61,13 +120,15 @@ def startTask(kind='node'):
         return redirect(url_for('.match', kind = kind))
         
     ##if the above if doesnt work, comes here
+    ##TODO: .show redirect
     temptext = 'No pending graph objects of kind '+kind+' to resolve, please go back'
     return render_template("temp.html", homeclass="active", 
         temptext=temptext)
 
 
 @verifier.route('/match/<string:kind>/',methods=["GET","POST"])
-def match(kind='node'):
+def match(kind):
+
 
     gg = GraphHandle()
     CRAWL_ID_NAME, CURR_ID  = gg.getTwoVars(kind)
@@ -75,15 +136,22 @@ def match(kind='node'):
     if session.get(CRAWL_ID_NAME) is None:
         return redirect(url_for('.show'))
 
+    if session.get('kind') is None or session.get('kind') !=kind:
+        flash('Kinds do not match, you must have began working in some other tab.')
+        redirect('.beginagain',kind=session.get(kind),choice='options')
+
     crawl_obj_original = gg.getCrawlObjectByID(kind, CRAWL_ID_NAME, session[CRAWL_ID_NAME], isIDString = True)
 
 
-    lockprop = gg.checkLockProperties(crawl_obj_original, session.get('userid'))
-    if lockprop == 'none':
-        return render_template("temp.html", homeclass="active", temptext="Graph object's lock has aready been removed. Begin again")
-    if lockprop == 'other':
-        return render_template("temp.html", homeclass="active", temptext="Graph object's lock has been locked by someone else in due time. Begin again")
-
+    lockprop, msg = gg.checkLockProperties(crawl_obj_original, session.get('userid'))
+    if lockprop != 'allowed':
+        msg  =  msg +" for kind " +str(kind)
+        ##also will have to remove session variables
+        session.pop(CRAWL_ID_NAME, None)
+        session.pop(CURR_ID, None )
+        session.pop('kind', None)
+        flash(msg)
+        return redirect(url_for('.show'))
 
 
     ##essential node meta is required when actually creating the node
@@ -94,7 +162,10 @@ def match(kind='node'):
 
     ##TODO: validation as well! What actually? I forgot!
 
-    if not request.form:
+    if not request.form or request.form['submit']!='submit':
+
+        algo = request.args.get('postalgo')
+        print 'Algooooooo selected!! ' +str(algo)
 
         graphobjs = gg.matchPossibleObjects(kind, crawl_obj, crawl_obj_original)
         connected_ens = gg.getDirectlyConnectedEntitiesCrawl(kind, crawl_obj_original) ##will be none if not hyperedgenode for now
@@ -102,7 +173,15 @@ def match(kind='node'):
         return render_template("verifier_match.html", homeclass="active",
             row=crawl_obj, graphobjs=graphobjs, ID = session[CRAWL_ID_NAME], kind = kind, 
             idname = gg.getCoreIDName(kind), connected_ens = connected_ens)
-    else:
+
+    elif request.form['submit']=='submit':
+
+        if session[CRAWL_ID_NAME] != request.form['##crawl_id##']:
+            flash("The crawl_id does not match with the session's")
+            redirect('.beginagain',choice='options', kind=kind)
+
+        # if request.form['submit'] == "algo":
+
 
         ##TODO: change this name in html file
         flash(request.form['match_id']) 
@@ -140,6 +219,7 @@ def match(kind='node'):
             ##pop session objects
             session.pop(CRAWL_ID_NAME, None)
             session.pop(CURR_ID, None) ##redundant code!
+            session.pop('kind',None)
 
             ##updateResolved PART
             gg.setResolvedWithID(kind, crawl_obj_original, curr_id)
@@ -147,16 +227,24 @@ def match(kind='node'):
             return redirect(url_for('.show'))
 
 
+
+
 ##two params: number and uuid ?? in session!
 @verifier.route('/diffPushGen/<string:kind>/', methods=["GET","POST"])
-def diffPushGen(kind='node'):
+def diffPushGen(kind):
 
     gg = GraphHandle()
     CRAWL_ID_NAME, CURR_ID  = gg.getTwoVars(kind)
 
     
     if session.get(CURR_ID) is None:
-        return render_template("temp.html", homeclass="active", temptext='No diff tasks go to start task/match task first!')
+        msg = 'No diff tasks go to start task/match task first!'
+        flash(msg)
+        return redirect('.show')
+
+    if session.get('kind') is None or session.get('kind') !=kind:
+        flash('Kinds do not match, you must have began working in some other tab.')
+        redirect('.beginagain',kind=session.get(kind),choice='options')
 
     
     curr_id = session.get(CURR_ID)
@@ -174,11 +262,15 @@ def diffPushGen(kind='node'):
     ##let the code be fixed then we can copy code to match too
     ##change the count in the view too
 
-    lockprop = gg.checkLockProperties(crawl_obj_original, session.get('userid'))
-    if lockprop == 'none':
-        return render_template("temp.html", homeclass="active", temptext="Graph object's lock has aready been removed. Begin again")
-    if lockprop == 'other':
-        return render_template("temp.html", homeclass="active", temptext="Graph object's lock has been locked by someone else in due time. Begin again")
+    lockprop, msg = gg.checkLockProperties(crawl_obj_original, session.get('userid'))
+    if lockprop != 'allowed':
+        msg  =  msg +" for kind " +str(kind) ##Adding the same code as match
+        ##also will have to remove session variables
+        session.pop(CRAWL_ID_NAME, None)
+        session.pop(CURR_ID, None )
+        session.pop('kind', None)
+        flash(msg)
+        return redirect(url_for('.show'))
 
 
     crawl_obj = gg.copyCrawlObject(kind, crawl_obj_original)
@@ -277,6 +369,7 @@ def diffPushGen(kind='node'):
         ##pop session objects
         session.pop(CRAWL_ID_NAME, None)
         session.pop(CURR_ID, None)
+        session.pop('kind', None)
         
         return redirect(url_for('.show'))
 

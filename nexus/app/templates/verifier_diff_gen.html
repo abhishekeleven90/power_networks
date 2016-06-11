@@ -1,6 +1,17 @@
 <!-- extend base layout -->
-{% extends "basicwithmacros.html" %}
+{% extends "verifier_common.html" %}
+
+{% block contentinner %}
+        {{super()}}
+        <a href={{ url_for( 'verifier.match', kind = kind ) }}>
+                    <button type="submit" class="btn btn-primary">Back to matching!</button>
+        </a>            
+{% endblock %}
+
 {% block content %}
+
+{{super()}}
+
 
 
 
@@ -11,19 +22,35 @@
 <h4> Crawl Object Meta </h4><hr/>
 <b>Crawl ID :</b> {{crawl_id}}<br/>
 <b>Kind :</b> {{kind}}
+{%if kind == 'relation'%}
+    <b>Crawl Relation type : </b> {{naya.type}}<br/> 
+{%endif%}
+
+
 <br/><br/>
 
 <h4> Core Graph Object Meta </h4><hr/>
 <b>UUID :</b> {{orig['uuid']}}<br/>
-<b>Labels : </b> {{list2csv(orig.labels)}}<br/> 
 
+{%if kind == 'node'%} <!--patch added as relations are different -->
+<b>Labels : </b> {{list2csv(orig.labels)}}<br/> 
 <b>Aliases :</b> {{list2csv(orig['aliases'])}} <br/>
+{%endif%}
+
+{%if kind == 'relation'%}
+<b>Relation type : </b> {{orig.type}}<br/> 
+{%endif%}
+
+
 
 
 <br/>
 
 <form class="form-horizontal" method="post" action={{url_for('verifier.diffPushGen', kind=kind)}}>
-    
+
+    <input type="hidden" name="##crawl_id##" value="{{crawl_id}}"/>
+    <input type="hidden" name="##core_id##" value="{{orig['uuid']}}"/>
+    <input type="hidden" name="##kind##" value="{{kind}}"/>
 
 
     {% if new_labels %}

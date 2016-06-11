@@ -672,12 +672,7 @@ class SelectionAlgoGraphDB(GraphDB):
     def checkIfNodeLocked(self, node):
         query = "match (n {_crawl_en_id_:'%s'}) where exists(n._lockedby_) and (timestamp()-n._lockedat_) > %s * 1000 remove n._lockedby_, n._lockedat_ return count(n)"
         pass
-
-    def countNotLockedUnresolvedNodes(self):
-        query = "match (n) where not exists(n._lockedby_) and not exists(n._resolvedWithUUID_) return count(n)"
-        results  = self.graph.cypher.execute(query)
-        return results[0][0]        
-        
+    
     def getNextRelationToResolve(self):
         ##TODO: use constant here for entity
         query = 'match (n:entity)-[r]->(p:entity) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') ' ##direction included
@@ -715,9 +710,16 @@ class SelectionAlgoGraphDB(GraphDB):
         from app.constants import LABEL_ENTITY
         query = 'match (n:'+LABEL_ENTITY+')--(c:'+LABEL_ENTITY+') where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'AND not exists(c.' + self.metaprops['RESOLVEDUUID'] +') ' 
+        query = query + 'AND not exists(c._lockedby_) ' 
         query = query + 'return count(c)'
         results = self.graph.cypher.execute(query)
         return results[0][0]
+
+    def countNotLockedUnresolvedNodes(self):
+        query = "match (n:entity) where not exists(n._lockedby_) AND not exists(n._resolvedWithUUID_) return count(n)"
+        results  = self.graph.cypher.execute(query)
+        return results[0][0]        
+    
 
     def countUnresolvedHyperEdgeNodes(self):
         '''counts the number of hyperedgenodes in current crawled graph that have to be resolved'''
@@ -755,12 +757,25 @@ class SelectionAlgoGraphDB(GraphDB):
         query = query + 'return count(r)'
         results = self.graph.cypher.execute(query)
         return results[0][0]
+
+    def countLockedRelationsBeingResolved(self):
+        ##TODO: use constant here for entity
+        query = 'match (n:entity)-[r]->(p:entity) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
+        query = query + 'AND exists(p.' + self.metaprops['RESOLVEDUUID'] +') '
+        query = query + 'AND not exists(r.' + self.metaprops['RESOLVEDRELID'] +') '
+        query = query + 'AND exists(r._lockedby_) ' 
+        query = query + 'return count(r)'
+        #print query
+        results = self.graph.cypher.execute(query)
+        #print 'countLockedRelationsBeingResolved ' + str(results[0][0])
+        return results[0][0]
     
     def countNextRelationsToResolve(self):
         ##TODO: use constant here for entity
         query = 'match (n:entity)-[r]->(p:entity) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'AND exists(p.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'AND not exists(r.' + self.metaprops['RESOLVEDRELID'] +') '
+        query = query + 'AND not exists(r._lockedby_) ' 
         query = query + 'return count(r)'
         #print query
         results = self.graph.cypher.execute(query)
