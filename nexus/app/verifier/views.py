@@ -143,7 +143,6 @@ def startTask(kind='node'):
     return render_template("temp.html", homeclass="active", 
         temptext=temptext)
 
-##IMP : Even if your lock is removed by bot, and if you do anything to call match or diff, you will be redirected to .show route
 
 @verifier.route('/match/<string:kind>/',methods=["GET","POST"])
 def match(kind):
@@ -164,6 +163,9 @@ def match(kind):
 
     lockprop, msg = gg.checkLockProperties(crawl_obj_original, session.get('userid'))
     if lockprop != 'allowed':
+        
+        ##IMP : Even if your lock is removed by bot, and if you do anything to call match or diff both, you will be redirected to .show route, and your session vars will be automatically removed
+
         msg  =  msg +" for kind " +str(kind)
         ##also will have to remove session variables
         session.pop(CRAWL_ID_NAME, None)
@@ -228,7 +230,7 @@ def match(kind):
             return redirect(url_for('.diffPushGen', kind = kind))
 
         if request.form['match_id']=='##NA##':
-            ## assuming the curr_relation has a label atleast else no way are we going to isert it! ##TODO a check!!! Can be done at api time too!
+            ## assuming the curr_relation has a label atleast else no way are we going to insert it! ##TODO a check!!! Can be done at api time too!
 
             ## create
             ## crawl_obj is the copied object
@@ -254,8 +256,6 @@ def match(kind):
         else:
             flash("Match_id not recognized. Start over again.")
             return redirect(url_for('.show'))
-
-
 
 
 ##two params: number and uuid ?? in session!
