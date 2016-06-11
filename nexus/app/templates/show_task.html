@@ -1,0 +1,88 @@
+<!-- extend base layout -->
+{% extends "basic.html" %}
+{% block content %}
+<script src="{{url_for('static', filename='js/dynamicinput.js')}}"></script>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 toppad" >
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Task Props</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-2 col-lg-2 " align="center"> </div>
+                        <div class=" col-md-10 col-lg-10 "> 
+                            <table class="table table-user-information">
+                                <tbody>
+                                    <tr>
+                                        <td><b>Task Name:</b></td>
+                                        <td>{{task.name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Task Description:</b></td>
+                                        <td>{{task.description}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Task owner</b></td>
+                                        <td>{{task.ownerid}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="control-group" id="fields">
+                    <label class="control-label" for="field1">Nice Multiple Form Fields</label>
+                    <div class="controls"> 
+                        <form role="form" autocomplete="off">
+                            <div class="entry input-group col-xs-3">
+                                <input class="form-control" name="fields[]" type="text" placeholder="Type something" />
+                                <span class="input-group-btn">
+                                    <button class="btn btn-success btn-add" type="button">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                        <br>
+                        <small>Press <span class="glyphicon glyphicon-plus gs"></span> to add another form field :)</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Activities
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                        {%for log in logs%}
+                        <li class="list-group-item">
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <td><b>Desc:</b></td>
+                                        <td>{{log['desc']}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Date:</b></td>
+                                        <td>{{log['ddate']}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>By</b></td>
+                                        <td>{{log['userid']}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </li>
+                        {%endfor%}
+                    </ul>
+                </div>
+            </div>
+        </div>
+{% endblock %}

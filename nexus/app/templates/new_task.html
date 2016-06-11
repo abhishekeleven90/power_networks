@@ -5,11 +5,28 @@
 <div class="starter-template" align="center" >
     <h3>
         Enter task info - <hr/><br/>
-        <form class="form-horizontal">
+        <form class="form-horizontal" method="POST" action="{{url_for('crawler.submittask')}}">
             <fieldset>
 
             <!-- Form Name -->
             <legend>Add task</legend>
+
+            <!-- userid label by form control static-->
+            <div class="form-group">
+                <label class="col-md-4 control-label">UserId:</label>
+                <div class="col-md-4 form-control-static">
+                    <input type="hidden" name="ownerid" value="{{session.get('userid')}}"/>
+                    {{session.get('userid')}}
+                </div>
+            </div>
+
+            <!-- apikey label by form control static
+            <div class="form-group">
+                <label class="col-md-4 control-label">Apikey:</label>
+                <div class="col-md-4 form-control-static">
+                </div>
+            </div>
+            -->
 
             <!-- Text input-->
             <div class="form-group">
@@ -27,22 +44,7 @@
                     <textarea class="form-control" id="desc" name="desc">Enter short description here</textarea>
                 </div>
             </div>
-
-            <!-- Multiple Radios (inline) -->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="iscrawled">Is the data crawled</label>
-                <div class="col-md-4"> 
-                    <label class="radio-inline" for="iscrawled-0">
-                        <input type="radio" name="iscrawled" id="iscrawled-0" value="1" checked="checked">
-                        Yes
-                    </label> 
-                    <label class="radio-inline" for="iscrawled-1">
-                        <input type="radio" name="iscrawled" id="iscrawled-1" value="0">
-                        No
-                    </label>
-                </div>
-            </div>
-
+            
             <!-- Button (Double) -->
             <div class="form-group">
                 <label class="col-md-4 control-label" for="submitBtn"></label>

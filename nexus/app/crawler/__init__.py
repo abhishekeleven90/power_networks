@@ -9,8 +9,8 @@ def before_request():
 
     print 'AAYA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
 
-#    if session.get('role')<2:
-#        abort(403)
+    if session.get('role')<2:
+        abort(403)
     print 'crawler hi!!!' ##this is like a wrapper inside a wrapper
 
 @crawler.after_request

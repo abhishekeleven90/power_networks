@@ -235,15 +235,52 @@ class Tasklog:
 
         return numrows
 
+    def getListFromDB(self, taskid):
+
+        self.dbwrap.connect()
+        try:
+            cursor = self.dbwrap.cursor()
+        except:
+            print "[Tasklog object] In getListFromDB"
+            print "Cannot get cursor"
+            self.dbwrap.commitAndClose()
+            exit(3)
+
+        query = "SELECT userid, taskid, description, jsondump, dumpdate \
+                 FROM " + self.tablename + " where taskid=" + str(self.taskid)
+        results = []
+
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            print e.message
+            print "query execution error"
+            self.dbwrap.commitAndClose()
+            exit(3)
+        else:
+            rows = cursor.fetchall()
+            for r in rows:
+                userid, taskid, description, jsondump, dumpdate =\
+                        r[0], r[1], r[2], r[3], r[4]
+
+                tmpdict = {"userid": userid, "taskid": taskid,
+                           "desc": description, "ddate": dumpdate}
+                results.append(tmpdict.copy())
+
+            self.dbwrap.commitAndClose()
+
+        return results
+
     def getSelfFromDB(self):
 
         self.dbwrap.connect()
         try:
             cursor = self.dbwrap.cursor()
         except:
-            print "[Tasklog object] In update"
+            print "[Tasklog object] In getSelfFromDB"
             print "Cannot get cursor"
             self.dbwrap.commitAndClose()
+            exit(3)
 
         query = "SELECT userid, taskid, description, jsondump, dumpdate \
                  FROM " + self.tablename + " where taskid=" + str(self.taskid) + \

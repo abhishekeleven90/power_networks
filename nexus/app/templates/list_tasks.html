@@ -1,0 +1,56 @@
+<!-- extend base layout -->
+{% extends "basic.html" %}
+{% block content %}
+<script src="{{url_for('static', filename='js/table.js')}}"></script>
+<script>
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        var url = $(this).data("href");
+        window.open(url, '_blank');
+    });
+});
+</script>
+
+<div class="container">
+    <h1>Tasks List </h1>
+    <div class="row">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Your tasks</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-3 ">
+                        <label for="dev-table-filter">Filter here</label>
+                    </div>
+                    <div class="col-md-9 ">
+                        <input type="text" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="Filter text" />
+                    </div>
+                </div>
+            </div>
+            <table class="table table-hover" id="dev-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Task name</th>
+                        <th>No of users</th>
+                        <th>Owner</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for d in usr_list%}
+                    <a>
+                        <tr class='clickable-row' data-href="{{url_for('crawler.showtask',taskid=d['taskid']|int)}}">
+                            <td>{{loop.index}}</td>
+                            <td>{{d.name}}</td>
+                            <td>{{d.users}}</td>
+                            <td>{{d.ownerid}}</td>
+                        </tr>
+                    </a>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

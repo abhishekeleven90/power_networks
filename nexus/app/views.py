@@ -237,8 +237,8 @@ def trial():
 
 @app.before_first_request
 def background():
-    startBackGroundJob()
-    pass
+    #startBackGroundJob()
+    return
 
 def alarm(time, sched):
     from datetime import datetime, timedelta
@@ -253,12 +253,12 @@ def alarm(time, sched):
 
     sched.add_job(alarm, 'date', run_date=alarm_time, args=[datetime.now(), sched])
 
-def startBackGroundJob():
-    from apscheduler.schedulers.background import BackgroundScheduler
-    sched = BackgroundScheduler()
-    sched.start()
-    from datetime import datetime
-    alarm(datetime.now(),sched)
+#def startBackGroundJob():
+#    from apscheduler.schedulers.background import BackgroundScheduler
+#    sched = BackgroundScheduler()
+#    sched.start()
+#    from datetime import datetime
+#    alarm(datetime.now(),sched)
 
 
 
