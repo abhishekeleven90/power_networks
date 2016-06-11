@@ -58,16 +58,34 @@ def beginagain(choice, kind):
 
         return redirect(url_for('.diffPushGen', kind=kind))
     
-    elif choice == 'releaseall':
-        flash('Selected releaseall')
-        ##TODO: you have userid, clear all locks for that userid, irrespective of time
-        flash('Locks will be released by bot. Clearing the session variables')
+    elif choice == 'sessionclear':
+        flash('Selected sessionclear')
  
         session.pop(CURR_ID, None)
         session.pop(CRAWL_ID_NAME, None)
         session.pop('kind',None)
 
+        flash('Locks will be eventually released by bot. Your task is cleared.')
+
         return redirect(url_for('.show'))
+
+    elif choice == 'releaseall':
+        flash('Selected releaseall')
+       
+        session.pop(CURR_ID, None)
+        session.pop(CRAWL_ID_NAME, None)
+        session.pop('kind',None)
+
+        print 'releaseall releaseall releaseall'
+        print session['userid']
+        nc,rc  = gg.crawldb.releaseLocks(userid=session['userid'])
+        flashstr = "User explicitly asked to release (%s,%s) locks with userid %s" %(str(nc),str(rc),session['userid'])
+        flash(flashstr)
+
+        flash('Your locks released. Your task cleared.')
+
+        return redirect(url_for('.show'))
+
     else:
         flash('Not a valid option in beginagain!')
         return render_template("temp.html", homeclass="active", temptext='Not a valid option')

@@ -655,15 +655,32 @@ class SelectionAlgoGraphDB(GraphDB):
         graphobject.push()
         return graphobject
 
-    def releaseLocks(self):
+    def releaseLocks(self, userid = None):
+        '''
+            releaseLocks releases locks of a particular user irrespective of time is userid is not None
+            else
+                it releases all dormant locks from the graph irrespective of the user
+        '''
         from app.constants import CRAWL_LOCK_LIMIT
-        query = "match (n) where exists(n._lockedby_) and (timestamp()-n._lockedat_) > %s * 1000 remove n._lockedby_, n._lockedat_ return count(n)"
-        query = query %(str(CRAWL_LOCK_LIMIT))
+        query = ''
+        if userid is None:
+            query = "match (n) where exists(n._lockedby_) and (timestamp()-n._lockedat_) > %s * 1000 remove n._lockedby_, n._lockedat_ return count(n)"
+            query = query %(str(CRAWL_LOCK_LIMIT))
+        else:
+            query = "match (n {_lockedby_:'%s'}) remove n._lockedby_, n._lockedat_ return count(n)"
+            query = query %(userid)
+
         results  = self.graph.cypher.execute(query)
         nodecount = results[0][0]
 
-        query = "match ()-[n]->() where exists(n._lockedby_) and (timestamp()-n._lockedat_) > %s * 1000 remove n._lockedby_, n._lockedat_ return count(n)"
-        query = query %(str(CRAWL_LOCK_LIMIT))
+        ##working on relations------------------
+        query = ''
+        if userid is None:
+            query = "match ()-[n]->() where exists(n._lockedby_) and (timestamp()-n._lockedat_) > %s * 1000 remove n._lockedby_, n._lockedat_ return count(n)"
+            query = query %(str(CRAWL_LOCK_LIMIT))
+        else:
+            query = "match ()-[n {_lockedby_:'%s'}]->() remove n._lockedby_, n._lockedat_ return count(n)"
+            query = query %(userid)
         results  = self.graph.cypher.execute(query)
         relcount = results[0][0]
 
