@@ -345,18 +345,22 @@ class CoreGraphDB(GraphDB):
             if x not in orig.properties:
                 new_props.append(x)
             else:
-                # if orig[x] != naya[x]: 
-                ##exactly equal prop! TODO: if all props equal -> empty,
+                from app.utils.commonutils import Utils
+                utils = Utils()
+                origstr = utils.processString(str(orig[x]))
+                nayastr = utils.processString(str(naya[x]))
+                if str(orig[x]) != naya[x]: 
+                    ##exactly equal prop! TODO: if all props equal -> empty,
 
-                #TODO:
-                ## then submit doesnt allow to go any further
-                ##will have to check no new labels, no new props, no new conf props, 
-                ##go to next method, that is show-->home page of verifier
-                ##no point in any clicks
+                    #TODO:
+                    ## then submit doesnt allow to go any further
+                    ##will have to check no new labels, no new props, no new conf props, 
+                    ##go to next method, that is show-->home page of verifier
+                    ##no point in any clicks
 
-                ##TODO: disallow some props to come?
-                #conf_props.append(x)
-                conf_props.append(x)
+                    ##TODO: disallow some props to come?
+                    #conf_props.append(x)
+                    conf_props.append(x)
         return conf_props, new_props #mvp_props
 
 

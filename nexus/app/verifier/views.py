@@ -315,6 +315,17 @@ def diffPushGen(kind):
 
     if not request.form:
 
+        if new_labels == [] and new_props == [] and conf_props == []:
+            ##
+            print 'nothing nothing nothing at allllllllll!'
+            flash('Objects match prop by prop, label by label, just setting resolved id in crawldb')
+            gg.setResolvedWithID(kind, crawl_obj_original, curr_id)
+            ##pop session objects
+            session.pop(CRAWL_ID_NAME, None)
+            session.pop(CURR_ID, None)
+            session.pop('kind', None)
+            return redirect(url_for('.show'))
+
         return render_template("verifier_diff_gen.html", homeclass="active",
             new_labels=new_labels,conf_props=conf_props, new_props=new_props,orig=orig, naya=naya, crawl_id = session[CRAWL_ID_NAME], kind=kind)
     else:
@@ -333,9 +344,6 @@ def diffPushGen(kind):
             ##then we choose one of them, convert them to list and push
             ##but this seems to be a bad idea
             ##so commenting out
-
-            
-
 
 
 
