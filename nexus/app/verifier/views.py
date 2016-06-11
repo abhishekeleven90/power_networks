@@ -197,19 +197,25 @@ def match(kind):
 
         if session[CRAWL_ID_NAME] != request.form['##crawl_id##']:
             flash("The crawl_id does not match with the session's")
-            redirect('.beginagain',choice='options', kind=kind)
+            return redirect(url_for('.beginagain',choice='options', kind=kind))
 
         # if request.form['submit'] == "algo":
 
 
         ##TODO: change this name in html file
-        flash(request.form['match_id']) 
+        print 'match match match in verifier 2'
+        print request.form.get('match_id')
+        print 'match match match in verifier 3'
+
+        if request.form.get('match_id') is None:
+            print 'here here ere hee hererrererre '
+            flash('Please select a matching option to proceed')
+            return redirect(url_for('.match', kind = kind))
 
         
         if request.form['match_id']=='##ID##':
             idval = request.form['input_id']
-            print 'IDVALLlllllll'
-            print idval
+            
             ##TODO: validatiopn if such id for this kind exists
             if idval is None or idval.strip() == '':
                 flash('nothing given in id text box')
@@ -221,7 +227,7 @@ def match(kind):
             session[CURR_ID] = request.form['match_id']
             return redirect(url_for('.diffPushGen', kind = kind))
 
-        else:
+        if request.form['match_id']=='##NA##':
             ## assuming the curr_relation has a label atleast else no way are we going to isert it! ##TODO a check!!! Can be done at api time too!
 
             ## create
@@ -243,6 +249,10 @@ def match(kind):
             ##updateResolved PART
             gg.setResolvedWithID(kind, crawl_obj_original, curr_id)
             #change to original            
+            return redirect(url_for('.show'))
+
+        else:
+            flash("Match_id not recognized. Start over again.")
             return redirect(url_for('.show'))
 
 

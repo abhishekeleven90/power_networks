@@ -45,23 +45,19 @@
     <!--</div> container-->
     <h3>To be matched</h3>
 
-    {% if kind == 'node' %}
-        {{entity_read(row,True)}}
-    {% endif %}
+        {% if kind == 'node' %}
+            {{entity_read(row,True)}}
+        {% endif %}
 
 
-    {% if kind == 'relation' %}
-        {{relation_read(row, True, True)}}
-    {% endif %}
+        {% if kind == 'relation' %}
+            {{relation_read(row, True, True)}}
+        {% endif %}
 
-    {% if kind == 'hyperedgenode' %}
-        {{entity_read(row,True)}}
-    {% endif %}
-
-
+        {% if kind == 'hyperedgenode' %}
+            {{entity_read(row,True)}}
+        {% endif %}
     <hr/>
-
-
 
     <form id="matchform" class="form-horizontal" method="post" action={{url_for('verifier.match', kind = kind)}}>
 
@@ -79,13 +75,7 @@
 
      <button type="submit" name="submit" class="btn btn-default" value="algo">Go Now!</button> -->
 
-</div>
-
-
-
-     <hr/>
-
-        
+</div>  
         <h3>From graph</h3>
         <br/>
 
