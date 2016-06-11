@@ -2,10 +2,13 @@
 {% extends "verifier_common.html" %}
 
 {% block contentinner %}
-        {{super()}}
+        
         <a href={{ url_for( 'verifier.match', kind = kind ) }}>
                     <button type="submit" class="btn btn-primary">Back to matching!</button>
-        </a>            
+        </a>  
+
+        {{super()}}
+                  
 {% endblock %}
 
 {% block content %}

@@ -143,6 +143,7 @@ def startTask(kind='node'):
     return render_template("temp.html", homeclass="active", 
         temptext=temptext)
 
+##IMP : Even if your lock is removed by bot, and if you do anything to call match or diff, you will be redirected to .show route
 
 @verifier.route('/match/<string:kind>/',methods=["GET","POST"])
 def match(kind):
