@@ -60,10 +60,12 @@ def beginagain(choice, kind):
     
     elif choice == 'sessionclear':
         flash('Selected sessionclear')
+
+        clearVerifierSessionAll()
  
-        session.pop(CURR_ID, None)
-        session.pop(CRAWL_ID_NAME, None)
-        session.pop('kind',None)
+        # session.pop(CURR_ID, None)
+        # session.pop(CRAWL_ID_NAME, None)
+        # session.pop('kind',None)
 
         flash('Locks will be eventually released by bot. Your task is cleared.')
 
@@ -71,10 +73,12 @@ def beginagain(choice, kind):
 
     elif choice == 'releaseall':
         flash('Selected releaseall')
+
+        clearVerifierSessionAll()
        
-        session.pop(CURR_ID, None)
-        session.pop(CRAWL_ID_NAME, None)
-        session.pop('kind',None)
+        # session.pop(CURR_ID, None)
+        # session.pop(CRAWL_ID_NAME, None)
+        # session.pop('kind',None)
 
         print 'releaseall releaseall releaseall'
         print session['userid']
@@ -108,14 +112,15 @@ def startTask(kind='node'):
 
     CRAWL_ID_NAME, CURR_ID  = gg.getTwoVars(kind)
 
-    ##This is needed whenever a new task is started
-    for (var,retkind) in allVars:
-        ## imp
-        ## so baiscally when a new task is started old task gets stale.
-        ## so if you are on old task page, that could create a problem
-        ## that is why the checks are for crawl_id, kind, and curr_id in match/diff
-        session.pop(var, None)
-    session.pop('kind', None)
+    # ##This is needed whenever a new task is started
+    clearVerifierSessionAll()
+    # for (var,retkind) in allVars:
+    #     ## imp
+    #     ## so baiscally when a new task is started old task gets stale.
+    #     ## so if you are on old task page, that could create a problem
+    #     ## that is why the checks are for crawl_id, kind, and curr_id in match/diff
+    #     session.pop(var, None)
+    # session.pop('kind', None)
 
     ##Obsolete now TODO: remove
     ##TODO: check if session vars exist in session directly redirect to runTask
@@ -168,9 +173,10 @@ def match(kind):
 
         msg  =  msg +" for kind " +str(kind)
         ##also will have to remove session variables
-        session.pop(CRAWL_ID_NAME, None)
-        session.pop(CURR_ID, None )
-        session.pop('kind', None)
+        clearVerifierSessionAll()
+        # session.pop(CRAWL_ID_NAME, None)
+        # session.pop(CURR_ID, None )
+        # session.pop('kind', None)
         flash(msg)
         return redirect(url_for('.show'))
 
@@ -244,9 +250,10 @@ def match(kind):
             flash(kind+ ' : '+CRAWL_ID_NAME +' : '+str(session[CRAWL_ID_NAME]))
 
             ##pop session objects
-            session.pop(CRAWL_ID_NAME, None)
-            session.pop(CURR_ID, None) ##redundant code!
-            session.pop('kind',None)
+            clearVerifierSessionAll()
+            # session.pop(CRAWL_ID_NAME, None)
+            # session.pop(CURR_ID, None) ##redundant code!
+            # session.pop('kind',None)
 
             ##updateResolved PART
             gg.setResolvedWithID(kind, crawl_obj_original, curr_id)
@@ -295,9 +302,10 @@ def diffPushGen(kind):
     if lockprop != 'allowed':
         msg  =  msg +" for kind " +str(kind) ##Adding the same code as match
         ##also will have to remove session variables
-        session.pop(CRAWL_ID_NAME, None)
-        session.pop(CURR_ID, None )
-        session.pop('kind', None)
+        clearVerifierSessionAll()
+        # session.pop(CRAWL_ID_NAME, None)
+        # session.pop(CURR_ID, None )
+        # session.pop('kind', None)
         flash(msg)
         return redirect(url_for('.show'))
 
@@ -317,14 +325,14 @@ def diffPushGen(kind):
 
         if new_labels == [] and new_props == [] and conf_props == []:
             ##
-            print 'nothing nothing nothing at allllllllll!'
             flash('Objects match prop by prop, label by label, just setting resolved id in crawldb')
-            gg.setResolvedWithID(kind, crawl_obj_original, curr_id)
-            ##pop session objects
-            session.pop(CRAWL_ID_NAME, None)
-            session.pop(CURR_ID, None)
-            session.pop('kind', None)
-            return redirect(url_for('.show'))
+            resolveFast(gg, kind, crawl_obj_original, curr_id, CRAWL_ID_NAME, CURR_ID)
+            # gg.setResolvedWithID(kind, crawl_obj_original, curr_id)
+            # ##pop session objects
+            # session.pop(CRAWL_ID_NAME, None)
+            # session.pop(CURR_ID, None)
+            # session.pop('kind', None)
+            # return redirect(url_for('.show'))
 
         return render_template("verifier_diff_gen.html", homeclass="active",
             new_labels=new_labels,conf_props=conf_props, new_props=new_props,orig=orig, naya=naya, crawl_id = session[CRAWL_ID_NAME], kind=kind)
@@ -334,7 +342,18 @@ def diffPushGen(kind):
         from app.utils.commonutils import Utils
         utils = Utils()
 
-        
+        value_list = request.form.getlist('justresolve')
+        if len(value_list)==1:
+            justresolve = request.form['justresolve']
+            print justresolve
+            flash('Nothing will be pushed. Resolving just like that')
+            resolveFast(gg,kind,crawl_obj_original, curr_id, CRAWL_ID_NAME, CURR_ID)
+            return redirect(url_for('.show'))
+
+        if not checkDiffSelected(conf_props,new_props,new_labels):
+            flash('You selected nothing. Please select something. <br/> Or you can select JUST RESOLVE.')
+            return redirect(url_for('.diffPushGen',kind=kind))
+
         for prop in conf_props:
 
             tosave = str(request.form[prop])
@@ -344,9 +363,6 @@ def diffPushGen(kind):
             ##then we choose one of them, convert them to list and push
             ##but this seems to be a bad idea
             ##so commenting out
-
-
-
 
 
             flash(prop+' : '+str(tosave))
@@ -364,9 +380,7 @@ def diffPushGen(kind):
         for prop in new_props:
             
             value_list = request.form.getlist(prop)
-            
-            if len(value_list)==1: ##as only one value is going to be any way!
-
+            if len(value_list)==1: ##as only one value is going to be any way
                 tosave = str(request.form[prop])
                 
                
@@ -404,12 +418,58 @@ def diffPushGen(kind):
         gg.setResolvedWithID(kind, crawl_obj_original, curr_id)
 
         ##pop session objects
-        session.pop(CRAWL_ID_NAME, None)
-        session.pop(CURR_ID, None)
-        session.pop('kind', None)
+        # session.pop(CRAWL_ID_NAME, None)
+        # session.pop(CURR_ID, None)
+        # session.pop('kind', None)
+        clearVerifierSessionAll()
         
         return redirect(url_for('.show'))
 
         ##TODO: same validation checks like _ for wiki thing too 
+
+
+def resolveFast(gg, kind, crawl_obj_original, curr_id, CRAWL_ID_NAME, CURR_ID):
+    gg.setResolvedWithID(kind, crawl_obj_original, curr_id)
+    ##pop session objects
+    # session.pop(CRAWL_ID_NAME, None)
+    # session.pop(CURR_ID, None)
+    # session.pop('kind', None)
+    clearVerifierSessionAll()
+    return redirect(url_for('.show'))
+
+def checkDiffSelected(conf_props, new_props, new_labels):
+    '''
+        returns True if some option selected in diff page
+        else returns False
+    '''
+    flag = False
+    
+    for prop in conf_props:
+        flag = True ##always selected
+        break
+    if flag: 
+        return flag
+
+    for prop in new_props:
+            value_list = request.form.getlist(prop)
+            if len(value_list)==1: ##as only one value is going to be any way
+                flag = True
+                break
+    if flag: 
+        return flag
+
+    for label in request.form.getlist('newlabels'):
+        flag = True
+        break
+
+    return flag
+
+def clearVerifierSessionAll():
+    gg = GraphHandle()
+    allVars = gg.getAllVars()
+    for a,b in allVars:
+        session.pop(a, None)
+    session.pop('kind', None)
+
 
 
