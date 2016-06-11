@@ -181,7 +181,7 @@ def match(kind):
 
     ##TODO: validation as well! What actually? I forgot!
 
-    if not request.form or request.form['submit']!='submit':
+    if not request.form:
 
         algo = request.args.get('postalgo')
         print 'Algooooooo selected!! ' +str(algo)
@@ -193,7 +193,7 @@ def match(kind):
             row=crawl_obj, graphobjs=graphobjs, ID = session[CRAWL_ID_NAME], kind = kind, 
             idname = gg.getCoreIDName(kind), connected_ens = connected_ens)
 
-    elif request.form['submit']=='submit':
+    else:
 
         if session[CRAWL_ID_NAME] != request.form['##crawl_id##']:
             flash("The crawl_id does not match with the session's")
