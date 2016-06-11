@@ -1,6 +1,39 @@
 <!-- extend base layout -->
 {% extends "verifier_common.html" %}
 
+
+{%block head%}
+    {{super()}}
+
+    <script language="javascript" type="text/javascript">
+
+//             $(function() { // <== Doc ready
+
+//     $('tr').click(function(event) {  
+
+//         if(event.target.type != "radio") {
+
+//             var that = $(this).find('input:radio');
+//             that.attr('checked', !that.is(':checked'));
+
+//         }
+//     });
+// });
+
+
+
+// jQuery(document).ready(function($) {
+//     $(".clickable-row").click(function() {
+//          var that = $(this).find('input:radio');
+//          that.attr('checked', !that.is(':checked'));
+//     });
+// });
+
+    </script>
+
+{%endblock%}
+
+
 {% block contentinner %}
 
     <!-- 
@@ -80,7 +113,7 @@
         <br/>
 
         {% if kind == 'node' %}
-            <table class="table table-hover">
+            <table class="table table-hover" id="matchTable">
                     <tr>
                         
                         <td>
@@ -111,16 +144,18 @@
                     </tr>
 
                     {% for obj in graphobjs %}
-                    <tr>
+                    <tr class='clickable-row' > 
                         
 
                         {{printRowNode(obj)}}
 
+
+                        <div class="radio">
                         <td>
-                            <div class="radio">
+                            
                                 <label><input type="radio" name="match_id" value="{{obj.properties[idname]}}"></input> </label>
-                            </div>
                         </td>
+                        </div>
 
                     </tr>
                     {% endfor %}
@@ -154,9 +189,10 @@
             <div class="radio">
                 
                 <!-- Using NA as None is not a NICE string-->
-                <label><input type="radio" name="match_id" value="##NA##" onclick="alert('**{{kind}} -- {{ID}}** will be **inserted** in CORE graph')"></input> No I don't find the graph object of kind {{kind}} here! </label> <!-- AA --> 
+                <label><input type="radio" name="match_id" value="##NA##" data-toggle="modal" data-target=".warn-for-insert"></input> No I don't find the graph object of kind {{kind}} here! </label> <!-- AA --> 
 
             </div>
+
             <hr/>
 
             {% if kind  == 'node' %} <!-- patch to not allow user to enter IDs for relations --> <!-- as relations have been handled only after nodes, relations are always absolutely resolved -->
@@ -183,5 +219,25 @@
     </form>
 
 </div>
+
+<div class="modal fade warn-for-insert" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                            <h3 class="modal-title">Warning</h3>
+                        </div>
+                        <div class="modal-body">
+                            <p> NEW graph object will be <b>INSERTED</b> <br/> 
+                                Kind : <b>{{kind}}</b>   CRAWL_ID : <b>{{ID}}</b> </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                        </div>
+                        </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
    
 {% endblock %}

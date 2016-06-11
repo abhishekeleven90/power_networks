@@ -1,194 +1,171 @@
 <!-- extend base layout -->
 {% extends "verifier_common.html" %}
-
 {% block contentinner %}
-        
-        <a href={{ url_for( 'verifier.match', kind = kind ) }}>
-                    <button type="submit" class="btn btn-primary">Back to matching!</button>
-        </a>  
-
-        {{super()}}
-                  
-{% endblock %}
-
-{% block content %}
-
-{{super()}}
-
-
-
-
-
-<div class="starter-template" align="center" >
-
-<br/>
-<h4> Crawl Object Meta </h4><hr/>
-<b>Crawl ID :</b> {{crawl_id}}<br/>
-<b>Kind :</b> {{kind}}
-{%if kind == 'relation'%}
-    <b>Crawl Relation type : </b> {{naya.type}}<br/> 
-{%endif%}
-
-
-<br/><br/>
-
-<h4> Core Graph Object Meta </h4><hr/>
-<b>UUID :</b> {{orig['uuid']}}<br/>
-
-{%if kind == 'node'%} <!--patch added as relations are different -->
-<b>Labels : </b> {{list2csv(orig.labels)}}<br/> 
-<b>Aliases :</b> {{list2csv(orig['aliases'])}} <br/>
-{%endif%}
-
-{%if kind == 'relation'%}
-<b>Relation type : </b> {{orig.type}}<br/> 
-{%endif%}
-
-
-
-
-<br/>
-
-<form class="form-horizontal" method="post" action={{url_for('verifier.diffPushGen', kind=kind)}}>
-
-    <input type="hidden" name="##crawl_id##" value="{{crawl_id}}"/>
-    <input type="hidden" name="##core_id##" value="{{orig['uuid']}}"/>
-    <input type="hidden" name="##kind##" value="{{kind}}"/>
-
-
-    {% if new_labels %}
-    <h4>New labels to add</h4>
-       <table class="table  table-hover">
-            {% for label in new_labels%}
-                <tr>
-                    <td>
-
-                        <div class="checkbox">
-                            <label><input type="checkbox" name="newlabels" value="{{label}}"></input> <b>{{label}}</b>
-                            </label>
-                        </div>
-
-                    </td>
-                </tr>
-            {% endfor %}
-        
-       </table>
-    <br/>
-    {% endif %}
-
-
-    {% if new_props %}
-    <h4>New properties to add</h4>
-       <table class="table table-hover">
-            
-
-            {% for prop in new_props%}
-                <tr>
-                    <td>
-
-                        <div class="checkbox">
-                            <label><input type="checkbox" name="{{prop}}" value="{{naya[prop]}}"></input> {{prop}}: <b>{{naya[prop]}}</b> </label>
-                        </div>
-
-                        
-                    </td>
-                </tr>
-            {% endfor %}
-        
-       </table>
-    <br/>
-    {% endif %}
-
-    {% if conf_props %}
-    <h4>Conflicting properties to resolve</h4>
-       <table class="table table-hover">
-            
-
-                <tr>
-                    <td>
-                        <b>Original</b>
-                    </td>
-                    <td>
-                        <b>New</b>
-                    </td>
-                    <td>
-                        <b>Extra Info</b>
-                    </td>
-                </tr>
-
-
-            {% for prop in conf_props%}
-
-                {% set origprop, nayaprop = diffObjects(orig[prop], naya[prop]) %}
-
-
-
-            
-                <tr>
-
-                    <td>   
-                    <div class="radio">
-                        <label>   
-                            <!--checked is very imp very very imp!-->
-                            <!-- else null goes or nothing goes and that creates a problem! -->
-                            <input type="radio" name="{{prop}}" value="{{orig[prop]}}" checked=""></input> {{prop}}: <b>{{origprop | safe}}</b>
-                        </label>
-                    </div>                    
-                    </td>
-
-
-
-                    <td>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="{{prop}}" value="{{naya[prop]}}"></input> {{prop}}: <b>{{nayaprop | safe}}</b>
-                            </label>
-                        </div>
-                    </td>
-                    
-
-                    <td>
-                    {% if prop == 'name'%}
-                    
-                        <div class="checkbox">
-                            <label><input type="checkbox" name="addtoalias" value="{{naya[prop]}}"></input> Add <b>{{naya[prop]}}</b> to aliases </label>
-                        </div class="checkbox">
-                    
-                    {% endif %}
-                    </td>
-
-                </tr>
-            {% endfor %}
-        
-       </table>
-
-       <div class="radio">
-                
-                
-                <label><input type="radio" name="justresolve" value="##justresolve##"></input> Just Resolve. Don't push/edit anything. </label> <!-- AA -->  
-
-        </div>
-
-    <br/>
-    {% endif %}
-
-
-
-    <div class="form-group">
-                <label class="col-md-4 control-label" for=""></label>
-                <div class="col-md-4">
-                <!-- Button -->
-                <button type="submit" class="btn btn-default">Submit</button>
-                </div>
-    </div>
-
-</form>
-
-
-
-
-
-</div>
     
-   
+    <a href={{ url_for( 'verifier.match', kind = kind ) }}>
+        <button type="submit" class="btn btn-primary">Back to matching!</button>
+    </a>
+    {{super()}}
+    
 {% endblock %}
+{% block content %}
+    {{super()}}
+    <div class="starter-template" align="center" >
+
+        <br/>
+        <h4> Crawl Object Meta </h4><hr/>
+        <b>Crawl ID :</b> {{crawl_id}}<br/>
+        <b>Kind :</b> {{kind}}
+        {%if kind == 'relation'%}
+        <b>Crawl Relation type : </b> {{naya.type}}<br/>
+        {%endif%}
+        <br/><br/>
+        <h4> Core Graph Object Meta </h4><hr/>
+        <b>UUID :</b> {{orig['uuid']}}<br/>
+        {%if kind == 'node'%} <!--patch added as relations are different -->
+        <b>Labels : </b> {{list2csv(orig.labels)}}<br/>
+        <b>Aliases :</b> {{list2csv(orig['aliases'])}} <br/>
+        {%endif%}
+        {%if kind == 'relation'%}
+        <b>Relation type : </b> {{orig.type}}<br/>
+        {%endif%}
+        <br/>
+
+
+        <form class="form-horizontal" method="post" action={{url_for('verifier.diffPushGen', kind=kind)}}>
+            <input type="hidden" name="##crawl_id##" value="{{crawl_id}}"/>
+            <input type="hidden" name="##core_id##" value="{{orig['uuid']}}"/>
+            <input type="hidden" name="##kind##" value="{{kind}}"/>
+            <hr/>
+            <!--Outside conf props -->
+            <h4>Select type of diff task</h4>
+            <div class="checkbox">
+                
+                <label><input type="checkbox" name="justresolve" value="##justresolve##" data-toggle="modal" data-target=".bs-example-modal-sm2"></input> Just Resolve. Don't push/edit anything. </label>
+
+            </div>
+
+
+            <div class="modal fade bs-example-modal-sm2" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                            <h3 class="modal-title">Warning</h3>
+                        </div>
+                        <div class="modal-body">
+                            <p> ONLY object will be resolved.<br/> 
+                                <b>Nothing will be pushed</b> EVEN if you select other options.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                        </div>
+                        </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                        
+
+                        <!--
+                        <div class="radio">
+                            <label><input type="radio" name="justresolve" value="##dontjustresolve##" checked="true"></input> Use the values selected </label>
+                        </div> -->
+                        <hr/>
+                        {% if new_labels %}
+                            <h4>New labels to add</h4>
+                            <table class="table  table-hover">
+                                {% for label in new_labels%}
+                                    <tr>
+                                        <td>
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" name="newlabels" value="{{label}}"></input> <b>{{label}}</b>
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            
+                        </table>
+                        <br/>
+                    {% endif %}
+                    {% if new_props %}
+                        <h4>New properties to add</h4>
+                        <table class="table table-hover">
+                            
+                            {% for prop in new_props%}
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" name="{{prop}}" value="{{naya[prop]}}"></input> {{prop}}: <b>{{naya[prop]}}</b> </label>
+                                        </div>
+                                        
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            
+                        </table>
+                        <br/>
+                    {% endif %}
+                    {% if conf_props %}
+                        <h4>Conflicting properties to resolve</h4>
+                        <table class="table table-hover">
+                            
+                            <tr>
+                                <td>
+                                    <b>Original</b>
+                                </td>
+                                <td>
+                                    <b>New</b>
+                                </td>
+                                <td>
+                                    <b>Extra Info</b>
+                                </td>
+                            </tr>
+                            {% for prop in conf_props%}
+                                {% set origprop, nayaprop = diffObjects(orig[prop], naya[prop]) %}
+                                
+                                <tr>
+                                    <td>
+                                        <div class="radio">
+                                            <label>
+                                                <!--checked is very imp very very imp!-->
+                                                <!-- else null goes or nothing goes and that creates a problem! -->
+                                                <input type="radio" name="{{prop}}" value="{{orig[prop]}}" checked=""></input> {{prop}}: <b>{{origprop | safe}}</b>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="{{prop}}" value="{{naya[prop]}}"></input> {{prop}}: <b>{{nayaprop | safe}}</b>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    
+                                    <td>
+                                        {% if prop == 'name'%}
+                                            
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" name="addtoalias" value="{{naya[prop]}}"></input> Add <b>{{naya[prop]}}</b> to aliases </label>
+                                            </div class="checkbox">
+                                            
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            
+                        </table>
+                        <br/>
+                    {% endif %}
+                    
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for=""></label>
+                        <div class="col-md-4">
+                            <!-- Button -->
+                            <button type="submit" class="btn btn-default">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        {% endblock %}
