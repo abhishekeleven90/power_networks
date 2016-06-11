@@ -7,10 +7,9 @@ from locprocess import getCityState
 def getStates():
     url = "https://www.whizapi.com/api/v2/util/ui/in/indian-states-list"
     querystring = {"project-app-key": "sd6u15esx571r9kndndlib17"}
-    headers = {
-                'cache-control' : "no-cache",
-                    'postman-token': "d23e64b1-f1c7-2459-eb6e-d77e4b2d20ff"
-                        }
+    headers = {'cache-control': "no-cache",
+                'postman-token': "d23e64b1-f1c7-2459-eb6e-d77e4b2d20ff"}
+
     response = requests.request("GET", url, headers=headers, params=querystring)
     states = json.loads(response.text)
     states_df = pd.DataFrame(states['Data'])

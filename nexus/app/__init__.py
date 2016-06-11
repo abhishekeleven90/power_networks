@@ -5,7 +5,6 @@ from user import user
 from mod import mod
 from verifier import verifier
 from crawler import crawler
-
 app = Flask(__name__)
 
 ##DON'T ADD A FORWARD SLASH AFTER GUEST WILL CREATE A PROBLEM
@@ -15,7 +14,6 @@ app.register_blueprint(user, url_prefix='/user')
 app.register_blueprint(mod, url_prefix='/mod')
 app.register_blueprint(verifier, url_prefix='/verifier')
 app.register_blueprint(crawler, url_prefix='/crawler')
-
 
 app.config.from_object('config')
 
