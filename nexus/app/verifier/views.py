@@ -80,8 +80,6 @@ def beginagain(choice, kind):
         # session.pop(CRAWL_ID_NAME, None)
         # session.pop('kind',None)
 
-        print 'releaseall releaseall releaseall'
-        print session['userid']
         nc,rc  = gg.crawldb.releaseLocks(userid=session['userid'])
         flashstr = "User explicitly asked to release (%s,%s) locks with userid %s" %(str(nc),str(rc),session['userid'])
         flash(flashstr)
@@ -192,10 +190,10 @@ def match(kind):
     if not request.form:
 
         algo = request.args.get('postalgo')
-        print 'Algooooooo selected!! ' +str(algo)
-
+        
         graphobjs = gg.matchPossibleObjects(kind, crawl_obj, crawl_obj_original)
         connected_ens = gg.getDirectlyConnectedEntitiesCrawl(kind, crawl_obj_original) ##will be none if not hyperedgenode for now
+        flash('Selected post-algo: '+str(algo))
 
         return render_template("verifier_match.html", homeclass="active",
             row=crawl_obj, graphobjs=graphobjs, ID = session[CRAWL_ID_NAME], kind = kind, 
@@ -207,16 +205,7 @@ def match(kind):
             flash("The crawl_id does not match with the session's")
             return redirect(url_for('.beginagain',choice='options', kind=kind))
 
-        # if request.form['submit'] == "algo":
-
-
-        ##TODO: change this name in html file
-        print 'match match match in verifier 2'
-        print request.form.get('match_id')
-        print 'match match match in verifier 3'
-
         if request.form.get('match_id') is None:
-            print 'here here ere hee hererrererre '
             flash('Please select a matching option to proceed')
             return redirect(url_for('.match', kind = kind))
 
@@ -224,7 +213,7 @@ def match(kind):
         if request.form['match_id']=='##ID##':
             idval = request.form['input_id']
             
-            ##TODO: validatiopn if such id for this kind exists
+            ##TODO: validation if such id for this kind exists
             if idval is None or idval.strip() == '':
                 flash('nothing given in id text box')
                 return redirect(url_for('.match', kind = kind))
@@ -342,13 +331,17 @@ def diffPushGen(kind):
         from app.utils.commonutils import Utils
         utils = Utils()
 
+        ##first check if justresolve has been selected
         value_list = request.form.getlist('justresolve')
         if len(value_list)==1:
+
+            ##redundant code, we know its the only option, would have been selected
             justresolve = request.form['justresolve']
             print justresolve
+
             flash('Nothing will be pushed. Resolving just like that')
             resolveFast(gg,kind,crawl_obj_original, curr_id, CRAWL_ID_NAME, CURR_ID)
-            return redirect(url_for('.show'))
+            # return redirect(url_for('.show'))
 
         if not checkDiffSelected(conf_props,new_props,new_labels):
             flash('You selected nothing. Please select something. <br/> Or you can select JUST RESOLVE.')

@@ -110,34 +110,39 @@ def temp():
 
 @app.route('/search/', methods = ['POST'])
 def search():
-    print 'inside method rrrrrrrrrrrrrrrrrrrrrr'
     name = request.form.get('query')
     rows = request.form.get('rows')
 
     if rows is None or rows == '':
         rows = 10
     
-    labels = request.form.get('labels')
-    if labels is None or labels =='':
+    ##TODO: more validation for labels
+    labelstr = request.form.get('labels')
+    labels = ''
+    if labelstr is None or labelstr =='':
         labels = ['entity']
+        labelstr = 'entity'
     else:
-        labels = labels.split(' ')
+        labels = labelstr.split(' ')
 
-    keywords = request.form.get('keywords')
-    if keywords is None or keywords =='':
+    #TODO: more validation for keywords
+    keywordstr = request.form.get('keywords')
+    keywords = ''
+    if keywordstr is None or keywordstr =='':
+        keywordstr = ''
         keywords = []
     else:
-        keywords = keywords.split(' ')
+        keywords = keywordstr.split(' ')
 
 
-    print keywords
-    print name, rows, labels, keywords
+    # print keywords
+    # print name, rows, labels, keywords
     from app.solr.searchsolr_phonetic import get_uuids
     uuids = get_uuids(name=name, labels=labels, rows=rows, aliases = [name], keywords = keywords)
     from app.models.graphmodels.graphdb import CoreGraphDB
     coredb = CoreGraphDB()
     nodes = coredb.getNodeListCore(uuids)
-    return render_template("search_results.html", uuids= uuids, name=name, nodes = nodes)
+    return render_template("search_results.html", uuids= uuids, name=name, nodes = nodes, labelstr =labelstr, keywordstr = keywordstr, numrows = rows)
 
 
 #Moved to forms.py

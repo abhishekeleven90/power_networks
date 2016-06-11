@@ -1,144 +1,118 @@
 <!-- extend base layout -->
-
 {% extends "basicwithmacros.html" %}
-
-
 {% block head %}
-
-{{ super() }}
-
-<link href="{{ url_for('static', filename='css/advanced_search.css') }}" rel="stylesheet">
-
- 
-
-<script>
-jQuery(document).ready(function($) {
+    {{ super() }}
+    <link href="{{ url_for('static', filename='css/advanced_search.css') }}" rel="stylesheet">
+    
+    <script>
+    jQuery(document).ready(function($) {
     $(".clickable-row").click(function() {
-        var url = $(this).data("href");
-        window.open(url, '_blank');
+    var url = $(this).data("href");
+    window.open(url, '_blank');
     });
-});
-</script>
+    });
+    </script>
+    {%endblock%}
+    {% block content %}
+        <br/>
+        <br/>
+        <br/>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
 
 
-{%endblock%}
+                    <form method="post" action={{url_for('search')}}>
 
-{% block content %}
-
-
-
-<br/>
-<br/>
-<br/>
-
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <form class="form-horizontal" role="form" method="post" action={{url_for('search')}}>
-                <div class="input-group" id="adv-search">
-
-                    <input type="text" class="form-control" placeholder="Search for snippets" name="query" value = "{{name}}"/>
-
-                    <div class="input-group-btn">
-                        <div class="btn-group" role="group">
-                            <div class="dropdown dropdown-lg">
+                        <div class="form-group row">
+                            <label for="query" class="col-sm-2 form-control-label">Entity Name</label>
+                            <div class="col-sm-10">
+                                <input type="name" class="form-control" name="query" placeholder="Entity Name" value = "{{name}}">
+                            </div>
+                        </div>
 
 
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                        <div class="form-group row">
+                            <label for="labels" class="col-sm-2 form-control-label">Labels</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="labels" placeholder="Space separated labels" value="{{labelstr}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="keywords" class="col-sm-2 form-control-label">Keywords</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="keywords" placeholder="Space separated keywords" value="{{keywordstr}}">
+                            </div>
+                        </div>
+
+                         <div class="form-group row">
 
 
-                                <div class="dropdown-menu dropdown-menu-right" role="menu">
-
-
-
-
-                                    <div class="form-group">
-                                        <label for="rows">Number of Results</label>
-                                        <select class="form-control" name="rows">
-                                            <option value="10" selected>10 Results</option>
-                                            <option value="20">20 Results</option>
-                                            <option value="50">50 Results</option>
-                                            <option value="70">70 Results</option>
-                                            <option value="100">100 Results</option>
-                                        </select>
-                                    </div>
-
-
-                                    <div class="form-group">
-                                        <label for="labels">Labels (Spaces in between)</label>
-                                        <input class="form-control" type="text" name="labels"/>
-                                    </div>
-
-
-
-                                    <div class="form-group">
-                                        <label for="keywords">Keywords (Spaces in between)</label>
-                                        <input class="form-control" type="text" name = "keywords"/>
-                                    </div>
-
-
-
-                                    <button type="submit" class="btn btn-primary">
-                                        <span class="glyphicon glyphicon-star" >
-                                        </span>
-                                    </button>
-
-                                </div>
+                            <label for="keywords" class="col-sm-2 form-control-label">Number of Results</label>
+                            <div class="col-sm-10">
+                               <select class="form-control" name="rows">
+                                                    <option value="10" {% if numrows=='10' %} selected {% endif %} >10 Results</option>
+                                                    <option value="20" {% if numrows=='20' %} selected {% endif %}> 20 Results</option>
+                                                    <option value="50" {% if numrows=='50' %} selected {% endif %}> 50 Results</option>
+                                                    <option value="70" {% if numrows=='70' %} selected {% endif %}> 70 Results</option>
+                                                    <option value="100" {% if numrows=='100' %} selected {% endif %}> 100 Results</option>
+                                                </select>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">
-                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                            </button>
+                        </div>
+
+                       
+                        <div class="form-group row">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-primary">Go!</button>
+                            </div>
 
                         </div>
-                    </div>
+
+                    </form>
+
+
+                    
+                   
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
-</div>
 
-    <br/>
-    <br/>
-    <br/>
 
-    <table class="table table-hover">
-        <tr>
-            <td>
-                <b>
+        <br/>
+        <br/>
+        <br/>
+        <table class="table table-hover">
+            <tr>
+                <td>
+                    <b>
                     uuid
-                </b>
-            </td>
-            <td>
-                <b>
+                    </b>
+                </td>
+                <td>
+                    <b>
                     name
-                </b>
-            </td>
-            <td>
-                <b>
+                    </b>
+                </td>
+                <td>
+                    <b>
                     labels
-                </b>
-            </td>
-            <td>
-                <b>
+                    </b>
+                </td>
+                <td>
+                    <b>
                     aliases
-                </b>
-            </td>
-
-        </tr>
-
-        {% for node in nodes %}
-
-        <tr class='clickable-row' data-href="{{url_for('readEntity',uuid=node['uuid']|int)}}">
-            {{printRowNode(node)}}
-        </tr>            
-        {% endfor %}
-    </table>
-</div>
-
-
-
+                    </b>
+                </td>
+            </tr>
+            {% for node in nodes %}
+                <tr class='clickable-row' data-href="{{url_for('readEntity',uuid=node['uuid']|int)}}">
+                    {{printRowNode(node)}}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
     
-
 {% endblock %}
