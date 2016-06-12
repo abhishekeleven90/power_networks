@@ -1,6 +1,75 @@
 <!-- extend base layout -->
-{% extends "basicwithmacros.html" %}
+{% extends "verifier_common.html" %}
+
+
+{%block head%}
+    {{super()}}
+
+    <script language="javascript" type="text/javascript">
+
+//             $(function() { // <== Doc ready
+
+//     $('tr').click(function(event) {  
+
+//         if(event.target.type != "radio") {
+
+//             var that = $(this).find('input:radio');
+//             that.attr('checked', !that.is(':checked'));
+
+//         }
+//     });
+// });
+
+
+
+// jQuery(document).ready(function($) {
+//     $(".clickable-row").click(function() {
+//          var that = $(this).find('input:radio');
+//          that.attr('checked', !that.is(':checked'));
+//     });
+// });
+
+    </script>
+
+{%endblock%}
+
+
+{% block contentinner %}
+
+    <!-- 
+        Why buttons? Since they do not conflict with form.
+        Also, this way just click above and the uuid list changes for us.
+        This is a good way, dont change it.
+    -->
+        
+        <a href={{ url_for( 'verifier.match', kind = kind) }}>
+
+                    <button type="submit" class="btn btn-primary">No post algo!</button>
+        </a>
+
+        <a href={{ url_for( 'verifier.match', kind = kind, postalgo = "waterman") }}>
+
+                    <button type="submit"  class="btn btn-primary">Waterman!</button>
+        </a>
+        
+        <a href={{ url_for( 'verifier.match', kind = kind, postalgo = "jaro" ) }}>
+                    <button type="submit" class="btn btn-primary">Jaro!</button>
+        </a>
+
+        {{super()}}
+
+{% endblock %}
+
+
 {% block content %}
+
+
+
+
+<div class="starter-template" align="center" >
+
+    {{super()}}
+
     <!--<div class="container">-->
         <br/>
         <h1> Crawl ID : {{ID}} </h1>
@@ -9,30 +78,42 @@
     <!--</div> container-->
     <h3>To be matched</h3>
 
-    {% if kind == 'node' %}
-        {{entity_read(row,True)}}
-    {% endif %}
+        {% if kind == 'node' %}
+            {{entity_read(row,True)}}
+        {% endif %}
 
 
-    {% if kind == 'relation' %}
-        {{relation_read(row, True, True)}}
-    {% endif %}
+        {% if kind == 'relation' %}
+            {{relation_read(row, True, True)}}
+        {% endif %}
 
-    {% if kind == 'hyperedgenode' %}
-        {{entity_read(row,True)}}
-    {% endif %}
-
-
+        {% if kind == 'hyperedgenode' %}
+            {{entity_read(row,True)}}
+        {% endif %}
     <hr/>
 
+    <form id="matchform" class="form-horizontal" method="post" action={{url_for('verifier.match', kind = kind)}}>
 
-    <form class="form-horizontal" method="post" action={{url_for('verifier.match', kind = kind)}}>
+    <input type="hidden" name="##crawl_id##" value="{{ID}}"/>
+    <input type="hidden" name="##kind##" value="{{kind}}"/>
 
+
+     <!-- <h3>Choose post algo: </h3>
+     
+     <label><input type="radio" name="postalgo" value="none"></input> None </label>
+
+     <label><input type="radio" name="postalgo" value="jaro"></input> Jaro </label>
+
+     <label><input type="radio" name="postalgo" value="waterman"></input> Waterman </label>
+
+     <button type="submit" name="submit" class="btn btn-default" value="algo">Go Now!</button> -->
+
+</div>  
         <h3>From graph</h3>
         <br/>
 
         {% if kind == 'node' %}
-            <table class="table table-hover">
+            <table class="table table-hover" id="matchTable">
                     <tr>
                         
                         <td>
@@ -63,16 +144,18 @@
                     </tr>
 
                     {% for obj in graphobjs %}
-                    <tr>
+                    <tr class='clickable-row' > 
                         
 
                         {{printRowNode(obj)}}
 
+
+                        <div class="radio">
                         <td>
-                            <div class="radio">
+                            
                                 <label><input type="radio" name="match_id" value="{{obj.properties[idname]}}"></input> </label>
-                            </div>
                         </td>
+                        </div>
 
                     </tr>
                     {% endfor %}
@@ -106,11 +189,13 @@
             <div class="radio">
                 
                 <!-- Using NA as None is not a NICE string-->
-                <label><input type="radio" name="match_id" value="##NA##"></input> No I don't find the graph object of kind {{kind}} here! </label> <!-- AA --> 
+                <label><input type="radio" name="match_id" value="##NA##" data-toggle="modal" data-target=".warn-for-insert"></input> No I don't find the graph object of kind {{kind}} here! </label> <!-- AA --> 
 
             </div>
+
             <hr/>
 
+            {% if kind  == 'node' %} <!-- patch to not allow user to enter IDs for relations --> <!-- as relations have been handled only after nodes, relations are always absolutely resolved -->
             <div class="radio">
                 
                 
@@ -119,29 +204,40 @@
                 <label><input type="text" name="input_id"/></label> <!-- AA --> 
 
             </div>
-<!-- 
-            <div class="text">
-                
-                
-                
-
-            </div> -->
-
-
 
             <hr/>
-
+            {% endif %}
 
         <div class="form-group">
             <label class="col-md-4 control-label" for=""></label>
             <div class="col-md-4">
             <!-- Button -->
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button type="submit" name="submit" class="btn btn-default" value="submit">Submit</button>
             </div>
         </div>
 
     </form>
 
+</div>
 
+<div class="modal fade warn-for-insert" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                            <h3 class="modal-title">Warning</h3>
+                        </div>
+                        <div class="modal-body">
+                            <p> NEW graph object will be <b>INSERTED</b> <br/> 
+                                Kind : <b>{{kind}}</b>   CRAWL_ID : <b>{{ID}}</b> </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                        </div>
+                        </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
    
 {% endblock %}

@@ -235,7 +235,7 @@
 
                           {% if not fromcrawldb %}
                           
-                          <a href="{{url_for('readEntity',uuid=rel.start_node.properties['uuid']|int )}}">
+                          <a href="{{url_for('readEntity',uuid=rel.start_node.properties['uuid']|int )}}" target="_blank">
                               {{rel.start_node.properties['uuid']}} : {{rel.start_node.properties['name']}} 
                           </a> 
 
@@ -244,7 +244,7 @@
                           {% if fromcrawldb %}
                           
                           <!--TODO: get the constant _resolvedWIth_ out -->
-                          <a href="{{url_for('readEntity',uuid=rel.start_node.properties['_resolvedWithUUID_']| int)}}">
+                          <a href="{{url_for('readEntity',uuid=rel.start_node.properties['_resolvedWithUUID_']| int)}}" target="_blank">
                               {{rel.start_node.properties['_resolvedWithUUID_']}} : {{rel.start_node.properties['name']}} 
                           </a> 
                           
@@ -272,7 +272,7 @@
 
                           {% if not fromcrawldb %}
                           
-                          <a href="{{url_for('readEntity',uuid=rel.end_node.properties['uuid'])}}">
+                          <a href="{{url_for('readEntity',uuid=rel.end_node.properties['uuid'])}}" target="_blank">
                               {{rel.end_node.properties['uuid']}} : {{rel.end_node.properties['name']}} 
                           </a> 
 
@@ -281,7 +281,7 @@
                           {% if fromcrawldb %}
                           
                           <!--TODO: get the constant _resolvedWIth_ out -->
-                          <a href="{{url_for('readEntity',uuid=rel.end_node.properties['_resolvedWithUUID_'])}}">
+                          <a href="{{url_for('readEntity',uuid=rel.end_node.properties['_resolvedWithUUID_'])}}" target="_blank">
                               {{rel.end_node.properties['_resolvedWithUUID_']}} : {{rel.end_node.properties['name']}} 
                           </a> 
                           

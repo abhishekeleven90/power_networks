@@ -19,13 +19,79 @@ def show():
     # session.pop(CRAWL_ID_NAME, None)
     # session.pop(CURR_ID, None)
 
-    unresolvedTotal, immediateUnResolvedTotal = gg.getCrawlNodeStats()
-    r_unresolvedTotal, r_immediateUnResolvedTotal = gg.getCrawlRelationStats()
+    unresolvedTotal, unlockedUnresolvedTotal, immediateUnResolvedTotal = gg.getCrawlNodeStats()
+
+    r_unresolvedTotal, r_beingResolved, r_immediateUnResolvedTotal = gg.getCrawlRelationStats()
+
     h_unresolvedTotal, h_immediateUnResolvedTotal = gg.getCrawlHyperEdgeNodeStats()
+
     return render_template("verifier_home.html", homeclass="active",
-        unresolvedTotal = unresolvedTotal, immediateUnResolvedTotal = immediateUnResolvedTotal, 
+        unlockedUnresolvedTotal = unlockedUnresolvedTotal,unresolvedTotal = unresolvedTotal, immediateUnResolvedTotal = immediateUnResolvedTotal, 
         r_unresolvedTotal = r_unresolvedTotal, r_immediateUnResolvedTotal = r_immediateUnResolvedTotal,
-        h_unresolvedTotal = h_unresolvedTotal, h_immediateUnResolvedTotal = h_immediateUnResolvedTotal)
+        r_beingResolved = r_beingResolved, h_unresolvedTotal = h_unresolvedTotal, h_immediateUnResolvedTotal = h_immediateUnResolvedTotal)
+
+
+@verifier.route('/beginagain/<string:choice>/<string:kind>/')
+def beginagain(choice, kind):
+
+    gg = GraphHandle()
+
+    CRAWL_ID_NAME, CURR_ID  = gg.getTwoVars(kind)
+
+    if session.get(CRAWL_ID_NAME) is None:
+        flash("You don't have any on-going tasks. Redirecting to start page.")
+        return redirect(url_for('.show'))
+
+    if choice == 'options':
+        flash('Selected options')
+        return render_template("verifier_begin_again.html", homeclass="active", kind=kind)
+
+    elif choice == 'resume':
+
+        flash('Selected resume') 
+
+        if session.get(CRAWL_ID_NAME) is None:
+            return redirect(url_for('.show'))
+
+        if session.get(CURR_ID) is None:
+            return redirect(url_for('.match', kind=kind))
+
+        return redirect(url_for('.diffPushGen', kind=kind))
+    
+    elif choice == 'sessionclear':
+        flash('Selected sessionclear')
+
+        clearVerifierSessionAll()
+ 
+        # session.pop(CURR_ID, None)
+        # session.pop(CRAWL_ID_NAME, None)
+        # session.pop('kind',None)
+
+        flash('Locks will be eventually released by bot. Your task is cleared.')
+
+        return redirect(url_for('.show'))
+
+    elif choice == 'releaseall':
+        flash('Selected releaseall')
+
+        clearVerifierSessionAll()
+       
+        # session.pop(CURR_ID, None)
+        # session.pop(CRAWL_ID_NAME, None)
+        # session.pop('kind',None)
+
+        nc,rc  = gg.crawldb.releaseLocks(userid=session['userid'])
+        flashstr = "User explicitly asked to release (%s,%s) locks with userid %s" %(str(nc),str(rc),session['userid'])
+        flash(flashstr)
+
+        flash('Your locks released. Your task cleared.')
+
+        return redirect(url_for('.show'))
+
+    else:
+        flash('Not a valid option in beginagain!')
+        return render_template("temp.html", homeclass="active", temptext='Not a valid option')
+
 
 
 @verifier.route('/startTask/<string:kind>/')
@@ -33,13 +99,28 @@ def startTask(kind='node'):
 
     gg = GraphHandle()
 
+    allVars = gg.getAllVars()
+    flag = False
+    retKind = None
+    
+    for (var,retkind) in allVars:
+        if session.get(var) is not None:
+            flash('You already have ongoing tasks in your session. Redirecting to beginagain.')
+            return redirect(url_for('.beginagain', kind = retkind, choice = "options"))
+
     CRAWL_ID_NAME, CURR_ID  = gg.getTwoVars(kind)
 
-    ##This is needed whenever a new task is started
-    ##Task would mean anything node resolution, rel resolution, or hyperedge resolution
-    session.pop(CRAWL_ID_NAME, None)
-    session.pop(CURR_ID, None)
+    # ##This is needed whenever a new task is started
+    clearVerifierSessionAll()
+    # for (var,retkind) in allVars:
+    #     ## imp
+    #     ## so baiscally when a new task is started old task gets stale.
+    #     ## so if you are on old task page, that could create a problem
+    #     ## that is why the checks are for crawl_id, kind, and curr_id in match/diff
+    #     session.pop(var, None)
+    # session.pop('kind', None)
 
+    ##Obsolete now TODO: remove
     ##TODO: check if session vars exist in session directly redirect to runTask
     if session.get(CRAWL_ID_NAME) is not None:
         print 'startTask: in the middle of a resolution task of kind '+kind+' for graph object : '+str(session.get(CRAWL_ID_NAME))  
@@ -51,9 +132,8 @@ def startTask(kind='node'):
 
         graphobj = gg.nextTaskToResolve(kind, session.get('userid'))
 
-        print graphobj
-
         session[CRAWL_ID_NAME] = graphobj[CRAWL_ID_NAME]
+        session['kind'] = kind ##adding kind to session as well. 
 
         print '\n\nstartTask: Beginning resolution for graph obj with crawl id: '+graphobj[CRAWL_ID_NAME]+'\n\n'
         print 'startTask: now redirecting'
@@ -61,13 +141,15 @@ def startTask(kind='node'):
         return redirect(url_for('.match', kind = kind))
         
     ##if the above if doesnt work, comes here
+    ##TODO: .show redirect
     temptext = 'No pending graph objects of kind '+kind+' to resolve, please go back'
     return render_template("temp.html", homeclass="active", 
         temptext=temptext)
 
 
 @verifier.route('/match/<string:kind>/',methods=["GET","POST"])
-def match(kind='node'):
+def match(kind):
+
 
     gg = GraphHandle()
     CRAWL_ID_NAME, CURR_ID  = gg.getTwoVars(kind)
@@ -75,15 +157,26 @@ def match(kind='node'):
     if session.get(CRAWL_ID_NAME) is None:
         return redirect(url_for('.show'))
 
+    if session.get('kind') is None or session.get('kind') !=kind:
+        flash('Kinds do not match, you must have began working in some other tab.')
+        redirect('.beginagain',kind=session.get(kind),choice='options')
+
     crawl_obj_original = gg.getCrawlObjectByID(kind, CRAWL_ID_NAME, session[CRAWL_ID_NAME], isIDString = True)
 
 
-    lockprop = gg.checkLockProperties(crawl_obj_original, session.get('userid'))
-    if lockprop == 'none':
-        return render_template("temp.html", homeclass="active", temptext="Graph object's lock has aready been removed. Begin again")
-    if lockprop == 'other':
-        return render_template("temp.html", homeclass="active", temptext="Graph object's lock has been locked by someone else in due time. Begin again")
+    lockprop, msg = gg.checkLockProperties(crawl_obj_original, session.get('userid'))
+    if lockprop != 'allowed':
+        
+        ##IMP : Even if your lock is removed by bot, and if you do anything to call match or diff both, you will be redirected to .show route, and your session vars will be automatically removed
 
+        msg  =  msg +" for kind " +str(kind)
+        ##also will have to remove session variables
+        clearVerifierSessionAll()
+        # session.pop(CRAWL_ID_NAME, None)
+        # session.pop(CURR_ID, None )
+        # session.pop('kind', None)
+        flash(msg)
+        return redirect(url_for('.show'))
 
 
     ##essential node meta is required when actually creating the node
@@ -96,23 +189,31 @@ def match(kind='node'):
 
     if not request.form:
 
+        algo = request.args.get('postalgo')
+        
         graphobjs = gg.matchPossibleObjects(kind, crawl_obj, crawl_obj_original)
         connected_ens = gg.getDirectlyConnectedEntitiesCrawl(kind, crawl_obj_original) ##will be none if not hyperedgenode for now
+        flash('Selected post-algo: '+str(algo))
 
         return render_template("verifier_match.html", homeclass="active",
             row=crawl_obj, graphobjs=graphobjs, ID = session[CRAWL_ID_NAME], kind = kind, 
             idname = gg.getCoreIDName(kind), connected_ens = connected_ens)
+
     else:
 
-        ##TODO: change this name in html file
-        flash(request.form['match_id']) 
+        if session[CRAWL_ID_NAME] != request.form['##crawl_id##']:
+            flash("The crawl_id does not match with the session's")
+            return redirect(url_for('.beginagain',choice='options', kind=kind))
+
+        if request.form.get('match_id') is None:
+            flash('Please select a matching option to proceed')
+            return redirect(url_for('.match', kind = kind))
 
         
         if request.form['match_id']=='##ID##':
             idval = request.form['input_id']
-            print 'IDVALLlllllll'
-            print idval
-            ##TODO: validatiopn if such id for this kind exists
+            
+            ##TODO: validation if such id for this kind exists
             if idval is None or idval.strip() == '':
                 flash('nothing given in id text box')
                 return redirect(url_for('.match', kind = kind))
@@ -123,8 +224,8 @@ def match(kind='node'):
             session[CURR_ID] = request.form['match_id']
             return redirect(url_for('.diffPushGen', kind = kind))
 
-        else:
-            ## assuming the curr_relation has a label atleast else no way are we going to isert it! ##TODO a check!!! Can be done at api time too!
+        if request.form['match_id']=='##NA##':
+            ## assuming the curr_relation has a label atleast else no way are we going to insert it! ##TODO a check!!! Can be done at api time too!
 
             ## create
             ## crawl_obj is the copied object
@@ -138,25 +239,37 @@ def match(kind='node'):
             flash(kind+ ' : '+CRAWL_ID_NAME +' : '+str(session[CRAWL_ID_NAME]))
 
             ##pop session objects
-            session.pop(CRAWL_ID_NAME, None)
-            session.pop(CURR_ID, None) ##redundant code!
+            clearVerifierSessionAll()
+            # session.pop(CRAWL_ID_NAME, None)
+            # session.pop(CURR_ID, None) ##redundant code!
+            # session.pop('kind',None)
 
             ##updateResolved PART
             gg.setResolvedWithID(kind, crawl_obj_original, curr_id)
             #change to original            
             return redirect(url_for('.show'))
 
+        else:
+            flash("Match_id not recognized. Start over again.")
+            return redirect(url_for('.show'))
+
 
 ##two params: number and uuid ?? in session!
 @verifier.route('/diffPushGen/<string:kind>/', methods=["GET","POST"])
-def diffPushGen(kind='node'):
+def diffPushGen(kind):
 
     gg = GraphHandle()
     CRAWL_ID_NAME, CURR_ID  = gg.getTwoVars(kind)
 
     
     if session.get(CURR_ID) is None:
-        return render_template("temp.html", homeclass="active", temptext='No diff tasks go to start task/match task first!')
+        msg = 'No diff tasks go to start task/match task first!'
+        flash(msg)
+        return redirect('.show')
+
+    if session.get('kind') is None or session.get('kind') !=kind:
+        flash('Kinds do not match, you must have began working in some other tab.')
+        redirect('.beginagain',kind=session.get(kind),choice='options')
 
     
     curr_id = session.get(CURR_ID)
@@ -174,11 +287,16 @@ def diffPushGen(kind='node'):
     ##let the code be fixed then we can copy code to match too
     ##change the count in the view too
 
-    lockprop = gg.checkLockProperties(crawl_obj_original, session.get('userid'))
-    if lockprop == 'none':
-        return render_template("temp.html", homeclass="active", temptext="Graph object's lock has aready been removed. Begin again")
-    if lockprop == 'other':
-        return render_template("temp.html", homeclass="active", temptext="Graph object's lock has been locked by someone else in due time. Begin again")
+    lockprop, msg = gg.checkLockProperties(crawl_obj_original, session.get('userid'))
+    if lockprop != 'allowed':
+        msg  =  msg +" for kind " +str(kind) ##Adding the same code as match
+        ##also will have to remove session variables
+        clearVerifierSessionAll()
+        # session.pop(CRAWL_ID_NAME, None)
+        # session.pop(CURR_ID, None )
+        # session.pop('kind', None)
+        flash(msg)
+        return redirect(url_for('.show'))
 
 
     crawl_obj = gg.copyCrawlObject(kind, crawl_obj_original)
@@ -194,6 +312,17 @@ def diffPushGen(kind='node'):
 
     if not request.form:
 
+        if new_labels == [] and new_props == [] and conf_props == []:
+            ##
+            flash('Objects match prop by prop, label by label, just setting resolved id in crawldb')
+            resolveFast(gg, kind, crawl_obj_original, curr_id, CRAWL_ID_NAME, CURR_ID)
+            # gg.setResolvedWithID(kind, crawl_obj_original, curr_id)
+            # ##pop session objects
+            # session.pop(CRAWL_ID_NAME, None)
+            # session.pop(CURR_ID, None)
+            # session.pop('kind', None)
+            # return redirect(url_for('.show'))
+
         return render_template("verifier_diff_gen.html", homeclass="active",
             new_labels=new_labels,conf_props=conf_props, new_props=new_props,orig=orig, naya=naya, crawl_id = session[CRAWL_ID_NAME], kind=kind)
     else:
@@ -202,7 +331,22 @@ def diffPushGen(kind='node'):
         from app.utils.commonutils import Utils
         utils = Utils()
 
-        
+        ##first check if justresolve has been selected
+        value_list = request.form.getlist('justresolve')
+        if len(value_list)==1:
+
+            ##redundant code, we know its the only option, would have been selected
+            justresolve = request.form['justresolve']
+            print justresolve
+
+            flash('Nothing will be pushed. Resolving just like that')
+            resolveFast(gg,kind,crawl_obj_original, curr_id, CRAWL_ID_NAME, CURR_ID)
+            # return redirect(url_for('.show'))
+
+        if not checkDiffSelected(conf_props,new_props,new_labels):
+            flash('You selected nothing. Please select something. <br/> Or you can select JUST RESOLVE.')
+            return redirect(url_for('.diffPushGen',kind=kind))
+
         for prop in conf_props:
 
             tosave = str(request.form[prop])
@@ -212,12 +356,6 @@ def diffPushGen(kind='node'):
             ##then we choose one of them, convert them to list and push
             ##but this seems to be a bad idea
             ##so commenting out
-
-            
-
-
-
-
 
 
             flash(prop+' : '+str(tosave))
@@ -235,9 +373,7 @@ def diffPushGen(kind='node'):
         for prop in new_props:
             
             value_list = request.form.getlist(prop)
-            
-            if len(value_list)==1: ##as only one value is going to be any way!
-
+            if len(value_list)==1: ##as only one value is going to be any way
                 tosave = str(request.form[prop])
                 
                
@@ -275,11 +411,58 @@ def diffPushGen(kind='node'):
         gg.setResolvedWithID(kind, crawl_obj_original, curr_id)
 
         ##pop session objects
-        session.pop(CRAWL_ID_NAME, None)
-        session.pop(CURR_ID, None)
+        # session.pop(CRAWL_ID_NAME, None)
+        # session.pop(CURR_ID, None)
+        # session.pop('kind', None)
+        clearVerifierSessionAll()
         
         return redirect(url_for('.show'))
 
         ##TODO: same validation checks like _ for wiki thing too 
+
+
+def resolveFast(gg, kind, crawl_obj_original, curr_id, CRAWL_ID_NAME, CURR_ID):
+    gg.setResolvedWithID(kind, crawl_obj_original, curr_id)
+    ##pop session objects
+    # session.pop(CRAWL_ID_NAME, None)
+    # session.pop(CURR_ID, None)
+    # session.pop('kind', None)
+    clearVerifierSessionAll()
+    return redirect(url_for('.show'))
+
+def checkDiffSelected(conf_props, new_props, new_labels):
+    '''
+        returns True if some option selected in diff page
+        else returns False
+    '''
+    flag = False
+    
+    for prop in conf_props:
+        flag = True ##always selected
+        break
+    if flag: 
+        return flag
+
+    for prop in new_props:
+            value_list = request.form.getlist(prop)
+            if len(value_list)==1: ##as only one value is going to be any way
+                flag = True
+                break
+    if flag: 
+        return flag
+
+    for label in request.form.getlist('newlabels'):
+        flag = True
+        break
+
+    return flag
+
+def clearVerifierSessionAll():
+    gg = GraphHandle()
+    allVars = gg.getAllVars()
+    for a,b in allVars:
+        session.pop(a, None)
+    session.pop('kind', None)
+
 
 

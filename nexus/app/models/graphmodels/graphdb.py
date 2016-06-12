@@ -345,18 +345,22 @@ class CoreGraphDB(GraphDB):
             if x not in orig.properties:
                 new_props.append(x)
             else:
-                # if orig[x] != naya[x]: 
-                ##exactly equal prop! TODO: if all props equal -> empty,
+                from app.utils.commonutils import Utils
+                utils = Utils()
+                origstr = utils.processString(str(orig[x]))
+                nayastr = utils.processString(str(naya[x]))
+                if str(orig[x]) != naya[x]: 
+                    ##exactly equal prop! TODO: if all props equal -> empty,
 
-                #TODO:
-                ## then submit doesnt allow to go any further
-                ##will have to check no new labels, no new props, no new conf props, 
-                ##go to next method, that is show-->home page of verifier
-                ##no point in any clicks
+                    #TODO:
+                    ## then submit doesnt allow to go any further
+                    ##will have to check no new labels, no new props, no new conf props, 
+                    ##go to next method, that is show-->home page of verifier
+                    ##no point in any clicks
 
-                ##TODO: disallow some props to come?
-                #conf_props.append(x)
-                conf_props.append(x)
+                    ##TODO: disallow some props to come?
+                    #conf_props.append(x)
+                    conf_props.append(x)
         return conf_props, new_props #mvp_props
 
 
@@ -655,15 +659,32 @@ class SelectionAlgoGraphDB(GraphDB):
         graphobject.push()
         return graphobject
 
-    def releaseLocks(self):
+    def releaseLocks(self, userid = None):
+        '''
+            releaseLocks releases locks of a particular user irrespective of time is userid is not None
+            else
+                it releases all dormant locks from the graph irrespective of the user
+        '''
         from app.constants import CRAWL_LOCK_LIMIT
-        query = "match (n) where exists(n._lockedby_) and (timestamp()-n._lockedat_) > %s * 1000 remove n._lockedby_, n._lockedat_ return count(n)"
-        query = query %(str(CRAWL_LOCK_LIMIT))
+        query = ''
+        if userid is None:
+            query = "match (n) where exists(n._lockedby_) and (timestamp()-n._lockedat_) > %s * 1000 remove n._lockedby_, n._lockedat_ return count(n)"
+            query = query %(str(CRAWL_LOCK_LIMIT))
+        else:
+            query = "match (n {_lockedby_:'%s'}) remove n._lockedby_, n._lockedat_ return count(n)"
+            query = query %(userid)
+
         results  = self.graph.cypher.execute(query)
         nodecount = results[0][0]
 
-        query = "match ()-[n]->() where exists(n._lockedby_) and (timestamp()-n._lockedat_) > %s * 1000 remove n._lockedby_, n._lockedat_ return count(n)"
-        query = query %(str(CRAWL_LOCK_LIMIT))
+        ##working on relations------------------
+        query = ''
+        if userid is None:
+            query = "match ()-[n]->() where exists(n._lockedby_) and (timestamp()-n._lockedat_) > %s * 1000 remove n._lockedby_, n._lockedat_ return count(n)"
+            query = query %(str(CRAWL_LOCK_LIMIT))
+        else:
+            query = "match ()-[n {_lockedby_:'%s'}]->() remove n._lockedby_, n._lockedat_ return count(n)"
+            query = query %(userid)
         results  = self.graph.cypher.execute(query)
         relcount = results[0][0]
 
@@ -672,12 +693,7 @@ class SelectionAlgoGraphDB(GraphDB):
     def checkIfNodeLocked(self, node):
         query = "match (n {_crawl_en_id_:'%s'}) where exists(n._lockedby_) and (timestamp()-n._lockedat_) > %s * 1000 remove n._lockedby_, n._lockedat_ return count(n)"
         pass
-
-    def countNotLockedUnresolvedNodes(self):
-        query = "match (n) where not exists(n._lockedby_) and not exists(n._resolvedWithUUID_) return count(n)"
-        results  = self.graph.cypher.execute(query)
-        return results[0][0]        
-        
+    
     def getNextRelationToResolve(self):
         ##TODO: use constant here for entity
         query = 'match (n:entity)-[r]->(p:entity) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') ' ##direction included
@@ -715,9 +731,16 @@ class SelectionAlgoGraphDB(GraphDB):
         from app.constants import LABEL_ENTITY
         query = 'match (n:'+LABEL_ENTITY+')--(c:'+LABEL_ENTITY+') where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'AND not exists(c.' + self.metaprops['RESOLVEDUUID'] +') ' 
+        query = query + 'AND not exists(c._lockedby_) ' 
         query = query + 'return count(c)'
         results = self.graph.cypher.execute(query)
         return results[0][0]
+
+    def countNotLockedUnresolvedNodes(self):
+        query = "match (n:entity) where not exists(n._lockedby_) AND not exists(n._resolvedWithUUID_) return count(n)"
+        results  = self.graph.cypher.execute(query)
+        return results[0][0]        
+    
 
     def countUnresolvedHyperEdgeNodes(self):
         '''counts the number of hyperedgenodes in current crawled graph that have to be resolved'''
@@ -755,12 +778,25 @@ class SelectionAlgoGraphDB(GraphDB):
         query = query + 'return count(r)'
         results = self.graph.cypher.execute(query)
         return results[0][0]
+
+    def countLockedRelationsBeingResolved(self):
+        ##TODO: use constant here for entity
+        query = 'match (n:entity)-[r]->(p:entity) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
+        query = query + 'AND exists(p.' + self.metaprops['RESOLVEDUUID'] +') '
+        query = query + 'AND not exists(r.' + self.metaprops['RESOLVEDRELID'] +') '
+        query = query + 'AND exists(r._lockedby_) ' 
+        query = query + 'return count(r)'
+        #print query
+        results = self.graph.cypher.execute(query)
+        #print 'countLockedRelationsBeingResolved ' + str(results[0][0])
+        return results[0][0]
     
     def countNextRelationsToResolve(self):
         ##TODO: use constant here for entity
         query = 'match (n:entity)-[r]->(p:entity) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'AND exists(p.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'AND not exists(r.' + self.metaprops['RESOLVEDRELID'] +') '
+        query = query + 'AND not exists(r._lockedby_) ' 
         query = query + 'return count(r)'
         #print query
         results = self.graph.cypher.execute(query)

@@ -108,36 +108,46 @@ def temp():
     return render_template("temp.html", homeclass="active", temptext=str(nayaperson.id)+" "
         +str(naya_kitty.id))
 
-@app.route('/search/', methods = ['POST'])
+@app.route('/search/', methods = ['GET','POST'])
 def search():
-    print 'inside method rrrrrrrrrrrrrrrrrrrrrr'
+
     name = request.form.get('query')
+    if name is None or name == '':
+        return render_template("search_results.html", uuids= [], name='', nodes = [], labelstr ='', keywordstr = '', numrows = 10)
+        
     rows = request.form.get('rows')
 
     if rows is None or rows == '':
         rows = 10
     
-    labels = request.form.get('labels')
-    if labels is None or labels =='':
-        labels = ['entity']
-    else:
-        labels = labels.split(' ')
+    ##TODO: more validation for labels
+    labelstr = request.form.get('labels')
 
-    keywords = request.form.get('keywords')
-    if keywords is None or keywords =='':
+    labels = ''
+    if labelstr is None or labelstr =='':
+        labels = ['entity']
+        labelstr = 'entity'
+    else:
+        labels = labelstr.split(' ')
+
+    #TODO: more validation for keywords
+    keywordstr = request.form.get('keywords')
+    keywords = ''
+    if keywordstr is None or keywordstr =='':
+        keywordstr = ''
         keywords = []
     else:
-        keywords = keywords.split(' ')
+        keywords = keywordstr.split(' ')
 
 
-    print keywords
-    print name, rows, labels, keywords
+    # print keywords
+    # print name, rows, labels, keywords
     from app.solr.searchsolr_phonetic import get_uuids
     uuids = get_uuids(name=name, labels=labels, rows=rows, aliases = [name], keywords = keywords)
     from app.models.graphmodels.graphdb import CoreGraphDB
     coredb = CoreGraphDB()
     nodes = coredb.getNodeListCore(uuids)
-    return render_template("search_results.html", uuids= uuids, name=name, nodes = nodes)
+    return render_template("search_results.html", uuids= uuids, name=name, nodes = nodes, labelstr =labelstr, keywordstr = keywordstr, numrows = rows)
 
 
 #Moved to forms.py
@@ -245,10 +255,12 @@ def alarm(time, sched):
     from app.models.graphmodels.graphdb import SelectionAlgoGraphDB
     from app.constants import CRAWl_JOB_INTERVAL
 
-    print('JOB! This job was scheduled at %s.' % time)
-
+    
     gg = SelectionAlgoGraphDB()
-    print str(gg.releaseLocks())+' crawl verifier locks released in this cycle'
+    nodes, rels = gg.releaseLocks()
+    if nodes!=0 or rels!=0:
+        print('JOB! This job was scheduled at %s.' % time)
+        print '('+str(nodes)+','+str(rels)+')' + 'crawl verifier locks released in this cycle'
     alarm_time = datetime.now() + timedelta(seconds=CRAWl_JOB_INTERVAL)
 
     sched.add_job(alarm, 'date', run_date=alarm_time, args=[datetime.now(), sched])

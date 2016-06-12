@@ -13,25 +13,28 @@ class GraphHandle():
         self.coredb = CoreGraphDB()
 
     def getCrawlNodeStats(self):
-        return self.crawldb.countUnresolvedNodes(), self.crawldb.countNextNodesToResolve()
+        return self.crawldb.countUnresolvedNodes(), self.crawldb.countNotLockedUnresolvedNodes(), self.crawldb.countNextNodesToResolve()
 
     def getCrawlRelationStats(self):
-        return self.crawldb.countUnresolvedRelations(), self.crawldb.countNextRelationsToResolve()
+        n1 = self.crawldb.countUnresolvedRelations()
+        n2 = self.crawldb.countLockedRelationsBeingResolved()
+        n3 = self.crawldb.countNextRelationsToResolve()
+        return  n1, n2, n3
 
     def getCrawlHyperEdgeNodeStats(self):
         return self.crawldb.countUnresolvedHyperEdgeNodes(), self.crawldb.countNextHyperEdgeNodesToResolve()
 
     def areCrawlNodesLeft(self):
-        n1,n2 = self.getCrawlNodeStats()
-        return n1 != 0 ##here the first count can work as we just need to select any node
+        n1,n2,n3 = self.getCrawlNodeStats()
+        return n2 != 0 ##here the second count will work as we just need to select any node that is not locked
 
     def areCrawlHyperEdgeNodesLeft(self):
         n1,n2 = self.getCrawlHyperEdgeNodeStats()
         return n1 != 0 ##here the first count can work as we just need to select any hyper edge node
 
     def areCrawlRelationsLeft(self):
-        r1,r2 = self.getCrawlRelationStats()
-        return r2 != 0  ##here the second count works as we just need to select any relation for which the nodes are resolved
+        r1, r2, r3 = self.getCrawlRelationStats()
+        return r3 != 0  ##here the second count works as we just need to select any relation for which the nodes are resolved
 
     def updateCrawlNode(self, node, uuid):
         self.crawldb.setResolvedWithUUID(node, uuid)
@@ -261,6 +264,15 @@ class GraphHandle():
 
         return CRAWL_ID_NAME, CURR_ID
 
+    def getAllVars(self):
+        kinds = ['node','relation']
+        ret = []
+        for kind in kinds:
+            a,b = self.getTwoVars(kind) 
+            ret.append((a,kind))
+            ret.append((b,kind))
+        return ret
+
 
     def areTasksLeft(self, kind): ##kind is kind of task
         
@@ -446,12 +458,20 @@ class GraphHandle():
         return new_labels, conf_props, new_props
 
     def checkLockProperties(self, crawl_obj_original, userid):
+
         if crawl_obj_original.properties.get('_lockedby_') is None:
-            return "none" ##locked by none
-        if crawl_obj_original.properties.get('_lockedby_') != userid:
-            return "other" ##locked by other
+            lockprop = "none"
+            msg = "Graph object's lock aready been removed. Begin again "
+        
+        elif crawl_obj_original.properties.get('_lockedby_') != userid:
+            lockprop =  "other" ##locked by other
+            msg = "Graph object's lock is with someone else. Begin again "
 
+        else:
+            lockprop = "allowed"
+            msg = "Graph object's lock is not with you. Begin again "
 
+        return lockprop, msg
 
 
 
