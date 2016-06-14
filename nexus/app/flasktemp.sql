@@ -3,10 +3,20 @@ CREATE TABLE IF NOT EXISTS `users` (
   `userid` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `role` int(11) NOT NULL,
-  `apikey` varchar(255) NOT NULL,
+  `apikey` varchar(255) NOT NULL unique,
   `keyenabled` int(11) NOT NULL,
+  `lastlogin` datetime NOT NULL,
+  `lastpwdchange` datetime NOT NULL,
+  `displayname` varchar(1000) NOT NULL,
   PRIMARY KEY (`userid`)
 );
+
+CREATE TABLE IF NOT EXISTS `uuidtable` (
+  `uuid` int(11) NOT NULL,
+  `name` varchar(3000) DEFAULT NULL,
+  PRIMARY KEY (`uuid`)
+);
+
 
 INSERT INTO `users` (`userid`, `password`, `role`, `apikey`,`keyenabled`) VALUES
 ('abhi1@gmail.com', '48dc8d29308eb256edc76f25def07251', 1, 'token1', 0),
@@ -17,27 +27,14 @@ INSERT INTO `users` (`userid`, `password`, `role`, `apikey`,`keyenabled`) VALUES
 ('abhi6@gmail.com', '48dc8d29308eb256edc76f25def07251', 6, 'token6', 1),
 ('abhi7@gmail.com', '48dc8d29308eb256edc76f25def07251', 7, 'token7', 1);
 
-CREATE TABLE IF NOT EXISTS `uuidtable` (
-  `uuid` int(11) NOT NULL,
-  `name` varchar(3000) DEFAULT NULL,
-  PRIMARY KEY (`uuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 
 create table relidtable(
   relid int not null primary key, 
-  reltype varchar(1000), 
-  startuuid int, 
-  enduuid int, 
+  reltype varchar(1000) not null, 
+  startuuid int not null, 
+  enduuid int not null, 
   foreign key (startuuid) references uuidtable(uuid) on delete cascade on update cascade,  
   foreign key (enduuid) references uuidtable(uuid) on delete cascade on update cascade); 
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `uuidtable`
---
 
 
 
@@ -54,6 +51,7 @@ CREATE TABLE `tasks` (
 CREATE TABLE `taskusers` (
   `taskid` int not null,
   `userid` varchar(255) NOT NULL,
+  primary key(`taskid`, `userid`),
   foreign key (`taskid`) references `tasks`(`taskid`) on delete cascade on update cascade,
   foreign key (`userid`) references `users`(`userid`) on delete cascade on update cascade
 );
@@ -77,8 +75,8 @@ CREATE TABLE `changetable` (
   `verifydate` datetime NOT NULL,
   `pushdate` datetime NOT NULL,
   `fetchdate` datetime NOT NULL,
-  foreign key (`taskid`) references `tasks`(`taskid`) on delete cascade on update cascade,
-  foreign key (`pushedby`) references `users`(`userid`) on delete cascade on update cascade,
+  `source_url` varchar(1000) NOT NULL,
+  foreign key (`taskid`, `pushedby`) references `taskusers`(`taskid`,`userid`) on delete cascade on update cascade,
   foreign key (`verifiedby`) references `users`(`userid`) on delete cascade on update cascade
 );
 
@@ -124,4 +122,3 @@ CREATE TABLE `relidprops` (
   foreign key (`changeid`) references `changetable`(`changeid`) on delete cascade on update cascade,
   foreign key (`relid`) references `relidtable`(`relid`) on delete cascade on update cascade
 );
-
