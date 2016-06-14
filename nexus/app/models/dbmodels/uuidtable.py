@@ -12,7 +12,7 @@ class UUIDTable:
     def __init__(self, name, uuid):
         self.uuid = uuid
         self.name = name ##TODO: but what if the primary name changes?
-        #self.uri = uri #TODO: will decide afterwards 
+        #self.uri = uri #TODO: will decide afterwards
         from app.constants import META_TABLE_UUID
         self.tablename  = META_TABLE_UUID
         self.dbwrap = MetaSQLDB()
@@ -20,7 +20,7 @@ class UUIDTable:
     def create(self):
         query = "insert into uuidtable(uuid, name) values(%s,'%s');"
         query = query %(self.uuid, self.name)
-        
+
         cursor = self.dbwrap.connectAndCursor()
         numrows = cursor.execute(query)
         self.dbwrap.commitAndClose() ##what if something breaks? TODO!

@@ -28,12 +28,12 @@ INSERT INTO `users` (`userid`, `password`, `role`, `apikey`,`keyenabled`) VALUES
 
 
 create table relidtable(
-  relid int not null primary key, 
-  reltype varchar(1000) not null, 
-  startuuid int not null, 
-  enduuid int not null, 
-  foreign key (startuuid) references uuidtable(uuid) on delete cascade on update cascade,  
-  foreign key (enduuid) references uuidtable(uuid) on delete cascade on update cascade); 
+  relid int not null primary key,
+  reltype varchar(1000) not null,
+  startuuid int not null,
+  enduuid int not null,
+  foreign key (startuuid) references uuidtable(uuid) on delete cascade on update cascade,
+  foreign key (enduuid) references uuidtable(uuid) on delete cascade on update cascade);
 
 
 CREATE TABLE `tasks` (
@@ -78,35 +78,41 @@ CREATE TABLE `changetable` (
 );
 
 
+##the changeid will be in increasing order for any recent changes
+##so for a uuid, based on the largest/recent uuid you can get the latest change was because of whom
 CREATE TABLE `uuidlabels` (
   `changeid` bigint(20) not null,
   `uuid` int not null,
-  `label` varchar(1000) NOT NULL,
+  `label` varchar(100) NOT NULL, #100 is the new size for any label, will have to follow that
   `changetype` int not null,
   foreign key (`changeid`) references `changetable`(`changeid`) on delete cascade on update cascade,
   foreign key (`uuid`) references `uuidtable`(`uuid`) on delete cascade on update cascade
 );
+alter table uuidlabels add unique(changeid, uuid, label);
 
 
 CREATE TABLE `relidlabels` (
   `changeid` bigint(20) not null,
   `relid` int not null,
-  `label` varchar(1000) NOT NULL,
+  `label` varchar(100) NOT NULL,
   `changetype` int not null,
   foreign key (`changeid`) references `changetable`(`changeid`) on delete cascade on update cascade,
   foreign key (`relid`) references `relidtable`(`relid`) on delete cascade on update cascade
 );
+alter table relidlabels add unique(changeid, relid, label);
 
+##TODO: assertion on this table that if changetype is 1,2,0 then oldpropvalue and newpropvalue will behave accordingly
 CREATE TABLE `uuidprops` (
   `changeid` bigint(20) not null,
   `uuid` int not null,
-  `propname` varchar(1000) NOT NULL,
+  `propname` varchar(100) NOT NULL, #100 is the new size for any propname, will have to follow that
   `oldpropvalue`  text,
   `newpropvalue` text,
   `changetype` int not null,
   foreign key (`changeid`) references `changetable`(`changeid`) on delete cascade on update cascade,
   foreign key (`uuid`) references `uuidtable`(`uuid`) on delete cascade on update cascade
 );
+alter table uuidprops add unique(changeid, uuid, propname);
 
 
 CREATE TABLE `relidprops` (

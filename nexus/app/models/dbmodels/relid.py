@@ -202,6 +202,10 @@ class RelLabels:
         self.dbwrap.commitAndClose()
         return results_list
 
+    def __str__(self):
+        s = '[ RelIDLabels -- relid: %s   label: %s  changeid: %s  changetype: %s]' %(self.relid, self.label, self.changeid, self.changetype)
+        return s
+
     @classmethod
     def getRelLabels(cls, changeid):
         r = RelLabels(changeid=changeid)
@@ -210,17 +214,18 @@ class RelLabels:
 
 class RelProps:
 
-    def __init__(self, changeid=None, relid=None, propname='',
-            oldpropvalue='', newpropvalue='', changetype=None):
+    def __init__(self, changeid=None, relid=None, propname=None,
+            oldpropvalue=None, newpropvalue=None, changetype=None):
+        ##makes sense to change propname to None, this way nothing will be inserted, error!
         self.changeid = changeid
         self.relid = relid
         self.propname = propname
+        ##TODO: add constarint in programming or db, if both none, non need of anything here
         self.oldpropvalue = oldpropvalue
         self.newpropvalue = newpropvalue
         self.changetype = changetype
         self.dbwrap = MetaSQLDB()
         self.tablename = META_TABLE_RELIDPROPS
-        return
 
     def create(self):
         self.dbwrap.connect()
@@ -281,8 +286,12 @@ class RelProps:
         self.dbwrap.commitAndClose()
         return results_list
 
+    def __str__(self):
+        s = '[ RelIDprops -- relid: %s   propname: %s  changeid: %s  changetype: %s oldpropvalue: %s newpropvalue: %s]'
+        s = s %(self.relid, self.propname, self.changeid, self.changetype, self.oldpropvalue, self.newpropvalue)
+        return s
+
     @classmethod
     def getRelProps(cls, changeid):
         rp = RelProps(changeid)
         return rp.getListFromDB()
-

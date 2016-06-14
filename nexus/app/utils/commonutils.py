@@ -34,3 +34,12 @@ class Utils:
         from app.constants import DATE_FORMAT
         dt = datetime.now()
         return dt.strftime(DATE_FORMAT)
+
+    def changeTypeDescribe(self, changeType):
+        from app.constants import CHANGE_DELETE, CHANGE_INSERT, CHANGE_MODIFY
+        if changeType == CHANGE_DELETE:
+            return 'deletion'
+        if changeType == CHANGE_INSERT:
+            return 'insertion'
+        if changeType == CHANGE_MODIFY:
+            return 'modification'

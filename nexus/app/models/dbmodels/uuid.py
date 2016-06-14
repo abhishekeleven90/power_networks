@@ -196,6 +196,10 @@ class UuidLabels:
         self.dbwrap.commitAndClose()
         return results_list
 
+    def __str__(self):
+        s = '[ UuidLabels -- uuid: %s   label: %s  changeid: %s  changetype: %s]' %(self.uuid, self.label, self.changeid, self.changetype)
+        return s
+
     @classmethod
     def getUuidLabels(cls, changeid):
         u = UuidLabels(changeid=changeid)
@@ -204,17 +208,17 @@ class UuidLabels:
 
 class UuidProps:
 
-    def __init__(self, changeid=None, uuid=None, propname='',
-            oldpropvalue='', newpropvalue='', changetype=None):
+    def __init__(self, changeid=None, uuid=None, propname=None, ##makes sense to change propname to None, this way nothing will be inserted, error!
+            oldpropvalue=None, newpropvalue=None, changetype=None):
         self.changeid = changeid
         self.uuid = uuid
         self.propname = propname
         self.oldpropvalue = oldpropvalue
         self.newpropvalue = newpropvalue
+        ##TODO: add constarint in programming or db, if both none, non need of anything here
         self.changetype = changetype
         self.dbwrap = MetaSQLDB()
         self.tablename = META_TABLE_UUIDPROPS
-        return
 
     def create(self):
         self.dbwrap.connect()
@@ -275,8 +279,12 @@ class UuidProps:
         self.dbwrap.commitAndClose()
         return results_list
 
+    def __str__(self):
+        s = '[ UuidProps -- uuid: %s   propname: %s  changeid: %s  changetype: %s oldpropvalue: %s newpropvalue: %s]'
+        s = s %(self.uuid, self.propname, self.changeid, self.changetype, self.oldpropvalue, self.newpropvalue)
+        return s
+
     @classmethod
     def getUuidProps(cls, changeid):
         up = UuidProps(changeid)
         return up.getListFromDB()
-
