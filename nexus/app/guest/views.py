@@ -141,13 +141,18 @@ def tasks():
 @guest.route('/changeitem/')
 def changeitem():
     from app.models.dbmodels.change import ChangeItem
-    print 'should work fine'
-    #chg = ChangeItem(6, pushedby='abhi1@gmail.com', verifiedby='abhi7@gmail.com')
-    #chg.insert()
-    chg2 = ChangeItem.getChangeItem(2)
-    print chg2
-    print 'will be here if all fine'
-    return render_template("temp.html", homeclass="active", temptext='You are here ' + str(chg2))
+    from app.utils.commonutils import Utils
+    utils = Utils()
+    fetchdate = utils.getCurrentDateTime()
+    pushdate = utils.getCurrentDateTime()
+    verifydate = utils.getCurrentDateTime()
+    chg = ChangeItem(1, pushedby='abhi5@gmail.com', verifiedby=session['userid'], sourceurl='http://wikipedia.com', fetchdate=fetchdate, pushdate=pushdate, verifydate = verifydate)
+    chg.insert()
+    flash(chg.changeid)
+    #chg2 = ChangeItem.getChangeItem(2)
+    #print chg2
+    #print 'will be here if all fine'
+    return render_template("temp.html", homeclass="active", temptext='You are here ' + str(chg))
 
 
 
@@ -184,13 +189,13 @@ def viz():
 
     ## TODO: constants
     if isValidCypher(cypher):
-        return render_template("viz2.html", homeclass="active", temptext=cypher, 
-            CORE_GRAPH_HOST =CORE_GRAPH_HOST, CORE_GRAPH_PASSWORD = CORE_GRAPH_PASSWORD, 
+        return render_template("viz2.html", homeclass="active", temptext=cypher,
+            CORE_GRAPH_HOST =CORE_GRAPH_HOST, CORE_GRAPH_PASSWORD = CORE_GRAPH_PASSWORD,
             CORE_GRAPH_PORT = CORE_GRAPH_PORT, CORE_GRAPH_USER = CORE_GRAPH_USER)
     else:
         flash('Invalid query')
-        return render_template("viz2.html", homeclass="active", temptext='', 
-            CORE_GRAPH_HOST =CORE_GRAPH_HOST, CORE_GRAPH_PASSWORD = CORE_GRAPH_PASSWORD, 
+        return render_template("viz2.html", homeclass="active", temptext='',
+            CORE_GRAPH_HOST =CORE_GRAPH_HOST, CORE_GRAPH_PASSWORD = CORE_GRAPH_PASSWORD,
             CORE_GRAPH_PORT = CORE_GRAPH_PORT, CORE_GRAPH_USER = CORE_GRAPH_USER)
 
 @guest.route('/temp4/')

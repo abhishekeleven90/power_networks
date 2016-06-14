@@ -1,4 +1,3 @@
-
 CREATE TABLE IF NOT EXISTS `users` (
   `userid` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -35,8 +34,6 @@ create table relidtable(
   enduuid int not null, 
   foreign key (startuuid) references uuidtable(uuid) on delete cascade on update cascade,  
   foreign key (enduuid) references uuidtable(uuid) on delete cascade on update cascade); 
-
-
 
 
 CREATE TABLE `tasks` (

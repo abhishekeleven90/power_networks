@@ -4,18 +4,23 @@ from datetime import datetime
 
 class ChangeItem:
 
-    def __init__(self, taskid=None, pushedby='', verifiedby='', 
-            fetchdate='', pushdate=''):
-        
+    def __init__(self, taskid=None, pushedby='', sourceurl='', verifiedby='',
+            fetchdate='', pushdate='', verifydate = ''):
+
         ##password by default empty, must be checked from higher function
         ##for a non empty password
         self.changeid = None
         self.taskid  = taskid
         self.pushedby = pushedby
         self.verifiedby = verifiedby
-        self.verifydate = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        self.verifydate = verifydate ##adding this patch for neo4j, since this ts will be gen from neo4j
+        if verifydate == '':
+            self.verifydate = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
         self.fetchdate = fetchdate
         self.pushdate = pushdate
+        self.sourceurl = sourceurl
 
         ##other meta
         self.dbwrap = MetaSQLDB()
@@ -34,9 +39,9 @@ class ChangeItem:
 
         #print type(self.keyEnabled)
         query = "INSERT INTO " + self.tablename + " (taskid, pushedby, verifiedby,\
-                verifydate, fetchdate, pushdate) VALUES(%d, '%s', '%s', '%s', '%s','%s')"\
+                verifydate, fetchdate, pushdate, sourceurl) VALUES(%d, '%s', '%s', '%s', '%s','%s', '%s')"\
                 % (self.taskid, self.pushedby, self.verifiedby, self.verifydate,
-                        self.fetchdate, self.pushdate)
+                        self.fetchdate, self.pushdate, self.sourceurl)
 
         print query
         numrows = cursor.execute(query)
@@ -49,7 +54,7 @@ class ChangeItem:
         ##TODO - later
         pass
 
-    
+
     def __str__(self):
         s = '[Change: changeid: '+str(self.changeid)+' pushedby: '+str(self.pushedby)+']'
         print s
@@ -87,4 +92,3 @@ class ChangeItem:
         chg = ChangeItem()
         chg.changeid = changeid
         return chg.getSelfFromDB()
-
