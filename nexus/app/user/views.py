@@ -4,7 +4,9 @@ from app.forms import EditEntityForm, form_error_helper
 
 @user.route('/')
 def show():
-    return render_template("temp.html", homeclass="active", temptext='user')
+	from app.models.dbmodels.user import User
+	user = User.getUser(session['userid'])
+	return render_template("user_profile.html", user = user)
 
 ##TODO: check if the ending forward slashes are there for all
 ## do it when checking
@@ -59,3 +61,4 @@ def temp():
 	##edit form of entity?
 	##wait for moderation	
 	return render_template("temp.html", homeclass="active", temptext='temp')
+

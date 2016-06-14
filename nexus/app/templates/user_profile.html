@@ -1,0 +1,88 @@
+{% macro user_profile(user) %}
+    
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
+
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">{{user.userid}}</h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+
+                <div class="col-md-3 col-lg-3 " align="center"> <img alt="{{user.userid}}" style="padding-top: 5px" class="img-responsive pull-xs-left" src="http://cdn2.saveritemedical.com/product-default.jpg"> </div>
+                
+                <div class=" col-md-9 col-lg-9 "> 
+                  <table class="table table-user-information">
+                    <tbody>
+                      
+                      <tr>
+                        <td><b>Role</b></td>
+                        <td>
+
+                            {{user.role}}
+                          
+                        </td>
+                      </tr>
+
+
+                      <tr>
+                        <td><b>API Key Enabled</b></td>
+                        <td>
+
+                            {{user.keyEnabled}}
+                          
+                        </td>
+                      </tr>
+                          
+
+                      
+                    </tbody>
+                  </table>
+                  
+                  
+
+                </div>
+              </div>
+            </div>
+                 <div class="panel-footer">
+                        <!--<a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-envelope"></i></a>
+                        <span class="pull-right">
+                            <a href="edit.html" data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
+                            <a data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
+                        </span>-->
+                    </div>
+            
+          </div>
+        </div>
+      </div>
+    
+{% endmacro %}
+
+
+
+{% extends "basic.html" %}
+
+
+
+{% block content %}
+
+<!-- 
+<ul class="nav nav-tabs">
+  <li role=><a href="#">As a </a></li>
+  <li role="presentation"><a href="{{url_for('user.show')}}">User</a></li>
+  <li role="presentation"><a href="{{url_for('crawler.crawler_home')}}">Crawler</a></li>
+  <li role="presentation"><a href="{{url_for('verifier.show')}}">Verifier</a></li>
+  <li role="presentation"><a href="{{url_for('mod.show')}}">Moderator</a></li>
+  <li role="presentation"><a href="{{url_for('admin.show')}}">Admin</a></li>
+</ul> -->
+
+<br/>
+
+<!-- This is already shown in the tab pane! So shouldn't be a problem. -->
+<!-- Viewing as : {{session['userid']}} <br/> -->
+
+{{user_profile(user)}}
+
+
+{%endblock%}

@@ -6,7 +6,8 @@ user = Blueprint('user', __name__)
 # to create and tear down a database connection on each request.
 @user.before_request
 def before_request():
-    if session.get('role')<1:
+    from app.constants import ROLE_USER
+    if session.get('role')<ROLE_USER:
         abort(403)
     print 'user hi!!!' ##this is like a wrapper inside a wrapper
 

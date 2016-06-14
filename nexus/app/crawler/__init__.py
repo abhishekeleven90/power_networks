@@ -6,10 +6,8 @@ crawler = Blueprint('crawler', __name__)
 # to create and tear down a database connection on each request.
 @crawler.before_request
 def before_request():
-
-    print 'AAYA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-
-    if session.get('role')<2:
+    from app.constants import ROLE_CRAWLER
+    if session.get('role')<ROLE_CRAWLER:
         abort(403)
     print 'crawler hi!!!' ##this is like a wrapper inside a wrapper
 

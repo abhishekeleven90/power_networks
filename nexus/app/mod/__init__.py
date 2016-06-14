@@ -6,7 +6,8 @@ mod = Blueprint('mod', __name__)
 # to create and tear down a database connection on each request.
 @mod.before_request
 def before_request():
-    if session.get('role')<5:
+    from app.constants import ROLE_MODERATOR
+    if session.get('role')<ROLE_MODERATOR:
         abort(403)
     print 'mod hi!!!' ##this is like a wrapper inside a wrapper
 

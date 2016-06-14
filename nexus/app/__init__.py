@@ -32,6 +32,12 @@ def before_request():
     print 'app hi'
     g.db = dbwork.dbobject()
     g.db.connect()
+    from app.constants import ROLE_ADMIN, ROLE_CRAWLER, ROLE_MODERATOR, ROLE_USER, ROLE_VERIFIER
+    g.ROLE_ADMIN = ROLE_ADMIN
+    g.ROLE_CRAWLER = ROLE_CRAWLER
+    g.ROLE_MODERATOR = ROLE_MODERATOR
+    g.ROLE_USER = ROLE_USER
+    g.ROLE_VERIFIER = ROLE_VERIFIER
     g.user = None ##Session related
     ##adding for neo4j graph
 

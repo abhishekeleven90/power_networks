@@ -36,6 +36,10 @@ def role_required(*roles):
 def home():
     return render_template("home.html", homeclass="active")
 
+@app.route('/temp/')
+def temp():
+    return render_template("temp4.html")
+
 @app.route('/login/',methods=["GET","POST"])
 def login():
     '''
@@ -95,10 +99,10 @@ def page_not_found(e):
 def not_permitted(e):
     return render_template("error.html", homeclass="active", errortext="Sorry, you are not permitted to see this.")
 
-@app.route('/temp/')
+@app.route('/temp6/')
 @login_required
 @role_required('admin')
-def temp():
+def temp6():
     nayaperson = Person.create(name='nayaperson')
     naya_kitty = Pet.create(ownerid=nayaperson, type='cat')
     toflash = ''

@@ -93,8 +93,34 @@
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
                                 {% if session.userid %}
-                                <li class="{{loginclass}}">
-                                    <a>{{session.userid}}</a>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        {{session.userid}}
+                                    </a>
+
+                                    <ul class="dropdown-menu">
+
+                                        {% if session['role'] >= g.ROLE_USER %}
+                                            <li role="presentation"><a href="{{url_for('user.show')}}">User</a></li>
+                                        {% endif %}
+                                        
+                                        {% if session['role'] >= g.ROLE_CRAWLER %}
+                                            <li role="presentation"><a href="{{url_for('crawler.crawler_home')}}">Crawler</a></li>
+                                        {% endif %}
+
+                                        {% if session['role'] >= g.ROLE_VERIFIER %}
+                                            <li role="presentation"><a href="{{url_for('verifier.show')}}">Verifier</a></li>
+                                        {% endif %}
+
+                                        {% if session['role'] >= g.ROLE_MODERATOR %}
+                                            <li role="presentation"><a href="{{url_for('mod.show')}}">Moderator</a></li>
+                                        {% endif %}
+                                        
+                                        {% if session['role'] >= g.ROLE_ADMIN %}
+                                         <li role="presentation"><a href="{{url_for('admin.show')}}">Admin</a></li>
+                                        {% endif %}
+                                    </ul>
+
                                 </li>
                                 {% endif %}
 
@@ -151,13 +177,15 @@
                     {% endblock %}
 
                 </div>
-                <div>
-                    <footer>
+                <div  class="footer navbar-fixed-bottom">
+                    <div class="well">
+                    <footer >
                         {% block footer %}
                             <p class="text-center">© ICTD Lab, IIT-Delhi 2015
                              </p>
                         {% endblock %}
                     </footer>
+                    </div>
                 </div>
 
             
