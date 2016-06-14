@@ -6,7 +6,8 @@ admin = Blueprint('admin', __name__)
 # to create and tear down a database connection on each request.
 @admin.before_request
 def before_request():
-    if session.get('role')!=7:
+    from app.constants import ROLE_ADMIN
+    if session.get('role')!=ROLE_ADMIN:
         abort(403)
     print 'admin hi!!!' ##this is like a wrapper inside a wrapper
 

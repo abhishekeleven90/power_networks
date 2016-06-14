@@ -1,0 +1,20 @@
+{% extends "basic.html" %}
+
+
+
+{% block content %}
+
+
+<br/>
+
+<ul class="nav nav-tabs">
+  <!-- <li role="presentation" class="active"><a href="#">Profile</a></li> -->
+  <li role="presentation"><a href="{{url_for('crawler.crawler_home')}}">Crawler</a></li>
+  <li role="presentation"><a href="#">Verifier</a></li>
+  <li role="presentation"><a href="#">Moderator</a></li>
+  <li role="presentation"><a href="#">Admin</a></li>
+</ul>
+
+
+
+{%endblock%}

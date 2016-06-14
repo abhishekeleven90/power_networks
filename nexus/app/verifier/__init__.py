@@ -6,8 +6,8 @@ verifier = Blueprint('verifier', __name__)
 # to create and tear down a database connection on each request.
 @verifier.before_request
 def before_request():
-    print 'AAYA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-    if session.get('role')<3:
+    from app.constants import ROLE_VERIFIER
+    if session.get('role')<ROLE_VERIFIER:
         abort(403)
     print 'verifier hi!!!' ##this is like a wrapper inside a wrapper
 
