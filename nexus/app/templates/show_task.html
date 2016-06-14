@@ -3,6 +3,7 @@
 {% block content %}
 <script src="{{url_for('static', filename='js/dynamicinput.js')}}"></script>
 <div class="container">
+    <h1>Task Info </h1>
     <div class="row">
         <div class="col-md-6 toppad" >
             <div class="panel panel-primary">
@@ -35,20 +36,22 @@
             </div>
             <div class="row">
                 <div class="control-group" id="fields">
-                    <label class="control-label" for="field1">Nice Multiple Form Fields</label>
+                    <label class="control-label" for="field1">Add users to this task</label>
                     <div class="controls"> 
-                        <form role="form" autocomplete="off">
-                            <div class="entry input-group col-xs-3">
-                                <input class="form-control" name="fields[]" type="text" placeholder="Type something" />
+                        <form role="form" autocomplete="off" method="POST" action="{{url_for('crawler.addUser')}}">
+                            <input type="hidden" name="taskid" value="{{task.taskid}}">
+                            <div class="entry input-group col-md-6">
+                                <input class="form-control" name="fields[]" type="text" placeholder="Type username" />
                                 <span class="input-group-btn">
                                     <button class="btn btn-success btn-add" type="button">
                                         <span class="glyphicon glyphicon-plus"></span>
                                     </button>
                                 </span>
                             </div>
+                            <button type="submit" class="btn btn-primary">Add User(s)</button>
                         </form>
                         <br>
-                        <small>Press <span class="glyphicon glyphicon-plus gs"></span> to add another form field :)</small>
+                        <small>Press <span class="glyphicon glyphicon-plus gs"></span> to add another user</small>
                     </div>
                 </div>
             </div>

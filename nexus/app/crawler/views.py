@@ -62,10 +62,35 @@ def listtasks():
 ## TODO - use taskid as route parameter
 @crawler.route('/showtask/<int:taskid>')
 def showtask(taskid):
-    ##TODO - show a particular task and its recent activities
     userid = session.get('userid')
     task = Tasks.getTask(taskid)
     data = task.__dict__.copy()
     tasklog = Tasklog(taskid=taskid)
     logobjs = tasklog.getListFromDB(taskid)
     return render_template("show_task.html", task=data, logs=logobjs)
+
+
+@crawler.route('/addUser/', methods=['POST'])
+def addUser():
+    print "addUser here"
+    userids = request.form.getlist('fields[]')
+    print type(userids), userids
+    assert(type(userids) == list)
+    taskid = int(request.form['taskid'])
+    tmptaskusr = Taskusers(taskid=taskid)
+    users_list = tmptaskusr.getListFromDB('taskid')
+
+    for userid in userids:
+        if userid in users_list:
+            flash(userid+' already in the task')
+        else:
+            try:
+                tu = Taskusers(taskid, userid)
+                tu.create()
+            except Exception as e:
+                print e.message
+                flash("Could not add entry!!")
+            else:
+                flash("Entry added successfully!")
+
+    return redirect(url_for('.crawler_home'))
