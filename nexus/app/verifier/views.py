@@ -255,7 +255,7 @@ def match(kind):
             # ##Infact resolution for ID should be done here
             # ##TODO: gg.crawldb.unlockObject(crawl_obj_original) should be done here alongside clearVerifierSessionAll
 
-            flashmsg =  "[match: changeid: %s || numrows: %s || kind: %s || id: %s]" %(changeid), numrows, kind, curr_id)
+            flashmsg =  "[match: changeid: %s || numrows: %s || kind: %s || id: %s]" %(changeid, numrows, kind, curr_id)
             print flashmsg
             flash(flashmsg)
 
@@ -428,7 +428,7 @@ def diffPushGen(kind):
         changeid, numrows = gg.resolveAndProvenance(kind, curr_id, curr_obj, old_obj, crawl_obj_original, session['userid'])
         clearVerifierSessionAll()
 
-        flashmsg =  "[diffPushGen: changeid: %s || numrows: %s || kind: %s || id: %s]" %(changeid), numrows, kind, curr_id)
+        flashmsg =  "[diffPushGen: changeid: %s || numrows: %s || kind: %s || id: %s]" %(changeid, numrows, kind, curr_id)
         print flashmsg
         flash(flashmsg)
 

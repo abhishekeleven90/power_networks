@@ -160,16 +160,18 @@ class GraphHandle():
         from app.utils.commonutils import Utils
         utils = Utils()
 
-        fetchdate = utils.getDateTimeFromTimestamp(float(crawl_obj_original[CRAWL_FETCHDATE]))
-        pushdate = utils.getDateTimeFromTimestamp(float(crawl_obj_original[CRAWL_PUSHDATE]))
-        verifydate = utils.getDateTimeFromTimestamp(float(crawl_obj_original([CRAWL_VERIFYDATE]))
-        pushedby = crawl_obj_original[CRAWL_PUSHEDBY]
+
+        fetchdate = utils.getDateTimeFromTimestamp( float( crawl_obj_original[CRAWL_FETCHDATE] ) )
+        pushdate = utils.getDateTimeFromTimestamp( float ( crawl_obj_original[CRAWL_PUSHDATE] ) )
+        verifydate = utils.getDateTimeFromTimestamp( float( crawl_obj_original[CRAWL_VERIFYDATE] ) )
+        pushedby = str( crawl_obj_original[CRAWL_PUSHEDBY] )
         verifiedby = crawl_obj_original[CRAWL_VERIFIEDBY]
         sourceurl = float(crawl_obj_original[CRAWL_SOURCEURL])
         taskid = float(crawl_obj_original[CRAWL_TASKID])
 
         chg = ChangeItem(taskid=taskid, pushedby=pushedby, verifiedby=verifiedby, sourceurl=sourceurl, fetchdate=fetchdate, pushdate=pushdate, verifydate = verifydate)
         chg.insert()
+
         print '[provenanceID: generate new change id for %s id being : %s]' %(crawl_obj_original, str(chg.changeid))
 
         return chg.changeid
