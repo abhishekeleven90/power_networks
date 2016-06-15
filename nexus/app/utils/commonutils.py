@@ -43,3 +43,7 @@ class Utils:
             return 'insertion'
         if changeType == CHANGE_MODIFY:
             return 'modification'
+
+    def currentTimeStamp(self):
+        import time
+        return time.time()

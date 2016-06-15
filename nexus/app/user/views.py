@@ -8,8 +8,9 @@ def show():
 	user = User.getUser(session['userid'])
 	return render_template("user_profile.html", user = user)
 
-##TODO: check if the ending forward slashes are there for all
-## do it when checking
+
+# TODO: check if the ending forward slashes are there for all
+#  do it when checking
 @user.route('/editEntity/<int:uuid>/',methods=["GET","POST"])
 def editEntity(uuid):
 	##fetch current details for now
@@ -28,7 +29,7 @@ def editEntity(uuid):
 	##TODO: UUIDS are not changeable for ever, make a check of that
 
 
-	# delete a node with uuid and create a node 
+	# delete a node with uuid and create a node
 
 	from app.graphdb import *
 	node = entity(uuid)
@@ -49,7 +50,7 @@ def editEntity(uuid):
 			flash('Form not filled properly')
 	else:
 		form_error_helper(form)
-	return render_template("edit_entity.html", homeclass="active",uuid=str(uuid), entity=entity, form=form)	
+	return render_template("edit_entity.html", homeclass="active",uuid=str(uuid), entity=entity, form=form)
 
 
 ##TODO: check if the ending forward slashes are there for all
@@ -58,7 +59,6 @@ def editEntity(uuid):
 def temp():
 	##fetch current details for now
 	##show these current details
-	##edit form of entity?
-	##wait for moderation	
+	##edit form of entity
+	##wait for moderation
 	return render_template("temp.html", homeclass="active", temptext='temp')
-

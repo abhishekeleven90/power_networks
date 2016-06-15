@@ -203,7 +203,7 @@ class RelLabels:
         return results_list
 
     def __str__(self):
-        s = '[ RelIDLabels -- relid: %s   label: %s  changeid: %s  changetype: %s]' %(self.relid, self.label, self.changeid, self.changetype)
+        s = '[ RelIDLabels -- relid: %s   label: %s  changeid: %s  changetype: %s]' %(str(self.relid), self.label, str(self.changeid), str(self.changetype))
         return s
 
     @classmethod
@@ -288,7 +288,7 @@ class RelProps:
 
     def __str__(self):
         s = '[ RelIDprops -- relid: %s   propname: %s  changeid: %s  changetype: %s oldpropvalue: %s newpropvalue: %s]'
-        s = s %(self.relid, self.propname, self.changeid, self.changetype, self.oldpropvalue, self.newpropvalue)
+        s = s %(str(self.relid), self.propname, str(self.changeid), str(self.changetype), self.oldpropvalue, self.newpropvalue)
         return s
 
     @classmethod
