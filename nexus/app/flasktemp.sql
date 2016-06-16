@@ -118,10 +118,11 @@ alter table uuidprops add unique(changeid, uuid, propname);
 CREATE TABLE `relidprops` (
   `changeid` bigint(20) not null,
   `relid` int not null,
-  `propname` varchar(1000) NOT NULL,
+  `propname` varchar(100) NOT NULL,
   `oldpropvalue`  text,
   `newpropvalue` text,
   `changetype` int not null,
   foreign key (`changeid`) references `changetable`(`changeid`) on delete cascade on update cascade,
   foreign key (`relid`) references `relidtable`(`relid`) on delete cascade on update cascade
 );
+alter table relidprops add unique(changeid, relid, propname);

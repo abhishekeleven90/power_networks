@@ -158,6 +158,7 @@ class GraphHandle():
 
         from app.constants import CRAWL_PUSHDATE, CRAWL_FETCHDATE, CRAWL_SOURCEURL, CRAWL_VERIFIEDBY, CRAWL_VERIFYDATE, CRAWL_TASKID, CRAWL_PUSHEDBY
         from app.utils.commonutils import Utils
+        from app.models.dbmodels.change import ChangeItem
         utils = Utils()
 
 
@@ -165,9 +166,9 @@ class GraphHandle():
         pushdate = utils.getDateTimeFromTimestamp( float ( crawl_obj_original[CRAWL_PUSHDATE] ) )
         verifydate = utils.getDateTimeFromTimestamp( float( crawl_obj_original[CRAWL_VERIFYDATE] ) )
         pushedby = str( crawl_obj_original[CRAWL_PUSHEDBY] )
-        verifiedby = crawl_obj_original[CRAWL_VERIFIEDBY]
-        sourceurl = float(crawl_obj_original[CRAWL_SOURCEURL])
-        taskid = float(crawl_obj_original[CRAWL_TASKID])
+        verifiedby = str(crawl_obj_original[CRAWL_VERIFIEDBY])
+        sourceurl = str(crawl_obj_original[CRAWL_SOURCEURL])
+        taskid = crawl_obj_original[CRAWL_TASKID] ##TODO: check in api, if taskid int or not
 
         chg = ChangeItem(taskid=taskid, pushedby=pushedby, verifiedby=verifiedby, sourceurl=sourceurl, fetchdate=fetchdate, pushdate=pushdate, verifydate = verifydate)
         chg.insert()
@@ -215,7 +216,7 @@ class GraphHandle():
         ##done in provenanceID: so changeid is in arguments
 
         if kind=='node':
-            from app.models.dbmodels.uuid import *
+            from app.models.dbmodels.uuid import UuidLabels, UuidProps
             for label in new_labels:
                 newlabel = UuidLabels(changeid=changeid, uuid=curr_id, label=label, changetype=CHANGE_INSERT)
                 newlabel.create()
@@ -226,11 +227,11 @@ class GraphHandle():
                 newitem.create()
                 numrows = numrows + 1
             for prop in conf_props: ##for fresh insert wont go inside
-                olditem = UuidProps(changeid=changeid, uuid=curr_id, propname=prop, changetype=CHANGE_INSERT, oldpropvalue = old_obj[prop], newpropvalue=curr_obj[prop])
+                olditem = UuidProps(changeid=changeid, uuid=curr_id, propname=prop, changetype=CHANGE_MODIFY, oldpropvalue = old_obj[prop], newpropvalue=curr_obj[prop])
                 olditem.create()
                 numrows = numrows + 1
         elif kind=='relation':
-            from app.models.dbmodels.relid import *
+            from app.models.dbmodels.relid import RelLabels, RelProps
             for label in new_labels:
                 newlabel = RelLabels(changeid=changeid, relid=curr_id, label=label, changetype=CHANGE_INSERT)
                 newlabel.create()
@@ -535,9 +536,9 @@ class GraphHandle():
             resolveid to the curr_id that we get from the coredb
         '''
         if kind == 'node':
-            self.crawldb.setResolvedWithUUID(crawl_obj_original, curr_id, session['userid'])
+            self.crawldb.setResolvedWithUUID(crawl_obj_original, curr_id, verifiedby)
         elif kind == 'relation':
-            self.crawldb.setResolvedWithRELID(crawl_obj_original, curr_id, session['userid'])
+            self.crawldb.setResolvedWithRELID(crawl_obj_original, curr_id, verifiedby)
         # elif kind == 'hyperedgenode':
         #     self.crawldb.setResolvedWithHENID(crawl_obj_original, curr_id)
         return

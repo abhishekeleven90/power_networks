@@ -349,7 +349,7 @@ class CoreGraphDB(GraphDB):
                 utils = Utils()
                 origstr = utils.processString(str(orig[x]))
                 nayastr = utils.processString(str(naya[x]))
-                if str(orig[x]) != naya[x]:
+                if origstr != nayastr:
                     ##exactly equal prop! TODO: if all props equal -> empty,
 
                     #TODO:
@@ -812,8 +812,8 @@ class SelectionAlgoGraphDB(GraphDB):
         query = query + ' match (n:%s)--(c) where not exists(n.%s) with c, count(n) as countn'
         query = query + ' where countn <> 0 return count(distinct c) '
         query = query %(LABEL_HYPEREDGE_NODE, RESOLVEDHENID, LABEL_ENTITY, RESOLVEDUUID)
-        print 'hhhhhhhhhhhh'
-        print query
+        #print 'hhhhhhhhhhhh'
+        #print query
         results = self.graph.cypher.execute(query)
         count =  results[0][0]
         return self.countUnresolvedHyperEdgeNodes() - count

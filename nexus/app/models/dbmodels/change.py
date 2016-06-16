@@ -4,7 +4,7 @@ from datetime import datetime
 
 class ChangeItem:
 
-    def __init__(self, taskid=None, pushedby='', sourceurl='', verifiedby='',
+    def __init__(self, taskid='', pushedby='', sourceurl='', verifiedby='',
             fetchdate='', pushdate='', verifydate = ''):
 
         ##password by default empty, must be checked from higher function
@@ -30,6 +30,7 @@ class ChangeItem:
 
     def insert(self):
         self.dbwrap.connect()
+
         try:
             cursor = self.dbwrap.cursor()
         except:
@@ -40,7 +41,7 @@ class ChangeItem:
         #print type(self.keyEnabled)
         query = "INSERT INTO " + self.tablename + " (taskid, pushedby, verifiedby,\
                 verifydate, fetchdate, pushdate, sourceurl) VALUES(%d, '%s', '%s', '%s', '%s','%s', '%s')"\
-                % (self.taskid, self.pushedby, self.verifiedby, self.verifydate,
+                % (int(self.taskid), self.pushedby, self.verifiedby, self.verifydate,
                         self.fetchdate, self.pushdate, self.sourceurl)
 
         print query

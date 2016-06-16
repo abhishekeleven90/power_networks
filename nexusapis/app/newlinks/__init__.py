@@ -7,16 +7,16 @@ newlinks = Blueprint('newlinks', __name__)
 @newlinks.before_request
 def before_request():
     print 'newlinks hi!!!' ##this is like a wrapper inside a wrapper
-    from utils_crawler import isValidToken
-    if not isValidToken(request.args.get('_token', ''),2):
-        abort(403)
+    ##no need of token here
+    # from utils_crawler import isValidToken
+    # if not isValidToken(request.args.get('_token', ''),2):
+        # abort(403)
     print 'newlinks hi2222!!!' ##this is like a wrapper inside a wrapper
 
 @newlinks.after_request
 def after_request(response):
     print "new links apis bye!!!"
     #print g.db ## this object exists!!
-    return response   
+    return response
 
-from app.newlinks import views 
-
+from app.newlinks import views

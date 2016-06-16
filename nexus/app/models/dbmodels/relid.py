@@ -4,7 +4,7 @@ from app.sqldb import MetaSQLDB
 
 class RelIdTable:
 
-    def __init__(self, relid, reltype='', startuuid=None, enduuid=None):
+    def __init__(self, relid, reltype='', startuuid='', enduuid=''):
         self.dbwrap = MetaSQLDB()
         self.tablename = META_TABLE_RELID
         self.relid = relid
@@ -32,8 +32,10 @@ class RelIdTable:
         try:
             numrows = cursor.execute(query)
         except Exception as e:
-            print e.message
-            print "query execution error"
+            import traceback
+            traceback.print_exc()
+            traceback.print_stack()
+            print "[relid.RelIdTable.create: query execution error]"
             self.dbwrap.commitAndClose()
 
         else:
@@ -131,7 +133,7 @@ class RelIdTable:
 
 class RelLabels:
 
-    def __init__(self, changeid=None, relid=None, label='', changetype=None):
+    def __init__(self, changeid='', relid='', label='', changetype=''):
         self.changeid = changeid
         self.relid = relid
         self.label = label
@@ -153,15 +155,17 @@ class RelLabels:
 
         query = "INSERT INTO " + self.tablename + " (changeid, relid,\
                 label, changetype) VALUES(%d, %d, '%s', %d)" %\
-                (self.changeid, self.relid, self.label, self.changetype)
+                (int(self.changeid), int(self.relid), self.label, int(self.changetype))
 
         print query
         numrows = 0
         try:
             numrows = cursor.execute(query)
         except Exception as e:
-            print e.message
-            print "query execution error"
+            import traceback
+            traceback.print_exc()
+            traceback.print_stack()
+            print "[relid.RelLabels.create: query execution error]"
             self.dbwrap.commitAndClose()
         else:
             self.dbwrap.commitAndClose()
@@ -214,8 +218,11 @@ class RelLabels:
 
 class RelProps:
 
-    def __init__(self, changeid=None, relid=None, propname=None,
-            oldpropvalue=None, newpropvalue=None, changetype=None):
+    def __init__(self, changeid='', relid='', propname='',
+            oldpropvalue='', newpropvalue='', changetype=''):
+
+
+
         ##makes sense to change propname to None, this way nothing will be inserted, error!
         self.changeid = changeid
         self.relid = relid
@@ -228,6 +235,10 @@ class RelProps:
         self.tablename = META_TABLE_RELIDPROPS
 
     def create(self):
+
+        ##TODO: can put a check here that some strings cannot be empty
+        ##or in __init__
+
         self.dbwrap.connect()
         try:
             cursor = self.dbwrap.cursor()
@@ -237,17 +248,22 @@ class RelProps:
             print "Cannot get cursor"
             self.dbwrap.commitAndClose()
 
+        ##TODO: will insert empty strings for oldpropvalue!
+
         query = "INSERT INTO " + self.tablename + " (changeid, relid, propname,\
                 oldpropvalue, newpropvalue, changetype) VALUES(%d, %d, '%s',\
-                '%s', '%s', %d)" % (self.changeid, self.relid, self.propname,
-                self.oldpropvalue, self.newpropvalue, self.changetype)
+                '%s', '%s', %d)" % (int(self.changeid), int(self.relid), self.propname,
+                self.oldpropvalue, self.newpropvalue, int(self.changetype))
 
         print query
         numrows = 0
         try:
             numrows = cursor.execute(query)
         except Exception as e:
-            print "query execution error"
+            import traceback
+            traceback.print_exc()
+            traceback.print_stack()
+            print "[relid.RelProps.create: query execution error]"
             self.dbwrap.commitAndClose()
         else:
             self.dbwrap.commitAndClose()

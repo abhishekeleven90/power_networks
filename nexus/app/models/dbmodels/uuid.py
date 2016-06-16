@@ -12,6 +12,11 @@ class UuidTable:
         return
 
     def create(self):
+
+        ##TODO: can put a check here that some strings cannot be empty
+        ##or in __init__
+
+
         self.dbwrap.connect()
         try:
             cursor = self.dbwrap.cursor()
@@ -29,8 +34,10 @@ class UuidTable:
         try:
             numrows = cursor.execute(query)
         except Exception as e:
-            print e.message
-            print "query execution error"
+            import traceback
+            traceback.print_exc()
+            traceback.print_stack()
+            print "[UuidTable.create: query execution error]"
             self.dbwrap.commitAndClose()
 
         else:
@@ -125,7 +132,7 @@ class UuidTable:
 
 class UuidLabels:
 
-    def __init__(self, changeid=None, uuid=None, label='', changetype=None):
+    def __init__(self, changeid='', uuid='', label='', changetype=''):
         self.changeid = changeid
         self.uuid = uuid
         self.label = label
@@ -147,15 +154,17 @@ class UuidLabels:
 
         query = "INSERT INTO " + self.tablename + " (changeid, uuid,\
                 label, changetype) VALUES(%d, %d, '%s', %d)" %\
-                (self.changeid, self.uuid, self.label, self.changetype)
+                (int(self.changeid), int(self.uuid), self.label, int(self.changetype))
 
         print query
         numrows = 0
         try:
             numrows = cursor.execute(query)
         except Exception as e:
-            print e.message
-            print "query execution error"
+            import traceback
+            traceback.print_exc()
+            traceback.print_stack()
+            print "[UuidLabels.create: query execution error]"
             self.dbwrap.commitAndClose()
         else:
             self.dbwrap.commitAndClose()
@@ -208,8 +217,12 @@ class UuidLabels:
 
 class UuidProps:
 
-    def __init__(self, changeid=None, uuid=None, propname=None, ##makes sense to change propname to None, this way nothing will be inserted, error!
-            oldpropvalue=None, newpropvalue=None, changetype=None):
+    ##TODO: see how if ' in string how to handle that!
+    ##MVP '[u'naveen jindal']' will have to be handled separately
+    ##IDEA: disable aliases completely in api calls?
+
+    def __init__(self, changeid='', uuid='', propname='', ##makes sense to change propname to None, this way nothing will be inserted, error!
+            oldpropvalue='', newpropvalue='', changetype=''):
         self.changeid = changeid
         self.uuid = uuid
         self.propname = propname
@@ -230,17 +243,22 @@ class UuidProps:
             print "Cannot get cursor"
             self.dbwrap.commitAndClose()
 
+        ##TODO: will insert empty strings for oldpropvalue!
+
         query = "INSERT INTO " + self.tablename + " (changeid, uuid, propname,\
                 oldpropvalue, newpropvalue, changetype) VALUES(%d, %d, '%s',\
-                '%s', '%s', %d)" % (self.changeid, self.uuid, self.propname,
-                self.oldpropvalue, self.newpropvalue, self.changetype)
+                '%s', '%s', %d)" % (int(self.changeid), int(self.uuid), self.propname,
+                self.oldpropvalue, self.newpropvalue, int(self.changetype))
 
         print query
         numrows = 0
         try:
             numrows = cursor.execute(query)
         except Exception as e:
-            print "query execution error"
+            import traceback
+            traceback.print_exc()
+            traceback.print_stack()
+            print "[UuidProps.create: query execution error]"
             self.dbwrap.commitAndClose()
         else:
             self.dbwrap.commitAndClose()

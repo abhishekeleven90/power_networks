@@ -47,3 +47,20 @@ class Utils:
     def currentTimeStamp(self):
         import time
         return time.time()
+
+    ## idea is to use a dict and then construct
+    ## names, types, vals as in mysql
+    ## to handle the issue of None
+    ## i think can be done
+    ## TODO
+    def mysqlHepler(self, dictvals, dicttypes):
+        dictuseful = {}
+        for key in dictvals:
+            if dictvals[key] is not None:
+                dictuseful[key] = dictvals[key]
+        print dictuseful
+        str1 = ''
+        for key in dictuseful:
+            str1=str1+key+','
+            # str2 if
+        print str1

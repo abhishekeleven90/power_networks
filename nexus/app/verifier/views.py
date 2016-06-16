@@ -218,6 +218,7 @@ def match(kind):
 
         if request.form['match_id']!='##NA##':
             session[CURR_ID] = request.form['match_id']
+            print session[CRAWL_ID_NAME] + ' inside sessionnnnnnnnnn'
             return redirect(url_for('.diffPushGen', kind = kind))
 
         if request.form['match_id']=='##NA##':
@@ -258,7 +259,6 @@ def match(kind):
             flashmsg =  "[match: changeid: %s || numrows: %s || kind: %s || id: %s]" %(changeid, numrows, kind, curr_id)
             print flashmsg
             flash(flashmsg)
-
 
             return redirect(url_for('.show'))
 
@@ -314,7 +314,6 @@ def diffPushGen(kind):
 
     crawl_obj = gg.copyCrawlObject(kind, crawl_obj_original)
 
-
     naya = crawl_obj
     orig = gg.getOriginalCoreObject(kind, curr_id)
     orig.pull()
@@ -328,11 +327,14 @@ def diffPushGen(kind):
         if new_labels == [] and new_props == [] and conf_props == []:
             ##
             flash('Objects match prop by prop, label by label, just setting resolved id in crawldb')
-            resolveFast(gg, kind, crawl_obj_original, curr_id, CRAWL_ID_NAME, CURR_ID)
+            print 'Objects match prop by prop, label by label, just setting resolved id in crawldb'
+            return resolveFast(gg, kind, crawl_obj_original, curr_id, CRAWL_ID_NAME, CURR_ID)
+
+        print session.get(CRAWL_ID_NAME,'Bhai kuch nahi aaaya!')
 
 
         return render_template("verifier_diff_gen.html", homeclass="active",
-            new_labels=new_labels,conf_props=conf_props, new_props=new_props,orig=orig, naya=naya, crawl_id = session[CRAWL_ID_NAME], kind=kind)
+            new_labels=new_labels, conf_props=conf_props, new_props=new_props, orig=orig, naya=naya, crawl_id = session[CRAWL_ID_NAME], kind=kind)
     else:
 
         from app.constants import MVPLIST
@@ -344,6 +346,7 @@ def diffPushGen(kind):
 
         ##first check if justresolve has been selected
         value_list = request.form.getlist('justresolve')
+
         if len(value_list)==1:
 
             ##redundant code, we know its the only option, would have been selected
@@ -358,6 +361,7 @@ def diffPushGen(kind):
             flash('You selected nothing. Please select something. <br/> Or you can select JUST RESOLVE.')
             return redirect(url_for('.diffPushGen',kind=kind))
 
+        ##we are really going to update something, if reach here
         for prop in conf_props:
 
             tosave = str(request.form[prop])
@@ -373,7 +377,7 @@ def diffPushGen(kind):
             ##update this prop in orig graph object!
             #orig[prop] = request.form[prop]
 
-            if tosave!=orig[prop]: ##added patch before provenance,
+            if str(tosave)!=str(orig[prop]): ##added patch before provenance,
                 ##if creates problem, can remove
                 orig[prop] = tosave ##naya prop/orig prop
 
@@ -390,9 +394,6 @@ def diffPushGen(kind):
             if len(value_list)==1: ##as only one value is going to be any way
                 tosave = str(request.form[prop])
 
-
-
-
                 flash(prop+' : '+str(value_list[0]))
                 ##add this prop to orig graph object!
                 #orig[prop] = request.form[prop]
@@ -402,12 +403,15 @@ def diffPushGen(kind):
 
         ##name with alias patch
         aliascopy = utils.copyListOfStrings(orig['aliases'])
+        flag = False
         for alias in request.form.getlist('addtoalias'):
             flash('addtoalias: '+str(alias))
             alias = utils.processString(alias)
             if alias not in aliascopy:
+                flag = True
                 aliascopy.append(alias)
-        orig['aliases'] = aliascopy
+        if flag:
+            orig['aliases'] = aliascopy
 
 
         orig.push()#one graph object resolved!
