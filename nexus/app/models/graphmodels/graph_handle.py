@@ -597,7 +597,7 @@ class GraphHandle():
 
     def getNewLabelsAndPropsDiff(self, kind, orig, naya):
 
-        new_labels = None
+        new_labels = []
 
         if kind == 'node': ##hen can only have two labels thats it!
             new_labels = self.coredb.labelsToBeAdded(orig,naya)

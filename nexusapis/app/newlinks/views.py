@@ -109,6 +109,18 @@ def pushLinked():
         if not prop in request.json:
             return error_helper(str(prop)+"property not in json data", 400)
 
+    # patch for one of these should be present but never none
+    # relations can exist in isolation coz of entities that are already present in db
+    oneofthese = ['entities','relations']
+    flag = False
+    for prop in oneofthese:
+        if prop in request.json:
+            flag = True
+            break
+
+    if not flag:
+        return error_helper("neither entities nor relations in json data", 400)
+
     taskid = request.json['taskid']
     tokenid = request.json['token']
     userid = request.json['userid']
@@ -144,7 +156,9 @@ def pushLinked():
 
 
     ##entities must part in request json
-    entities = request.json['entities'] ##MAJOR TODO: change this to nodes
+    entities = []
+    if 'entities' in request.json:
+        entities = request.json['entities'] ##MAJOR TODO: change this to nodes
 
     ##can be there or can not be, in json
     relations = []

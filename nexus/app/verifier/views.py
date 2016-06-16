@@ -278,7 +278,7 @@ def diffPushGen(kind):
     if session.get(CURR_ID) is None:
         msg = 'No diff tasks go to start task/match task first!'
         flash(msg)
-        return redirect('.show')
+        return redirect(url_for('.show'))
 
     if session.get('kind') is None or session.get('kind') !=kind:
         flash('Kinds do not match, you must have began working in some other tab.')
@@ -320,7 +320,8 @@ def diffPushGen(kind):
 
 
     new_labels, conf_props, new_props = gg.getNewLabelsAndPropsDiff(kind, orig, naya)
-
+    print 'just before diffffffffffffff'
+    print new_props, new_labels, new_props
 
     if not request.form:
 
@@ -354,7 +355,7 @@ def diffPushGen(kind):
             print justresolve
 
             flash('Nothing will be pushed. Resolving just like that')
-            resolveFast(gg,kind,crawl_obj_original, curr_id, CRAWL_ID_NAME, CURR_ID)
+            return resolveFast(gg,kind,crawl_obj_original, curr_id, CRAWL_ID_NAME, CURR_ID)
             # return redirect(url_for('.show'))
 
         if not checkDiffSelected(conf_props,new_props,new_labels):
@@ -402,16 +403,17 @@ def diffPushGen(kind):
 
 
         ##name with alias patch
-        aliascopy = utils.copyListOfStrings(orig['aliases'])
-        flag = False
-        for alias in request.form.getlist('addtoalias'):
-            flash('addtoalias: '+str(alias))
-            alias = utils.processString(alias)
-            if alias not in aliascopy:
-                flag = True
-                aliascopy.append(alias)
-        if flag:
-            orig['aliases'] = aliascopy
+        if kind == 'node':
+            aliascopy = utils.copyListOfStrings(orig['aliases'])
+            flag = False
+            for alias in request.form.getlist('addtoalias'):
+                flash('addtoalias: '+str(alias))
+                alias = utils.processString(alias)
+                if alias not in aliascopy:
+                    flag = True
+                    aliascopy.append(alias)
+            if flag:
+                orig['aliases'] = aliascopy
 
 
         orig.push()#one graph object resolved!

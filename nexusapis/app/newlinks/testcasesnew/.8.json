@@ -1,0 +1,18 @@
+{
+    "taskid": "1",
+    "userid": "abhi2@gmail.com",
+    "token": "token2",
+    "relations": [{
+        "id": "6",
+        "label": "foughtfrom",
+        "start_entity": "3",
+        "end_entity": "6",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "bidirectional": "no",
+        "properties": {
+          "startdate":"10 Jan 1990",
+          "enddate": "20 Feb 2016"
+        }
+    }]
+}

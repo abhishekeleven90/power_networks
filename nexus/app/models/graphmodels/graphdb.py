@@ -624,7 +624,7 @@ class SelectionAlgoGraphDB(GraphDB):
 
     def setResolvedWithRELID(self, rel, relid, verifiedby):
         rel.properties[self.metaprops['RESOLVEDRELID']] = relid
-        self.setVerified(node,verifiedby)
+        self.setVerified(rel,verifiedby)
         rel.push()
         #rel = self.unlockObject(rel) ##to be handled separately
 
