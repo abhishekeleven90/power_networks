@@ -221,15 +221,15 @@ class RelProps:
     def __init__(self, changeid='', relid='', propname='',
             oldpropvalue='', newpropvalue='', changetype=''):
 
-
-
+        import MySQLdb
         ##makes sense to change propname to None, this way nothing will be inserted, error!
+
         self.changeid = changeid
         self.relid = relid
         self.propname = propname
         ##TODO: add constarint in programming or db, if both none, non need of anything here
-        self.oldpropvalue = oldpropvalue
-        self.newpropvalue = newpropvalue
+        self.oldpropvalue = MySQLdb.escape_string(oldpropvalue)
+        self.newpropvalue = MySQLdb.escape_string(newpropvalue)
         self.changetype = changetype
         self.dbwrap = MetaSQLDB()
         self.tablename = META_TABLE_RELIDPROPS

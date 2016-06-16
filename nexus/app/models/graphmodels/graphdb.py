@@ -434,7 +434,7 @@ class CoreGraphDB(GraphDB):
         node[idprop] = idval
         ##patch for aliases
         if 'aliases' not in node.properties:
-            node['aliases'] = [node['name']] ##TODO: move 2 constants
+            node['aliases'] = [str(node['name'])] ##TODO: move 2 constants
         print node
         self.graph.create(node)
         node.pull()

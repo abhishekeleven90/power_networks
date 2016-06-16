@@ -13,14 +13,19 @@ class Utils:
         currvalue = currvalue.replace(';','')
         currvalue = currvalue.replace('`','')
         currvalue = currvalue.replace(";",'')
-        return currvalue
+        return str(currvalue)
 
     def copyListOfStrings(self, listofstr):
         ret = []
         for val in listofstr:
             val = self.processString(val)
             ret.append(val)
+        return ret
 
+    def copyList(self, somelist):
+        ret = []
+        for val in somelist:
+            ret.append(val)
         return ret
 
     def getDateTimeFromTimestamp(self, timestamp):
@@ -64,3 +69,18 @@ class Utils:
             str1=str1+key+','
             # str2 if
         print str1
+
+    @classmethod
+    def isStringEmptyNone(self, givenstr):
+        if givenstr is None:
+            return True
+        if len(self.processString(givenstr))==0:
+            return True
+        return False
+
+    @classmethod
+    def convertToRegularList(self, somelist):
+        retlist = []
+        for l in somelist:
+            retlist.append(str(l))
+        return retlist

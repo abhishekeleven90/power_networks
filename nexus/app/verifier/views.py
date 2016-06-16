@@ -401,28 +401,28 @@ def diffPushGen(kind):
                 orig[prop] = tosave ##naya prop/orig prop
 
 
-
         ##name with alias patch
+        ##NOTE: we didnt processString when savinf first alias!
+        ##That's why here too!
+        ##TODO: move to graph_handle
         if kind == 'node':
-            aliascopy = utils.copyListOfStrings(orig['aliases'])
+            aliasoriglist = utils.copyList(orig['aliases'])
+            aliasmodifylist = utils.copyListOfStrings(orig['aliases'])
             flag = False
-            for alias in request.form.getlist('addtoalias'):
-                flash('addtoalias: '+str(alias))
-                alias = utils.processString(alias)
-                if alias not in aliascopy:
+            for aliasorig in request.form.getlist('addtoalias'):
+                aliasmodify = utils.processString(aliasorig)
+                if aliasmodify not in aliasmodifylist:
+                    flash('addtoalias: '+str(aliasorig))
                     flag = True
-                    aliascopy.append(alias)
+                    aliasoriglist.append(str(aliasorig))
             if flag:
-                orig['aliases'] = aliascopy
+                orig['aliases'] = aliasoriglist
 
 
         orig.push()#one graph object resolved!
 
 
         flash(kind+ ' : '+CRAWL_ID_NAME+' : '+ str(session[CRAWL_ID_NAME]))
-
-
-
 
         if kind=='node':
             #will be called when node's props are changed to update the row

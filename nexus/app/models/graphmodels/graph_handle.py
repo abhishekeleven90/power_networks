@@ -210,7 +210,8 @@ class GraphHandle():
             return numrows ##returns 0
 
         # Ofcourse there should be a curr_obj : core_obj
-        from app.constants import CHANGE_INSERT, CHANGE_MODIFY
+        from app.constants import CHANGE_INSERT, CHANGE_MODIFY, MVPLIST
+        from app.utils.commonutils import Utils
 
         ##step 2 : generate a change id for this
         ##done in provenanceID: so changeid is in arguments
@@ -219,15 +220,24 @@ class GraphHandle():
             from app.models.dbmodels.uuid import UuidLabels, UuidProps
             for label in new_labels:
                 newlabel = UuidLabels(changeid=changeid, uuid=curr_id, label=label, changetype=CHANGE_INSERT)
-                newlabel.create()
+                newlabel.create() ##TODO: check when execute returns numrows
                 numrows = numrows + 1
                 ##TODO: I think that UuidLabels etc. should have an auto inc column to kepe track if inserted or not
             for prop in new_props:
-                newitem = UuidProps(changeid=changeid, uuid=curr_id, propname=prop, changetype=CHANGE_INSERT, newpropvalue=curr_obj[prop])
+                ##TODO: almost similar code for relation and nodes, get together
+                curr_obj_val = curr_obj[prop]
+                if prop in MVPLIST or type(curr_obj[prop]) is list:
+                    curr_obj_val = Utils.convertToRegularList(curr_obj_val)
+                newitem = UuidProps(changeid=changeid, uuid=curr_id, propname=prop, changetype=CHANGE_INSERT, newpropvalue=str(curr_obj_val))
                 newitem.create()
                 numrows = numrows + 1
             for prop in conf_props: ##for fresh insert wont go inside
-                olditem = UuidProps(changeid=changeid, uuid=curr_id, propname=prop, changetype=CHANGE_MODIFY, oldpropvalue = old_obj[prop], newpropvalue=curr_obj[prop])
+                curr_obj_val = curr_obj[prop]
+                old_obj_val = old_obj[prop]
+                if prop in MVPLIST or type(curr_obj[prop]) is list or type(old_obj[prop]) is list:
+                    curr_obj_val = Utils.convertToRegularList(curr_obj_val)
+                    old_obj_val = Utils.convertToRegularList(old_obj_val)
+                olditem = UuidProps(changeid=changeid, uuid=curr_id, propname=prop, changetype=CHANGE_MODIFY, oldpropvalue = str(old_obj_val), newpropvalue=str(curr_obj_val))
                 olditem.create()
                 numrows = numrows + 1
         elif kind=='relation':
@@ -238,11 +248,24 @@ class GraphHandle():
                 numrows = numrows + 1
                 ##TODO: I think that UuidLabels etc. should have an auto inc column to kepe track if inserted or not
             for prop in new_props:
-                newitem = RelProps(changeid=changeid, relid=curr_id, propname=prop, changetype=CHANGE_INSERT, newpropvalue=curr_obj[prop])
+                curr_obj_val = curr_obj[prop]
+                if prop in MVPLIST or type(curr_obj[prop]) is list:
+                    curr_obj_val = Utils.convertToRegularList(curr_obj_val)
+                newitem = RelProps(changeid=changeid, relid=curr_id, propname=prop, changetype=CHANGE_INSERT, newpropvalue=str(curr_obj_val))
                 newitem.create()
                 numrows = numrows + 1
             for prop in conf_props:
-                olditem = RelProps(changeid=changeid, relid=curr_id, propname=prop, changetype=CHANGE_MODIFY, oldpropvalue = old_obj[prop], newpropvalue=curr_obj[prop])
+                curr_obj_val = curr_obj[prop]
+                old_obj_val = old_obj[prop]
+                if prop in MVPLIST or type(curr_obj[prop]) is list or type(old_obj[prop]) is list:
+                    ##TODO: test for MVP in relations
+                    curr_obj_val = Utils.convertToRegularList(curr_obj_val)
+                    old_obj_val = Utils.convertToRegularList(old_obj_val)
+                olditem = RelProps(changeid=changeid, relid=curr_id, propname=prop, changetype=CHANGE_MODIFY, oldpropvalue = str(old_obj_val), newpropvalue=str(curr_obj_val))
+                ##IDEA: TODO: Now I am thinking instead of all this mysql hoopla
+                ## the original idea of versioning each node in a separate graph would have been the best!
+                ## why? every type is string here but in neo4j it has different types!
+                ## same issue with api when pushing data
                 olditem.create()
                 numrows = numrows + 1
         return numrows ##won't reach here

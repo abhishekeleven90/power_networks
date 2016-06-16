@@ -223,15 +223,19 @@ class UuidProps:
 
     def __init__(self, changeid='', uuid='', propname='', ##makes sense to change propname to None, this way nothing will be inserted, error!
             oldpropvalue='', newpropvalue='', changetype=''):
+        import MySQLdb
+        from app.utils.commonutils import Utils
         self.changeid = changeid
         self.uuid = uuid
         self.propname = propname
-        self.oldpropvalue = oldpropvalue
-        self.newpropvalue = newpropvalue
+        self.oldpropvalue = MySQLdb.escape_string(oldpropvalue)
+        self.newpropvalue = MySQLdb.escape_string(newpropvalue)
         ##TODO: add constarint in programming or db, if both none, non need of anything here
         self.changetype = changetype
         self.dbwrap = MetaSQLDB()
         self.tablename = META_TABLE_UUIDPROPS
+
+
 
     def create(self):
         self.dbwrap.connect()
