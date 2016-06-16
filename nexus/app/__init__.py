@@ -50,6 +50,6 @@ def after_request(response):
 from app import views
 
 from app.utils.diffcolors import diffObjects
+from app.utils.commonutils import Utils
 app.jinja_env.globals.update(diffObjects=diffObjects)
-
-
+app.jinja_env.globals.update(toPrintString=Utils.toPrintString)

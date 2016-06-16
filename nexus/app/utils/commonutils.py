@@ -71,7 +71,7 @@ class Utils:
         print str1
 
     @classmethod
-    def isStringEmptyNone(self, givenstr):
+    def isStringEmptyNone(cls, givenstr):
         if givenstr is None:
             return True
         if len(self.processString(givenstr))==0:
@@ -79,8 +79,22 @@ class Utils:
         return False
 
     @classmethod
-    def convertToRegularList(self, somelist):
+    def convertToRegularList(cls, somelist):
         retlist = []
         for l in somelist:
             retlist.append(str(l))
         return retlist
+
+    @classmethod
+    def toPrintString(cls,someobj):
+        '''
+        Will be useful when printing to a jinga template
+        '''
+        currtype = str(type(someobj)).lower()
+        if currtype.find('list')!=-1 or currtype.find('set')!=-1:
+            toret = ''
+            for item in cls.convertToRegularList(someobj):
+                toret = toret + item +', '
+            return toret
+        else:
+            return str(someobj)

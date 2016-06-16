@@ -24,8 +24,8 @@
 
         {%if kind == 'node'%} <!--patch added as relations are different -->
           <b>UUID :</b> {{orig['uuid']}}<br/>
-          <b>Labels : </b> {{list2csv(orig.labels)}}<br/>
-          <b>Aliases :</b> {{list2csv(orig['aliases'])}} <br/>
+          <b>Labels : </b> {{toPrintString(orig.labels)}}<br/>
+          <b>Aliases :</b> {{toPrintString(orig['aliases'])}} <br/>
         {%endif%}
         {%if kind == 'relation'%}
           <b>RELID :</b> {{orig['relid']}}<br/>
