@@ -432,6 +432,9 @@ class CoreGraphDB(GraphDB):
     def insertCoreNodeWrapGeneric(self, node, idprop, idval):
         node = self.copyNodeAsItIs(node)
         node[idprop] = idval
+        ##patch for aliases
+        if 'aliases' not in node.properties:
+            node['aliases'] = [node['name']] ##TODO: move 2 constants
         print node
         self.graph.create(node)
         node.pull()

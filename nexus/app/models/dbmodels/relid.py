@@ -238,6 +238,7 @@ class RelProps:
 
         ##TODO: can put a check here that some strings cannot be empty
         ##or in __init__
+        ##TODO: check numrows on insert!
 
         self.dbwrap.connect()
         try:
