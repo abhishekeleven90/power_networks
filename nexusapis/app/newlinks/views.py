@@ -187,7 +187,7 @@ def pushLinked():
     'resolvedAgainst','verifiedBy','resolvedBy','verifiedDate','update',
     'lastUpdatedBy','lastUpdatedOn', '_crawl_en_id_','_token_','_taskname_',
     '_id_','_nodenumber_','taskid','_taskid_','verifiedby','_verifiedby_','verifydate',
-    'pushdate','uuid','_uuid_'] ##_nodeid_ is the node number along with _token_ and _taskname_ will help us in identifying the node! so do not worry!
+    'pushdate','uuid','_uuid_','labels','_labels_'] ##_nodeid_ is the node number along with _token_ and _taskname_ will help us in identifying the node! so do not worry!
 
     ## ALIASES CODE
     # required_en_props = ['name','aliases'] ##inside entity['properties']
@@ -268,7 +268,7 @@ def pushLinked():
 
     required_reldict_props = ['label','properties','start_entity','end_entity','bidirectional','id','fetchdate','sourceurl']
     reserved_rel_props = ['crawl_rel_id','resolvedWithRELID','taskname','token','_token','workname','date','time','resolvedDate','resolvedAgainst','verifiedBy','resolvedBy','verifiedDate','update','lastUpdatedBy','lastUpdatedOn','_crawl_rel_id_','_token_','_taskname_','_id_','_relnumber_','taskid','_taskid_','verifiedby','_verifiedby_','verifydate',
-    'pushdate','uuid','_uuid_'] ##just like the above _nodenumber_
+    'pushdate','uuid','_uuid_','labels','_labels_'] ##just like the above _nodenumber_
     required_rel_props = [] ##inside entity['properties']
 
     for rel in relations:

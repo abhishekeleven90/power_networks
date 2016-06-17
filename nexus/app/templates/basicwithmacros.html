@@ -101,7 +101,9 @@
                   <table class="table table-user-information">
                     <tbody>
                         <tr>
-                        <td><b>Labels</b></td>
+                        <td><b>
+                            <a href="{{url_for('user.history',propname='labels',uuid=node.properties[idname]|int)}}">Labels</a>
+                        </b></td>
                         <td>
 
                           <!--TODO: REMOVE THE COMMA-->
@@ -149,12 +151,24 @@
 
                   {% if not verifier %}
 
-                          <a href="#" class="btn btn-primary">Edit info</a>
+                  <div class="btn-group" role="group" aria-label="...">
+                        <button type="button" class="btn btn-default">Edit Info</button>
 
-                          <a href="#" class="btn btn-primary">Request Delete</a>
+                        {%set nodeuuid = node['uuid']|string%}
+                        {% set queryval = "match (n:entity {uuid:"+nodeuuid+"})-[r]-(p) return n,r,p"%}
 
-                          <br/>
-                          <br/>
+                        <a href="{{url_for('guest.viz',query=queryval)}}" role="button">
+                          <button type="button" class="btn btn-default">
+
+                                View Connections
+                          </button>
+                        </a>
+                        <button type="button" class="btn btn-default">Request Delete</button>
+                  </div>
+                  <br/>
+                  <br/>
+
+
 
                           <form role="form" action="{{url_for('guest.viz')}}" method="POST">
 

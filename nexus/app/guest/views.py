@@ -190,7 +190,12 @@ def viz():
     ##to decide: post or not?
     from app.utils.validate_cypher import isValidCypher
 
-    cypher = request.form.get('query')
+    cypher = ''
+    if request.form:
+        cypher = request.form.get('query')
+    else:
+        cypher = request.args['query']
+    print 'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqueeeeeeeeeeeerrry'
     print cypher
 
     from app.constants import CORE_GRAPH_HOST, CORE_GRAPH_PASSWORD, CORE_GRAPH_PORT, CORE_GRAPH_USER

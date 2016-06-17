@@ -127,3 +127,18 @@ for a change id generate list of strings for changes done :
 
 given a node uuid - get the list of strings for the latestchangeid -changeid is auto inc so obvsly the higest in such a case is the best
 -------------------------------------------------------
+
+#for uuidimage:
+
+uuid: foregin key, primary - if primary creates problem make another imageid for the same
+image: column with blob object, can be NULL
+addedby: userd foreign key
+addedat: datetime
+
+this is just for flow, and test, so that blob handling is done: can test on user pages
+upload button : route to flask : get binary data : convert to blob object : push to table: with a session['userid'] for now
+updload button overwrites create or modify if not already inserted
+read image : write in guest for now code to return blob object and render image: /imageuuid/345/ : such that this works fine: in any of our pages
+<img src="http://localhost:5000/guest/imageuuid/77/"/>
+
+------------------------------------------------------------
