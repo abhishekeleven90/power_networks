@@ -24,7 +24,7 @@ def temp2():
 
 @guest.route('/uuid/')
 def uuid():
-    print 'should work fine'
+    print 'uuid uuid uuid huuid'
     from app.models.dbmodels.uuid import UuidTable, UuidLabels, UuidProps
     #First check reltable
     #r = UuidTable(1111111, name='Abhishek')
@@ -34,25 +34,29 @@ def uuid():
     #r2.update('name')
     #print r2
 
-    #Second check rellabels
-    #r = UuidLabels(changeid=2, uuid=1111111, label='gigi', changetype=1)
-    #r.create()
+    #TODO:
+    # r = UuidLabels(changeid=5, uuid=1, label='entity', changetype=1)
+    # r.create()
+
+
     #r2 = UuidLabels(changeid=2, uuid=1111111, label='aa', changetype=1)
     #r2.create()
     #r3 = UuidLabels.getUuidLabels(2)
     #print r3
 
-    #Last, check relprops
-    r = UuidProps(changeid=2, uuid=1111111, propname='nana',
-                  newpropvalue='wer', changetype=0)
+    #Last, check relprops ##TODO
+    r = UuidProps(changeid=5, uuid=34567, propname='name',changetype=1, newpropvalue='Abhishek Agarwal')
     r.create()
-    r2 = UuidProps(changeid=2, uuid=1111111, propname='mama',
-                   oldpropvalue='ert', newpropvalue='ort', changetype=1)
-    r2.create()
-    r3 = UuidProps.getUuidProps(2)
-    print r3
-    print 'should be here if all works fine'
-    return render_template("temp.html", homeclass="active", temptext='You are here ' + str(r3))
+
+    # r2 = UuidProps(changeid=2, uuid=1111111, propname='mama',
+    #                oldpropvalue='ert', newpropvalue='ort', changetype=1)
+    # r2.create()
+    # r3 = UuidProps.getUuidProps(2)
+    # print r3
+    # print 'should be here if all works fine'
+    print type(r)
+
+    return render_template("temp.html", homeclass="active", temptext='You are here ' + str(r))
 
 
 @guest.route('/rel/')
@@ -68,24 +72,28 @@ def rel():
     #r2.update('all')
 
     #Second check rellabels
-    #r = RelLabels(changeid=2, relid=1111111, label='gigi', changetype=1)
-    #r.create()
+    ##TODO:
+    # r = RelLabels(changeid=5, relid=123, label='worksin', changetype=1)
+    # r.create()
+
+
     #r2 = RelLabels(changeid=2, relid=1111111, label='aa', changetype=1)
     #r2.create()
     #r3 = RelLabels.getRelLabels(2)
     #print r3
 
-    #Last, check relprops
-    r = RelProps(changeid=2, relid=1111111, propname='nana',
-                 newpropvalue='wer', changetype=0)
-    r.create()
-    r2 = RelProps(changeid=2, relid=1111111, propname='mama',
-                  oldpropvalue='ert', newpropvalue='ort', changetype=1)
-    r2.create()
-    r3 = RelProps.getRelProps(2)
-    print r3
-    print 'should be here if all works fine'
-    return render_template("temp.html", homeclass="active", temptext='You are here ' + str(r3))
+    #Last, check relprops ##TODO:
+    # r = RelProps(changeid=5, relid=87587, propname='startDate',newpropvalue='23 August 1990', changetype=1)
+    # r.create()
+
+
+    # r2 = RelProps(changeid=2, relid=1111111, propname='mama',
+    #               oldpropvalue='ert', newpropvalue='ort', changetype=1)
+    # r2.create()
+    # r3 = RelProps.getRelProps(2)
+    # print r3
+
+    return render_template("temp.html", homeclass="active", temptext='You are here ' + str(r))
 
 @guest.route('/user/')
 def user():
@@ -141,13 +149,18 @@ def tasks():
 @guest.route('/changeitem/')
 def changeitem():
     from app.models.dbmodels.change import ChangeItem
-    print 'should work fine'
-    #chg = ChangeItem(6, pushedby='abhi1@gmail.com', verifiedby='abhi7@gmail.com')
-    #chg.insert()
-    chg2 = ChangeItem.getChangeItem(2)
-    print chg2
-    print 'will be here if all fine'
-    return render_template("temp.html", homeclass="active", temptext='You are here ' + str(chg2))
+    from app.utils.commonutils import Utils
+    utils = Utils()
+    fetchdate = utils.getCurrentDateTime()
+    pushdate = utils.getCurrentDateTime()
+    verifydate = utils.getCurrentDateTime()
+    chg = ChangeItem(1, pushedby='abhi2@gmail.com', verifiedby=session['userid'], sourceurl='http://wikipedia.com', fetchdate=fetchdate, pushdate=pushdate, verifydate = verifydate)
+    chg.insert()
+    flash(chg.changeid)
+    #chg2 = ChangeItem.getChangeItem(2)
+    #print chg2
+    #print 'will be here if all fine'
+    return render_template("temp.html", homeclass="active", temptext='You are here ' + str(chg))
 
 
 
@@ -184,13 +197,13 @@ def viz():
 
     ## TODO: constants
     if isValidCypher(cypher):
-        return render_template("viz2.html", homeclass="active", temptext=cypher, 
-            CORE_GRAPH_HOST =CORE_GRAPH_HOST, CORE_GRAPH_PASSWORD = CORE_GRAPH_PASSWORD, 
+        return render_template("viz2.html", homeclass="active", temptext=cypher,
+            CORE_GRAPH_HOST =CORE_GRAPH_HOST, CORE_GRAPH_PASSWORD = CORE_GRAPH_PASSWORD,
             CORE_GRAPH_PORT = CORE_GRAPH_PORT, CORE_GRAPH_USER = CORE_GRAPH_USER)
     else:
         flash('Invalid query')
-        return render_template("viz2.html", homeclass="active", temptext='', 
-            CORE_GRAPH_HOST =CORE_GRAPH_HOST, CORE_GRAPH_PASSWORD = CORE_GRAPH_PASSWORD, 
+        return render_template("viz2.html", homeclass="active", temptext='',
+            CORE_GRAPH_HOST =CORE_GRAPH_HOST, CORE_GRAPH_PASSWORD = CORE_GRAPH_PASSWORD,
             CORE_GRAPH_PORT = CORE_GRAPH_PORT, CORE_GRAPH_USER = CORE_GRAPH_USER)
 
 @guest.route('/temp4/')

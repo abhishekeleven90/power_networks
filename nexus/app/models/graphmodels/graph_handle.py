@@ -3,11 +3,11 @@ from flask import current_app
 
 
 class GraphHandle():
-    
+
     """Business logic for dealing with graph and querying the right graph"""
 
     def __init__(self):
-        
+
         self.crawldb = SelectionAlgoGraphDB()
 
         self.coredb = CoreGraphDB()
@@ -48,12 +48,12 @@ class GraphHandle():
         ##dont proceed further
 
         # ##no longer would be required
-        # count = self.crawldb.countNotLockedUnresolvedNodes() 
+        # count = self.crawldb.countNotLockedUnresolvedNodes()
         # if count == 0:
         #     return None
 
         node, degree =  self.crawldb.getNearestBestNode()
-        
+
         if node is None:
             ##all nodes resolved or locked -  by new changes
             ##no node to resolve
@@ -79,12 +79,12 @@ class GraphHandle():
         rel =  self.crawldb.getNextRelationToResolve()
         if rel is None:
             return rel
-        
+
         rel = self.crawldb.lockObject(rel, userid)
         if rel is None:
             rel = self.nextRelationToResolve(userid)
             return rel
-        
+
         return rel ##returns a type py2neo.relation, can be None
 
     def getNodeListCore(self, uuidList):
@@ -118,18 +118,18 @@ class GraphHandle():
         return rows
 
     def insertCoreNodeHelper(self, node):
-        ##a very basic necessity of this! 
-        ##as uuids and graphs are linked 
+        ##a very basic necessity of this!
+        ##as uuids and graphs are linked
 
         uuid = self.coredb.generateNewUUID()
-        #in case of any mishap: 
+        #in case of any mishap:
         #first check: match (n:_meta_ {metaid:1}) return n.nextuuid
         #match (n:_meta_ {metaid:1}) set n.nextuuid = n.nextuuid -1 return n.nextuuid
 
         from app.models.dbmodels.uuidtable import UUIDTable
         en = UUIDTable(uuid=uuid, name=node['name'])
         en.create()
-        
+
         ##TODO: move uuid to props!
         print 'uuid generated ' +str(uuid) #change this code : TODO
 
@@ -138,13 +138,183 @@ class GraphHandle():
         ##at this point the node is inserted in db and neo4j
         ##have to insert changes to index db
 
+        ## this has been done in views.py for verifier diff push
+        ##TODO: move this code to views.py as is the case with diffPushGen
         print self.insertToIndexDBHelper(uuid) +' rows added for uuid '+str(uuid)
+
         return nayanode
 
+    def provenanceID(self, crawl_obj_original):
+        '''
+            To be called after crawl_obj_original has been resolved with a core_obj
+            To be called after all the verifiedby, verifiedat information saved in crawl_obj_original
+            Will fetch all these info from the crawl_obj_original
+            And save the info in changeitem table and generate a new change id for this crawl_obj_original
+        '''
+        # from the crawl_obj get all these vars and insert
+        # all this data will be in crawl obj
+        # TODO: for all these make changes in API work too!
+        # TODO: this should happen only after all these are set in crawldb apis
 
-    def insertCoreHyperEdgeNodeHelper(self, node):   
+        from app.constants import CRAWL_PUSHDATE, CRAWL_FETCHDATE, CRAWL_SOURCEURL, CRAWL_VERIFIEDBY, CRAWL_VERIFYDATE, CRAWL_TASKID, CRAWL_PUSHEDBY
+        from app.utils.commonutils import Utils
+        from app.models.dbmodels.change import ChangeItem
+        utils = Utils()
 
-        ##a very basic necessity of this! 
+
+        fetchdate = utils.getDateTimeFromTimestamp( float( crawl_obj_original[CRAWL_FETCHDATE] ) )
+        pushdate = utils.getDateTimeFromTimestamp( float ( crawl_obj_original[CRAWL_PUSHDATE] ) )
+        verifydate = utils.getDateTimeFromTimestamp( float( crawl_obj_original[CRAWL_VERIFYDATE] ) )
+        pushedby = str( crawl_obj_original[CRAWL_PUSHEDBY] )
+        verifiedby = str(crawl_obj_original[CRAWL_VERIFIEDBY])
+        sourceurl = str(crawl_obj_original[CRAWL_SOURCEURL])
+        taskid = crawl_obj_original[CRAWL_TASKID] ##TODO: check in api, if taskid int or not
+
+        chg = ChangeItem(taskid=taskid, pushedby=pushedby, verifiedby=verifiedby, sourceurl=sourceurl, fetchdate=fetchdate, pushdate=pushdate, verifydate = verifydate)
+        chg.insert()
+
+        print '[provenanceID: generate new change id for %s id being : %s]' %(crawl_obj_original, str(chg.changeid))
+
+        return chg.changeid
+
+
+
+    def provenanceMetaDB(self, kind, new_labels, new_props, conf_props, changeid, curr_id, curr_obj, old_obj):
+        '''     Inserts alll metadata in 4 tables for uuidprops, uuidlabels, etc.
+                Note: After a lot of thought changetype removed from arguments as
+                for new_props and new_labels changetype will be CHANGE_INSERT
+                for conf_props will be CHANGE_MODIFY
+                Working: This method will fill in the uuidlabels, uuidprops table based on diff provided
+                To be called after changeid has been generated
+                Idea: Since this is after the object has been inserted in coredb, curr_obj contains latest of everything
+                Thats why new_props will be accessed from curr_obj
+
+                But conf_props have old value from old_obj! Phew! Both curr_obj:core and old_obj:core needed for this!
+                old_obj None when new graphboject insert
+
+                Note on MVP: since this method is being called when all has been done, so should have no problem
+                Example: aliases updated, will detect a change in diff methods and will be updated in next
+                Also, a prop is MVP will be able to check from MVP list in future: dont complicate
+        '''
+
+        numrows = 0
+
+        ##step1: check if all empty list or None
+        flag = True
+        if (new_labels is None or new_labels == []):
+            if (new_props is None or new_props == []):
+                if (conf_props is None or conf_props == []):
+                    flag = False
+
+        if not flag:
+            return numrows ##returns 0
+
+        # Ofcourse there should be a curr_obj : core_obj
+        from app.constants import CHANGE_INSERT, CHANGE_MODIFY, MVPLIST
+        from app.utils.commonutils import Utils
+
+        ##step 2 : generate a change id for this
+        ##done in provenanceID: so changeid is in arguments
+
+        if kind=='node':
+            from app.models.dbmodels.uuid import UuidLabels, UuidProps
+            for label in new_labels:
+                newlabel = UuidLabels(changeid=changeid, uuid=curr_id, label=label, changetype=CHANGE_INSERT)
+                newlabel.create() ##TODO: check when execute returns numrows
+                numrows = numrows + 1
+                ##TODO: I think that UuidLabels etc. should have an auto inc column to kepe track if inserted or not
+            for prop in new_props:
+                ##TODO: almost similar code for relation and nodes, get together
+                curr_obj_val = curr_obj[prop]
+                if prop in MVPLIST or type(curr_obj[prop]) is list:
+                    curr_obj_val = Utils.convertToRegularList(curr_obj_val)
+                newitem = UuidProps(changeid=changeid, uuid=curr_id, propname=prop, changetype=CHANGE_INSERT, newpropvalue=str(curr_obj_val))
+                newitem.create()
+                numrows = numrows + 1
+            for prop in conf_props: ##for fresh insert wont go inside
+                curr_obj_val = curr_obj[prop]
+                old_obj_val = old_obj[prop]
+                if prop in MVPLIST or type(curr_obj[prop]) is list or type(old_obj[prop]) is list:
+                    curr_obj_val = Utils.convertToRegularList(curr_obj_val)
+                    old_obj_val = Utils.convertToRegularList(old_obj_val)
+                olditem = UuidProps(changeid=changeid, uuid=curr_id, propname=prop, changetype=CHANGE_MODIFY, oldpropvalue = str(old_obj_val), newpropvalue=str(curr_obj_val))
+                olditem.create()
+                numrows = numrows + 1
+        elif kind=='relation':
+            from app.models.dbmodels.relid import RelLabels, RelProps
+            for label in new_labels:
+                newlabel = RelLabels(changeid=changeid, relid=curr_id, label=label, changetype=CHANGE_INSERT)
+                newlabel.create()
+                numrows = numrows + 1
+                ##TODO: I think that UuidLabels etc. should have an auto inc column to kepe track if inserted or not
+            for prop in new_props:
+                curr_obj_val = curr_obj[prop]
+                if prop in MVPLIST or type(curr_obj[prop]) is list:
+                    curr_obj_val = Utils.convertToRegularList(curr_obj_val)
+                newitem = RelProps(changeid=changeid, relid=curr_id, propname=prop, changetype=CHANGE_INSERT, newpropvalue=str(curr_obj_val))
+                newitem.create()
+                numrows = numrows + 1
+            for prop in conf_props:
+                curr_obj_val = curr_obj[prop]
+                old_obj_val = old_obj[prop]
+                if prop in MVPLIST or type(curr_obj[prop]) is list or type(old_obj[prop]) is list:
+                    ##TODO: test for MVP in relations
+                    curr_obj_val = Utils.convertToRegularList(curr_obj_val)
+                    old_obj_val = Utils.convertToRegularList(old_obj_val)
+                olditem = RelProps(changeid=changeid, relid=curr_id, propname=prop, changetype=CHANGE_MODIFY, oldpropvalue = str(old_obj_val), newpropvalue=str(curr_obj_val))
+                ##IDEA: TODO: Now I am thinking instead of all this mysql hoopla
+                ## the original idea of versioning each node in a separate graph would have been the best!
+                ## why? every type is string here but in neo4j it has different types!
+                ## same issue with api when pushing data
+                olditem.create()
+                numrows = numrows + 1
+        return numrows ##won't reach here
+
+    def provenanceCore(self, old_obj, curr_obj, curr_id, crawl_obj_original, kind):
+        '''
+            To be called after all resolution and updation done.
+            Needless to say all old_obj, curr_obj, crawl_obj_original are of same kind.
+            Uses two helper methods provenanceID and provenanceMetaDB
+        '''
+        # TODO:I think unlock should happen here and nowhere else from now on!
+
+        # get change id also -- step 1
+        # after this changeitem will be inserted with taskid and everything
+        changeid = self.provenanceID(crawl_obj_original=crawl_obj_original)
+
+        ##get the object items to update
+        ##step- get new diff: old is None as insert
+        new_labels, conf_props, new_props = self.coredb.compareTwoObjects(old_obj, curr_obj, kind)
+
+        #step: insert one by one in meta db
+        numrows = self.provenanceMetaDB(kind, new_labels, new_props, conf_props, changeid, curr_id, curr_obj, old_obj)
+        return changeid, numrows
+
+    def resolveAndProvenance(self, kind, curr_id, curr_obj, old_obj, crawl_obj_original, verifiedby):
+        '''
+            if old_obj and curr_obj both None, then resolve fast
+            old_obj can be None if only insertion
+            curr_obj can not be None - but if it is fast resolve
+        '''
+        changeid = None
+        numrows = None
+
+        ##Provenance patch
+        ##DONE: set resolved and also other props here, verified by, verified at, etc.
+        self.setResolvedWithID(kind, crawl_obj_original, curr_id, verifiedby)
+
+        if curr_obj is not None: # not fast resolve
+            changeid, numrows = self.provenanceCore(old_obj, curr_obj, curr_id, crawl_obj_original, kind)
+
+        ##only after all the resolution complete and done
+        self.crawldb.unlockObject(crawl_obj_original)
+
+        return changeid, numrows
+
+
+    def insertCoreHyperEdgeNodeHelper(self, node):
+
+        ##a very basic necessity of this!
         ##as henids and graphs are linked
 
         ##todo: a table for hyperedgenodes, labels, connected entities
@@ -163,7 +333,7 @@ class GraphHandle():
         return self.coredb.insertCoreHyperEdgeNodeWrap(node, henid)
 
 
-    def insertCoreRelationHelper(self, crawl_rel): 
+    def insertCoreRelationHelper(self, crawl_rel):
         ##this relation contains no metadata
         ##but the start and edn nodes contain metadata for uuids against which resolved
 
@@ -171,7 +341,7 @@ class GraphHandle():
         start_node_uuid = crawl_rel.start_node[RESOLVEDWITHUUID]
         end_node_uuid = crawl_rel.end_node[RESOLVEDWITHUUID]
 
-        relid = self.coredb.generateNewRELID() 
+        relid = self.coredb.generateNewRELID()
         print 'relid generated ' +str(relid) #change this code : TODO
 
         from app.models.dbmodels.relidtable import RELIDTable
@@ -182,16 +352,16 @@ class GraphHandle():
 
         ##now adding the touched entities to index db for solr
         print self.updateIndexDBHelper(start_node_uuid) +' rows added for uuid '+str(start_node_uuid)
-        
+
         print self.updateIndexDBHelper(end_node_uuid) +' rows added for uuid '+str(end_node_uuid)
 
         return nayarel
 
     def matchNodesInCore(self, crawl_obj_original):
 
-        
+
         ##use the crawl object original - and generate search query to get
-        ##keywords aliases labels name 
+        ##keywords aliases labels name
         from app.constants import CRAWL_EN_ID_NAME
         print 'This will be the search query!!!!!!' ##TODO:remove
         name, labels, aliases, keywords = self.crawldb.generateSearchData(CRAWL_EN_ID_NAME, crawl_obj_original[CRAWL_EN_ID_NAME],
@@ -217,9 +387,9 @@ class GraphHandle():
     def matchRelationsInCore(self, crawl_rel):
         '''
             Returns a list of relations that are almost as same as this crawl_rel object from crawldb
-        '''    
+        '''
         from app.constants import RESOLVEDWITHUUID, RESOLVEDWITHRELID
-        
+
         start_node_uuid = crawl_rel.start_node[RESOLVEDWITHUUID]
         end_node_uuid = crawl_rel.end_node[RESOLVEDWITHUUID]
 
@@ -229,7 +399,7 @@ class GraphHandle():
     def matchHyperEdgeNodesInCore(self, crawl_obj):
         '''
             Returns a list of hyperedge nodes that are almost as same as this crawl_obj object from crawldb
-        '''    
+        '''
         from app.constants import RESOLVEDWITHUUID, RESOLVEDWITHRELID, RESOLVEDWITHHENID
 
         ens = self.getDirectlyConnectedEntitiesCrawl('hyperedgenode', crawl_obj)
@@ -251,7 +421,7 @@ class GraphHandle():
         from app.constants import CRAWL_EN_ID_NAME, CRAWL_REL_ID_NAME, CRAWL_HEN_ID_NAME
 
         ##TODO: curr_id using getCoreIDName
-        
+
         if kind == 'relation':
             CRAWL_ID_NAME = CRAWL_REL_ID_NAME
             CURR_ID = 'curr_relid'
@@ -268,18 +438,18 @@ class GraphHandle():
         kinds = ['node','relation']
         ret = []
         for kind in kinds:
-            a,b = self.getTwoVars(kind) 
+            a,b = self.getTwoVars(kind)
             ret.append((a,kind))
             ret.append((b,kind))
         return ret
 
 
     def areTasksLeft(self, kind): ##kind is kind of task
-        
+
         ans = False
 
         if kind == 'node':
-            ans = self.areCrawlNodesLeft() 
+            ans = self.areCrawlNodesLeft()
         elif kind=='relation':
             ans = self.areCrawlRelationsLeft()
         elif kind == 'hyperedgenode':
@@ -302,13 +472,13 @@ class GraphHandle():
         elif kind == 'node':
             graphobj =  self.nextNodeToResolve(userid)
         elif kind == 'hyperedgenode':
-            graphobj = self.nextHyperEdgeNodeToResolve(userid) 
-        
+            graphobj = self.nextHyperEdgeNodeToResolve(userid)
+
         return graphobj
 
 
     def getCrawlObjectByID(self, kind, id_prop, id_val, isIDString):
-        
+
         '''
             given a crawl_id like _crawl_en_id_ and its value,
             fetches the crawl node from crawldb
@@ -325,7 +495,7 @@ class GraphHandle():
 
 
     def copyCrawlObject(self, kind, crawl_obj_original):
-        
+
         '''
             given the kind and the crawl_obj,
             copies the crawl object accrodingly
@@ -341,7 +511,7 @@ class GraphHandle():
         return None
 
     def matchPossibleObjects(self, kind, crawl_obj, crawl_obj_original):
-        
+
         '''
             the heart and soul of the verifier task
             the faster this method is the better for the human
@@ -361,37 +531,39 @@ class GraphHandle():
 
 
     def insertCoreGraphObjectHelper(self, kind, crawl_obj):
-        
+
         '''
             based on the kind, creates the graph object
             inserts it in core graph db,
             and returns the corresponding id - uuid, relid, hyperedgeid
         '''
+        curr_obj = None
+        retid = None
 
         if kind=='node':
             curr_obj = self.insertCoreNodeHelper(crawl_obj)
-            return curr_obj['uuid']
+            retid =  curr_obj['uuid']
         elif kind == 'relation':
             curr_obj = self.insertCoreRelationHelper(crawl_obj)
-            return curr_obj['relid']
+            retid =  curr_obj['relid']
         elif kind == 'hyperedgenode':
             curr_obj = self.insertCoreHyperEdgeNodeHelper(crawl_obj)
-            return curr_obj['henid']
+            retid =  curr_obj['henid']
 
-        return None
+        return retid
 
-    def setResolvedWithID(self, kind, crawl_obj_original, curr_id):
+    def setResolvedWithID(self, kind, crawl_obj_original, curr_id, verifiedby):
         '''
             based on kind - node, relation, hyperedge, etc.,
             gives a resolveid to the graphobj of crawldb and sets this
             resolveid to the curr_id that we get from the coredb
         '''
         if kind == 'node':
-            self.crawldb.setResolvedWithUUID(crawl_obj_original, curr_id)
+            self.crawldb.setResolvedWithUUID(crawl_obj_original, curr_id, verifiedby)
         elif kind == 'relation':
-            self.crawldb.setResolvedWithRELID(crawl_obj_original, curr_id)
-        elif kind == 'hyperedgenode':
-            self.crawldb.setResolvedWithHENID(crawl_obj_original, curr_id)
+            self.crawldb.setResolvedWithRELID(crawl_obj_original, curr_id, verifiedby)
+        # elif kind == 'hyperedgenode':
+        #     self.crawldb.setResolvedWithHENID(crawl_obj_original, curr_id)
         return
         #doesn't return anything just sets resolved ID
 
@@ -448,7 +620,7 @@ class GraphHandle():
 
     def getNewLabelsAndPropsDiff(self, kind, orig, naya):
 
-        new_labels = None
+        new_labels = []
 
         if kind == 'node': ##hen can only have two labels thats it!
             new_labels = self.coredb.labelsToBeAdded(orig,naya)
@@ -462,7 +634,7 @@ class GraphHandle():
         if crawl_obj_original.properties.get('_lockedby_') is None:
             lockprop = "none"
             msg = "Graph object's lock aready been removed. Begin again "
-        
+
         elif crawl_obj_original.properties.get('_lockedby_') != userid:
             lockprop =  "other" ##locked by other
             msg = "Graph object's lock is with someone else. Begin again "
@@ -472,7 +644,3 @@ class GraphHandle():
             msg = "Graph object's lock is not with you. Begin again "
 
         return lockprop, msg
-
-
-
-         

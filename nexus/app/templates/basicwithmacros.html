@@ -15,17 +15,17 @@
           {{node['uuid']}}
         </a>
   </td>
-  
+
   <td>
           {{node['name']}}
   </td>
-  
+
   <td>
-          {{list2csv(node.labels)}}
+          {{toPrintString(node.labels)}}
   </td>
 
   <td>
-          {{list2csv(node['aliases'])}}
+          {{toPrintString(node['aliases'])}}
   </td>
 
 {% endmacro %}
@@ -34,26 +34,26 @@
 
 
     {% if '_token_' in node.properties %} <!--if from crawldb graph -->
-              {% set connectedidname = '_resolvedWithUUID_' %} 
+              {% set connectedidname = '_resolvedWithUUID_' %}
     {% else %}
               {% set connectedidname = 'uuid' %}
     {% endif %}
 
 
-  
-    <a href="{{url_for('readEntity',uuid=node[connectedidname]| int)}}"> {{node['name']}} : {{node[connectedidname]}}</a> : 
+
+    <a href="{{url_for('readEntity',uuid=node[connectedidname]| int)}}"> {{node['name']}} : {{node[connectedidname]}}</a> :
     [
         {% for label in node.labels %}
             {{label}},
         {% endfor %}
     ]
 
-  
-{% endmacro %}  
+
+{% endmacro %}
 
 
 {% macro entity_read(node,verifier) %}
-    
+
     <div class="row">
       <!--<div class="col-md-5  toppad  pull-right col-md-offset-3 ">
            <A href="edit.html" >Edit Profile</A>
@@ -76,7 +76,7 @@
           {% endif %}
 
 
-        
+
           <div class="panel panel-info">
             <div class="panel-heading">
               <h3 class="panel-title">{{nodename}} : {{node.properties[idname]}}</h3>
@@ -84,7 +84,7 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-md-3 col-lg-3 " align="center"> <img alt="{{node.properties['name']}}" style="padding-top: 5px" class="img-responsive pull-xs-left" src="http://cdn2.saveritemedical.com/product-default.jpg"> </div>
-                
+
                 <!--<div class="col-xs-10 col-sm-10 hidden-md hidden-lg"> <br>
                   <dl>
                     <dt>DEPARTMENT:</dt>
@@ -97,7 +97,7 @@
                     <dd>Male</dd>
                   </dl>
                 </div>-->
-                <div class=" col-md-9 col-lg-9 "> 
+                <div class=" col-md-9 col-lg-9 ">
                   <table class="table table-user-information">
                     <tbody>
                         <tr>
@@ -105,13 +105,11 @@
                         <td>
 
                           <!--TODO: REMOVE THE COMMA-->
-                          {% for label in node.labels %}
-                            {{label}},
-                          {% endfor %}
+                          {{toPrintString(node.labels)}}
 
                         </td>
                       </tr>
-                          
+
                       {% if not verifier %}
                         <tr>
                             <td><b>{{IDNAME}}</b></td>
@@ -130,7 +128,7 @@
                                       {{node_short_desc(en)}}<hr/>
 
                                   {% endfor %}
-                              
+
                                 </td>
                             </tr>
                       {% endif %}
@@ -141,16 +139,16 @@
                         {% if prop != idname %}
                           <tr>
                             <td><b>{{prop}}</b></td>
-                            <td>{{node.properties[prop]}}</td>
+                            <td>{{toPrintString(node.properties[prop])}}</td>
                           </tr>
                         {% endif %}
                       {% endfor %}
-                     
+
                     </tbody>
                   </table>
-                  
+
                   {% if not verifier %}
-                          
+
                           <a href="#" class="btn btn-primary">Edit info</a>
 
                           <a href="#" class="btn btn-primary">Request Delete</a>
@@ -161,7 +159,7 @@
                           <form role="form" action="{{url_for('guest.viz')}}" method="POST">
 
                             <input type="hidden" name="query" value="match (n:entity {uuid:{{node['uuid']}}})-[r]-(p) return n,r,p"/>
-                  
+
                           <button type="submit" class="btn btn-primary">
                             View Connections
                           </button>
@@ -180,11 +178,11 @@
                             <a data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
                         </span>-->
                     </div>
-            
+
           </div>
         </div>
       </div>
-    
+
 {% endmacro %}
 
 
@@ -194,8 +192,8 @@
 <div class="row">
 
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
-   
-   
+
+
           <div class="panel panel-info">
             <div class="panel-heading">
               <h3 class="panel-title">Relationship ID : {{rel.properties['relid']}} </h3>
@@ -203,8 +201,8 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-md-3 col-lg-3 " align="center"> <img alt="{{rel.type}}" style="padding-top: 5px" class="img-responsive pull-xs-left" src="http://cdn2.saveritemedical.com/product-default.jpg"> </div>
-                
-                <div class=" col-md-9 col-lg-9 "> 
+
+                <div class=" col-md-9 col-lg-9 ">
                   <table class="table table-user-information">
                     <tbody>
                          <tr>
@@ -234,27 +232,27 @@
 
 
                           {% if not fromcrawldb %}
-                          
+
                           <a href="{{url_for('readEntity',uuid=rel.start_node.properties['uuid']|int )}}" target="_blank">
-                              {{rel.start_node.properties['uuid']}} : {{rel.start_node.properties['name']}} 
-                          </a> 
+                              {{rel.start_node.properties['uuid']}} : {{rel.start_node.properties['name']}}
+                          </a>
 
                           {% endif %}
 
                           {% if fromcrawldb %}
-                          
+
                           <!--TODO: get the constant _resolvedWIth_ out -->
                           <a href="{{url_for('readEntity',uuid=rel.start_node.properties['_resolvedWithUUID_']| int)}}" target="_blank">
-                              {{rel.start_node.properties['_resolvedWithUUID_']}} : {{rel.start_node.properties['name']}} 
-                          </a> 
-                          
+                              {{rel.start_node.properties['_resolvedWithUUID_']}} : {{rel.start_node.properties['name']}}
+                          </a>
+
                           {% endif %}
 
-                          <br/> 
+                          <br/>
                           [
                             {% for label in rel.start_node.labels %}
                              {{label}} ,
-                            {% endfor %} 
+                            {% endfor %}
                           ]
 
 
@@ -271,20 +269,20 @@
                         <td>
 
                           {% if not fromcrawldb %}
-                          
+
                           <a href="{{url_for('readEntity',uuid=rel.end_node.properties['uuid'])}}" target="_blank">
-                              {{rel.end_node.properties['uuid']}} : {{rel.end_node.properties['name']}} 
-                          </a> 
+                              {{rel.end_node.properties['uuid']}} : {{rel.end_node.properties['name']}}
+                          </a>
 
                           {% endif %}
 
                           {% if fromcrawldb %}
-                          
+
                           <!--TODO: get the constant _resolvedWIth_ out -->
                           <a href="{{url_for('readEntity',uuid=rel.end_node.properties['_resolvedWithUUID_'])}}" target="_blank">
-                              {{rel.end_node.properties['_resolvedWithUUID_']}} : {{rel.end_node.properties['name']}} 
-                          </a> 
-                          
+                              {{rel.end_node.properties['_resolvedWithUUID_']}} : {{rel.end_node.properties['name']}}
+                          </a>
+
                           {% endif %}
 
 
@@ -299,18 +297,18 @@
                           </tr>
                         {% endif %}
                       {% endfor %}
-                     
+
                     </tbody>
                   </table>
 
 
                   {% if not verifier %}
-                  
+
                   <a href="#" class="btn btn-primary">Edit Relation</a>
 
                   <a href="#" class="btn btn-primary">Request Delete</a>
 
-                  <a href="#" class="btn btn-primary">Request Delete</a> <!--TODO:  When showing hyperedge resolution, why not this! -->                  
+                  <a href="#" class="btn btn-primary">Request Delete</a> <!--TODO:  When showing hyperedge resolution, why not this! -->
 
                   {% endif %}
 
@@ -319,7 +317,7 @@
             </div>
                  <div class="panel-footer">
                     </div>
-            
+
           </div>
         </div>
       </div>

@@ -1,2 +1,6 @@
 setups pypi:
 diff-match-patch-20121119
+jedi - atom
+pep8 - atom
+apscheduler
+termcolor

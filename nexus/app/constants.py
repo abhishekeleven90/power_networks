@@ -52,8 +52,16 @@ CRAWL_HEN_ID_NAME = '_crawl_en_id_' ##TODO: for now will have to change to give 
 RESOLVEDWITHUUID = '_resolvedWithUUID_'
 RESOLVEDWITHRELID = '_resolvedWithRELID_'
 RESOLVEDWITHHENID = '_resolvedWithHENID_'
+CRAWL_VERIFIEDBY = '_verifiedby_'
+CRAWL_PUSHEDBY = '_pushedby_'
+CRAWL_VERIFYDATE = '_verifydate_'
+CRAWL_PUSHDATE = '_pushdate_'
+CRAWL_FETCHDATE = '_fetchdate_'
+CRAWL_SOURCEURL = '_sourceurl_'
+CRAWL_TASKID = '_taskid_'
 LABEL_HYPEREDGE_NODE = 'hyperedgenode'
 LABEL_ENTITY = 'entity'
+
 
 
 #SOLR CONFIG
@@ -92,3 +100,11 @@ ROLE_CRAWLER = 2
 ROLE_VERIFIER = 3
 ROLE_MODERATOR = 5
 ROLE_ADMIN = 7
+
+##DATE FORMAT
+DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
+
+##CHANGETYPE
+CHANGE_INSERT = 1
+CHANGE_DELETE = 0
+CHANGE_MODIFY = 2

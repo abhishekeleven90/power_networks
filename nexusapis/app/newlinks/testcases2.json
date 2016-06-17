@@ -3,7 +3,7 @@
 "meta-description": "Trial",
 "fetchdate": "01/01/2011",
 "sourceurls": ["wikipedia", "capitalline"],
-"entities": 
+"entities":
     [
         {
             "id":"1",
@@ -85,7 +85,7 @@
             "bidirectional":"no",
             "properties":
                 {
-                    
+
                 }
         },
         {
@@ -108,7 +108,7 @@
             "bidirectional":"no",
             "properties":
                 {
-                    
+
                 }
         },
         {
@@ -119,10 +119,9 @@
             "bidirectional":"no",
             "properties":
                 {
-                    
+
                 }
         }
 
     ]
-    
 }

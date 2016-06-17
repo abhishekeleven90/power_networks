@@ -12,6 +12,11 @@ class UuidTable:
         return
 
     def create(self):
+
+        ##TODO: can put a check here that some strings cannot be empty
+        ##or in __init__
+
+
         self.dbwrap.connect()
         try:
             cursor = self.dbwrap.cursor()
@@ -29,8 +34,10 @@ class UuidTable:
         try:
             numrows = cursor.execute(query)
         except Exception as e:
-            print e.message
-            print "query execution error"
+            import traceback
+            traceback.print_exc()
+            traceback.print_stack()
+            print "[UuidTable.create: query execution error]"
             self.dbwrap.commitAndClose()
 
         else:
@@ -125,7 +132,7 @@ class UuidTable:
 
 class UuidLabels:
 
-    def __init__(self, changeid=None, uuid=None, label='', changetype=None):
+    def __init__(self, changeid='', uuid='', label='', changetype=''):
         self.changeid = changeid
         self.uuid = uuid
         self.label = label
@@ -147,15 +154,17 @@ class UuidLabels:
 
         query = "INSERT INTO " + self.tablename + " (changeid, uuid,\
                 label, changetype) VALUES(%d, %d, '%s', %d)" %\
-                (self.changeid, self.uuid, self.label, self.changetype)
+                (int(self.changeid), int(self.uuid), self.label, int(self.changetype))
 
         print query
         numrows = 0
         try:
             numrows = cursor.execute(query)
         except Exception as e:
-            print e.message
-            print "query execution error"
+            import traceback
+            traceback.print_exc()
+            traceback.print_stack()
+            print "[UuidLabels.create: query execution error]"
             self.dbwrap.commitAndClose()
         else:
             self.dbwrap.commitAndClose()
@@ -196,6 +205,10 @@ class UuidLabels:
         self.dbwrap.commitAndClose()
         return results_list
 
+    def __str__(self):
+        s = '[ UuidLabels -- uuid: %s   label: %s  changeid: %s  changetype: %s]' %(self.uuid, self.label, self.changeid, self.changetype)
+        return s
+
     @classmethod
     def getUuidLabels(cls, changeid):
         u = UuidLabels(changeid=changeid)
@@ -204,17 +217,25 @@ class UuidLabels:
 
 class UuidProps:
 
-    def __init__(self, changeid=None, uuid=None, propname='',
-            oldpropvalue='', newpropvalue='', changetype=None):
+    ##TODO: see how if ' in string how to handle that!
+    ##MVP '[u'naveen jindal']' will have to be handled separately
+    ##IDEA: disable aliases completely in api calls?
+
+    def __init__(self, changeid='', uuid='', propname='', ##makes sense to change propname to None, this way nothing will be inserted, error!
+            oldpropvalue='', newpropvalue='', changetype=''):
+        import MySQLdb
+        from app.utils.commonutils import Utils
         self.changeid = changeid
         self.uuid = uuid
         self.propname = propname
-        self.oldpropvalue = oldpropvalue
-        self.newpropvalue = newpropvalue
+        self.oldpropvalue = MySQLdb.escape_string(oldpropvalue)
+        self.newpropvalue = MySQLdb.escape_string(newpropvalue)
+        ##TODO: add constarint in programming or db, if both none, non need of anything here
         self.changetype = changetype
         self.dbwrap = MetaSQLDB()
         self.tablename = META_TABLE_UUIDPROPS
-        return
+
+
 
     def create(self):
         self.dbwrap.connect()
@@ -226,17 +247,22 @@ class UuidProps:
             print "Cannot get cursor"
             self.dbwrap.commitAndClose()
 
+        ##TODO: will insert empty strings for oldpropvalue!
+
         query = "INSERT INTO " + self.tablename + " (changeid, uuid, propname,\
                 oldpropvalue, newpropvalue, changetype) VALUES(%d, %d, '%s',\
-                '%s', '%s', %d)" % (self.changeid, self.uuid, self.propname,
-                self.oldpropvalue, self.newpropvalue, self.changetype)
+                '%s', '%s', %d)" % (int(self.changeid), int(self.uuid), self.propname,
+                self.oldpropvalue, self.newpropvalue, int(self.changetype))
 
         print query
         numrows = 0
         try:
             numrows = cursor.execute(query)
         except Exception as e:
-            print "query execution error"
+            import traceback
+            traceback.print_exc()
+            traceback.print_stack()
+            print "[UuidProps.create: query execution error]"
             self.dbwrap.commitAndClose()
         else:
             self.dbwrap.commitAndClose()
@@ -275,8 +301,12 @@ class UuidProps:
         self.dbwrap.commitAndClose()
         return results_list
 
+    def __str__(self):
+        s = '[ UuidProps -- uuid: %s   propname: %s  changeid: %s  changetype: %s oldpropvalue: %s newpropvalue: %s]'
+        s = s %(self.uuid, self.propname, self.changeid, self.changetype, self.oldpropvalue, self.newpropvalue)
+        return s
+
     @classmethod
     def getUuidProps(cls, changeid):
         up = UuidProps(changeid)
         return up.getListFromDB()
-

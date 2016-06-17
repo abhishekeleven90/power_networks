@@ -4,7 +4,7 @@ from app.sqldb import MetaSQLDB
 
 class RelIdTable:
 
-    def __init__(self, relid, reltype='', startuuid=None, enduuid=None):
+    def __init__(self, relid, reltype='', startuuid='', enduuid=''):
         self.dbwrap = MetaSQLDB()
         self.tablename = META_TABLE_RELID
         self.relid = relid
@@ -32,8 +32,10 @@ class RelIdTable:
         try:
             numrows = cursor.execute(query)
         except Exception as e:
-            print e.message
-            print "query execution error"
+            import traceback
+            traceback.print_exc()
+            traceback.print_stack()
+            print "[relid.RelIdTable.create: query execution error]"
             self.dbwrap.commitAndClose()
 
         else:
@@ -131,7 +133,7 @@ class RelIdTable:
 
 class RelLabels:
 
-    def __init__(self, changeid=None, relid=None, label='', changetype=None):
+    def __init__(self, changeid='', relid='', label='', changetype=''):
         self.changeid = changeid
         self.relid = relid
         self.label = label
@@ -153,15 +155,17 @@ class RelLabels:
 
         query = "INSERT INTO " + self.tablename + " (changeid, relid,\
                 label, changetype) VALUES(%d, %d, '%s', %d)" %\
-                (self.changeid, self.relid, self.label, self.changetype)
+                (int(self.changeid), int(self.relid), self.label, int(self.changetype))
 
         print query
         numrows = 0
         try:
             numrows = cursor.execute(query)
         except Exception as e:
-            print e.message
-            print "query execution error"
+            import traceback
+            traceback.print_exc()
+            traceback.print_stack()
+            print "[relid.RelLabels.create: query execution error]"
             self.dbwrap.commitAndClose()
         else:
             self.dbwrap.commitAndClose()
@@ -202,6 +206,10 @@ class RelLabels:
         self.dbwrap.commitAndClose()
         return results_list
 
+    def __str__(self):
+        s = '[ RelIDLabels -- relid: %s   label: %s  changeid: %s  changetype: %s]' %(str(self.relid), self.label, str(self.changeid), str(self.changetype))
+        return s
+
     @classmethod
     def getRelLabels(cls, changeid):
         r = RelLabels(changeid=changeid)
@@ -210,19 +218,28 @@ class RelLabels:
 
 class RelProps:
 
-    def __init__(self, changeid=None, relid=None, propname='',
-            oldpropvalue='', newpropvalue='', changetype=None):
+    def __init__(self, changeid='', relid='', propname='',
+            oldpropvalue='', newpropvalue='', changetype=''):
+
+        import MySQLdb
+        ##makes sense to change propname to None, this way nothing will be inserted, error!
+
         self.changeid = changeid
         self.relid = relid
         self.propname = propname
-        self.oldpropvalue = oldpropvalue
-        self.newpropvalue = newpropvalue
+        ##TODO: add constarint in programming or db, if both none, non need of anything here
+        self.oldpropvalue = MySQLdb.escape_string(oldpropvalue)
+        self.newpropvalue = MySQLdb.escape_string(newpropvalue)
         self.changetype = changetype
         self.dbwrap = MetaSQLDB()
         self.tablename = META_TABLE_RELIDPROPS
-        return
 
     def create(self):
+
+        ##TODO: can put a check here that some strings cannot be empty
+        ##or in __init__
+        ##TODO: check numrows on insert!
+
         self.dbwrap.connect()
         try:
             cursor = self.dbwrap.cursor()
@@ -232,17 +249,22 @@ class RelProps:
             print "Cannot get cursor"
             self.dbwrap.commitAndClose()
 
+        ##TODO: will insert empty strings for oldpropvalue!
+
         query = "INSERT INTO " + self.tablename + " (changeid, relid, propname,\
                 oldpropvalue, newpropvalue, changetype) VALUES(%d, %d, '%s',\
-                '%s', '%s', %d)" % (self.changeid, self.relid, self.propname,
-                self.oldpropvalue, self.newpropvalue, self.changetype)
+                '%s', '%s', %d)" % (int(self.changeid), int(self.relid), self.propname,
+                self.oldpropvalue, self.newpropvalue, int(self.changetype))
 
         print query
         numrows = 0
         try:
             numrows = cursor.execute(query)
         except Exception as e:
-            print "query execution error"
+            import traceback
+            traceback.print_exc()
+            traceback.print_stack()
+            print "[relid.RelProps.create: query execution error]"
             self.dbwrap.commitAndClose()
         else:
             self.dbwrap.commitAndClose()
@@ -281,8 +303,12 @@ class RelProps:
         self.dbwrap.commitAndClose()
         return results_list
 
+    def __str__(self):
+        s = '[ RelIDprops -- relid: %s   propname: %s  changeid: %s  changetype: %s oldpropvalue: %s newpropvalue: %s]'
+        s = s %(str(self.relid), self.propname, str(self.changeid), str(self.changetype), self.oldpropvalue, self.newpropvalue)
+        return s
+
     @classmethod
     def getRelProps(cls, changeid):
         rp = RelProps(changeid)
         return rp.getListFromDB()
-

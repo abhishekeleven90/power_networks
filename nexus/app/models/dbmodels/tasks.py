@@ -14,7 +14,6 @@ class Tasks:
         self.createdate = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.dbwrap = MetaSQLDB()
         self.tablename = META_TABLE_TASKS
-        return
 
     def create(self):
         self.dbwrap.connect()

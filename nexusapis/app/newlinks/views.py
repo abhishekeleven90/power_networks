@@ -10,8 +10,8 @@ from validations import Validate
 def show():
     return jsonify({'message':'randomrandom success'}), 200
     ##The below can b removed: not needed at all, checked completely
-    # resp = Response(response=jsonify({'message':'randomrandom'}), 
-    #     status=200, 
+    # resp = Response(response=jsonify({'message':'randomrandom'}),
+    #     status=200,
     #     mimetype="application/json")
     # return(resp)
 
@@ -92,8 +92,7 @@ def error_helper(message,statuscode):
 @newlinks.route('/pushlinked/', methods=['POST'])
 def pushLinked():
 
-    
-    tokenid = request.args.get('_token')
+    ##TODO: validate and push jso load to task table
 
     print 'datttttttta'
     print request.data
@@ -105,20 +104,40 @@ def pushLinked():
 
     ##removed entities, rels alone can be pushed if previous ids known
     ##changed name to meta_desc
-    required_master_props = ['taskname', 'meta-description', 'fetchdate', 'sourceurls'] 
+    required_master_props = ['taskid', 'userid', 'token']
     for prop in required_master_props:
         if not prop in request.json:
-            return error_helper(str(prop)+"property not in json data", 400)    
-    
-    taskname = request.json['taskname']
+            return error_helper(str(prop)+"property not in json data", 400)
+
+    # patch for one of these should be present but never none
+    # relations can exist in isolation coz of entities that are already present in db
+    oneofthese = ['entities','relations']
+    flag = False
+    for prop in oneofthese:
+        if prop in request.json:
+            flag = True
+            break
+
+    if not flag:
+        return error_helper("neither entities nor relations in json data", 400)
+
+    taskid = request.json['taskid']
+    tokenid = request.json['token']
+    userid = request.json['userid']
+    # INFO: tokenid is just for initial validation, will not be saved
+    # taskid and userid will be saved
+    ##TODO: if the combination is valid
+    ##else abort
+    ##TODO: get fetchdate and source_url to entities, , 'fetchdate', 'sourceurls'
+
 
     ## MAJOR TODO!
     ## some props are interanally reserved crawl_en_id not allowed for nodes
     ## what about ternary relations?
-    ## 
-    ## check for strings 
-    ## validation checks: if task exists, 
-    ## ids repeated in nodes in json and in actual 
+    ##
+    ## check for strings
+    ## validation checks: if task exists,
+    ## ids repeated in nodes in json and in actual
     ## ids repeated in relations
     ## source_urls known in particular format
     ## fetch date in format
@@ -137,21 +156,24 @@ def pushLinked():
 
 
     ##entities must part in request json
-    entities = request.json['entities'] ##MAJOR TODO: change this to nodes
+    entities = []
+    if 'entities' in request.json:
+        entities = request.json['entities'] ##MAJOR TODO: change this to nodes
 
-    ##can be there or can not be, in json 
+    ##can be there or can not be, in json
     relations = []
     if 'relations' in request.json:
         relations = request.json['relations']
 
-    
-    # this is for returning the json to the user! 
+
+    # this is for returning the json to the user!
     subgraph = {}
-    subgraph['_token'] = tokenid ##TODO: exatly this? _token! conflict?
-    subgraph['taskname'] = taskname
-    subgraph['pushtime'] = getTimeNow()
-    subgraph['sourceurls'] = request.json['sourceurls']
-    subgraph['fetchdate'] = request.json['fetchdate']
+
+    ##no need to return back token to the user
+    #subgraph['token'] = tokenid ##TODO: exatly this? _token! conflict?
+    subgraph['userid'] = userid
+    subgraph['taskid'] = taskid
+    #subgraph['pushdate'] = getTimeNow()
 
     nodes = {}
     links = {}
@@ -159,9 +181,14 @@ def pushLinked():
     ##MAJOR TODO reserved keywords and required keywords list
     ##MAJOR TODO format and pattern against keywords with regex ??
 
-    required_endict_props = ['labels','properties','id']
-    reserved_en_props = ['crawl_en_id','resolvedWithUUID','taskname','token','_token','workname','date','time','resolvedDate','resolvedAgainst','verifiedBy','resolvedBy','verifiedDate','update','lastUpdatedBy','lastUpdatedOn', '_crawl_en_id_','_token_','_taskname_','_id_','_nodenumber_'] ##_nodeid_ is the node number along with _token_ and _taskname_ will help us in identifying the node! so do not worry!
-    
+    required_endict_props = ['labels','properties','id','fetchdate','sourceurl']
+    reserved_en_props = ['crawl_en_id','resolvedWithUUID','taskname','token',
+    '_token','workname','date','time','resolvedDate',
+    'resolvedAgainst','verifiedBy','resolvedBy','verifiedDate','update',
+    'lastUpdatedBy','lastUpdatedOn', '_crawl_en_id_','_token_','_taskname_',
+    '_id_','_nodenumber_','taskid','_taskid_','verifiedby','_verifiedby_','verifydate',
+    'pushdate','uuid','_uuid_'] ##_nodeid_ is the node number along with _token_ and _taskname_ will help us in identifying the node! so do not worry!
+
     ## ALIASES CODE
     # required_en_props = ['name','aliases'] ##inside entity['properties']
 
@@ -173,18 +200,18 @@ def pushLinked():
     for en in entities:
 
         if not validate.validateNodeIsEntityOrHyperedge(en):
-            return error_helper('a node must have either entity or hyperedgenode as a label and not both', 400) 
+            return error_helper('a node must have either entity or hyperedgenode as a label and not both', 400)
 
         for prop in required_endict_props:
             if not prop in en:
-                return error_helper(str(prop)+' required attribute missing for an entity', 400) 
+                return error_helper(str(prop)+' required attribute missing for an entity', 400)
 
         #print entities[en]
         nodeid = en['id'] ##TODO: check if id is there!
 
         if nodeid in nodes:
             return error_helper('id repeated under entities',400)
-        
+
         if not len(en['labels'])>0:
             return error_helper('Labels list empty for an entity', 400)
 
@@ -195,7 +222,7 @@ def pushLinked():
         ## ALIASES CODE
         # if not len(en['properties']['aliases'])>0:
         #     return error_helper('aliases list empty for an entity', 400)
-        # ##TODO: how to verify if the name is in aliases? 
+        # ##TODO: how to verify if the name is in aliases?
 
         for prop in reserved_en_props:
             if prop in en['properties']:
@@ -210,29 +237,38 @@ def pushLinked():
         ## OR MV and check here back!
 
         nodelabels = en['labels']
+
+        fetchdate = en['fetchdate']
+        sourceurl = en['sourceurl']
+
         nodeprops = {}
         for prop in en['properties']:
-            
+
             # if prop != 'aliases': ##ALIASES CODE
 
 
             ##for all MV -- json.loads? or somehting else?
             nodeprops[prop] = en['properties'][prop]
 
-        ### ALIASES CODE      
+        ### ALIASES CODE
         # nodeprops['aliases'] = []
         # for val in en['properties']['aliases']:
         #     nodeprops['aliases'].append(val)
 
         # nodeprops = en['properties']
-        nodeprops['_crawl_en_id_'] = 'en_'+tokenid+'_'+taskname+'_'+str(nodeid)
-        nodeprops['_token_'] = tokenid ##TODO: if you change this!, will have to change code for entity_read macro.
-        nodeprops['_taskname_'] = taskname
+        nodeprops['_crawl_en_id_'] = 'en_'+taskid+'_'+str(nodeid)
+        # nodeprops['_token_'] = tokenid ##TODO: if you change this!, will have to change code for entity_read macro.
+        nodeprops['_taskid_'] = taskid
         nodeprops['_nodenumber_'] = nodeid
+        nodeprops['_pushedby_'] = userid
+        nodeprops['_pushdate_'] = getTimeNow()
+        nodeprops['_fetchdate_'] = fetchdate
+        nodeprops['_sourceurl_'] = sourceurl
         nodes[nodeid] = {'labels':nodelabels,'properties':nodeprops}
 
-    required_reldict_props = ['label','properties','start_entity','end_entity','bidirectional','id']
-    reserved_rel_props = ['crawl_rel_id','resolvedWithRELID','taskname','token','_token','workname','date','time','resolvedDate','resolvedAgainst','verifiedBy','resolvedBy','verifiedDate','update','lastUpdatedBy','lastUpdatedOn','_crawl_rel_id_','_token_','_taskname_','_id_','_relnumber_'] ##just like the above _nodenumber_
+    required_reldict_props = ['label','properties','start_entity','end_entity','bidirectional','id','fetchdate','sourceurl']
+    reserved_rel_props = ['crawl_rel_id','resolvedWithRELID','taskname','token','_token','workname','date','time','resolvedDate','resolvedAgainst','verifiedBy','resolvedBy','verifiedDate','update','lastUpdatedBy','lastUpdatedOn','_crawl_rel_id_','_token_','_taskname_','_id_','_relnumber_','taskid','_taskid_','verifiedby','_verifiedby_','verifydate',
+    'pushdate','uuid','_uuid_'] ##just like the above _nodenumber_
     required_rel_props = [] ##inside entity['properties']
 
     for rel in relations:
@@ -244,12 +280,12 @@ def pushLinked():
         linkid = rel['id']
         if linkid in links:
             return error_helper('id repeated under relations',400)
-        
+
         linklabel = rel['label']
 
         if len(linklabel)<3:
             return error_helper('Label too short for a relation', 400)
-        
+
         bidirectional = rel['bidirectional']
 
         print 'bbbbbb '+bidirectional
@@ -269,21 +305,28 @@ def pushLinked():
             return error_helper(str(prop)+' cannot begin or end with underscore', 400)
 
         linkprops = rel['properties']
-        startnode = 'en_'+tokenid+'_'+taskname+'_'+str(rel['start_entity'])
-        endnode = 'en_'+tokenid+'_'+taskname+'_'+str(rel['end_entity'])
-        linkprops['_crawl_rel_id_'] = 'rel_'+tokenid+'_'+taskname+'_'+str(linkid)
-        linkprops['_token_'] = tokenid
-        linkprops['_taskname_'] = taskname
+        fetchdate = rel['fetchdate']
+        sourceurl = rel['sourceurl']
+
+        startnode = 'en_'+taskid+'_'+str(rel['start_entity'])
+        endnode = 'en_'+taskid+'_'+str(rel['end_entity'])
+        linkprops['_crawl_rel_id_'] = 'rel_'+taskid+'_'+str(linkid)
+        #linkprops['_token_'] = tokenid
+        linkprops['_taskid_'] = taskid
         linkprops['_relnumber_'] = linkid
         linkprops['bidirectional'] = bidirectional
+        linkprops['_pushedby_'] = userid
+        linkprops['_pushdate_'] = getTimeNow()
+        linkprops['_fetchdate_'] = fetchdate
+        linkprops['_sourceurl_'] = sourceurl
 
-        
-        
-        links[linkid] = {'label':linklabel,'properties':linkprops,'start_entity':startnode, 'end_entity':endnode}        
-        
 
-    posted, msg = postSubGraph(getGraph(), nodes, links, tokenid, taskname)
-    
+
+        links[linkid] = {'label':linklabel,'properties':linkprops,'start_entity':startnode, 'end_entity':endnode}
+
+
+    posted, msg = postSubGraph(getGraph(), nodes, links, tokenid, taskid)
+
     if not posted:
         return error_helper(msg, 400)
 

@@ -1,5 +1,5 @@
 from app.verifier import verifier
-from flask import render_template, flash, redirect, session, request, url_for, current_app
+from flask import render_template, flash, redirect, session, request, url_for, g
 from app.models.graphmodels.graph_handle import GraphHandle
 
 @verifier.route('/')
@@ -8,10 +8,6 @@ def show():
     # show the begin task button!
     gg = GraphHandle()
 
-    
-    # #adding here too, so that whenever I am here, new thing starts always!
-    # ##TODO: can we show pending tasks?
-    
     # CRAWL_ID_NAME, CURR_ID  = gg.getTwoVars(kind)
 
     # ##This is needed whenever a new task is started
@@ -26,7 +22,7 @@ def show():
     h_unresolvedTotal, h_immediateUnResolvedTotal = gg.getCrawlHyperEdgeNodeStats()
 
     return render_template("verifier_home.html", homeclass="active",
-        unlockedUnresolvedTotal = unlockedUnresolvedTotal,unresolvedTotal = unresolvedTotal, immediateUnResolvedTotal = immediateUnResolvedTotal, 
+        unlockedUnresolvedTotal = unlockedUnresolvedTotal,unresolvedTotal = unresolvedTotal, immediateUnResolvedTotal = immediateUnResolvedTotal,
         r_unresolvedTotal = r_unresolvedTotal, r_immediateUnResolvedTotal = r_immediateUnResolvedTotal,
         r_beingResolved = r_beingResolved, h_unresolvedTotal = h_unresolvedTotal, h_immediateUnResolvedTotal = h_immediateUnResolvedTotal)
 
@@ -36,7 +32,7 @@ def beginagain(choice, kind):
 
     gg = GraphHandle()
 
-    CRAWL_ID_NAME, CURR_ID  = gg.getTwoVars(kind)
+    CRAWL_ID_NAME, CURR_ID = gg.getTwoVars(kind)
 
     if session.get(CRAWL_ID_NAME) is None:
         flash("You don't have any on-going tasks. Redirecting to start page.")
@@ -48,7 +44,7 @@ def beginagain(choice, kind):
 
     elif choice == 'resume':
 
-        flash('Selected resume') 
+        flash('Selected resume')
 
         if session.get(CRAWL_ID_NAME) is None:
             return redirect(url_for('.show'))
@@ -57,12 +53,12 @@ def beginagain(choice, kind):
             return redirect(url_for('.match', kind=kind))
 
         return redirect(url_for('.diffPushGen', kind=kind))
-    
+
     elif choice == 'sessionclear':
         flash('Selected sessionclear')
 
         clearVerifierSessionAll()
- 
+
         # session.pop(CURR_ID, None)
         # session.pop(CRAWL_ID_NAME, None)
         # session.pop('kind',None)
@@ -75,12 +71,12 @@ def beginagain(choice, kind):
         flash('Selected releaseall')
 
         clearVerifierSessionAll()
-       
+
         # session.pop(CURR_ID, None)
         # session.pop(CRAWL_ID_NAME, None)
         # session.pop('kind',None)
 
-        nc,rc  = gg.crawldb.releaseLocks(userid=session['userid'])
+        nc, rc = gg.crawldb.releaseLocks(userid=session['userid'])
         flashstr = "User explicitly asked to release (%s,%s) locks with userid %s" %(str(nc),str(rc),session['userid'])
         flash(flashstr)
 
@@ -102,7 +98,7 @@ def startTask(kind='node'):
     allVars = gg.getAllVars()
     flag = False
     retKind = None
-    
+
     for (var,retkind) in allVars:
         if session.get(var) is not None:
             flash('You already have ongoing tasks in your session. Redirecting to beginagain.')
@@ -123,31 +119,31 @@ def startTask(kind='node'):
     ##Obsolete now TODO: remove
     ##TODO: check if session vars exist in session directly redirect to runTask
     if session.get(CRAWL_ID_NAME) is not None:
-        print 'startTask: in the middle of a resolution task of kind '+kind+' for graph object : '+str(session.get(CRAWL_ID_NAME))  
-        return redirect(url_for('.match', kind = kind)) 
+        print 'startTask: in the middle of a resolution task of kind '+kind+' for graph object : '+str(session.get(CRAWL_ID_NAME))
+        return redirect(url_for('.match', kind = kind))
 
     if gg.areTasksLeft(kind): ##if task exists in crawl db!
-        
+
         print 'startTask: ckecked tasks to resolve exist for kind'+kind+'!!'
 
         graphobj = gg.nextTaskToResolve(kind, session.get('userid'))
 
         session[CRAWL_ID_NAME] = graphobj[CRAWL_ID_NAME]
-        session['kind'] = kind ##adding kind to session as well. 
+        session['kind'] = kind ##adding kind to session as well.
 
         print '\n\nstartTask: Beginning resolution for graph obj with crawl id: '+graphobj[CRAWL_ID_NAME]+'\n\n'
         print 'startTask: now redirecting'
 
         return redirect(url_for('.match', kind = kind))
-        
+
     ##if the above if doesnt work, comes here
     ##TODO: .show redirect
     temptext = 'No pending graph objects of kind '+kind+' to resolve, please go back'
-    return render_template("temp.html", homeclass="active", 
+    return render_template("temp.html", homeclass="active",
         temptext=temptext)
 
 
-@verifier.route('/match/<string:kind>/',methods=["GET","POST"])
+@verifier.route('/match/<string:kind>/', methods=["GET", "POST"])
 def match(kind):
 
 
@@ -166,7 +162,7 @@ def match(kind):
 
     lockprop, msg = gg.checkLockProperties(crawl_obj_original, session.get('userid'))
     if lockprop != 'allowed':
-        
+
         ##IMP : Even if your lock is removed by bot, and if you do anything to call match or diff both, you will be redirected to .show route, and your session vars will be automatically removed
 
         msg  =  msg +" for kind " +str(kind)
@@ -183,21 +179,21 @@ def match(kind):
     ##also will be required when resolving the relation, though can be taken from original
 
     crawl_obj = gg.copyCrawlObject(kind, crawl_obj_original)
-    
+
 
     ##TODO: validation as well! What actually? I forgot!
 
     if not request.form:
 
         algo = request.args.get('postalgo')
-        
+
         graphobjs = gg.matchPossibleObjects(kind, crawl_obj, crawl_obj_original)
         connected_ens = gg.getDirectlyConnectedEntitiesCrawl(kind, crawl_obj_original) ##will be none if not hyperedgenode for now
         flash('Selected post-algo: '+str(algo))
 
         return render_template("verifier_match.html", homeclass="active",
-            row=crawl_obj, graphobjs=graphobjs, ID = session[CRAWL_ID_NAME], kind = kind, 
-            idname = gg.getCoreIDName(kind), connected_ens = connected_ens)
+            row=crawl_obj, graphobjs=graphobjs, ID=session[CRAWL_ID_NAME], kind=kind,
+            idname=gg.getCoreIDName(kind), connected_ens=connected_ens)
 
     else:
 
@@ -209,10 +205,10 @@ def match(kind):
             flash('Please select a matching option to proceed')
             return redirect(url_for('.match', kind = kind))
 
-        
+
         if request.form['match_id']=='##ID##':
             idval = request.form['input_id']
-            
+
             ##TODO: validation if such id for this kind exists
             if idval is None or idval.strip() == '':
                 flash('nothing given in id text box')
@@ -220,12 +216,14 @@ def match(kind):
             session[CURR_ID] = request.form['input_id']
             return redirect(url_for('.diffPushGen', kind = kind))
 
-        if request.form['match_id']!='##NA##':            
+        if request.form['match_id']!='##NA##':
             session[CURR_ID] = request.form['match_id']
+            print session[CRAWL_ID_NAME] + ' inside sessionnnnnnnnnn'
             return redirect(url_for('.diffPushGen', kind = kind))
 
         if request.form['match_id']=='##NA##':
-            ## assuming the curr_relation has a label atleast else no way are we going to insert it! ##TODO a check!!! Can be done at api time too!
+            ## assuming the curr_relation has a label atleast else no way are we going to insert it!
+            ##TODO a check for above one type for relation!!! Can be done at api time too!
 
             ## create
             ## crawl_obj is the copied object
@@ -233,20 +231,35 @@ def match(kind):
 
             ##MAJOR MAJOR TODO: if we are creating a hyperedgenode, we can directly also push all its relations! assuming all things are validated.
             ##if we are creating a node, all its relations that are connected to resolved nodes can all be pushed as such, saves a lot of time.
-            ##again assuming that we have validated graph objects. 
+            ##again assuming that we have validated graph objects.
 
             flash('Graph object created with id: '+ str(curr_id))
             flash(kind+ ' : '+CRAWL_ID_NAME +' : '+str(session[CRAWL_ID_NAME]))
 
-            ##pop session objects
-            clearVerifierSessionAll()
-            # session.pop(CRAWL_ID_NAME, None)
-            # session.pop(CURR_ID, None) ##redundant code!
-            # session.pop('kind',None)
+            ##step: get the recenlty inserted object
+            curr_obj = gg.getOriginalCoreObject(kind, curr_id)
 
-            ##updateResolved PART
-            gg.setResolvedWithID(kind, crawl_obj_original, curr_id)
-            #change to original            
+            changeid, numrows = gg.resolveAndProvenance(kind, curr_id, curr_obj, None, crawl_obj_original, session['userid'])
+
+            # ##Provenance patch
+            # ##DONE: set resolved and also other props here, verified by, verified at, etc.
+            # gg.setResolvedWithID(kind, crawl_obj_original, curr_id, session['userid'])
+            # #change to original
+            #
+            # numrows = gg.provenanceCore(None, curr_obj, curr_id, crawl_obj_original, kind)
+
+            # ##pop session objects
+            # ##only after all the resolution complete and done
+            # gg.crawldb.unlockObject(crawl_obj_original)
+            clearVerifierSessionAll()
+
+            # ##Infact resolution for ID should be done here
+            # ##TODO: gg.crawldb.unlockObject(crawl_obj_original) should be done here alongside clearVerifierSessionAll
+
+            flashmsg =  "[match: changeid: %s || numrows: %s || kind: %s || id: %s]" %(changeid, numrows, kind, curr_id)
+            print flashmsg
+            flash(flashmsg)
+
             return redirect(url_for('.show'))
 
         else:
@@ -261,21 +274,21 @@ def diffPushGen(kind):
     gg = GraphHandle()
     CRAWL_ID_NAME, CURR_ID  = gg.getTwoVars(kind)
 
-    
+
     if session.get(CURR_ID) is None:
         msg = 'No diff tasks go to start task/match task first!'
         flash(msg)
-        return redirect('.show')
+        return redirect(url_for('.show'))
 
     if session.get('kind') is None or session.get('kind') !=kind:
         flash('Kinds do not match, you must have began working in some other tab.')
         redirect('.beginagain',kind=session.get(kind),choice='options')
 
-    
+
     curr_id = session.get(CURR_ID)
     crawl_id = session.get(CRAWL_ID_NAME)
 
-    
+
     crawl_obj_original = gg.getCrawlObjectByID(kind, CRAWL_ID_NAME, session[CRAWL_ID_NAME], isIDString = True)
 
     ##here we check if actually the node is locked
@@ -300,39 +313,41 @@ def diffPushGen(kind):
 
 
     crawl_obj = gg.copyCrawlObject(kind, crawl_obj_original)
-    
 
     naya = crawl_obj
     orig = gg.getOriginalCoreObject(kind, curr_id)
     orig.pull()
 
-    
+
     new_labels, conf_props, new_props = gg.getNewLabelsAndPropsDiff(kind, orig, naya)
-    
+    print 'just before diffffffffffffff'
+    print new_props, new_labels, new_props
 
     if not request.form:
 
         if new_labels == [] and new_props == [] and conf_props == []:
             ##
             flash('Objects match prop by prop, label by label, just setting resolved id in crawldb')
-            resolveFast(gg, kind, crawl_obj_original, curr_id, CRAWL_ID_NAME, CURR_ID)
-            # gg.setResolvedWithID(kind, crawl_obj_original, curr_id)
-            # ##pop session objects
-            # session.pop(CRAWL_ID_NAME, None)
-            # session.pop(CURR_ID, None)
-            # session.pop('kind', None)
-            # return redirect(url_for('.show'))
+            print 'Objects match prop by prop, label by label, just setting resolved id in crawldb'
+            return resolveFast(gg, kind, crawl_obj_original, curr_id, CRAWL_ID_NAME, CURR_ID)
+
+        print session.get(CRAWL_ID_NAME,'Bhai kuch nahi aaaya!')
+
 
         return render_template("verifier_diff_gen.html", homeclass="active",
-            new_labels=new_labels,conf_props=conf_props, new_props=new_props,orig=orig, naya=naya, crawl_id = session[CRAWL_ID_NAME], kind=kind)
+            new_labels=new_labels, conf_props=conf_props, new_props=new_props, orig=orig, naya=naya, crawl_id = session[CRAWL_ID_NAME], kind=kind)
     else:
 
         from app.constants import MVPLIST
         from app.utils.commonutils import Utils
         utils = Utils()
 
+        ##for provenance
+        old_obj = gg.copyCrawlObject(kind,orig)
+
         ##first check if justresolve has been selected
         value_list = request.form.getlist('justresolve')
+
         if len(value_list)==1:
 
             ##redundant code, we know its the only option, would have been selected
@@ -340,18 +355,19 @@ def diffPushGen(kind):
             print justresolve
 
             flash('Nothing will be pushed. Resolving just like that')
-            resolveFast(gg,kind,crawl_obj_original, curr_id, CRAWL_ID_NAME, CURR_ID)
+            return resolveFast(gg,kind,crawl_obj_original, curr_id, CRAWL_ID_NAME, CURR_ID)
             # return redirect(url_for('.show'))
 
         if not checkDiffSelected(conf_props,new_props,new_labels):
             flash('You selected nothing. Please select something. <br/> Or you can select JUST RESOLVE.')
             return redirect(url_for('.diffPushGen',kind=kind))
 
+        ##we are really going to update something, if reach here
         for prop in conf_props:
 
             tosave = str(request.form[prop])
 
-            
+
             ##the following code just checks if the props in conflict are list
             ##then we choose one of them, convert them to list and push
             ##but this seems to be a bad idea
@@ -361,73 +377,88 @@ def diffPushGen(kind):
             flash(prop+' : '+str(tosave))
             ##update this prop in orig graph object!
             #orig[prop] = request.form[prop]
-            orig[prop] = tosave ##naya prop/orig prop 
 
-        
+            if str(tosave)!=str(orig[prop]): ##added patch before provenance,
+                ##if creates problem, can remove
+                orig[prop] = tosave ##naya prop/orig prop
+
+
         for label in request.form.getlist('newlabels'):
             flash('Label: '+str(label))
             ##add this label to orig!
             orig.labels.add(label)
 
-        
+
         for prop in new_props:
-            
+
             value_list = request.form.getlist(prop)
             if len(value_list)==1: ##as only one value is going to be any way
                 tosave = str(request.form[prop])
-                
-               
-
 
                 flash(prop+' : '+str(value_list[0]))
                 ##add this prop to orig graph object!
                 #orig[prop] = request.form[prop]
-                orig[prop] = tosave ##naya prop/orig prop 
-
+                orig[prop] = tosave ##naya prop/orig prop
 
 
         ##name with alias patch
-        aliascopy = utils.copyListOfStrings(orig['aliases']) 
-        for alias in request.form.getlist('addtoalias'):
-            flash('addtoalias: '+str(alias))
-            alias = utils.processString(alias)
-            if alias not in aliascopy:
-                aliascopy.append(alias)
-        orig['aliases'] = aliascopy
-        
+        ##NOTE: we didnt processString when savinf first alias!
+        ##That's why here too!
+        ##TODO: move to graph_handle
+        if kind == 'node':
+            aliasoriglist = utils.copyList(orig['aliases'])
+            aliasmodifylist = utils.copyListOfStrings(orig['aliases'])
+            flag = False
+            for aliasorig in request.form.getlist('addtoalias'):
+                aliasmodify = utils.processString(aliasorig)
+                if aliasmodify not in aliasmodifylist:
+                    flash('addtoalias: '+str(aliasorig))
+                    flag = True
+                    aliasoriglist.append(str(aliasorig))
+            if flag:
+                orig['aliases'] = aliasoriglist
 
-        orig.push()#one graph object resolved! 
 
-        
+        orig.push()#one graph object resolved!
+
+
         flash(kind+ ' : '+CRAWL_ID_NAME+' : '+ str(session[CRAWL_ID_NAME]))
-
-        
-
 
         if kind=='node':
             #will be called when node's props are changed to update the row
             gg.updateIndexDBHelper(curr_id)
 
-        gg.setResolvedWithID(kind, crawl_obj_original, curr_id)
+        curr_obj = orig
 
-        ##pop session objects
-        # session.pop(CRAWL_ID_NAME, None)
-        # session.pop(CURR_ID, None)
-        # session.pop('kind', None)
+        # provenance patch
+        changeid, numrows = gg.resolveAndProvenance(kind, curr_id, curr_obj, old_obj, crawl_obj_original, session['userid'])
         clearVerifierSessionAll()
-        
+
+        flashmsg =  "[diffPushGen: changeid: %s || numrows: %s || kind: %s || id: %s]" %(changeid, numrows, kind, curr_id)
+        print flashmsg
+        flash(flashmsg)
+
         return redirect(url_for('.show'))
 
-        ##TODO: same validation checks like _ for wiki thing too 
+        ##TODO: same validation checks like _ for wiki thing too
 
 
 def resolveFast(gg, kind, crawl_obj_original, curr_id, CRAWL_ID_NAME, CURR_ID):
-    gg.setResolvedWithID(kind, crawl_obj_original, curr_id)
-    ##pop session objects
-    # session.pop(CRAWL_ID_NAME, None)
-    # session.pop(CURR_ID, None)
-    # session.pop('kind', None)
+    # gg.setResolvedWithID(kind, crawl_obj_original, curr_id, session['userid'])
+    # gg.crawldb.unlockObject(crawl_obj_original)
+
+    ##resolved methods has unlock work too
+    ##since this is a fast resolve, no need to update any metadata
+    ##the work is only on the crawl object
+    ##note here too the session is cleared after resolve
+
+    gg.resolveAndProvenance(kind, curr_id, None, None, crawl_obj_original, session['userid'])
+    #  no need of getting the changeid or numrows as both will be None in this case
+
     clearVerifierSessionAll()
+
+    flash('Session cleared. Object unnlocked. Object resolved.')
+
     return redirect(url_for('.show'))
 
 def checkDiffSelected(conf_props, new_props, new_labels):
@@ -436,11 +467,11 @@ def checkDiffSelected(conf_props, new_props, new_labels):
         else returns False
     '''
     flag = False
-    
+
     for prop in conf_props:
         flag = True ##always selected
         break
-    if flag: 
+    if flag:
         return flag
 
     for prop in new_props:
@@ -448,7 +479,7 @@ def checkDiffSelected(conf_props, new_props, new_labels):
             if len(value_list)==1: ##as only one value is going to be any way
                 flag = True
                 break
-    if flag: 
+    if flag:
         return flag
 
     for label in request.form.getlist('newlabels'):
@@ -463,6 +494,3 @@ def clearVerifierSessionAll():
     for a,b in allVars:
         session.pop(a, None)
     session.pop('kind', None)
-
-
-
