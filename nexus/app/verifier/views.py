@@ -31,17 +31,22 @@ def show():
 
 def getTaskType():
     from app.constants import SESSION_TASKTYPE_NAME, SESSION_CRAWL_VAL, SESSION_WIKI_VAL
-    tasktype = request.args.get(SESSION_TASKTYPE_NAME, SESSION_CRAWL_VAL)
+    tasktype = request.args.get(SESSION_TASKTYPE_NAME)
+    if tasktype is None:
+        print 'should not be here at aaaaaaaaaaaaaaaannnnnnnnnnny cost!!!'
+        tasktype = SESSION_CRAWL_VAL
     ##why we did not use a new parameter
     ##will not have to change match in all places
+    print "[getTaskType: tasktype: %s]" %(tasktype)
     return tasktype
 
 def taskTypeValidateHelper():
 
-    from app.constants import SESSION_TASKTYPE
+    from app.constants import SESSION_TASKTYPE_NAME
     tasktype = getTaskType()
+    print "[taskTypeValidateHelper: SESSION_TASKTYPE_NAME in session: %s]" %(session.get(SESSION_TASKTYPE_NAME))
     ##why we choose request.args and not functional parameters
-    return session.get(SESSION_TASKTYPE) == tasktype
+    return session.get(SESSION_TASKTYPE_NAME) == tasktype
 
 @verifier.route('/beginagain/<string:choice>/<string:kind>/')
 def beginagain(choice, kind):
@@ -124,7 +129,7 @@ def startTask(kind, tasktype): ##no point of defaulting to 'node', doesn't take 
     for (var,retkind) in allVars:
         if session.get(var) is not None:
             flash('You already have ongoing tasks in your session. Redirecting to beginagain.')
-            return redirect(url_for('.beginagain', kind = retkind, choice = "options"))
+            return redirect(url_for('.beginagain', kind = retkind, choice = "options", tasktype = tasktype))
 
     CRAWL_ID_NAME, CURR_ID  = gg.getTwoVars(kind)
 
@@ -153,20 +158,28 @@ def startTask(kind, tasktype): ##no point of defaulting to 'node', doesn't take 
     ##also check if kind variable needed in beginagain
     if gg.areTasksLeft(kind, tasktype): ##if task exists in crawl db!
 
+        from app.constants import SESSION_TASKTYPE_NAME
+
         print '[startTask: ckecked tasks to resolve exist for kind'+kind+'!!]'
 
         graphobj = gg.nextTaskToResolve(kind, tasktype, session.get('userid')) ##XXX: similarly call: our wiki method
 
         session[CRAWL_ID_NAME] = graphobj[CRAWL_ID_NAME]
         session['kind'] = kind ##adding kind to session as well.
-        session['tasktype'] = tasktype ##patch for wiki/crawl ##removed later
+        session[SESSION_TASKTYPE_NAME] = tasktype ##patch for wiki/crawl ##removed later
 
         print '[\n\nstartTask: Beginning resolution for graph obj with crawl id: '+graphobj[CRAWL_ID_NAME]+'\n\n]'
         print '[startTask: tasktype %s]' %(tasktype)
         print '[startTask: now redirecting]'
 
         if tasktype=='wiki':
-            return redirect(url_for('.diffPushGen', kind = kind))
+            from app.constants import RESOLVEDWITHUUID, RESOLVEDWITHRELID
+            crawl_obj_original = gg.getCrawlObjectByID(kind, CRAWL_ID_NAME, session[CRAWL_ID_NAME], isIDString = True)
+            if kind == 'node':
+                session[CURR_ID] = crawl_obj_original[RESOLVEDWITHUUID]
+            else:
+                session[CURR_ID] = crawl_obj_original[RESOLVEDWITHRELID]
+            return redirect(url_for('.diffPushGen', kind = kind, tasktype = tasktype))
 
         ##else if defaults to :
         return redirect(url_for('.match', kind = kind))
@@ -282,12 +295,12 @@ def match(kind):
                 flash('nothing given in id text box')
                 return redirect(url_for('.match', kind = kind))
             session[CURR_ID] = request.form['input_id']
-            return redirect(url_for('.diffPushGen', kind = kind))
+            return redirect(url_for('.diffPushGen', kind = kind, tasktype='crawl'))
 
         if request.form['match_id']!='##NA##':
             session[CURR_ID] = request.form['match_id']
             print session[CRAWL_ID_NAME] + ' inside sessionnnnnnnnnn'
-            return redirect(url_for('.diffPushGen', kind = kind))
+            return redirect(url_for('.diffPushGen', kind = kind, tasktype='crawl'))
 
         if request.form['match_id']=='##NA##':
             ## assuming the curr_relation has a label atleast else no way are we going to insert it!
@@ -352,13 +365,18 @@ def diffPushGen(kind):
         flash('Kinds do not match, you must have began working in some other tab.')
         redirect('.beginagain',kind=session.get(kind),choice='options')
 
+    tasktype = getTaskType()
+
     ## TASKTYPE PATCH -------
     if not taskTypeValidateHelper():
+        print 'why o why here!!!'
+        print kind
         flash('Tasktypes do not match, you must have began working in some other tab.')
         ##redirecting to begin again, so that the user can
         ##go to his/her original task
         ###XXX: tasktype?
-        return redirect(url_for('.beginagain',kind=session.get(kind), choice='options'))
+        print session.get('kind')
+        return redirect(url_for('.beginagain',kind=session.get('kind'), choice='options'))
     ## TASKTYPE PATCH -------
 
 
@@ -411,7 +429,7 @@ def diffPushGen(kind):
 
 
         return render_template("verifier_diff_gen.html", homeclass="active",
-            new_labels=new_labels, conf_props=conf_props, new_props=new_props, orig=orig, naya=naya, crawl_id = session[CRAWL_ID_NAME], kind=kind)
+            new_labels=new_labels, conf_props=conf_props, new_props=new_props, orig=orig, naya=naya, crawl_id = session[CRAWL_ID_NAME], kind=kind, tasktype=tasktype)
     else:
 
         from app.constants import MVPLIST
@@ -436,7 +454,7 @@ def diffPushGen(kind):
 
         if not checkDiffSelected(conf_props,new_props,new_labels):
             flash('You selected nothing. Please select something. <br/> Or you can select JUST RESOLVE.')
-            return redirect(url_for('.diffPushGen',kind=kind))
+            return redirect(url_for('.diffPushGen',kind=kind, tasktype = tasktype))
 
         ##we are really going to update something, if reach here
         for prop in conf_props:

@@ -31,16 +31,17 @@ def trial():
 
     copynode['uuid'] = None ##remove for now
     copynode[RESOLVEDWITHUUID] = 77
-    copynode[CRAWL_PUSHEDBY] = session['userid']
+    copynode[CRAWL_PUSHEDBY] = 'abhi10@gmail.com'
     copynode[CRAWL_PUSHDATE] = Utils.currentTimeStamp()
     #XXX: for user ownerid = session['userid'] and iscrawled = 0, get the unique row
     ##that's our taskid
-    copynode[CRAWL_TASKID] = 1001
+    copynode[CRAWL_TASKID] = 3
     copynode[CRAWL_SOURCEURL] = "http://wikipedia.com/NaveenJindal/"
     copynode[CRAWL_FETCHDATE] = copynode[CRAWL_PUSHDATE]-4000000
     copynode[CRAWL_TASKTYPE] = "wiki"
-    copynode['job'] = "director and businessperson"
-    copynode[CRAWL_NODENUMBER] = 2 ##though idiotic
+    copynode['job'] = "farmer, business, polictican, social worker"
+    copynode.labels.add('timePerson')
+    copynode[CRAWL_NODENUMBER] = 1 ##though idiotic
     copynode[CRAWL_EN_ID_NAME] = CRAWL_EN_ID_FORMAT %(copynode[CRAWL_TASKID], copynode[CRAWL_NODENUMBER])
 
     #flash(str(node))
@@ -49,7 +50,6 @@ def trial():
     gg.crawldb.graph.create(copynode)
     copycopynode = gg.getCrawlObjectByID('node',CRAWL_EN_ID_NAME,copynode[CRAWL_EN_ID_NAME],True)
     flash(copycopynode)
-
 
 
     ##TODO: same things for relations
