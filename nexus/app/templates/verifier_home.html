@@ -5,7 +5,7 @@
         <h3>
 
             Welcome verifier! <hr/><br/>
-            
+
 
             {{unresolvedTotal}} nodes to resolve in total (locked and unlocked) <br/>
 
@@ -13,7 +13,7 @@
 
             {{immediateUnResolvedTotal}} connected nodes to immediately resolve (unlocked, connected, unresolved)<br/><br/>
 
-            <a href={{url_for('verifier.startTask', kind = 'node')}}>
+            <a href={{url_for('verifier.startTask', kind = 'node', tasktype='crawl')}}>
                     <button type="submit" class="btn btn-primary">Resolve Nodes!</button>
             </a>
             <br/>
@@ -29,7 +29,7 @@
 
 
 
-            <a href={{url_for('verifier.startTask', kind = 'relation')}}>
+            <a href={{url_for('verifier.startTask', kind = 'relation', tasktype='crawl')}}>
                     <button type="submit" class="btn btn-primary">Resolve Relations!</button>
             </a>
             <br/>
@@ -44,20 +44,45 @@
 
 
 
-            <a href={{url_for('verifier.startTask', kind = 'hyperedgenode')}}>
+            <a href={{url_for('verifier.startTask', kind = 'hyperedgenode',tasktype='crawl')}}>
                     <button type="submit" class="btn btn-primary">Resolve Hyper-Edge-Nodes!</button>
             </a>
             <br/> -->
-            
+
+            {{n_wiki_total}} nodes to moderate in total (locked and non-locked) <br/>
+            {{n_wiki_actual}} nodes to moderate immediately (non-locked)  <br/>
+            <br/>
+
+            <a href={{url_for('verifier.startTask', kind = 'node', tasktype='wiki')}}>
+                    <button type="submit" class="btn btn-primary">Moderate Nodes</button>
+            </a>
+            <hr/>
+            <br/>
+
+            {{r_wiki_total}} relations to moderate in total (locked and non-locked) <br/>
+            {{r_wiki_actual}} relations to moderate immediately (non-locked)  <br/>
+
+
+            <br/>
+
+            <br/>
+
+            <a href={{url_for('verifier.startTask', kind = 'node', tasktype='wiki')}}>
+                    <button type="submit" class="btn btn-primary">Moderate Relations</button>
+            </a>
+            <br/>
+
+            <hr/>
+
         </h3>
 
-        
+
 
     </div>
-     
 
 
-<!-- 
+
+<!--
 
 </div> -->
 {% endblock %}

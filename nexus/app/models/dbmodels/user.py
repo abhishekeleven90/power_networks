@@ -7,15 +7,15 @@ nt = NexusToken()
 
 class User:
 
-    def __init__(self, userid, password="", role=1):
-        
+    def __init__(self, userid, password="", role=1, keyEnabled = 0):
+
         ##password by default empty, must be checked from higher function
         ##for a non empty password
         self.userid  = userid
         self.role = role
         self.password = nt.getMD5(password)
         self.apikey = nt.generateApiKey(self.userid)
-        self.keyEnabled = 0
+        self.keyEnabled = keyEnabled
 
         ##other meta
         self.dbwrap = MetaSQLDB()
@@ -145,5 +145,5 @@ class User:
         return usr.getSelfFromDB()
 
     def test(self):
-        
+
         usr1 = User('amartya',)

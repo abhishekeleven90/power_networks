@@ -52,7 +52,6 @@ class GraphDB:
         a.pull()
         return a
 
-
     def getNodeByUniqueID(self, uniquelabel, idName, idVal, isIDString=False):
         ##TODO: move uuid to props
         query = "match (n:"+uniquelabel+" {"
@@ -62,6 +61,7 @@ class GraphDB:
             query = query+ idName+":"+str(idVal)+"}) return n"
         rc = self.graph.cypher.execute(query)
         return rc[0][0]
+
 
     def getRelationByUniqueID(self, idName, idVal, isIDString=False):
         ##TODO: move uuid to props
@@ -608,7 +608,7 @@ class SelectionAlgoGraphDB(GraphDB):
         from app.utils.commonutils import Utils
         utils = Utils()
         graphobj.properties[CRAWL_VERIFIEDBY] = verifiedby
-        graphobj.properties[CRAWL_VERIFYDATE] = utils.currentTimeStamp()
+        graphobj.properties[CRAWL_VERIFYDATE] = Utils.currentTimeStamp()
 
     def setResolvedWithUUID(self, node, uuid, verifiedby):
         ##TODO: remove this self.metaprops
@@ -751,7 +751,7 @@ class SelectionAlgoGraphDB(GraphDB):
         query = 'match (n:entity)-[r]->(p:entity) where exists(n.' + self.metaprops['RESOLVEDUUID'] +') ' ##direction included
         query = query + 'AND exists(p.' + self.metaprops['RESOLVEDUUID'] +') '
         query = query + 'AND not exists(r.' + self.metaprops['RESOLVEDRELID'] +') '
-        query = query + 'AND not exists(r._lockedby_) '
+        query = query + 'AND not exists(r._lockedby_) ' ##TODO: constants here
         query = query + 'return r limit 1'
         #print query
         results = self.graph.cypher.execute(query)
@@ -857,6 +857,68 @@ class SelectionAlgoGraphDB(GraphDB):
     def copyRelationWithEssentialNodeMeta(self, rel):
         return self.copyRelationWithoutMeta(rel, node_exceptions=[self.metaprops['RESOLVEDUUID']])
 
+    def getNextWikiNode(self):
+        '''
+            returns nodes that are resolved, have tasktype wiki and are not locked
+            returns the first one of this lot
+        '''
+        from app.constants import LABEL_ENTITY, RESOLVEDWITHUUID, CRAWL_VERIFIEDBY, CRAWL_LOCKEDBY
+        query = "match (n:%s) where exists(n.%s) and not exists(n.%s) and not exists(n.%s) return n limit 1"
+        query = query %(LABEL_ENTITY, RESOLVEDWITHUUID, CRAWL_VERIFIEDBY, CRAWL_LOCKEDBY)
+        print query
+        results = self.graph.cypher.execute(query)
+        if len(results)==0:
+            return None, 0
+        else:
+            return results[0][0]
+
+    def getNextWikiRelation(self):
+        ##TODO: join both codes getNextWikiRelation, getNextWikiNode
+        from app.constants import RESOLVEDWITHRELID, CRAWL_VERIFIEDBY, CRAWL_LOCKEDBY
+        query = "match ()-[n]-() where exists(n.%s) and not exists(n.%s) and not exists(n.%s) return n limit 1"
+        query = query %(RESOLVEDWITHRELID, CRAWL_VERIFIEDBY, CRAWL_LOCKEDBY)
+        print query
+        results = self.graph.cypher.execute(query)
+        if len(results)==0:
+            return None, 0
+        else:
+            return results[0][0]
+
+    def getTotalWikiNodeCount(self):
+        ##TODO: locked and not locked
+        from app.constants import LABEL_ENTITY, RESOLVEDWITHUUID, CRAWL_VERIFIEDBY
+        query = "match (n:%s) where exists(n.%s) and not exists(n.%s) return count(n)"
+        query = query %(LABEL_ENTITY, RESOLVEDWITHUUID, CRAWL_VERIFIEDBY)
+        print query
+        results = self.graph.cypher.execute(query)
+        return results[0][0]
+
+    def getActualWikiNodeCount(self):
+        ##TODO: locked and not locked
+        from app.constants import LABEL_ENTITY, RESOLVEDWITHUUID, CRAWL_VERIFIEDBY, CRAWL_LOCKEDBY
+        query = "match (n:%s) where exists(n.%s) and not exists(n.%s) and not exists(n.%s) return count(n)"
+        query = query %(LABEL_ENTITY, RESOLVEDWITHUUID, CRAWL_VERIFIEDBY, CRAWL_LOCKEDBY)
+        print query
+        results = self.graph.cypher.execute(query)
+        return results[0][0]
+
+    def getTotalWikiRelationCount(self):
+        ##TODO: locked and not locked
+        from app.constants import RESOLVEDWITHRELID, CRAWL_VERIFIEDBY
+        query = "match ()-[n]-() where exists(n.%s) and not exists(n.%s) return count(n)"
+        query = query %(RESOLVEDWITHRELID, CRAWL_VERIFIEDBY)
+        print query
+        results = self.graph.cypher.execute(query)
+        return results[0][0]
+
+    def getActualWikiRelationCount(self):
+        ##TODO: locked and not locked
+        from app.constants import RESOLVEDWITHRELID, CRAWL_VERIFIEDBY, CRAWL_LOCKEDBY
+        query = "match ()-[n]-() where exists(n.%s) and not exists(n.%s) and not exists(n.%s) return count(n)"
+        query = query %(RESOLVEDWITHRELID, CRAWL_VERIFIEDBY, CRAWL_LOCKEDBY)
+        print query
+        results = self.graph.cypher.execute(query)
+        return results[0][0]
 
 
 class GraphObject():

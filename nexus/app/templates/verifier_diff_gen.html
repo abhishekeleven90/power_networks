@@ -2,7 +2,7 @@
 {% extends "verifier_common.html" %}
 {% block contentinner %}
 
-    <a href={{ url_for( 'verifier.match', kind = kind ) }}>
+    <a href={{ url_for('verifier.match', kind =kind , tasktype=tasktype) }}>
         <button type="submit" class="btn btn-primary">Back to matching!</button>
     </a>
     {{super()}}
@@ -34,7 +34,7 @@
         <br/>
 
 
-        <form class="form-horizontal" method="post" action={{url_for('verifier.diffPushGen', kind=kind)}}>
+        <form class="form-horizontal" method="post" action={{url_for('verifier.diffPushGen', kind=kind, tasktype=tasktype)}}>
             <input type="hidden" name="##crawl_id##" value="{{crawl_id}}"/>
 
             <!--TODO: remove this not required-->

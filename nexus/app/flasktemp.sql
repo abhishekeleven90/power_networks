@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `keyenabled` int(11) NOT NULL,
   `lastlogin` datetime NOT NULL,
   `lastpwdchange` datetime NOT NULL,
-  `displayname` varchar(1000) NOT NULL,
+  `name` varchar(1000) NOT NULL,
   PRIMARY KEY (`userid`)
 );
 

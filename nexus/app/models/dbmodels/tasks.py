@@ -5,7 +5,7 @@ from datetime import datetime
 
 class Tasks:
 
-    def __init__(self, ownerid = None, name=None, description='description', iscrawled=0):
+    def __init__(self, ownerid = '', name='', description='description', iscrawled=0):
         self.ownerid = ownerid
         self.name = name
         self.taskid = None
@@ -119,7 +119,7 @@ class Tasks:
         tsk = Tasks()
         tsk.taskid = taskid
         return tsk.getSelfFromDB()
-        
+
     def __str__(self):
         print '[ Task: taskid: '+str(self.taskid)+' name: '\
                 + str(self.name)+' descr: '+str(self.description)+' ]'
@@ -128,7 +128,7 @@ class Tasks:
 
 class Taskusers:
 
-    def __init__(self, taskid=None, userid=''):
+    def __init__(self, taskid='', userid=''):
         self.taskid = taskid
         self.userid = userid
         self.dbwrap = MetaSQLDB()
@@ -152,7 +152,10 @@ class Taskusers:
         try:
             numrows = cursor.execute(query)
         except Exception as e:
-            print e.message
+            import traceback
+            traceback.print_exc()
+            traceback.print_stack()
+            print "[relid.RelIdTable.create: query execution error]"
             print "query execution error"
             self.dbwrap.commitAndClose()
         else:
@@ -205,7 +208,7 @@ class Tasklog:
         self.dbwrap = MetaSQLDB()
         self.tablename = META_TABLE_TASKLOG
         return
-    
+
 
     def create(self):
         self.dbwrap.connect()
@@ -302,5 +305,3 @@ class Tasklog:
     def getTasklog(cls, userid, taskid):
         tl = Tasklog(taskid, userid)
         return tl.getSelfFromDB()
-
-

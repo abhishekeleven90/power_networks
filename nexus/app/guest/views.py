@@ -97,21 +97,32 @@ def rel():
 
 @guest.route('/user/')
 def user():
+
     from app.models.dbmodels.user import User
-    print 'should work fine'
-    usr = User('amartya', 'yummytummy', 5)
+    usr = User(userid = 'abhi10@gmail.com', password = 'yoyo', role = 7, keyEnabled =1)
     usr.insert()
-    usr2 = User('abhishek', 'zzzzzz')
-    usr2.insert()
-    usr2.password = 'wewrerw'
-    usr2.update('password')
-    print usr2.validateUser('yummytummy')
-    usr2.role = 3
-    usr2.keyEnabled = 1
-    usr2.update('all')
+    flash(usr.userid)
+
+    from app.models.dbmodels.tasks import Tasks, Taskusers
+    task = Tasks(ownerid = usr.userid, name = 'Wiki Task', description = 'Wiki Task Description',iscrawled=0)
+    task.create()
+    flash(task.taskid)
+
+    tuser = Taskusers(taskid=task.taskid, userid=usr.userid)
+    flash('numrows for: taskusers: '+str(tuser.create()))
+
+
+    # usr2 = User('abhi9.com', 'yoyo',3)
+    # usr2.insert()
+    # usr2.password = 'wewrerw'
+    # usr2.update('password')
+    # print usr2.validateUser('yummytummy')
+    # usr2.role = 3
+    # usr2.keyEnabled = 1
+    # usr2.update('all')
 
     print 'will be here if all fine'
-    return render_template("temp.html", homeclass="active", temptext='You are here ' + usr.userid + ' ' + usr2.userid)
+    return render_template("temp.html", homeclass="active", temptext='No problem')
 
 @guest.route('/tasks/')
 def tasks():
@@ -190,7 +201,12 @@ def viz():
     ##to decide: post or not?
     from app.utils.validate_cypher import isValidCypher
 
-    cypher = request.form.get('query')
+    cypher = ''
+    if request.form:
+        cypher = request.form.get('query')
+    else:
+        cypher = request.args['query']
+    print 'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqueeeeeeeeeeeerrry'
     print cypher
 
     from app.constants import CORE_GRAPH_HOST, CORE_GRAPH_PASSWORD, CORE_GRAPH_PORT, CORE_GRAPH_USER
