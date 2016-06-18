@@ -49,7 +49,8 @@ class Utils:
         if changeType == CHANGE_MODIFY:
             return 'modification'
 
-    def currentTimeStamp(self):
+    @classmethod
+    def currentTimeStamp(cls):
         import time
         return time.time()
 

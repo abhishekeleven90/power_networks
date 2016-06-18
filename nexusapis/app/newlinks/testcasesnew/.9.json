@@ -1,0 +1,89 @@
+  {
+      "taskid": "1",
+      "userid": "abhi2@gmail.com",
+      "token": "token2",
+      "entities": [{
+          "id": "1",
+          "fetchdate": "1466024344",
+          "sourceurl": "http://loksabha.nic.in",
+          "labels": ["person", "politician", "entity", "president","indianPresident"],
+          "properties": {
+              "name": "Pranab Mukherjee"
+          }
+      }, {
+          "id": "2",
+          "fetchdate": "1466024344",
+          "sourceurl": "http://loksabha.nic.in",
+          "labels": ["organization", "politicalparty", "nationalparty", "entity"],
+          "properties": {
+              "name": "Indian National Congress",
+              "startDate":"1 January 1900"
+          }
+      }, {
+          "id": "3",
+          "fetchdate": "1466024344",
+          "sourceurl": "http://loksabha.nic.in",
+          "labels": ["person", "politician", "entity","businessperson","director"],
+          "properties": {
+              "name": "Naveen Jindal",
+              "dob": "4 March 1976"
+          }
+      }, {
+          "id": "4",
+          "fetchdate": "1466024344",
+          "sourceurl": "http://loksabha.nic.in",
+          "labels": ["company", "indianCompany", "entity"],
+          "properties": {
+              "name": "Jindal Petroleum Ltd."
+          }
+      }, {
+          "id": "5",
+          "fetchdate": "1466024344",
+          "sourceurl": "http://loksabha.nic.in",
+          "labels": ["person", "politician", "entity"],
+          "properties": {
+              "name": "Pratibha D Patil"
+          }
+      }, {
+          "id": "6",
+          "fetchdate": "1466024344",
+          "sourceurl": "http://loksabha.nic.in",
+          "labels": ["state", "indianState", "entity"],
+          "properties": {
+              "name": "Haryana"
+          }
+      },  {
+        "id": "7",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "labels": ["city", "indianCity", "unionTerritory","entity"],
+        "properties": {
+            "name": "Chandigarh"
+        }
+      }
+    ],
+      "relations": [{
+          "id": "1",
+          "label": "worksin",
+          "start_entity": "1",
+          "end_entity": "2",
+          "fetchdate": "1466024344",
+          "sourceurl": "http://loksabha.nic.in",
+          "bidirectional": "no",
+          "properties": {
+              "startdate": "01/01/2000",
+              "endDate": "23/12/2015"
+          }
+      }, {
+          "id": "2",
+          "label": "capitalOf",
+          "start_entity": "7",
+          "end_entity": "6",
+          "fetchdate": "1466024344",
+          "sourceurl": "http://loksabha.nic.in",
+          "bidirectional": "no",
+          "properties": {
+          }
+      }
+    ]
+  }

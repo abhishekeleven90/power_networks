@@ -59,6 +59,9 @@ CRAWL_PUSHDATE = '_pushdate_'
 CRAWL_FETCHDATE = '_fetchdate_'
 CRAWL_SOURCEURL = '_sourceurl_'
 CRAWL_TASKID = '_taskid_'
+CRAWL_TASKTYPE = '_tasktype_'
+CRAWL_NODENUMBER = '_nodenumber_'
+CRAWL_EN_ID_FORMAT = "en_%s_%s"
 LABEL_HYPEREDGE_NODE = 'hyperedgenode'
 LABEL_ENTITY = 'entity'
 
@@ -108,3 +111,9 @@ DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
 CHANGE_INSERT = 1
 CHANGE_DELETE = 0
 CHANGE_MODIFY = 2
+
+##SESSION VARIABLES
+SESSION_KIND = 'kind'
+SESSION_TASKTYPE_NAME = 'tasktype'
+SESSION_CRAWL_VAL = 'crawl'
+SESSION_WIKI_VAL = 'wiki' 

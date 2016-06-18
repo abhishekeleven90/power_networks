@@ -187,7 +187,7 @@ def pushLinked():
     'resolvedAgainst','verifiedBy','resolvedBy','verifiedDate','update',
     'lastUpdatedBy','lastUpdatedOn', '_crawl_en_id_','_token_','_taskname_',
     '_id_','_nodenumber_','taskid','_taskid_','verifiedby','_verifiedby_','verifydate',
-    'pushdate','uuid','_uuid_','labels','_labels_'] ##_nodeid_ is the node number along with _token_ and _taskname_ will help us in identifying the node! so do not worry!
+    'pushdate','_pushedby_','uuid','_uuid_','labels','_labels_','tasktype','_tasktype_','relid','_relid_'] ##_nodeid_ is the node number along with _token_ and _taskname_ will help us in identifying the node! so do not worry!
 
     ## ALIASES CODE
     # required_en_props = ['name','aliases'] ##inside entity['properties']

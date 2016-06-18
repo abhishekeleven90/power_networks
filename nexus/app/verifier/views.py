@@ -19,20 +19,44 @@ def show():
 
     r_unresolvedTotal, r_beingResolved, r_immediateUnResolvedTotal = gg.getCrawlRelationStats()
 
+    n_wiki, r_wiki = gg.getWikiStats()
+
     h_unresolvedTotal, h_immediateUnResolvedTotal = gg.getCrawlHyperEdgeNodeStats()
 
     return render_template("verifier_home.html", homeclass="active",
         unlockedUnresolvedTotal = unlockedUnresolvedTotal,unresolvedTotal = unresolvedTotal, immediateUnResolvedTotal = immediateUnResolvedTotal,
         r_unresolvedTotal = r_unresolvedTotal, r_immediateUnResolvedTotal = r_immediateUnResolvedTotal,
-        r_beingResolved = r_beingResolved, h_unresolvedTotal = h_unresolvedTotal, h_immediateUnResolvedTotal = h_immediateUnResolvedTotal)
+        r_beingResolved = r_beingResolved, h_unresolvedTotal = h_unresolvedTotal, h_immediateUnResolvedTotal = h_immediateUnResolvedTotal,
+        n_wiki = n_wiki, r_wiki = r_wiki)
 
+def getTaskType():
+    from app.constants import SESSION_TASKTYPE_NAME, SESSION_CRAWL_VAL, SESSION_WIKI_VAL
+    tasktype = request.args.get(SESSION_TASKTYPE_NAME, SESSION_CRAWL_VAL)
+    ##why we did not use a new parameter
+    ##will not have to change match in all places
+    return tasktype
+
+def taskTypeValidateHelper():
+
+    from app.constants import SESSION_TASKTYPE
+    tasktype = getTaskType()
+    ##why we choose request.args and not functional parameters
+    return session.get(SESSION_TASKTYPE) == tasktype
 
 @verifier.route('/beginagain/<string:choice>/<string:kind>/')
 def beginagain(choice, kind):
 
+
+    ##kind should be from session
+    ##session.get('kind') will be one thing either node or rel right
+    ##similarly for tasktype
+    ##TODO: check
+
     gg = GraphHandle()
 
     CRAWL_ID_NAME, CURR_ID = gg.getTwoVars(kind)
+
+    tasktype = getTaskType()
 
     if session.get(CRAWL_ID_NAME) is None:
         flash("You don't have any on-going tasks. Redirecting to start page.")
@@ -50,18 +74,14 @@ def beginagain(choice, kind):
             return redirect(url_for('.show'))
 
         if session.get(CURR_ID) is None:
-            return redirect(url_for('.match', kind=kind))
+            return redirect(url_for('.match', kind=kind, tasktype = tasktype))
 
-        return redirect(url_for('.diffPushGen', kind=kind))
+        return redirect(url_for('.diffPushGen', kind=kind, tasktype = tasktype))
 
     elif choice == 'sessionclear':
         flash('Selected sessionclear')
 
         clearVerifierSessionAll()
-
-        # session.pop(CURR_ID, None)
-        # session.pop(CRAWL_ID_NAME, None)
-        # session.pop('kind',None)
 
         flash('Locks will be eventually released by bot. Your task is cleared.')
 
@@ -71,16 +91,7 @@ def beginagain(choice, kind):
         flash('Selected releaseall')
 
         clearVerifierSessionAll()
-
-        # session.pop(CURR_ID, None)
-        # session.pop(CRAWL_ID_NAME, None)
-        # session.pop('kind',None)
-
-        nc, rc = gg.crawldb.releaseLocks(userid=session['userid'])
-        flashstr = "User explicitly asked to release (%s,%s) locks with userid %s" %(str(nc),str(rc),session['userid'])
-        flash(flashstr)
-
-        flash('Your locks released. Your task cleared.')
+        releaseAllMyLocksNow()
 
         return redirect(url_for('.show'))
 
@@ -88,10 +99,19 @@ def beginagain(choice, kind):
         flash('Not a valid option in beginagain!')
         return render_template("temp.html", homeclass="active", temptext='Not a valid option')
 
+def releaseAllMyLocksNow():
+    gg = GraphHandle()
+    nc, rc = gg.crawldb.releaseLocks(userid=session['userid'])
+    flashstr = "User explicitly asked to release (%s,%s) locks with userid %s" %(str(nc),str(rc),session['userid'])
+    flash(flashstr)
+    flash('Your locks released. Your task cleared.')
+
+@verifier.route('/startTask/<string:tasktype>/<string:kind>/')
+def startTask(kind, tasktype): ##no point of defaulting to 'node', doesn't take it
 
 
-@verifier.route('/startTask/<string:kind>/')
-def startTask(kind='node'):
+    ##XXX-DONE:there has to be a differentitaor for moderator tasks
+    #either in session or somewhere else like in this fn as a request argument
 
     gg = GraphHandle()
 
@@ -99,6 +119,8 @@ def startTask(kind='node'):
     flag = False
     retKind = None
 
+    #XXX-DONE: for wiki tasks too, let it go to beginagain page
+    #XXX: do patch and correct
     for (var,retkind) in allVars:
         if session.get(var) is not None:
             flash('You already have ongoing tasks in your session. Redirecting to beginagain.')
@@ -108,6 +130,8 @@ def startTask(kind='node'):
 
     # ##This is needed whenever a new task is started
     clearVerifierSessionAll()
+
+    #also you can do one task at a time: verify or mod.
     # for (var,retkind) in allVars:
     #     ## imp
     #     ## so baiscally when a new task is started old task gets stale.
@@ -116,36 +140,46 @@ def startTask(kind='node'):
     #     session.pop(var, None)
     # session.pop('kind', None)
 
-    ##Obsolete now TODO: remove
-    ##TODO: check if session vars exist in session directly redirect to runTask
-    if session.get(CRAWL_ID_NAME) is not None:
-        print 'startTask: in the middle of a resolution task of kind '+kind+' for graph object : '+str(session.get(CRAWL_ID_NAME))
-        return redirect(url_for('.match', kind = kind))
+    # ##Obsolete now TODO: remove
+    # ##TODO: check if session vars exist in session directly redirect to runTask
+    # if session.get(CRAWL_ID_NAME) is not None:
+    #     print 'startTask: in the middle of a resolution task of kind '+kind+' for graph object : '+str(session.get(CRAWL_ID_NAME))
+    #     return redirect(url_for('.match', kind = kind))
 
-    if gg.areTasksLeft(kind): ##if task exists in crawl db!
+    ##XXX: pass one more variable which type of task: wiki or crawl
 
-        print 'startTask: ckecked tasks to resolve exist for kind'+kind+'!!'
+    ##TWO WORK: areTasksLeft and view for mod, then we can test both
+    ##part 1 should be completed
+    ##also check if kind variable needed in beginagain
+    if gg.areTasksLeft(kind, tasktype): ##if task exists in crawl db!
 
-        graphobj = gg.nextTaskToResolve(kind, session.get('userid'))
+        print '[startTask: ckecked tasks to resolve exist for kind'+kind+'!!]'
+
+        graphobj = gg.nextTaskToResolve(kind, tasktype, session.get('userid')) ##XXX: similarly call: our wiki method
 
         session[CRAWL_ID_NAME] = graphobj[CRAWL_ID_NAME]
         session['kind'] = kind ##adding kind to session as well.
+        session['tasktype'] = tasktype ##patch for wiki/crawl ##removed later
 
-        print '\n\nstartTask: Beginning resolution for graph obj with crawl id: '+graphobj[CRAWL_ID_NAME]+'\n\n'
-        print 'startTask: now redirecting'
+        print '[\n\nstartTask: Beginning resolution for graph obj with crawl id: '+graphobj[CRAWL_ID_NAME]+'\n\n]'
+        print '[startTask: tasktype %s]' %(tasktype)
+        print '[startTask: now redirecting]'
 
+        if tasktype=='wiki':
+            return redirect(url_for('.diffPushGen', kind = kind))
+
+        ##else if defaults to :
         return redirect(url_for('.match', kind = kind))
 
     ##if the above if doesnt work, comes here
     ##TODO: .show redirect
-    temptext = 'No pending graph objects of kind '+kind+' to resolve, please go back'
-    return render_template("temp.html", homeclass="active",
-        temptext=temptext)
+    temptext = 'No pending graph objects of kind %s and tasktype %s to resolve, please go back'
+    temptext = temptext % (kind, tasktype)
+    return render_template("temp.html", temptext=temptext)
 
 
 @verifier.route('/match/<string:kind>/', methods=["GET", "POST"])
 def match(kind):
-
 
     gg = GraphHandle()
     CRAWL_ID_NAME, CURR_ID  = gg.getTwoVars(kind)
@@ -155,7 +189,41 @@ def match(kind):
 
     if session.get('kind') is None or session.get('kind') !=kind:
         flash('Kinds do not match, you must have began working in some other tab.')
-        redirect('.beginagain',kind=session.get(kind),choice='options')
+        ###XXX: tasktype?
+        return redirect(url_for('.beginagain',kind=session.get(kind), choice='options'))
+
+    #----- PATCH for tasktype -----#
+
+    ##XXX: if tasktype wiki and curr_id exist
+    ## do we really need to use this request.args??
+    ## can just if session me tasktype not none and tasktype is wiki??
+    ## or setting both - one way or another! or change all :(
+
+    if not taskTypeValidateHelper():
+        flash('Tasktypes do not match, you must have began working in some other tab.')
+        ##redirecting to begin again, so that the user can
+        ##go to his/her original task
+        ###XXX: tasktype?
+        return redirect(url_for('.beginagain',kind=session.get(kind), choice='options'))
+
+
+    if tasktype == SESSION_WIKI_VAL:
+        if session.get(CURR_ID) is None:
+            # that means wiki is set but CURR_ID is not set,
+            # (or CRAWL_ID_NAME is not set -- already check above)
+            # this should not be the case
+            # clear all session
+            # release all locks and got to .show
+            # XXX: should work fine do check
+            return redirect(url_for('.beginagain',kind=session.get(kind), choice='releaseall'))
+        else:
+            ##will have to go to diff
+            ##XXX:check this!
+            ##XXX: tasktype?
+            return redirect( url_for('.diff',kind=session.get(kind), tasktype=SESSION_WIKI_VAL) )
+
+    # --- tasktype patch end ----- #
+
 
     crawl_obj_original = gg.getCrawlObjectByID(kind, CRAWL_ID_NAME, session[CRAWL_ID_NAME], isIDString = True)
 
@@ -284,10 +352,18 @@ def diffPushGen(kind):
         flash('Kinds do not match, you must have began working in some other tab.')
         redirect('.beginagain',kind=session.get(kind),choice='options')
 
+    ## TASKTYPE PATCH -------
+    if not taskTypeValidateHelper():
+        flash('Tasktypes do not match, you must have began working in some other tab.')
+        ##redirecting to begin again, so that the user can
+        ##go to his/her original task
+        ###XXX: tasktype?
+        return redirect(url_for('.beginagain',kind=session.get(kind), choice='options'))
+    ## TASKTYPE PATCH -------
+
 
     curr_id = session.get(CURR_ID)
     crawl_id = session.get(CRAWL_ID_NAME)
-
 
     crawl_obj_original = gg.getCrawlObjectByID(kind, CRAWL_ID_NAME, session[CRAWL_ID_NAME], isIDString = True)
 
@@ -494,3 +570,4 @@ def clearVerifierSessionAll():
     for a,b in allVars:
         session.pop(a, None)
     session.pop('kind', None)
+    session.pop('tasktype',None) ##added new

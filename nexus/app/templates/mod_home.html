@@ -1,0 +1,50 @@
+<!-- extend base layout -->
+{% extends "basic.html" %}
+{% block content %}
+     <div class="starter-template" align="center" >
+        <h3>
+
+            Welcome moderator! <hr/><br/>
+
+
+            <!-- {{unresolvedTotal}} nodes to resolve in total (locked and unlocked) <br/>
+
+            {{unlockedUnresolvedTotal}} unlocked, unresolved nodes (connected and nonconnected)<br/>
+
+            {{immediateUnResolvedTotal}} connected nodes to immediately resolve (unlocked, connected, unresolved)<br/><br/> -->
+
+            <a href={{url_for('verifier.startTask', kind = 'node', tasktype='wiki')}}>
+                    <button type="submit" class="btn btn-primary">Resolve Nodes!</button>
+            </a>
+            <br/>
+            <hr/>
+
+
+            <!-- {{r_unresolvedTotal}} relations to resolve(locked and unlocked) <br/>
+            {{r_beingResolved}} relations being resolved(locked and being resolved) <br/>
+            {{r_immediateUnResolvedTotal}} relations to immediately resolve<br/> -->
+
+            <br/>
+
+
+
+
+            <a href={{url_for('verifier.startTask', kind = 'relation', tasktype='wiki')}}>
+                    <button type="submit" class="btn btn-primary">Resolve Relations!</button>
+            </a>
+            <br/>
+            <hr/>
+
+
+        </h3>
+
+
+
+    </div>
+
+
+
+<!--
+
+</div> -->
+{% endblock %}

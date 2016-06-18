@@ -12,6 +12,9 @@ class GraphHandle():
 
         self.coredb = CoreGraphDB()
 
+    def getWikiStats(self):
+        return self.crawldb.getWikiNodeCount(), self.crawldb.getWikiRelationCount()
+
     def getCrawlNodeStats(self):
         return self.crawldb.countUnresolvedNodes(), self.crawldb.countNotLockedUnresolvedNodes(), self.crawldb.countNextNodesToResolve()
 
@@ -42,6 +45,18 @@ class GraphHandle():
     def updateCrawlRelation(self, rel, uuid):
         self.crawldb.setResolvedWithRELID(self, rel, relid)
 
+    def nextNodeToModerate(self, userid):
+        node = self.crawldb.getResolvedButNotModeratedNode()
+        if node is None:
+            return None
+        node = self.crawldb.lockObject(node, userid)
+        if node is None:
+            ##was already locked if goes in this condition
+            node = self.nextNodeToModerate(userid)
+            return node
+
+        return node
+
     def nextNodeToResolve(self, userid):
 
         ##can put a check here to see if all nodes locked at moment
@@ -68,6 +83,26 @@ class GraphHandle():
 
         return node
 
+    def nextWikiNodeToResolve(self, userid):
+
+        ##TODO: same as nextNodeToResolve, join both code
+
+        node =  self.crawldb.getNextWikiNode()
+
+        if node is None:
+            ##all nodes resolved or locked -  by new changes
+            ##no node to resolve
+            return node ##returns a type py2neo.Node, can be None
+
+        node = self.crawldb.lockObject(node, userid)
+
+        if node is None:
+            ##was already locked if goes in this condition
+            node = self.nextNodeToResolve(userid)
+            return node
+
+        return node
+
     def nextHyperEdgeNodeToResolve(self, userid):
         #TODO: remove prints
         node =  self.crawldb.getNearestBestHyperEdgeNode()
@@ -77,6 +112,21 @@ class GraphHandle():
 
     def nextRelationToResolve(self, userid):
         rel =  self.crawldb.getNextRelationToResolve()
+        if rel is None:
+            return rel
+
+        rel = self.crawldb.lockObject(rel, userid)
+        if rel is None:
+            rel = self.nextRelationToResolve(userid)
+            return rel
+
+        return rel ##returns a type py2neo.relation, can be None
+
+    def nextWikiRelationToResolve(self, userid):
+
+        ##all theses method nextRelationToResolve, nextNodeToResolve, nextWikiNodeToResolve all seem same
+        ##TODO: merge
+        rel =  self.crawldb.getNextWikiRelation()
         if rel is None:
             return rel
 
@@ -443,8 +493,7 @@ class GraphHandle():
             ret.append((b,kind))
         return ret
 
-
-    def areTasksLeft(self, kind): ##kind is kind of task
+    def areCrawlTasksLeft(self, kind):
 
         ans = False
 
@@ -457,8 +506,28 @@ class GraphHandle():
 
         return ans
 
-    def nextTaskToResolve(self, kind, userid):
+    def areWikiTasksLeft(self, kind):
+        n,r  = self.getWikiStats()
+        if kind == 'node':
+            return n!=0
+        elif kind == 'relation':
+            return r!=0
 
+        print "[areWikiTasksLeft: ERROR: should not reach here]"
+        return False
+
+    def areTasksLeft(self, kind, tasktype): ##kind is kind of task
+
+        if tasktype=='crawl':
+            return self.areCrawlTasksLeft(kind)
+        elif tasktype == 'wiki':
+            return self.areWikiTasksLeft(kind)
+
+        print "[areWTasksLeft: ERROR: should not reach here]"
+        return False
+
+
+    def nextCrawlTaskToResolve(self, kind, userid):
         '''
             given a kind - node, relation, hyperedge
             calls the appropriate method
@@ -476,6 +545,37 @@ class GraphHandle():
 
         return graphobj
 
+    def nextWikiTaskToResolve(self, kind, userid):
+        '''
+            given a kind - node, relation, hyperedge
+            calls the appropriate method
+            and returns the next graph object to resolve
+        '''
+
+        graphobj = None
+
+        if kind == 'node':
+            graphobj =  self.nextWikiNodeToResolve(userid)
+        elif kind == 'relation':
+            graphobj =  self.nextWikiRelationToResolve(userid)
+
+        return graphobj
+
+    def nextTaskToResolve(self, kind, tasktype, userid):
+
+        '''
+            appendum: added tasktype too to have similar flow
+            given a kind - node, relation, hyperedge
+            calls the appropriate method
+            and returns the next graph object to resolve
+        '''
+
+        if tasktype == 'crawl':
+            return self.nextCrawlTaskToResolve(kind, userid)
+        elif tasktype == 'wiki':
+            return self.nextWikiTaskToResolve(kind, userid)
+
+        return None
 
     def getCrawlObjectByID(self, kind, id_prop, id_val, isIDString):
 
