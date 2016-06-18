@@ -137,7 +137,7 @@ class GraphHandle():
 
         rel = self.crawldb.lockObject(rel, userid)
         if rel is None:
-            rel = self.getNextWikiRelation(userid)
+            rel = self.nextWikiRelationToResolve(userid)
             return rel
 
         return rel ##returns a type py2neo.relation, can be None
