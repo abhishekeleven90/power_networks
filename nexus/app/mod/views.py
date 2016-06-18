@@ -39,8 +39,8 @@ def trial():
     copynode[CRAWL_SOURCEURL] = "http://wikipedia.com/NaveenJindal/"
     copynode[CRAWL_FETCHDATE] = copynode[CRAWL_PUSHDATE]-4000000
     copynode[CRAWL_TASKTYPE] = "wiki"
-    copynode['job'] = "farmer, business, polictican, social worker"
-    copynode.labels.add('timePerson')
+    copynode['job'] = "just farmer"
+    #copynode.labels.add('personOfTheYear')
     copynode[CRAWL_NODENUMBER] = 1 ##though idiotic
     copynode[CRAWL_EN_ID_NAME] = CRAWL_EN_ID_FORMAT %(copynode[CRAWL_TASKID], copynode[CRAWL_NODENUMBER])
 

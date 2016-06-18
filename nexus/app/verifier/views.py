@@ -19,7 +19,9 @@ def show():
 
     r_unresolvedTotal, r_beingResolved, r_immediateUnResolvedTotal = gg.getCrawlRelationStats()
 
-    n_wiki, r_wiki = gg.getWikiStats()
+    n_wiki_total, n_wiki_actual = gg.getWikiNodeStats()
+
+    r_wiki_total, r_wiki_actual = gg.getWikiRelationStats()
 
     h_unresolvedTotal, h_immediateUnResolvedTotal = gg.getCrawlHyperEdgeNodeStats()
 
@@ -27,7 +29,7 @@ def show():
         unlockedUnresolvedTotal = unlockedUnresolvedTotal,unresolvedTotal = unresolvedTotal, immediateUnResolvedTotal = immediateUnResolvedTotal,
         r_unresolvedTotal = r_unresolvedTotal, r_immediateUnResolvedTotal = r_immediateUnResolvedTotal,
         r_beingResolved = r_beingResolved, h_unresolvedTotal = h_unresolvedTotal, h_immediateUnResolvedTotal = h_immediateUnResolvedTotal,
-        n_wiki = n_wiki, r_wiki = r_wiki)
+        n_wiki_total=n_wiki_total, n_wiki_actual = n_wiki_actual, r_wiki_total = r_wiki_total, r_wiki_actual = r_wiki_actual)
 
 def getTaskType():
     from app.constants import SESSION_TASKTYPE_NAME, SESSION_CRAWL_VAL, SESSION_WIKI_VAL
@@ -69,7 +71,7 @@ def beginagain(choice, kind):
 
     if choice == 'options':
         flash('Selected options')
-        return render_template("verifier_begin_again.html", homeclass="active", kind=kind)
+        return render_template("verifier_begin_again.html", homeclass="active", kind=session.get('kind'))
 
     elif choice == 'resume':
 
@@ -79,9 +81,9 @@ def beginagain(choice, kind):
             return redirect(url_for('.show'))
 
         if session.get(CURR_ID) is None:
-            return redirect(url_for('.match', kind=kind, tasktype = tasktype))
+            return redirect(url_for('.match', kind=session.get('kind'), tasktype = session.get('tasktype') ))
 
-        return redirect(url_for('.diffPushGen', kind=kind, tasktype = tasktype))
+        return redirect(url_for('.diffPushGen', kind=session.get('kind'), tasktype = session.get('tasktype') ))
 
     elif choice == 'sessionclear':
         flash('Selected sessionclear')
@@ -160,9 +162,11 @@ def startTask(kind, tasktype): ##no point of defaulting to 'node', doesn't take 
 
         from app.constants import SESSION_TASKTYPE_NAME
 
-        print '[startTask: ckecked tasks to resolve exist for kind'+kind+'!!]'
+        print '[startTask: ckecked tasks to resolve exist for kind'+kind+'!! and tasktype:'+tasktype+' ]'
 
         graphobj = gg.nextTaskToResolve(kind, tasktype, session.get('userid')) ##XXX: similarly call: our wiki method
+
+        print '[startTask: graphobj: %s]' %(str(graphobj))
 
         session[CRAWL_ID_NAME] = graphobj[CRAWL_ID_NAME]
         session['kind'] = kind ##adding kind to session as well.
@@ -182,7 +186,7 @@ def startTask(kind, tasktype): ##no point of defaulting to 'node', doesn't take 
             return redirect(url_for('.diffPushGen', kind = kind, tasktype = tasktype))
 
         ##else if defaults to :
-        return redirect(url_for('.match', kind = kind))
+        return redirect(url_for('.match', kind = kind, tasktype = tasktype))
 
     ##if the above if doesnt work, comes here
     ##TODO: .show redirect
@@ -203,7 +207,7 @@ def match(kind):
     if session.get('kind') is None or session.get('kind') !=kind:
         flash('Kinds do not match, you must have began working in some other tab.')
         ###XXX: tasktype?
-        return redirect(url_for('.beginagain',kind=session.get(kind), choice='options'))
+        return redirect(url_for('.beginagain',kind=session.get('kind'), choice='options'))
 
     #----- PATCH for tasktype -----#
 
@@ -212,14 +216,16 @@ def match(kind):
     ## can just if session me tasktype not none and tasktype is wiki??
     ## or setting both - one way or another! or change all :(
 
+    tasktype = getTaskType()
+
     if not taskTypeValidateHelper():
         flash('Tasktypes do not match, you must have began working in some other tab.')
         ##redirecting to begin again, so that the user can
         ##go to his/her original task
         ###XXX: tasktype?
-        return redirect(url_for('.beginagain',kind=session.get(kind), choice='options'))
+        return redirect(url_for('.beginagain',kind=session.get('kind'), choice='options'))
 
-
+    from app.constants import SESSION_WIKI_VAL
     if tasktype == SESSION_WIKI_VAL:
         if session.get(CURR_ID) is None:
             # that means wiki is set but CURR_ID is not set,
@@ -228,12 +234,12 @@ def match(kind):
             # clear all session
             # release all locks and got to .show
             # XXX: should work fine do check
-            return redirect(url_for('.beginagain',kind=session.get(kind), choice='releaseall'))
+            return redirect(url_for('.beginagain',kind=session.get('kind'), choice='releaseall'))
         else:
             ##will have to go to diff
             ##XXX:check this!
             ##XXX: tasktype?
-            return redirect( url_for('.diff',kind=session.get(kind), tasktype=SESSION_WIKI_VAL) )
+            return redirect( url_for('.diffPushGen',kind=session.get('kind'), tasktype=tasktype))
 
     # --- tasktype patch end ----- #
 
@@ -284,7 +290,7 @@ def match(kind):
 
         if request.form.get('match_id') is None:
             flash('Please select a matching option to proceed')
-            return redirect(url_for('.match', kind = kind))
+            return redirect(url_for('.match', kind = kind, tasktype = tasktype))
 
 
         if request.form['match_id']=='##ID##':
@@ -293,7 +299,7 @@ def match(kind):
             ##TODO: validation if such id for this kind exists
             if idval is None or idval.strip() == '':
                 flash('nothing given in id text box')
-                return redirect(url_for('.match', kind = kind))
+                return redirect(url_for('.match', kind = kind, tasktype = tasktype))
             session[CURR_ID] = request.form['input_id']
             return redirect(url_for('.diffPushGen', kind = kind, tasktype='crawl'))
 
@@ -363,7 +369,7 @@ def diffPushGen(kind):
 
     if session.get('kind') is None or session.get('kind') !=kind:
         flash('Kinds do not match, you must have began working in some other tab.')
-        redirect('.beginagain',kind=session.get(kind),choice='options')
+        redirect('.beginagain',kind=session.get('kind'),choice='options')
 
     tasktype = getTaskType()
 

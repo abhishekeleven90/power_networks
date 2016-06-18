@@ -12,8 +12,11 @@ class GraphHandle():
 
         self.coredb = CoreGraphDB()
 
-    def getWikiStats(self):
-        return self.crawldb.getWikiNodeCount(), self.crawldb.getWikiRelationCount()
+    def getWikiNodeStats(self):
+        return self.crawldb.getTotalWikiNodeCount(), self.crawldb.getActualWikiNodeCount()
+
+    def getWikiRelationStats(self):
+        return self.crawldb.getTotalWikiRelationCount(), self.crawldb.getActualWikiRelationCount()
 
     def getCrawlNodeStats(self):
         return self.crawldb.countUnresolvedNodes(), self.crawldb.countNotLockedUnresolvedNodes(), self.crawldb.countNextNodesToResolve()
@@ -89,6 +92,8 @@ class GraphHandle():
 
         node =  self.crawldb.getNextWikiNode()
 
+        print "[nextWikiNodeToResolve: node: %s]" %(node)
+
         if node is None:
             ##all nodes resolved or locked -  by new changes
             ##no node to resolve
@@ -98,7 +103,7 @@ class GraphHandle():
 
         if node is None:
             ##was already locked if goes in this condition
-            node = self.nextNodeToResolve(userid)
+            node = self.nextWikiNodeToResolve(userid)
             return node
 
         return node
@@ -132,7 +137,7 @@ class GraphHandle():
 
         rel = self.crawldb.lockObject(rel, userid)
         if rel is None:
-            rel = self.nextRelationToResolve(userid)
+            rel = self.getNextWikiRelation(userid)
             return rel
 
         return rel ##returns a type py2neo.relation, can be None
@@ -507,11 +512,12 @@ class GraphHandle():
         return ans
 
     def areWikiTasksLeft(self, kind):
-        n,r  = self.getWikiStats()
         if kind == 'node':
-            return n!=0
+            n1,n2 =  self.getWikiNodeStats()
+            return n2!=0
         elif kind == 'relation':
-            return r!=0
+            r1, r2 = getWikiRelationStats()
+            return r2!=0
 
         print "[areWikiTasksLeft: ERROR: should not reach here]"
         return False
