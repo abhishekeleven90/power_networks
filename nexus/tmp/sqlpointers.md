@@ -9,7 +9,7 @@ let's try to keep as object oriented as possible
 basically create/insert and read methods are very common
 
 ------------------------
-#for Users: ( ALL DONE EXCEPT 7, TESTED )
+#for Users: ( ALL DONE , TESTED )
 
 1. create a user:(create)
 given userid, password - convert to token in your model - classwritten in utils, role integer, token call method in utils,  keyenabled by default 1 for role >=2 only
