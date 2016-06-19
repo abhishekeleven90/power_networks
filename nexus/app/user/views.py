@@ -206,6 +206,10 @@ def edit(kind, objid):
 	return render_template('user_edit.html', sourceurl='', obj  = copyobj, needed = needed,  labels=labels, kind=kind, objid=objid)
 
 
+@user.route('/add/<string:kind>/')
+def add(kind):
+	return kind
+
 @user.route('/history/<int:uuid>/<string:prop>/')
 def history(uuid,prop):
 	return render_template("temp.html", temptext=str(uuid)+' and prop '+prop)
