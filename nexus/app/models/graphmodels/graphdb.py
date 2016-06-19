@@ -912,7 +912,7 @@ class SelectionAlgoGraphDB(GraphDB):
     def getTotalWikiRelationCount(self):
         ##TODO: locked and not locked
         from app.constants import RESOLVEDWITHRELID, CRAWL_VERIFIEDBY
-        query = "match ()-[n]-() where exists(n.%s) and not exists(n.%s) return count(n)"
+        query = "match ()-[n]->() where exists(n.%s) and not exists(n.%s) return count(n)"
         query = query %(RESOLVEDWITHRELID, CRAWL_VERIFIEDBY)
         print query
         results = self.graph.cypher.execute(query)
@@ -921,7 +921,7 @@ class SelectionAlgoGraphDB(GraphDB):
     def getActualWikiRelationCount(self):
         ##TODO: locked and not locked
         from app.constants import RESOLVEDWITHRELID, CRAWL_VERIFIEDBY, CRAWL_LOCKEDBY
-        query = "match ()-[n]-() where exists(n.%s) and not exists(n.%s) and not exists(n.%s) return count(n)"
+        query = "match ()-[n]->() where exists(n.%s) and not exists(n.%s) and not exists(n.%s) return count(n)"
         query = query %(RESOLVEDWITHRELID, CRAWL_VERIFIEDBY, CRAWL_LOCKEDBY)
         print query
         results = self.graph.cypher.execute(query)

@@ -519,7 +519,7 @@ class GraphHandle():
             n1,n2 =  self.getWikiNodeStats()
             return n2!=0
         elif kind == 'relation':
-            r1, r2 = getWikiRelationStats()
+            r1, r2 = self.getWikiRelationStats()
             return r2!=0
 
         print "[areWikiTasksLeft: ERROR: should not reach here]"
