@@ -94,7 +94,7 @@ INDEX_TABLE_ENTITIES = 'entities'
 
 ##MULTI-VALUED PROP
 ##contains for both nodes and rels overall
-MVPLIST = ["aliases","phones","addresses"]
+MVPLIST = ["aliases","phone","address","email"]
 ##TODO: add to api validation
 
 ##GOOGLE MAPS API KEY

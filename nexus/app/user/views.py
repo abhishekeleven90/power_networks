@@ -74,7 +74,7 @@ def edit(kind, objid):
 	# bornin a prop will change to relation
 	# diedin a prop will change to relation
 	# aliases, livedin
-	##also ocuntries related to
+	##also countries related to
 
 	from app.models.graphmodels.graph_handle import GraphHandle
 	gg = GraphHandle()
@@ -93,20 +93,24 @@ def edit(kind, objid):
 
 	if request.form:
 		sourceurl = request.form.get('sourceurl')
-		print 'sssssssssssssssssssssssssss'
 
 		print sourceurl
 		print len(sourceurl)
 		flash(sourceurl)
 
 		propnames = request.form.getlist('propname[]')
+		propvals = request.form.getlist('propval[]')
+
 		orignames = request.form.getlist('actualpropname[]')
 		origvals = request.form.getlist('actualpropval[]')
-		propvals = request.form.getlist('propval[]')
+
 		##will be empty if relation
 		origlabels = request.form.getlist('origlabel[]')
 		newlabels = request.form.getlist('newlabel[]')
 
+
+
+		newobj = gg.coredb.copyObjectAsItIs(kind, copyobj)
 
 		# ignore uuid
 		# if props with same name again , consider later one
@@ -138,22 +142,58 @@ def edit(kind, objid):
 					newobj[orignames[i].strip()] = origvals[i].strip()
 
 
-		if sourceurl is None or len(sourceurl)<20:
-			flash('sourceurl check again')
-			return render_template('wiki_form.html', sourceurl =sourceurl,  obj = newobj, newpropdict=newpropdict, needed = needed, labels=labels, newlabels=newlabelsnonempty, kind=kind, objid=objid)
+		flag = False
+		msg = ""
+
+		if sourceurl is None or len(sourceurl)<10:
+			msg = msg + 'sourceurl check again' +';;;'
+			flag = True
+
+		for prop in newpropdict:
+			if prop in newobj:
+				msg = msg + ' Added a custom prop that has same name as in our required prop list' +';;;'
+				flag = True
+
+		if flag:
+			flash(msg)
+			return render_template('user_edit.html', sourceurl =sourceurl,  obj = newobj, newpropdict=newpropdict, needed = needed, labels=labels, newlabels=newlabelsnonempty, kind=kind, objid=objid)
+
 		else:
+
+			nayaobj = gg.coredb.copyObjectAsItIs(kind, newobj)
+
+			for label in newlabelsnonempty:
+				nayaobj.labels.add(label)
+
+			for prop in newpropdict:
+				nayaobj[prop] = newpropdict[prop]
+
+			for prop in newobj.properties:
+				if len(str(newobj[prop]).strip())==0:
+					nayaobj[prop]=None
+
+			##adding MVP patch for wiki:
+			from app.constants import MVPLIST
+			for prop in MVPLIST:
+				if prop in nayaobj:
+					nayaobj[prop] = nayaobj[prop].split(',')
+
+			###XXX:
+			##make a json TODO
+			##validate json api call normal without token
+			##whould give true
+			#json object to be made at this point for this object remove uuid and stuff
+			###and then validate that json using the code in api, when merge! TODO
+
+			ID_NAME = gg.getCoreIDName(kind)
+			curr_id = nayaobj[ID_NAME]
+			nayaobj[ID_NAME] = None
+
+			someobj = gg.wikiObjCreate(kind, curr_id,  nayaobj, session['userid'], sourceurl)
+
+			flash(str(someobj))
+
 			flash('Successfully pushed for moderation')
-
-			##now we will use all labels
-			##but will call the method as we were doing in mod
-			##to use only conf_props
-			##name, resolvewdithuuid will be ethere
-			##and then push to db --- node
-
-			##use api method: some hack: our code from db if key is for user taskid is ok and iscralwed=0
-			##something to link with api call and push from flask code! :|
-
-
 
 			if kind=='node':
 				return redirect(url_for('readEntity',uuid=objid))

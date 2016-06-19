@@ -489,6 +489,9 @@ class GraphHandle():
 
         return CRAWL_ID_NAME, CURR_ID
 
+    def getIDForKind():
+        pass
+
     def getAllVars(self):
         kinds = ['node','relation']
         ret = []
@@ -750,3 +753,58 @@ class GraphHandle():
             msg = "Graph object's lock is not with you. Begin again "
 
         return lockprop, msg
+
+    def wikiObjCreate(self, kind, curr_id, obj, userid, sourceurl):
+        '''
+            would be a wrapper for a node, a dummy object
+            not bound to any graph - crawldb or coredb
+            validate the obj for prop and label error before sending here
+        '''
+
+        from app.utils.commonutils import Utils
+        from app.constants import CRAWL_TASKID, CRAWL_PUSHDATE, CRAWL_PUSHEDBY, CRAWL_TASKTYPE
+        from app.constants import CRAWL_SOURCEURL, CRAWL_FETCHDATE, CRAWL_EN_ID_NAME, RESOLVEDWITHUUID
+        from app.constants import CRAWL_NODENUMBER, CRAWL_EN_ID_FORMAT
+
+
+        CURR_ID, CRAWL_ID_NAME = self.getTwoVars(kind)
+
+        if kind=='node':
+            obj[RESOLVEDWITHUUID] = curr_id
+        elif kind=='relation':
+            obj[RESOLVEDWITHRELID] = curr_id
+        
+        obj[CURR_ID] = None ##remove for now
+
+
+        obj[CRAWL_PUSHEDBY] = userid
+        obj[CRAWL_PUSHDATE] = Utils.currentTimeStamp()
+
+        from app.models.dbmodels.tasks import Tasks
+        task = Tasks.getWikiTaskByUser(userid)
+
+        ##will throw an error if not in db, it will be our problem, not anybody's
+        obj[CRAWL_TASKID] =  task.taskid##get from db for thi user
+
+        obj[CRAWL_SOURCEURL] = sourceurl
+        obj[CRAWL_FETCHDATE] = obj[CRAWL_PUSHDATE]
+        obj[CRAWL_TASKTYPE] = "wiki"
+
+        #obj.labels.add('personOfTheYear')
+        obj[CRAWL_NODENUMBER] = int(Utils.currentTimeStamp()) ##though idiotic, we wont be needing it for this!
+        ##but for generating a unique name na!
+
+        obj[CRAWL_EN_ID_NAME] = CRAWL_EN_ID_FORMAT %(obj[CRAWL_TASKID], obj[CRAWL_NODENUMBER])
+
+        #flash(str(node))
+        #flash(obj)
+
+        ##Decided not doing:  diff and check and use that only with labels intact
+        ##if prop not in conf_props or new_props use it else set to None for us
+        ##this will be automatically handled by diff btw!
+
+        self.crawldb.graph.create(obj)
+        # copyobj =obj
+        copyobj = self.getCrawlObjectByID('node',CRAWL_EN_ID_NAME,obj[CRAWL_EN_ID_NAME],True)
+        #flash(copyobj)
+        return obj

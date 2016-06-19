@@ -89,6 +89,8 @@ class Tasks:
 
     def getSelfFromDB(self):
 
+        ##TODO: use the where clause!
+
         self.dbwrap.connect()
         try:
             cursor = self.dbwrap.cursor()
@@ -114,11 +116,45 @@ class Tasks:
         self.dbwrap.commitAndClose()
         return self
 
+    def getSelfFromDBWhere(self, where):
+
+        self.dbwrap.connect()
+        try:
+            cursor = self.dbwrap.cursor()
+        except:
+            print "[User object] In update"
+            print "Cannot get cursor"
+            self.dbwrap.commitAndClose()
+
+        query = "SELECT ownerid, taskid, name, description, iscrawled, createdate \
+                 FROM " + self.tablename + " where "+where
+
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        assert(len(rows) == 1)
+        for r in rows:
+            self.ownerid = r[0]
+            self.taskid = r[1]
+            self.name = r[2]
+            self.description = r[3]
+            self.iscrawled = r[4]
+            self.createdate = r[5]
+
+        self.dbwrap.commitAndClose()
+        return self
+
     @classmethod
     def getTask(cls, taskid):
         tsk = Tasks()
         tsk.taskid = taskid
         return tsk.getSelfFromDB()
+
+    @classmethod
+    def getWikiTaskByUser(cls, ownerid):
+        task = Tasks()
+        task.ownerid = ownerid
+        where = "ownerid='%s' and iscrawled=0 limit 1" %(ownerid)
+        return task.getSelfFromDBWhere(where)
 
     def __str__(self):
         print '[ Task: taskid: '+str(self.taskid)+' name: '\

@@ -37,13 +37,15 @@ def trial():
     copynode[CRAWL_PUSHDATE] = Utils.currentTimeStamp()
     #XXX: for user ownerid = session['userid'] and iscrawled = 0, get the unique row
     ##that's our taskid
-    copynode[CRAWL_TASKID] = 3
+    copynode[CRAWL_TASKID] = 3 ##get from db for thi user
     copynode[CRAWL_SOURCEURL] = "http://wikipedia.com/NaveenJindal/"
     copynode[CRAWL_FETCHDATE] = copynode[CRAWL_PUSHDATE]-4000000
     copynode[CRAWL_TASKTYPE] = "wiki"
     copynode['job'] = "just farmer"
     #copynode.labels.add('personOfTheYear')
-    copynode[CRAWL_NODENUMBER] = 1 ##though idiotic
+    copynode[CRAWL_NODENUMBER] = int(Utils.currentTimeStamp()) ##though idiotic, we wont be needing it for this!
+    ##but for generating a unique name na!
+    
     copynode[CRAWL_EN_ID_NAME] = CRAWL_EN_ID_FORMAT %(copynode[CRAWL_TASKID], copynode[CRAWL_NODENUMBER])
 
     #flash(str(node))
