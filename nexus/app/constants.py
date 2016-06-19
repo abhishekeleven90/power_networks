@@ -63,6 +63,7 @@ CRAWL_SOURCEURL = '_sourceurl_'
 CRAWL_TASKID = '_taskid_'
 CRAWL_TASKTYPE = '_tasktype_'
 CRAWL_NODENUMBER = '_nodenumber_'
+CRAWL_RELNUMBER = '_relnumber_'
 CRAWL_EN_ID_FORMAT = "en_%s_%s"
 LABEL_HYPEREDGE_NODE = 'hyperedgenode'
 LABEL_ENTITY = 'entity'

@@ -14,7 +14,7 @@ import peewee
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if 'userid' not in session: 
+        if 'userid' not in session:
             flash('Please login first to use this')
             return redirect(url_for('login', next=request.url))
         return f(*args, **kwargs)
@@ -29,7 +29,7 @@ def role_required(*roles):
             return f(*args, **kwargs)
         return wrapped
     return wrapper
-    
+
 @app.route('/')
 @app.route('/home/')
 @app.route('/index/')
@@ -50,7 +50,7 @@ def login():
     #server.starttls()
     server.login('abhishekeerie1234@gmail.com','')
     server.sendmail(fromaddr, toaddrs, msg)
-    smtpObj.sendmail('abhishekeerie1234@gmail.com', ['abhiagar90@gmail.com'], 'New msg')         
+    smtpObj.sendmail('abhishekeerie1234@gmail.com', ['abhiagar90@gmail.com'], 'New msg')
     server.quit()
     print "Successfully sent email"
     '''
@@ -60,7 +60,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         try:
-            someobj = Users.get(Users.userid == form.emailid.data, Users.password == 
+            someobj = Users.get(Users.userid == form.emailid.data, Users.password ==
                 hashlib.md5(form.password.data).hexdigest())
             session['userid']=someobj.userid
             session['role']=someobj.role
@@ -70,7 +70,7 @@ def login():
         except:
             flash('Details do not match')
     else:
-        form_error_helper(form) 
+        form_error_helper(form)
     return render_template("login2.html", loginclass="active", signincss=False, form = form)
 
 @app.route('/logout/',methods=["GET","POST"])
@@ -81,7 +81,7 @@ def logout():
     return render_template("temp.html", loginclass="active", signincss=False, temptext="Successfully logged out!")
 
 #get to land first on signup page, post to actually sign up
-@app.route('/signup/', methods=["GET","POST"]) 
+@app.route('/signup/', methods=["GET","POST"])
 def signup():
     form = RegisterationForm()
     if form.validate_on_submit():
@@ -89,7 +89,7 @@ def signup():
         return redirect('home')
     else:
         form_error_helper(form)
-    return render_template("signup.html", signupclass="active", signincss=True, form=form) 
+    return render_template("signup.html", signupclass="active", signincss=True, form=form)
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -118,12 +118,12 @@ def search():
     name = request.form.get('query')
     if name is None or name == '':
         return render_template("search_results.html", uuids= [], name='', nodes = [], labelstr ='', keywordstr = '', numrows = 10)
-        
+
     rows = request.form.get('rows')
 
     if rows is None or rows == '':
         rows = 10
-    
+
     ##TODO: more validation for labels
     labelstr = request.form.get('labels')
 
@@ -175,8 +175,8 @@ def readEntity(uuid):
     gg = CoreGraphDB()
     node = gg.entity(uuid)
     #3missing is how to better represent it online
-    return render_template("entity_read.html", 
-        homeclass="active", 
+    return render_template("entity_read.html",
+        homeclass="active",
         uuid=str(uuid),
         entity=str(node),node=node)
 
@@ -193,7 +193,7 @@ def readRelation(relid):
     gg = CoreGraphDB()
     rel = gg.relation(relid)
     #missing is how to better represent it online
-    return render_template("relation_read.html", homeclass="active", 
+    return render_template("relation_read.html", homeclass="active",
         rel=rel);
 
 @app.route('/hyperedgenode/<int:henid>/')
@@ -206,8 +206,8 @@ def readHyperEdgeNode(henid):
     gg = CoreGraphDB()
     node = gg.hyperedgenode(henid)
     #3missing is how to better represent it online
-    return render_template("entity_read.html", 
-        homeclass="active", 
+    return render_template("entity_read.html",
+        homeclass="active",
         uuid=str(uuid),
         entity=str(node),node=node)
 
@@ -223,7 +223,7 @@ def conn():
 
 @app.route('/trial/')
 def trial():
-    
+
     from app.models.dbmodels.idtables import Entity, Link
     from app.models.graphmodels.graphdb import CoreGraphDB
 
@@ -236,7 +236,7 @@ def trial():
         #print currid
 
         currnode = coredb.getNodeByInternalId(currid)
-        
+
         #print currnode['uuid']
 
         en = Entity(currnode['name'])
@@ -259,7 +259,7 @@ def alarm(time, sched):
     from app.models.graphmodels.graphdb import SelectionAlgoGraphDB
     from app.constants import CRAWl_JOB_INTERVAL
 
-    
+
     gg = SelectionAlgoGraphDB()
     nodes, rels = gg.releaseLocks()
     if nodes!=0 or rels!=0:
@@ -275,13 +275,3 @@ def alarm(time, sched):
 #    sched.start()
 #    from datetime import datetime
 #    alarm(datetime.now(),sched)
-
-
-
-
-
-
-
-
-
-

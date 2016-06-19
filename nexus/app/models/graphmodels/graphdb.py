@@ -147,6 +147,13 @@ class GraphDB:
         #             naya[prop] = rel[prop]
         #         return naya
 
+    def copyObjectAsItIs(self, kind, obj):
+        if kind == 'relation':
+            return self.copyRelationAsItIs(obj)
+        if kind == 'node':
+            return self.copyNodeAsItIs(obj)
+        return None
+
     def copyRelationWithoutMeta(self, rel, rel_exceptions = [], node_exceptions = []):
         return self.copyRelation(rel, copymeta = False, rel_exceptions = rel_exceptions, node_exceptions = node_exceptions)
 
