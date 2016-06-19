@@ -176,20 +176,22 @@ def edit(kind, objid):
 			from app.constants import MVPLIST
 			for prop in MVPLIST:
 				if prop in nayaobj:
-					nayaobj[prop] = nayaobj[prop].split(',')
+					aliaslist = nayaobj[prop].split(',')
+					nayaobj[prop] = []
+					for alias in aliaslist:
+						if len(str(alias))>0:
+							nayaobj[prop].append(alias)
 
 			###XXX:
+			##jsonvalidatehelper
 			##make a json TODO
 			##validate json api call normal without token
 			##whould give true
 			#json object to be made at this point for this object remove uuid and stuff
 			###and then validate that json using the code in api, when merge! TODO
 
-			ID_NAME = gg.getCoreIDName(kind)
-			curr_id = nayaobj[ID_NAME]
-			nayaobj[ID_NAME] = None
 
-			someobj = gg.wikiObjCreate(kind, curr_id,  nayaobj, session['userid'], sourceurl)
+			someobj = gg.wikiObjCreate(kind, nayaobj, session['userid'], sourceurl)
 
 			flash(str(someobj))
 

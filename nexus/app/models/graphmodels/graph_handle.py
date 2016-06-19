@@ -754,57 +754,80 @@ class GraphHandle():
 
         return lockprop, msg
 
-    def wikiObjCreate(self, kind, curr_id, obj, userid, sourceurl):
+    def wikiObjectCreateHelper(self, kind, obj, userid, sourceurl):
+        '''
+            Note: works directly on obj, has been used like that
+            working directly on the given object as
+            assumption that the object is already not bound and copied
+            Just changes the object, doesn't create/update
+        '''
+
+        from app.utils.commonutils import Utils
+        from app.constants import CRAWL_TASKID, CRAWL_PUSHDATE, CRAWL_PUSHEDBY, CRAWL_TASKTYPE
+        from app.constants import CRAWL_SOURCEURL, CRAWL_FETCHDATE, CRAWL_EN_ID_NAME, CRAWL_REL_ID_NAME, RESOLVEDWITHUUID, RESOLVEDWITHRELID
+        from app.constants import CRAWL_NODENUMBER, CRAWL_RELNUMBER, CRAWL_EN_ID_FORMAT, CRAWL_REL_ID_FORMAT
+
+        ##common for both kinds of objects
+        ID_NAME = self.getCoreIDName(kind)
+        curr_id = obj[ID_NAME]
+        obj[ID_NAME] = None
+
+        from app.models.dbmodels.tasks import Tasks
+        task = Tasks.getWikiTaskByUser(userid)
+        ##will throw an error if not in db, it will be our problem, not anybody's - would only occur if the at time of user creation, entry not updated here
+        obj[CRAWL_TASKID] =  task.taskid##get from db for thi user
+
+        if kind=='node':
+            obj[RESOLVEDWITHUUID] = curr_id
+            obj[CRAWL_NODENUMBER] = int(Utils.currentTimeStamp()) ##though idiotic, we wont be needing it for this!
+            obj[CRAWL_EN_ID_NAME] = CRAWL_EN_ID_FORMAT %(obj[CRAWL_TASKID], obj[CRAWL_NODENUMBER])
+        elif kind=='relation':
+            obj[RESOLVEDWITHRELID] = curr_id
+            obj[CRAWL_RELNUMBER] = int(Utils.currentTimeStamp())
+            obj[CRAWL_REL_ID_NAME] = CRAWL_REL_ID_FORMAT %(obj[CRAWL_TASKID], obj[CRAWL_RELNUMBER])
+
+        obj[CRAWL_PUSHEDBY] = userid
+        obj[CRAWL_PUSHDATE] = Utils.currentTimeStamp()
+
+
+        obj[CRAWL_SOURCEURL] = sourceurl
+        obj[CRAWL_FETCHDATE] = obj[CRAWL_PUSHDATE] ##since wiki work! dates same!
+        obj[CRAWL_TASKTYPE] = "wiki"
+
+        return obj,curr_id
+
+    def wikiObjCreate(self, kind, obj, userid, sourceurl):
         '''
             would be a wrapper for a node, a dummy object
             not bound to any graph - crawldb or coredb
             validate the obj for prop and label error before sending here
         '''
 
-        from app.utils.commonutils import Utils
-        from app.constants import CRAWL_TASKID, CRAWL_PUSHDATE, CRAWL_PUSHEDBY, CRAWL_TASKTYPE
-        from app.constants import CRAWL_SOURCEURL, CRAWL_FETCHDATE, CRAWL_EN_ID_NAME, RESOLVEDWITHUUID
-        from app.constants import CRAWL_NODENUMBER, CRAWL_EN_ID_FORMAT
+        obj,curr_id = self.wikiObjectCreateHelper(kind,obj,userid,sourceurl)
 
 
-        CURR_ID, CRAWL_ID_NAME = self.getTwoVars(kind)
+        if kind=='relation':
 
-        if kind=='node':
-            obj[RESOLVEDWITHUUID] = curr_id
-        elif kind=='relation':
-            obj[RESOLVEDWITHRELID] = curr_id
-        
-        obj[CURR_ID] = None ##remove for now
+            start_node,start_id = self.wikiObjectCreateHelper('node',obj.start_node,userid,sourceurl)
 
+            end_node, end_id = self.wikiObjectCreateHelper('node',obj.end_node,userid,sourceurl)
 
-        obj[CRAWL_PUSHEDBY] = userid
-        obj[CRAWL_PUSHDATE] = Utils.currentTimeStamp()
+        self.crawldb.graph.create(obj)
+        ##first will have to create to use setResolvedWithID
 
-        from app.models.dbmodels.tasks import Tasks
-        task = Tasks.getWikiTaskByUser(userid)
+        self.setResolvedWithID('node',obj.start_node,start_id,'nexusbot')
 
-        ##will throw an error if not in db, it will be our problem, not anybody's
-        obj[CRAWL_TASKID] =  task.taskid##get from db for thi user
+        self.setResolvedWithID('node',obj.end_node,end_id,'nexusbot')
 
-        obj[CRAWL_SOURCEURL] = sourceurl
-        obj[CRAWL_FETCHDATE] = obj[CRAWL_PUSHDATE]
-        obj[CRAWL_TASKTYPE] = "wiki"
-
-        #obj.labels.add('personOfTheYear')
-        obj[CRAWL_NODENUMBER] = int(Utils.currentTimeStamp()) ##though idiotic, we wont be needing it for this!
-        ##but for generating a unique name na!
-
-        obj[CRAWL_EN_ID_NAME] = CRAWL_EN_ID_FORMAT %(obj[CRAWL_TASKID], obj[CRAWL_NODENUMBER])
-
-        #flash(str(node))
-        #flash(obj)
+        # print str(obj.end_node)
 
         ##Decided not doing:  diff and check and use that only with labels intact
         ##if prop not in conf_props or new_props use it else set to None for us
         ##this will be automatically handled by diff btw!
 
-        self.crawldb.graph.create(obj)
-        # copyobj =obj
-        copyobj = self.getCrawlObjectByID('node',CRAWL_EN_ID_NAME,obj[CRAWL_EN_ID_NAME],True)
+        # self.crawldb.graph.create(obj)
+
+        # copyobj = self.getCrawlObjectByID('node',CRAWL_EN_ID_NAME,obj[CRAWL_EN_ID_NAME],True)
+
         #flash(copyobj)
         return obj
