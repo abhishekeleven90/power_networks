@@ -102,10 +102,10 @@
             position: absolute;
         }
       #container {
-           height: 1000px;
-           width: 1000px;
+           height: 600px;
            border: 10px;
            position: relative;    
+           overflow: hidden;
        }
      .sigma-tooltip {
        max-width: 300px;
@@ -281,40 +281,36 @@
         edgeLabelThreshold: 2.0,
     }});
 
+    var label_colors = {
+        'Person': 'rgb(218, 37, 104)',
+        'Organization': 'rgb(188,218,37)'
+    };
+
+    function getLabelClass(label){
+        //assuming mutually exlusive class
+        var mapping = {
+            'Person': ['politician', 'businessperson',
+                        'ias'],
+            'Organization': ['company', 'party',
+                        'constituency']
+        };
+        if (mapping['Person'].indexOf(label) != -1)
+            return 'Person';
+        else return 'Organization';
+    }
 
     function customiseGraph(s) {            
         s.graph.nodes().forEach(function(n) {       
-            if (n.neo4j_labels[0] == 'Politician'){
-            n.color = '#4acfc8'; 
-            }
-            if (n.neo4j_labels[0] == 'Party'){
-            n.color = '#FF6C7C';
-            }
-            //add more colors according to various labels
-            if (n.neo4j_labels[0] == 'Politician')
-                n.label = n.neo4j_data.Candidate;
-            else n.label = n.neo4j_data.Party;
+            var node_class = getLabelClass(n.neo4j_labels[0]);
+            n.color = label_colors[node_class]; 
+            
+            n.data = {'name':n.neo4j_data['name']
+                        , 'uuid':n.neo4j_data['uuid']};
 
-            n.keys = [];
-            n.vals = [];
-            var ptable = [];
-            for(var k in n.neo4j_data){
-                //n.keys.push(k);
-                //n.vals.push(n.neo4j_data[k]);
-                ptable.push({key: k, val: n.neo4j_data[k]});
-
-            }
-            //console.log("Table length="+ptable.length);
-            n.data = {props:ptable};
-            n.data.getkey = function(){
-                return this.key;
-            }
-            n.data.getval = function(){
-                return this.val;
-            }
-            console.log(n.data);
+            console.log('Node color' + n.color);
 
             n.type = n.neo4j_labels[0];
+            console.log("type=" + n.type)
             n.size = 16.0;
             n.fixed = false;         
     });
@@ -336,7 +332,8 @@
         ' <div class="sigma-tooltip-header">{{type}}</div>' +
         '  <div class="sigma-tooltip-body">' +
         '    <table>' +
-        '      {{#data.props}}<tr><th>{{data.getkey}}</th> <td>{{data.getval}}</td></tr> {{/data.props}}' +
+        '      <tr><th>uuid</th> <td>{{data.uuid}}</td></tr> ' +
+        '      <tr><th>name</th> <td>{{data.name}}</td></tr> ' +
         '    </table>' +
         '  </div>' +
         '  <div class="sigma-tooltip-footer">Connections: {{degree}}</div>',
@@ -368,10 +365,11 @@
         ratio: 1.9
         });
     initSigma.refresh();
-    }  
+    }
     
+    console.log('cypher query-' + cyphertext);
     sigma.neo4j.cypher(
-            { url: 'http://{{CORE_GRAPH_HOST}}:{{CORE_GRAPH_PORT}}', user: '{{CORE_GRAPH_USER}}', password: 'CORE_GRAPH_PASSWORD' },
+            { url: 'http://{{CORE_GRAPH_HOST}}:{{CORE_GRAPH_PORT}}', user: '{{CORE_GRAPH_USER}}', password: '{{CORE_GRAPH_PASSWORD}}' },
             cyphertext,
             initSigma,
             customiseGraph,

@@ -6,7 +6,7 @@ MYSQLDBUSER = 'root'
 MYSQLDBPASSWORD = 'yoyo'
 
 ##MAIN DB  VARIABLES
-CORE_DB_HOST = 'localhost'
+CORE_DB_HOST = '10.237.27.151'
 CORE_DB_USER = 'neo4j'
 CORE_DB_PORT = '7474' ##fot http this is
 CORE_DB_PASSWORD = 'yoyo'

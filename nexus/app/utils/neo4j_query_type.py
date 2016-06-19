@@ -1,10 +1,13 @@
 import requests
 import json
 from termcolor import colored
+from app.constants import CORE_GRAPH_HOST, CORE_GRAPH_PORT, AUTHORIZATION_HASH
 
 
 def isReadorWrite(query):
-    url = "http://localhost:7474/db/data/transaction/commit"
+    url = "http://" + CORE_GRAPH_HOST + ":" + CORE_GRAPH_PORT +\
+          "/db/data/transaction/commit"
+
     query = "explain "+query  #append an explain keyword to cypher query
     payload = {"statements":
             [{"statement": query}
@@ -13,7 +16,7 @@ def isReadorWrite(query):
     headers = {
             'accept': "application/json; charset=UTF-8",
             'content-type': "application/json",
-            'authorization': "Basic bmVvNGo6YWRtaW4=",
+            'authorization': AUTHORIZATION_HASH,
             'cache-control': "no-cache",
             }
 
