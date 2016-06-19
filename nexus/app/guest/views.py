@@ -22,10 +22,11 @@ def temp2():
     print 'will be here if all fine'
     return render_template("temp.html", homeclass="active", temptext ='You are here '+en2.name+' '+en2.labels)
 
-@guest.route('/uuid/')
-def uuid():
+@guest.route('/uuid/<int:id>')
+def uuid(id):
     print 'uuid uuid uuid huuid'
     from app.models.dbmodels.uuid import UuidTable, UuidLabels, UuidProps
+    
     #First check reltable
     #r = UuidTable(1111111, name='Abhishek')
     #r.create()
@@ -45,8 +46,8 @@ def uuid():
     #print r3
 
     #Last, check relprops ##TODO
-    r = UuidProps(changeid=5, uuid=34567, propname='name',changetype=1, newpropvalue='Abhishek Agarwal')
-    r.create()
+    #r = UuidProps(changeid=5, uuid=34567, propname='name',changetype=1, newpropvalue='Abhishek Agarwal')
+    #r.create()
 
     # r2 = UuidProps(changeid=2, uuid=1111111, propname='mama',
     #                oldpropvalue='ert', newpropvalue='ort', changetype=1)
@@ -54,7 +55,7 @@ def uuid():
     # r3 = UuidProps.getUuidProps(2)
     # print r3
     # print 'should be here if all works fine'
-    print type(r)
+    #print type(r)
 
     return render_template("temp.html", homeclass="active", temptext='You are here ' + str(r))
 
