@@ -16,18 +16,20 @@
       {% set action = url_for('user.edit', kind=kind) %}
     {% endif %}
 
+    <p><h4>
+          {% if work=='edit'  %}
+            [Edit] {{kind}}:{{objid}}
+          {% else %}
+            [Add] {{kind}}
+          {% endif %}
+    </h4>
+    <hr/></p>
+
     <form class="form-horizontal" method="post" action="{{action}}">
 
-      {% if kind == 'relation' %}
-        <input type="hidden" name="startnodeid"   value="{{obj.start_node['uuid']}}"/>
-        <input type="hidden" name="endnodeid"   value="{{obj.end_node['uuid']}}"/>
-        <input type="hidden" name="reltype"   value="{{obj.type}}"/>
-        {{form.csrf_token}}
-
-      {% endif %}
-
-
+    <div class="row">
       <div class="col-xs-9">
+
           <div class="input-group">
               <span class="input-group-addon">
                 source-url**
@@ -37,7 +39,55 @@
           </div>
           <!-- /input-group -->
       </div>
+    </div>
+
       <br/>
+      <br/>
+
+      {% if kind == 'relation' %}
+
+        {{form.csrf_token}}
+
+
+        <div class="row">
+          <div class="col-xs-9">
+              <div class="input-group">
+                  <span class="input-group-addon">
+                    start_node
+                </span>
+                  <input type="number" name="startnodeid" class="form-control input-sm" aria-label="..." value = "{{obj.start_node['uuid']}}" readonly>
+              </div>
+              <!-- /input-group -->
+          </div>
+      </div><br/>
+
+      <div class="row">
+        <div class="col-xs-9">
+            <div class="input-group">
+                <span class="input-group-addon">
+                  end_node
+              </span>
+                <input type="number" name="endnodeid" class="form-control input-sm" aria-label="..." value = "{{obj.end_node['uuid']}}" readonly>
+            </div>
+            <!-- /input-group -->
+        </div>
+      </div><br/>
+
+
+      <div class="row">
+        <div class="col-xs-9">
+            <div class="input-group">
+                <span class="input-group-addon">
+                  rel-type
+              </span>
+                <input type="text" name="reltype" class="form-control input-sm" aria-label="..." value = "{{obj.type}}" readonly>
+            </div>
+            <!-- /input-group -->
+        </div>
+      </div><br/>
+
+
+      {% endif %}
       <br/>
 
 {% if kind=='node' %}
@@ -78,7 +128,7 @@
 
 
 
-          <legend>Edit existing props</legend>
+          <legend>Edit recommended/existing props</legend>
 
           {% for prop in obj.properties %}
 

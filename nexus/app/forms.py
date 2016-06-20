@@ -23,6 +23,10 @@ class LoginForm(Form):
     ##rem_me = BooleanField('Remember me')
     ##TODO: some time afterwards
 
+class URLForm(Form):
+    emailid = EmailField('Email', validators=[validators.DataRequired(), validators.Email()])
+    url = StringField('URL',validators=[validators.DataRequired(),validators.URL('Not a valid URL')])
+
 class EditEntityForm(Form):
     new_entity = TextAreaField('new_entity', validators=[validators.Required()])
 

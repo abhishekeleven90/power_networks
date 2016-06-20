@@ -34,7 +34,7 @@ def show():
 # 	from app.graphdb import *
 # 	node = entity(uuid)
 # 	entity = str(node)
-#
+
 # 	form = EditEntityForm()
 # 	if form.validate_on_submit():
 # 		try:
@@ -53,18 +53,46 @@ def show():
 # 	return render_template("edit_entity.html", homeclass="active",uuid=str(uuid), entity=entity, form=form)
 
 
-##TODO: check if the ending forward slashes are there for all
+##TODO: this code here is an experiment with wtf validation without actually getting data form a form
 ## do it when checking
 @user.route('/temp/')
 def temp():
-	##fetch current details for now
-	##show these current details
-	##edit form of entity
-	##wait for moderation
+	currdict = {}
+	currdict['emailid']  = 'abhi@gmail.com'
+	currdict['url'] = 'http://bit.ly'
+	from werkzeug.datastructures import MultiDict
+	from app.forms import URLForm
+	formdata = MultiDict(mapping=currdict)
+	form = URLForm(formdata, csrf_enabled=False)
+
+	if form.validate():
+		return "yes"
+
+	else:
+		# msg = ""
+		# for prop in form:
+		# 	print prop.name+" " +prop.data
+		# 	msg = msg + str(prop.data) + " "
+		#
+		# # msg = msg + form.emailid.data+" "+form.password.data+" "+"no"
+		# # msg = msg + str(form.emailid.errors)
+		# # msg =  msg + str(form.password.errors)
+		msg = ''
+		msg =  msg + str(form.errors)
+		return msg
 	return render_template("temp.html", temptext='temp')
 
+##to be done for bypassing csrf, but not req now
+def mycustomvalid(form, dict):
+	##but can be used when constructin isntance, csrf_enabled=False
+	errors = []
+	for prop in dict:
+		for err in form[prop].errors:
+			errors.append(err)
+	return errors
 
-def wikiHelper(kind, obj, objid):
+
+def wikiHelper(kind, obj, objid, work):
 
 	from app.models.graphmodels.graph_handle import GraphHandle
 	# from py2neo import Node, Relationship
@@ -84,14 +112,13 @@ def wikiHelper(kind, obj, objid):
 		from app.forms import AddRelationForm
 		form = AddRelationForm()
 
-	print 'editForm' in request.form
-	print 'hjshkjahkjhdkhkjdhkdhjk'
-	if 'editForm' in request.form: ##life saviour line!
+	if 'editForm' in request.form: ##life saviour line! ##editForm is the submit button!
 
+		##TODO: remove uselsss flashes from here
 		sourceurl = request.form.get('sourceurl')
 
-		print sourceurl
-		print len(sourceurl)
+		# print sourceurl
+		# print len(sourceurl)
 		flash(sourceurl)
 
 		propnames = request.form.getlist('propname[]')
@@ -157,7 +184,7 @@ def wikiHelper(kind, obj, objid):
 
 		if flag:
 			flash(msg)
-			return render_template('user_edit.html', sourceurl =sourceurl,  obj = newobj, newpropdict=newpropdict, needed = needed, labels=labels, newlabels=newlabelsnonempty, kind=kind, objid=objid)
+			return render_template('user_edit.html', sourceurl =sourceurl, obj = newobj, newpropdict=newpropdict, needed = needed, labels=labels, newlabels=newlabelsnonempty, kind=kind, objid=objid, form = form, work=work)
 
 		else:
 
@@ -207,7 +234,7 @@ def wikiHelper(kind, obj, objid):
 				return redirect(url_for('home'))
 
 
-	return render_template('user_edit.html', sourceurl='', obj  = copyobj, needed = needed,  labels=labels, kind=kind, objid=objid, form=form)
+	return render_template('user_edit.html', sourceurl='', obj  = copyobj, needed = needed,  labels=labels, kind=kind, objid=objid, form=form, work = work)
 
 
 
@@ -243,6 +270,10 @@ def edit(kind, objid):
 		obj = gg.getOriginalCoreObject(kind, objid)
 	else:
 		if kind=='node':
+			##by default giving entity label,
+			##this is basically a hack
+			##but if any more label, then have to have a pre page
+			##as in relation
 			obj=Node("entity")
 		elif kind=="relation":
 
@@ -250,42 +281,25 @@ def edit(kind, objid):
 			form = AddRelationForm()
 			print request.method
 
-			print 'uuuuuuuuuuuuuuuuuuuuuuuuuuu111111111111'
 
 			if form.validate_on_submit():
-
-				print 'uuuuuuuuuuuuuuuuuuuuuuuuuuu22222222222222'
 
 				starnodeid = form.startnodeid.data
 				endnodeid = form.endnodeid.data
 				reltype = form.reltype.data
 
-
-				print starnodeid
-				print endnodeid
-				print reltype
-
-				# bidirectional =  str(bool(request.form['bidirectional'])) ##TODO: check afterwards
-				# print starnodeid, endnodeid, reltype
-
 				startnode = gg.getOriginalCoreObject('node',starnodeid)
-				print startnode
 				endnode = gg.getOriginalCoreObject('node', endnodeid)
 				obj = Relationship(startnode, reltype, endnode)
 
-				print 'uuuuuuuuuuuuuuuuuuuuu333333333'
-				print 'here'
-
-				print request.form['startnodeid']
-
-				return wikiHelper(kind, obj, objid)
+				return wikiHelper(kind, obj, objid, work)
 			else:
 				form_error_helper(form)
 
 			return render_template('user_add_object.html',form = form)
 
 	## works awesome for node
-	return wikiHelper(kind, obj, objid)
+	return wikiHelper(kind, obj, objid, work)
 
 @user.route('/sub/<string:kind>/', methods=["GET","POST"])
 def sub(kind):
