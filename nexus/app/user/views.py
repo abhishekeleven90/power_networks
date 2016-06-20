@@ -63,25 +63,13 @@ def temp():
 	##wait for moderation
 	return render_template("temp.html", temptext='temp')
 
-@user.route('/edit/<string:kind>/<int:objid>/', methods=["GET","POST"])
-def edit(kind, objid):
 
-	##even if you delete aliases and add only one value, it will take is a listld be no issue
-	##comma seperated
-	# livedin mvp, a prop will come for our mvp, assume something ##alsg se tab
-	#
-	# livedin a mvp prop will change to relation
-	# bornin a prop will change to relation
-	# diedin a prop will change to relation
-	# aliases, livedin
-	##also countries related to
+def wikiHelper(kind, obj, objid):
 
 	from app.models.graphmodels.graph_handle import GraphHandle
+	# from py2neo import Node, Relationship
 	gg = GraphHandle()
 
-	labels  = []
-
-	obj = gg.getOriginalCoreObject(kind, objid)
 	copyobj = gg.coredb.copyObjectAsItIs(kind, obj)
 
 	labels = diffLabelsNeeded(kind)
@@ -91,7 +79,15 @@ def edit(kind, objid):
 	for prop in needed:
 		copyobj[prop] = ''
 
-	if request.form:
+	form = ''
+	if kind=='relation':
+		from app.forms import AddRelationForm
+		form = AddRelationForm()
+
+	print 'editForm' in request.form
+	print 'hjshkjahkjhdkhkjdhkdhjk'
+	if 'editForm' in request.form: ##life saviour line!
+
 		sourceurl = request.form.get('sourceurl')
 
 		print sourceurl
@@ -138,7 +134,7 @@ def edit(kind, objid):
 		origpropdict = {}
 		for i in range(ll):
 			if (len(orignames[i].strip())>1):
-				if (len(origvals[i].strip())>0):
+				if (len(origvals[i].strip())>0): ##THOUGH HERE TOO WE HAVE KEEP HOLD ON '' name
 					newobj[orignames[i].strip()] = origvals[i].strip()
 
 
@@ -149,7 +145,12 @@ def edit(kind, objid):
 			msg = msg + 'sourceurl check again' +';;;'
 			flag = True
 
-		for prop in newpropdict:
+		if kind=='node': ##THIS TAKES CARE OF NAME, very imp for add node
+			if len(str(newobj['name']).strip())<3: ##TODO: name validation
+				msg = msg + ' name property too short' +';;;'
+				flag = True
+
+		for prop in newpropdict: ##THIS WILL TAKE CARE OF UUID OR RELID
 			if prop in newobj:
 				msg = msg + ' Added a custom prop that has same name as in our required prop list' +';;;'
 				flag = True
@@ -197,17 +198,101 @@ def edit(kind, objid):
 
 			flash('Successfully pushed for moderation')
 
-			if kind=='node':
-				return redirect(url_for('readEntity',uuid=objid))
-			if kind =='relation':
-				return redirect(url_for('readRelation',relid=objid))
+			if objid is not None:
+				if kind=='node':
+					return redirect(url_for('readEntity',uuid=objid))
+				if kind =='relation':
+					return redirect(url_for('readRelation',relid=objid))
+			else:
+				return redirect(url_for('home'))
 
 
-	return render_template('user_edit.html', sourceurl='', obj  = copyobj, needed = needed,  labels=labels, kind=kind, objid=objid)
+	return render_template('user_edit.html', sourceurl='', obj  = copyobj, needed = needed,  labels=labels, kind=kind, objid=objid, form=form)
 
 
-@user.route('/add/<string:kind>/')
-def add(kind):
+
+@user.route('/add/<string:kind>/',  defaults={'objid': None}, methods=["GET","POST"])
+@user.route('/edit/<string:kind>/<int:objid>/', methods=["GET","POST"])
+def edit(kind, objid):
+
+	work = 'edit'
+	if objid is None:
+	 	work = 'add'
+
+
+	##INFO: XXX:
+	##even if you delete aliases and add only one value, it will take is a listld be no issue
+	##comma seperated
+	# livedin mvp, a prop will come for our mvp, assume something ##alsg se tab
+	#
+	# livedin a mvp prop will change to relation
+	# bornin a prop will change to relation
+	# diedin a prop will change to relation
+	# aliases, livedin
+	##also countries related to
+
+	from app.models.graphmodels.graph_handle import GraphHandle
+	from py2neo import Node, Relationship
+	gg = GraphHandle()
+
+	labels  = []
+
+	obj = None
+
+	if objid is not None:
+		obj = gg.getOriginalCoreObject(kind, objid)
+	else:
+		if kind=='node':
+			obj=Node("entity")
+		elif kind=="relation":
+
+			from app.forms import AddRelationForm
+			form = AddRelationForm()
+			print request.method
+
+			print 'uuuuuuuuuuuuuuuuuuuuuuuuuuu111111111111'
+
+			if form.validate_on_submit():
+
+				print 'uuuuuuuuuuuuuuuuuuuuuuuuuuu22222222222222'
+
+				starnodeid = form.startnodeid.data
+				endnodeid = form.endnodeid.data
+				reltype = form.reltype.data
+
+
+				print starnodeid
+				print endnodeid
+				print reltype
+
+				# bidirectional =  str(bool(request.form['bidirectional'])) ##TODO: check afterwards
+				# print starnodeid, endnodeid, reltype
+
+				startnode = gg.getOriginalCoreObject('node',starnodeid)
+				print startnode
+				endnode = gg.getOriginalCoreObject('node', endnodeid)
+				obj = Relationship(startnode, reltype, endnode)
+
+				print 'uuuuuuuuuuuuuuuuuuuuu333333333'
+				print 'here'
+
+				print request.form['startnodeid']
+
+				return wikiHelper(kind, obj, objid)
+			else:
+				form_error_helper(form)
+
+			return render_template('user_add_object.html',form = form)
+
+	## works awesome for node
+	return wikiHelper(kind, obj, objid)
+
+@user.route('/sub/<string:kind>/', methods=["GET","POST"])
+def sub(kind):
+	if not request.form:
+		from py2neo import Graph, Node, Relationship
+		obj = Node("entity",name='')
+		return render_template("user_edit_object.html")
 	return kind
 
 @user.route('/history/<int:uuid>/<string:prop>/')

@@ -1,16 +1,21 @@
 from flask.ext.wtf import Form, widgets
 from flask import flash, request
-from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SelectMultipleField, widgets, RadioField
+from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SelectMultipleField, widgets, RadioField, IntegerField
 from wtforms import validators
 from wtforms.fields.html5 import EmailField
 
 class RegisterationForm(Form):
     emailid = EmailField('Email', validators=[validators.DataRequired(), validators.Email()])
     name = StringField('name', validators=[validators.DataRequired()])
-    password = PasswordField('password', validators=[validators.Required(), 
+    password = PasswordField('password', validators=[validators.Required(),
         validators.EqualTo('repassword',message="Passwords must match")])
     repassword = PasswordField('repassword', validators=[validators.Required()])
     accept_terms = BooleanField('I accept everything!')
+
+class AddRelationForm(Form):
+    startnodeid = IntegerField('From UUID', validators=[validators.DataRequired()])
+    endnodeid = IntegerField('To UUID', validators=[validators.DataRequired()])
+    reltype = StringField('Relation Type', validators=[validators.DataRequired()])
 
 class LoginForm(Form):
     emailid = EmailField('Email', validators=[validators.DataRequired(), validators.Email()])

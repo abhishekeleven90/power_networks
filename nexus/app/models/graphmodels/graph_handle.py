@@ -815,9 +815,11 @@ class GraphHandle():
         self.crawldb.graph.create(obj)
         ##first will have to create to use setResolvedWithID
 
-        self.setResolvedWithID('node',obj.start_node,start_id,'nexusbot')
+        if kind=='relation':
+            
+            self.setResolvedWithID('node',obj.start_node,start_id,'nexusbot')
 
-        self.setResolvedWithID('node',obj.end_node,end_id,'nexusbot')
+            self.setResolvedWithID('node',obj.end_node,end_id,'nexusbot')
 
         # print str(obj.end_node)
 

@@ -1,150 +1,30 @@
 <!-- extend base layout -->
-{% extends "basic.html" %} {% block head %} {{super()}}
-
-
-<style>
-    .entry:not(:first-of-type) {
-        margin-top: 10px;
-    }
-
-    .glyphicon {
-        font-size: 12px;
-    }
-</style>
-
-
-<script type="text/javascript">
-    $(function() {
-
-        $(document).on('click', '.btn-add', function(e) {
-            e.preventDefault();
-
-            var controlForm = $(this).parents('.controls'),
-                currentEntry = $(this).parents('.entry'),
-                newEntry = $(currentEntry.clone()).appendTo(controlForm);
-
-            newEntry.find('input').val('');
-            controlForm.find('.entry:not(:last) .btn-add')
-                .removeClass('btn-add').addClass('btn-remove')
-                .removeClass('btn-success').addClass('btn-danger')
-                .html('<span class="glyphicon glyphicon-minus"></span>');
-        }).on('click', '.btn-remove', function(e) {
-            $(this).parents('.entry:first').remove();
-
-            e.preventDefault();
-            return false;
-        });
-    });
-</script>
-
-{% endblock %}
-
-
-{% macro generaterow(prop, propval, namelist, vallist, showaddbutton=False, readonly=True, add_btn=True) %}
-<div class="entry">
-
-<div class="row">
-
-
-    <div class="col-xs-3">
-        <div class="input-group">
-            <span class="input-group-addon">
-            propname
-          </span>
-            <input type="text" name="{{namelist}}" class="form-control input-sm" aria-label="..." value = "{{prop}}" {% if readonly %}readonly{%endif%}>
-            <!-- <input type="hidden" name="propname[]" class="form-control input-sm"  value = "{{prop}}" > -->
-        </div>
-        <!-- /input-group -->
-    </div>
-
-    <div class="col-xs-8">
-        <div class="input-group">
-            <span class="input-group-addon">
-            propval
-          </span>
-            <input type="text" name="{{vallist}}" class="form-control input-sm" aria-label="..." value="{{propval}}" {% if prop=='uuid' or prop == 'relid' %}readonly{%endif%}>
-        </div>
-        <!-- /input-group -->
-    </div>
-    <!-- /.col-lg-6 -->
-
-    {% if showaddbutton and add_btn %}
-    <div class="col-xs-1">
-        <button type="button" class="btn btn-success btn-add">
-            <span class="glyphicon glyphicon-plus"></span>
-        </button>
-    </div>
-    {% endif %}
-
-    {% if showaddbutton and not add_btn %}
-    <div class="col-xs-1">
-        <button type="button" class="btn btn-danger btn-remove">
-            <span class="glyphicon glyphicon-minus"></span>
-        </button>
-    </div>
-    {% endif %}
-
-
-</div>
-<!-- /.row -->
-
-</div> <!--entry-->
-
-{% endmacro%}
-
-
-{% macro generatelabel(label, propname, showaddbutton=False, readonly=True, add_btn=True) %}
-<div class="entry">
-
-<div class="row">
-
-
-    <div class="col-xs-6">
-        <div class="input-group">
-            <span class="input-group-addon">
-            label
-          </span>
-            <input type="text" name="{{propname}}" class="form-control input-sm" aria-label="..." value = "{{label}}" {% if readonly %}readonly{%endif%}>
-            <!-- <input type="hidden" name="propname[]" class="form-control input-sm"  value = "{{prop}}" > -->
-        </div>
-        <!-- /input-group -->
-    </div>
-
-    {% if showaddbutton and add_btn %}
-    <div class="col-xs-1">
-        <button type="button" class="btn btn-success btn-add">
-            <span class="glyphicon glyphicon-plus"></span>
-        </button>
-    </div>
-    {% endif %}
-
-    {% if showaddbutton and not add_btn %}
-    <div class="col-xs-1">
-        <button type="button" class="btn btn-danger btn-remove">
-            <span class="glyphicon glyphicon-minus"></span>
-        </button>
-    </div>
-    {% endif %}
-
-
-</div>
-<!-- /.row -->
-
-</div> <!--entry-->
-
-{% endmacro%}
-
-
-
+{% extends "user_wiki_common.html" %}
 
 
 {% block content %}
 
 
 <div class="starter-template" align="center">
+
     {{temptext|safe}}
 
-    <form class="form-horizontal" method="post" action="{{url_for('user.edit', kind=kind, objid=objid)}}">
+    {% set action=''%}
+    {% if objid%}
+      {% set action = url_for('user.edit', kind=kind, objid=objid) %}
+    {% else %}
+      {% set action = url_for('user.edit', kind=kind) %}
+    {% endif %}
+
+    <form class="form-horizontal" method="post" action="{{action}}">
+
+      {% if kind == 'relation' %}
+        <input type="hidden" name="startnodeid"   value="{{obj.start_node['uuid']}}"/>
+        <input type="hidden" name="endnodeid"   value="{{obj.end_node['uuid']}}"/>
+        <input type="hidden" name="reltype"   value="{{obj.type}}"/>
+        {{form.csrf_token}}
+
+      {% endif %}
 
 
       <div class="col-xs-9">
@@ -202,7 +82,11 @@
 
           {% for prop in obj.properties %}
 
-            {{generaterow(prop,toPrintString(obj[prop]),'actualpropname[]','actualpropval[]') }}
+            {% if prop!='uuid' and prop!='relid' %}
+
+              {{generaterow(prop,toPrintString(obj[prop]),'actualpropname[]','actualpropval[]') }}
+
+            {%endif%}
 
           {% endfor %}
 
@@ -229,7 +113,7 @@
 
         <br/>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" name="editForm" class="btn btn-primary">Submit</button>
 
     </form>
 
