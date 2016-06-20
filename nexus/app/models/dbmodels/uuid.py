@@ -132,7 +132,7 @@ class UuidTable:
 
 class UuidLabels:
 
-    def __init__(self, changeid='', uuid='', label='', changetype=''):
+    def __init__(self, changeid=None, uuid=None, label='', changetype=''):
         self.changeid = changeid
         self.uuid = uuid
         self.label = label
@@ -181,13 +181,14 @@ class UuidLabels:
             print "Cannot get cursor"
             self.dbwrap.commitAndClose()
 
-        #if by == 'changeid':
-        #    bystr = "changeid='" + self.userid + "'"
-        #else:
-        #    bystr = "taskid=" + self.taskid
+        if by == 'changeid':
+            bystr = "where changeid=" + self.changeid
+        else:
+            bystr = "where uuid=" + self.uuid
 
+        rest_str = 'ORDER by ' + self.changeid + ' DESC'
         query = "SELECT changeid, uuid, label, changetype FROM "\
-                + self.tablename + " where changeid=" + str(self.changeid)
+                + self.tablename + bystr + rest_str
 
         cursor.execute(query)
         rows = cursor.fetchall()
@@ -210,9 +211,14 @@ class UuidLabels:
         return s
 
     @classmethod
-    def getUuidLabels(cls, changeid):
+    def getUuidLabelsUUId(cls, uuid):
+        u = UuidLabels(uuid=uuid)
+        return u.getListFromDB(by='uuid')
+
+    @classmethod
+    def getUuidLabelsChangeId(cls, changeid):
         u = UuidLabels(changeid=changeid)
-        return u.getListFromDB(changeid)
+        return u.getListFromDB(by='changeid')
 
 
 class UuidProps:
@@ -221,7 +227,7 @@ class UuidProps:
     ##MVP '[u'naveen jindal']' will have to be handled separately
     ##IDEA: disable aliases completely in api calls?
 
-    def __init__(self, changeid='', uuid='', propname='', ##makes sense to change propname to None, this way nothing will be inserted, error!
+    def __init__(self, changeid=None, uuid=None, propname='',  ##makes sense to change propname to None, this way nothing will be inserted, error!
             oldpropvalue='', newpropvalue='', changetype=''):
         import MySQLdb
         from app.utils.commonutils import Utils
@@ -269,8 +275,9 @@ class UuidProps:
 
         return numrows
 
-    def getListFromDB(self):
+    def getListFromDB(self, by):
 
+        assert ( by in ['changeid', 'uuid'])
         self.dbwrap.connect()
         try:
             cursor = self.dbwrap.cursor()
@@ -279,9 +286,13 @@ class UuidProps:
             print "Cannot get cursor"
             self.dbwrap.commitAndClose()
 
+        if by == "changeid":
+            bystr = 'where changeid= ' + self.changeid
+        else: bystr = 'where uuid= ' + self.uuid
+
+        rest_str = 'ORDER by ' + self.changeid + ' DESC'
         query = "SELECT changeid, uuid, propname, oldpropvalue, newpropvalue,\
-                 changetype FROM " + self.tablename + " where changeid=" + \
-                 str(self.changeid)
+                 changetype FROM " + self.tablename + bystr + rest_str
 
         cursor.execute(query)
         rows = cursor.fetchall()
@@ -307,6 +318,11 @@ class UuidProps:
         return s
 
     @classmethod
-    def getUuidProps(cls, changeid):
-        up = UuidProps(changeid)
-        return up.getListFromDB()
+    def getUuidPropsUUId(cls, uuid):
+        up = UuidProps(uuid=uuid)
+        return up.getListFromDB(by='uuid')
+
+    @classmethod
+    def getUuidPropsChangeId(cls, changeid):
+        up = UuidProps(changeid = changeid)
+        return up.getListFromDB(by='changeid')
