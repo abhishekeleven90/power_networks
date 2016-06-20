@@ -75,6 +75,24 @@
                         <a href="">Explore
                                     </a>
                     </li>
+                    {% if session.userid %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        Add
+                                    </a>
+
+                        <ul class="dropdown-menu">
+
+
+                            <li role="presentation"><a href="{{url_for('user.edit',kind='node')}}">Add Entity</a></li>
+
+                            <li role="presentation"><a href="{{url_for('user.edit',kind='relation')}}">Add Relation</a></li>
+
+                        </ul>
+
+                    </li>
+                    {% endif %}
+                    <!--TODO move to explore-->
                     <li class="{{helpclass}}">
                         <a href="">Help
                                     </a>
@@ -108,16 +126,17 @@
                             {% endif %} {% if session['role'] >= g.ROLE_ADMIN %}
                             <li role="presentation"><a href="{{url_for('admin.show')}}">Admin</a></li>
                             {% endif %}
+                            <li role="separator" class="divider"></li>
+                            <li role="presentation"><a href="#">Settings</a></li>
+                            <li role="presentation"><a href="{{ url_for('logout') }}">Logout</a></li>
+
                         </ul>
 
                     </li>
+                    {% else %}
+                        <li class="{{loginclass}}"><a href="{{ url_for('login') }}">Login</a></li>
                     {% endif %}
 
-                    <li class="{{loginclass}}">
-                        {% if not session.userid %}
-                        <a href="{{ url_for('login') }}">Login</a> {% else %}
-                        <a href="{{ url_for('logout') }}">Logout</a> {% endif %}
-                    </li>
                     {% if not session.userid %}
                     <li class="{{signupclass}}">
                         <a href="{{ url_for('signup') }}">Sign up

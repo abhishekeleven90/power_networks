@@ -147,6 +147,13 @@ class GraphDB:
         #             naya[prop] = rel[prop]
         #         return naya
 
+    def copyObjectAsItIs(self, kind, obj):
+        if kind == 'relation':
+            return self.copyRelationAsItIs(obj)
+        if kind == 'node':
+            return self.copyNodeAsItIs(obj)
+        return None
+
     def copyRelationWithoutMeta(self, rel, rel_exceptions = [], node_exceptions = []):
         return self.copyRelation(rel, copymeta = False, rel_exceptions = rel_exceptions, node_exceptions = node_exceptions)
 
@@ -905,7 +912,7 @@ class SelectionAlgoGraphDB(GraphDB):
     def getTotalWikiRelationCount(self):
         ##TODO: locked and not locked
         from app.constants import RESOLVEDWITHRELID, CRAWL_VERIFIEDBY
-        query = "match ()-[n]-() where exists(n.%s) and not exists(n.%s) return count(n)"
+        query = "match ()-[n]->() where exists(n.%s) and not exists(n.%s) return count(n)"
         query = query %(RESOLVEDWITHRELID, CRAWL_VERIFIEDBY)
         print query
         results = self.graph.cypher.execute(query)
@@ -914,7 +921,7 @@ class SelectionAlgoGraphDB(GraphDB):
     def getActualWikiRelationCount(self):
         ##TODO: locked and not locked
         from app.constants import RESOLVEDWITHRELID, CRAWL_VERIFIEDBY, CRAWL_LOCKEDBY
-        query = "match ()-[n]-() where exists(n.%s) and not exists(n.%s) and not exists(n.%s) return count(n)"
+        query = "match ()-[n]->() where exists(n.%s) and not exists(n.%s) and not exists(n.%s) return count(n)"
         query = query %(RESOLVEDWITHRELID, CRAWL_VERIFIEDBY, CRAWL_LOCKEDBY)
         print query
         results = self.graph.cypher.execute(query)

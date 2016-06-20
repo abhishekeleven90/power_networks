@@ -1,0 +1,177 @@
+<!-- extend base layout -->
+{% extends "user_wiki_common.html" %}
+
+
+{% block content %}
+
+
+<div class="starter-template" align="center">
+
+    {{temptext|safe}}
+
+    {% set action=''%}
+    {% if objid%}
+      {% set action = url_for('user.edit', kind=kind, objid=objid) %}
+    {% else %}
+      {% set action = url_for('user.edit', kind=kind) %}
+    {% endif %}
+
+    <p><h4>
+          {% if work=='edit'  %}
+            [Edit] {{kind}}:{{objid}}
+          {% else %}
+            [Add] {{kind}}
+          {% endif %}
+    </h4>
+    <hr/></p>
+
+    <form class="form-horizontal" method="post" action="{{action}}">
+
+    <div class="row">
+      <div class="col-xs-9">
+
+          <div class="input-group">
+              <span class="input-group-addon">
+                source-url**
+            </span>
+              <input type="text" name="sourceurl" class="form-control input-sm" aria-label="..." value = "{{sourceurl}}" placeholder="http://" >
+              <!-- <input type="hidden" name="propname[]" class="form-control input-sm"  value = "{{prop}}" > -->
+          </div>
+          <!-- /input-group -->
+      </div>
+    </div>
+
+      <br/>
+      <br/>
+
+      {% if kind == 'relation' %}
+
+        {{form.csrf_token}}
+
+
+        <div class="row">
+          <div class="col-xs-9">
+              <div class="input-group">
+                  <span class="input-group-addon">
+                    start_node
+                </span>
+                  <input type="number" name="startnodeid" class="form-control input-sm" aria-label="..." value = "{{obj.start_node['uuid']}}" readonly>
+              </div>
+              <!-- /input-group -->
+          </div>
+      </div><br/>
+
+      <div class="row">
+        <div class="col-xs-9">
+            <div class="input-group">
+                <span class="input-group-addon">
+                  end_node
+              </span>
+                <input type="number" name="endnodeid" class="form-control input-sm" aria-label="..." value = "{{obj.end_node['uuid']}}" readonly>
+            </div>
+            <!-- /input-group -->
+        </div>
+      </div><br/>
+
+
+      <div class="row">
+        <div class="col-xs-9">
+            <div class="input-group">
+                <span class="input-group-addon">
+                  rel-type
+              </span>
+                <input type="text" name="reltype" class="form-control input-sm" aria-label="..." value = "{{obj.type}}" readonly>
+            </div>
+            <!-- /input-group -->
+        </div>
+      </div><br/>
+
+
+      {% endif %}
+      <br/>
+
+{% if kind=='node' %}
+      <div class="controls">
+
+
+        <legend>Add Labels</legend>
+        <br/>
+
+        <span id="helpBlock" class="help-block">
+            Some obj labels: {{toPrintString(labels)}}
+        </span>
+
+
+
+        {% for label in obj.labels %}
+
+          {{ generatelabel(label,'origlabel[]') }}
+
+        {% endfor %}
+
+        {% for label in newlabels %}
+
+          {{ generatelabel(label,'newlabel[]',True,False,False) }}
+
+        {% endfor %}
+
+
+        {{ generatelabel('','newlabel[]',True,False) }}
+
+      </div>
+{%endif%}
+
+        <div class="controls">
+
+
+          <br/>
+
+
+
+          <legend>Edit recommended/existing props</legend>
+
+          {% for prop in obj.properties %}
+
+            {% if prop!='uuid' and prop!='relid' %}
+
+              {{generaterow(prop,toPrintString(obj[prop]),'actualpropname[]','actualpropval[]') }}
+
+            {%endif%}
+
+          {% endfor %}
+
+          <br/>
+
+
+
+
+
+          <legend>Custom props</legend>
+
+          {% for prop in newpropdict %}
+
+            {{ generaterow(prop, newpropdict[prop], 'propname[]','propval[]',True,False,False) }}
+
+          {% endfor %}
+
+          {{ generaterow('','','propname[]','propval[]',True,False) }}
+
+
+        </div> <!-- controls -->
+
+
+
+        <br/>
+
+        <button type="submit" name="editForm" class="btn btn-primary">Submit</button>
+
+    </form>
+
+
+</div>
+
+
+<!--
+
+</div> -->
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "basic.html" %} {% block content %}
+
+{% macro field_error(field) %}
+  {% if field.errors %}
+  <div class="alert alert-danger" role="alert">
+    <ul>
+    {% for error in field.errors %}
+      <li>{{field.label}} {{ error }}</li>
+    {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+{% endmacro %}
+
+
+<div class="starter-template" align="center">
+
+
+    <form class="form-inline" method="POST" name="addRelForm" action="{{url_for('user.edit',kind='relation')}}" role="form">
+
+        <div class="col-xs-3">
+            <div class="form-group input-group has-danger">
+              <span class="input-group-addon">
+              from:
+            </span>
+            <!-- <label for="text">From-UUID</label> -->
+            <input type="number" class="form-control" id="startnodeid" name="startnodeid" placeholder="uuid">
+          </div>
+        </div>
+
+
+        <div class="col-xs-3">
+          <div class="form-group input-group">
+            <!-- <label for="text">From-UUID</label> -->
+            <input type="number" class="form-control" id="endnodeid" name="endnodeid" placeholder="uuid">
+
+              <span class="input-group-addon">
+              :to
+            </span>
+
+          </div>
+        </div>
+
+
+        <div class="col-xs-5">
+            <div class="form-group input-group">
+              <span class="input-group-addon">
+              type:
+            </span>
+            <!-- <label for="text">From-UUID</label> -->
+            <input type="text" class="form-control" id="reltype" name="reltype" placeholder="relation-type">
+          </div>
+        </div>
+
+      <!-- <div class="col-xs-3">
+          <div class="input-group">
+
+            <span class="input-group-addon">
+              both-ways?:
+            </span>
+
+            <div class="radio">
+                <label>
+                    <input type="radio" name="bidirectional" id="bidirectional1" value="False" checked>No</label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="bidirectional" id="bidirectional2" value="True">Yes</label>
+            </div>
+
+          </div>
+
+
+        </div> -->
+
+        {{ form.csrf_token }}
+
+        <div class="col-xs-1">
+          <button type="submit" class="btn btn-default">Go</button>
+        </div>
+
+    </form>
+
+    <br/>
+
+
+
+</div>
+
+{%endblock%}

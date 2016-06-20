@@ -3,7 +3,9 @@ from flask import render_template, flash, redirect, session, g, request, url_for
 
 @mod.route('/')
 def show():
-    val = request.args.get('some',None)
+    print request.args
+    val = request.args['propname[]']
+
     flash(val)
     return render_template("mod_home.html")
 
@@ -35,13 +37,15 @@ def trial():
     copynode[CRAWL_PUSHDATE] = Utils.currentTimeStamp()
     #XXX: for user ownerid = session['userid'] and iscrawled = 0, get the unique row
     ##that's our taskid
-    copynode[CRAWL_TASKID] = 3
+    copynode[CRAWL_TASKID] = 3 ##get from db for thi user
     copynode[CRAWL_SOURCEURL] = "http://wikipedia.com/NaveenJindal/"
     copynode[CRAWL_FETCHDATE] = copynode[CRAWL_PUSHDATE]-4000000
     copynode[CRAWL_TASKTYPE] = "wiki"
     copynode['job'] = "just farmer"
     #copynode.labels.add('personOfTheYear')
-    copynode[CRAWL_NODENUMBER] = 1 ##though idiotic
+    copynode[CRAWL_NODENUMBER] = int(Utils.currentTimeStamp()) ##though idiotic, we wont be needing it for this!
+    ##but for generating a unique name na!
+    
     copynode[CRAWL_EN_ID_NAME] = CRAWL_EN_ID_FORMAT %(copynode[CRAWL_TASKID], copynode[CRAWL_NODENUMBER])
 
     #flash(str(node))
@@ -54,6 +58,100 @@ def trial():
 
     ##TODO: same things for relations
     return render_template("temp.html", temptext='trial completed')
+
+@mod.route('/trial2/')
+def mod2():
+
+    ##user gives certain data we have changed object let's say
+    from app.models.graphmodels.graph_handle import GraphHandle
+    from app.utils.commonutils import Utils
+
+    from app.constants import CRAWL_TASKID, CRAWL_PUSHDATE, CRAWL_PUSHEDBY, CRAWL_TASKTYPE
+    from app.constants import CRAWL_SOURCEURL, CRAWL_FETCHDATE, CRAWL_EN_ID_NAME, RESOLVEDWITHUUID, RESOLVEDWITHRELID
+    from app.constants import CRAWL_NODENUMBER, CRAWL_EN_ID_FORMAT, CRAWL_RELNUMBER, CRAWL_REL_ID_NAME
+
+    gg = GraphHandle()
+    rel = gg.getOriginalCoreObject('relation', 21)
+    copyrel = gg.coredb.copyRelation(rel)
+    flash(rel)
+    flash(copyrel)
+
+    ##TODO: copy the labels that is imp
+    ##get uuid that is imp
+    ##do your changes as you get from the html form, then push them to crawldb
+    ##with the changes that we have done here
+    ##TODO:
+    # think if you need to use the api push? we need to save the task id too! seems overkill.
+
+    copyrel['relid'] = None ##remove for now
+    copyrel[RESOLVEDWITHRELID] = 21
+    copyrel[CRAWL_PUSHEDBY] = 'abhi10@gmail.com'
+    copyrel[CRAWL_PUSHDATE] = Utils.currentTimeStamp()
+    # #XXX: for user ownerid = session['userid'] and iscrawled = 0, get the unique row
+    # ##that's our taskid
+    copyrel[CRAWL_TASKID] = 3
+    copyrel[CRAWL_SOURCEURL] = "http://wikipedia.com/NaveenJindal/"
+    copyrel[CRAWL_FETCHDATE] = copynode[CRAWL_PUSHDATE]-4000000
+    copyrel[CRAWL_TASKTYPE] = "wiki"
+    copyrel['startdate'] = "30 March 2010"
+    # #copynode.labels.add('personOfTheYear')
+
+    copyrel[CRAWL_RELNUMBER] = 1 ##though idiotic
+    copyrel[CRAWL_REL_ID_NAME] = CRAWL_EN_ID_FORMAT %(copynode[CRAWL_TASKID], copynode[CRAWL_NODENUMBER])
+
+
+    # #flash(str(node))
+    # flash(copynode)
+    #
+    # gg.crawldb.graph.create(copynode)
+    # copycopynode = gg.getCrawlObjectByID('node',CRAWL_EN_ID_NAME,copynode[CRAWL_EN_ID_NAME],True)
+    # flash(copycopynode)
+    #
+    #
+    # ##TODO: same things for relations
+
+    return render_template("temp.html", temptext='trial completed')
+
+
+
+
+@mod.route('/relform/', methods=["GET","POST"])
+def relform():
+
+
+    if request.form:
+
+        names = request.form.getlist('propname[]')
+        actualnames = request.form.getlist('actualpropname[]')
+        needednames = request.form.getlist('neededpropname[]')
+
+        neededvals = request.form.getlist('neededpropval[]')
+        actualvals = request.form.getlist('actualpropval[]')
+        namevals = request.form.getlist('propval[]')
+
+
+
+        # ignore uuid
+        # if props with same name again , consider later one
+        # if
+        flash(str(names)+ " ::::: " +str(namevals))
+        flash(str(actualnames) + " :::::: " +str(actualvals))
+        flash(str(needednames) +" :::::: "+str(neededvals))
+        # flash(str(labels))
+
+
+    from app.models.graphmodels.graph_handle import GraphHandle
+    gg = GraphHandle()
+    node = gg.getOriginalCoreObject('relation', 1)
+    copynode = gg.coredb.copyRelation(node)
+
+    needed = diffPropsNeeded(copynode,kind='relation')
+
+    # from app.utils.commonutils import Utils
+    # #copynode['uuid'] = None ##remove for now
+
+    # flash('Normal')
+    return render_template('wiki_form.html', node  = copynode, needed = needed, kind='relation')
 
 ## follows the same structure as in verifier work
 @mod.route('/pickobject/<string:kind>/')
@@ -80,8 +178,6 @@ def pickobject(kind):
         ##TODO: pass redirect or something
         abort(404)
         pass
-
-
 
     session[CRAWL_ID_NAME] = node[CRAWL_EN_ID_NAME]
 

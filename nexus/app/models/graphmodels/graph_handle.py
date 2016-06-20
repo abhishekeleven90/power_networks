@@ -137,7 +137,7 @@ class GraphHandle():
 
         rel = self.crawldb.lockObject(rel, userid)
         if rel is None:
-            rel = self.getNextWikiRelation(userid)
+            rel = self.nextWikiRelationToResolve(userid)
             return rel
 
         return rel ##returns a type py2neo.relation, can be None
@@ -489,6 +489,9 @@ class GraphHandle():
 
         return CRAWL_ID_NAME, CURR_ID
 
+    def getIDForKind():
+        pass
+
     def getAllVars(self):
         kinds = ['node','relation']
         ret = []
@@ -516,7 +519,7 @@ class GraphHandle():
             n1,n2 =  self.getWikiNodeStats()
             return n2!=0
         elif kind == 'relation':
-            r1, r2 = getWikiRelationStats()
+            r1, r2 = self.getWikiRelationStats()
             return r2!=0
 
         print "[areWikiTasksLeft: ERROR: should not reach here]"
@@ -750,3 +753,83 @@ class GraphHandle():
             msg = "Graph object's lock is not with you. Begin again "
 
         return lockprop, msg
+
+    def wikiObjectCreateHelper(self, kind, obj, userid, sourceurl):
+        '''
+            Note: works directly on obj, has been used like that
+            working directly on the given object as
+            assumption that the object is already not bound and copied
+            Just changes the object, doesn't create/update
+        '''
+
+        from app.utils.commonutils import Utils
+        from app.constants import CRAWL_TASKID, CRAWL_PUSHDATE, CRAWL_PUSHEDBY, CRAWL_TASKTYPE
+        from app.constants import CRAWL_SOURCEURL, CRAWL_FETCHDATE, CRAWL_EN_ID_NAME, CRAWL_REL_ID_NAME, RESOLVEDWITHUUID, RESOLVEDWITHRELID
+        from app.constants import CRAWL_NODENUMBER, CRAWL_RELNUMBER, CRAWL_EN_ID_FORMAT, CRAWL_REL_ID_FORMAT
+
+        ##common for both kinds of objects
+        ID_NAME = self.getCoreIDName(kind)
+        curr_id = obj[ID_NAME]
+        obj[ID_NAME] = None
+
+        from app.models.dbmodels.tasks import Tasks
+        task = Tasks.getWikiTaskByUser(userid)
+        ##will throw an error if not in db, it will be our problem, not anybody's - would only occur if the at time of user creation, entry not updated here
+        obj[CRAWL_TASKID] =  task.taskid##get from db for thi user
+
+        if kind=='node':
+            obj[RESOLVEDWITHUUID] = curr_id
+            obj[CRAWL_NODENUMBER] = int(Utils.currentTimeStamp()) ##though idiotic, we wont be needing it for this!
+            obj[CRAWL_EN_ID_NAME] = CRAWL_EN_ID_FORMAT %(obj[CRAWL_TASKID], obj[CRAWL_NODENUMBER])
+        elif kind=='relation':
+            obj[RESOLVEDWITHRELID] = curr_id
+            obj[CRAWL_RELNUMBER] = int(Utils.currentTimeStamp())
+            obj[CRAWL_REL_ID_NAME] = CRAWL_REL_ID_FORMAT %(obj[CRAWL_TASKID], obj[CRAWL_RELNUMBER])
+
+        obj[CRAWL_PUSHEDBY] = userid
+        obj[CRAWL_PUSHDATE] = Utils.currentTimeStamp()
+
+
+        obj[CRAWL_SOURCEURL] = sourceurl
+        obj[CRAWL_FETCHDATE] = obj[CRAWL_PUSHDATE] ##since wiki work! dates same!
+        obj[CRAWL_TASKTYPE] = "wiki"
+
+        return obj,curr_id
+
+    def wikiObjCreate(self, kind, obj, userid, sourceurl):
+        '''
+            would be a wrapper for a node, a dummy object
+            not bound to any graph - crawldb or coredb
+            validate the obj for prop and label error before sending here
+        '''
+
+        obj,curr_id = self.wikiObjectCreateHelper(kind,obj,userid,sourceurl)
+
+
+        if kind=='relation':
+
+            start_node,start_id = self.wikiObjectCreateHelper('node',obj.start_node,userid,sourceurl)
+
+            end_node, end_id = self.wikiObjectCreateHelper('node',obj.end_node,userid,sourceurl)
+
+        self.crawldb.graph.create(obj)
+        ##first will have to create to use setResolvedWithID
+
+        if kind=='relation':
+            
+            self.setResolvedWithID('node',obj.start_node,start_id,'nexusbot')
+
+            self.setResolvedWithID('node',obj.end_node,end_id,'nexusbot')
+
+        # print str(obj.end_node)
+
+        ##Decided not doing:  diff and check and use that only with labels intact
+        ##if prop not in conf_props or new_props use it else set to None for us
+        ##this will be automatically handled by diff btw!
+
+        # self.crawldb.graph.create(obj)
+
+        # copyobj = self.getCrawlObjectByID('node',CRAWL_EN_ID_NAME,obj[CRAWL_EN_ID_NAME],True)
+
+        #flash(copyobj)
+        return obj

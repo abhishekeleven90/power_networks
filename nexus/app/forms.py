@@ -1,22 +1,31 @@
 from flask.ext.wtf import Form, widgets
 from flask import flash, request
-from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SelectMultipleField, widgets, RadioField
+from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SelectMultipleField, widgets, RadioField, IntegerField
 from wtforms import validators
 from wtforms.fields.html5 import EmailField
 
 class RegisterationForm(Form):
     emailid = EmailField('Email', validators=[validators.DataRequired(), validators.Email()])
     name = StringField('name', validators=[validators.DataRequired()])
-    password = PasswordField('password', validators=[validators.Required(), 
+    password = PasswordField('password', validators=[validators.Required(),
         validators.EqualTo('repassword',message="Passwords must match")])
     repassword = PasswordField('repassword', validators=[validators.Required()])
     accept_terms = BooleanField('I accept everything!')
+
+class AddRelationForm(Form):
+    startnodeid = IntegerField('From UUID', validators=[validators.DataRequired()])
+    endnodeid = IntegerField('To UUID', validators=[validators.DataRequired()])
+    reltype = StringField('Relation Type', validators=[validators.DataRequired()])
 
 class LoginForm(Form):
     emailid = EmailField('Email', validators=[validators.DataRequired(), validators.Email()])
     password = PasswordField('Password', validators=[validators.Required()])
     ##rem_me = BooleanField('Remember me')
     ##TODO: some time afterwards
+
+class URLForm(Form):
+    emailid = EmailField('Email', validators=[validators.DataRequired(), validators.Email()])
+    url = StringField('URL',validators=[validators.DataRequired(),validators.URL('Not a valid URL')])
 
 class EditEntityForm(Form):
     new_entity = TextAreaField('new_entity', validators=[validators.Required()])

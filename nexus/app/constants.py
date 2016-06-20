@@ -27,7 +27,7 @@ INDEX_SQL_DBPASSWORD = 'yoyo'
 INDEX_SQL_DBPORT = 3306
 
 #CORE_GRAPH_CONNECT CONFIG
-CORE_GRAPH_HOST = '10.237.27.151'
+CORE_GRAPH_HOST = 'localhost'
 CORE_GRAPH_USER = 'neo4j'
 CORE_GRAPH_PORT = '7474'  #fot http this is
 CORE_GRAPH_PASSWORD = 'yoyo'
@@ -67,7 +67,9 @@ CRAWL_SOURCEURL = '_sourceurl_'
 CRAWL_TASKID = '_taskid_'
 CRAWL_TASKTYPE = '_tasktype_'
 CRAWL_NODENUMBER = '_nodenumber_'
+CRAWL_RELNUMBER = '_relnumber_'
 CRAWL_EN_ID_FORMAT = "en_%s_%s"
+CRAWL_REL_ID_FORMAT = "rel_%s_%s"
 LABEL_HYPEREDGE_NODE = 'hyperedgenode'
 LABEL_ENTITY = 'entity'
 
@@ -97,7 +99,7 @@ INDEX_TABLE_ENTITIES = 'entities'
 
 ##MULTI-VALUED PROP
 ##contains for both nodes and rels overall
-MVPLIST = ["aliases","phones","addresses"]
+MVPLIST = ["aliases","phone","address","email"]
 ##TODO: add to api validation
 
 ##GOOGLE MAPS API KEY

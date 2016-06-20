@@ -506,6 +506,8 @@ def diffPushGen(kind):
         ##That's why here too!
         ##TODO: move to graph_handle
         if kind == 'node':
+            if orig['aliases'] is None:
+                orig['aliases'] = [orig['name']] ##the new name at any cost
             aliasoriglist = utils.copyList(orig['aliases'])
             aliasmodifylist = utils.copyListOfStrings(orig['aliases'])
             flag = False
@@ -517,7 +519,6 @@ def diffPushGen(kind):
                     aliasoriglist.append(str(aliasorig))
             if flag:
                 orig['aliases'] = aliasoriglist
-
 
         orig.push()#one graph object resolved!
 
