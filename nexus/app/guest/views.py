@@ -24,40 +24,45 @@ def temp2():
 
 @guest.route('/uuid/<int:id>')
 def uuid(id):
-    print 'uuid uuid uuid huuid'
+    print ''
     from app.models.dbmodels.uuid import UuidTable, UuidLabels, UuidProps
-    
-    #First check reltable
-    #r = UuidTable(1111111, name='Abhishek')
-    #r.create()
-    #r2 = UuidTable.getUuid(1111111)
-    #r2.name = 'AJAY'
-    #r2.update('name')
-    #print r2
+    #TODO - get uuid props 
+    uuid_props_list = UuidProps.getUuidPropsUUId(id)
+    #TODO - get uuid labels
+    uuid_lab_list = UuidLabels.getUuidLabelsUUId(id)
+    #TODO - get uuid table ... all sorted by cid
+    u = UuidTable.getUuid(id).__dict__.copy()
+    #TODO - send all data to uuid.html
 
-    #TODO:
-    # r = UuidLabels(changeid=5, uuid=1, label='entity', changetype=1)
-    # r.create()
+    return render_template("uuid.html", temptext='You are here ' + str(r),
+                           props=uuid_props_list, labels=uuid_lab_list, uuid_entry=u)
+
+@guest.route('/relid/<int:id>')
+def relid(id):
+    print 'in relid'
+    from app.models.dbmodels.relid import RelIdTable, RelLabels, RelProps
+    #TODO - get relid props
+    relid_props_list = RelProps.getRelPropsRelId(id)
+    #TODO - get relid labels
+    relid_lab_list = RelLabels.getRelLabelsRelId(id)
+    #TODO - get relid table ... all sorted by cid
+    u = RelIdTable.getRel(id).__dict__.copy()
+    #TODO - send all data to relid.html
+
+    return render_template("relid.html", temptext='You are here ' + str(r),
+                           props=relid_props_list, labels=relid_lab_list, relid_entry=u)
 
 
-    #r2 = UuidLabels(changeid=2, uuid=1111111, label='aa', changetype=1)
-    #r2.create()
-    #r3 = UuidLabels.getUuidLabels(2)
-    #print r3
+@guest.route('/changeid/<int:id>')
+def changeid(id):
+    print 'in changeid'
+    from app.models.dbmodels.changeid import ChangeItem
+    #TODO - get changeid table ... all sorted by cid
+    u = ChangeItem.getChangeItem(id).__dict__.copy()
+    #TODO - send all data to changeid.html
 
-    #Last, check relprops ##TODO
-    #r = UuidProps(changeid=5, uuid=34567, propname='name',changetype=1, newpropvalue='Abhishek Agarwal')
-    #r.create()
-
-    # r2 = UuidProps(changeid=2, uuid=1111111, propname='mama',
-    #                oldpropvalue='ert', newpropvalue='ort', changetype=1)
-    # r2.create()
-    # r3 = UuidProps.getUuidProps(2)
-    # print r3
-    # print 'should be here if all works fine'
-    #print type(r)
-
-    return render_template("temp.html", homeclass="active", temptext='You are here ' + str(r))
+    return render_template("changeid.html", temptext='You are here ' + str(r),
+                           props=changeid_props_list, labels=changeid_lab_list, changeid_entry=u)
 
 
 @guest.route('/rel/')

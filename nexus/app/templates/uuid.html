@@ -1,0 +1,58 @@
+<!-- extend base layout -->
+{% extends "basic.html" %}
+{% block content %}
+
+<div class="starter-template" align="center" >
+    {{temptext|safe}}
+    <!-- For the labels-->
+    <div class="row">
+        <div class="col-md-8 col-md-offset-3">
+            <h3>Labels for {{uuid_entry.name}}</h3>
+            <!-- TODO - Replace with a panel maybe-->
+            <!-- TODO - filter table entries (list_tasks.html)-->
+            <table>
+                {%for l in labels%}
+                <tr>
+                    {% keys =  l.keys()%}
+                    {% for k in keys %}
+                    <th> {{k}} </th>
+                    {%endfor%}
+                </tr>
+                <tr>
+                    {% for k in keys %}
+                        <td> {{l[k]}}</td>
+                    {%endfor%}
+                </tr>
+                {%endfor%}
+            </table>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- For the props-->
+    <div class="row">
+        <div class="col-md-8 col-md-offset-3">
+            <h3>Properties for {{uuid_entry.name}}</h3>
+            <!-- TODO - Replace with a panel maybe-->
+            <!-- TODO - filter table entries(list_tasks.html)-->
+            <table>
+                {%for p in props%}
+                <tr>
+                    {% keys =  p.keys()%}
+                    {% for k in keys %}
+                    <th> {{k}} </th>
+                    {%endfor%}
+                </tr>
+                <tr>
+                    {% for k in keys %}
+                        <td> {{p[k]}}</td>
+                    {%endfor%}
+                </tr>
+                {%endfor%}
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
