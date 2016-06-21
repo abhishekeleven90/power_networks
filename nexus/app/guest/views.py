@@ -22,7 +22,7 @@ def temp2():
     print 'will be here if all fine'
     return render_template("temp.html", homeclass="active", temptext ='You are here '+en2.name+' '+en2.labels)
 
-@guest.route('/uuid/<int:id>')
+@guest.route('/uuid/<int:id>/')
 def uuid(id):
     print ''
     from app.models.dbmodels.uuid import UuidTable, UuidLabels, UuidProps
@@ -32,37 +32,49 @@ def uuid(id):
     uuid_lab_list = UuidLabels.getUuidLabelsUUId(id)
     #TODO - get uuid table ... all sorted by cid
     u = UuidTable.getUuid(id).__dict__.copy()
+    del u['dbwrap']
+    del u['tablename']
     #TODO - send all data to uuid.html
 
-    return render_template("uuid.html", temptext='You are here ' + str(r),
-                           props=uuid_props_list, labels=uuid_lab_list, uuid_entry=u)
+    return render_template("uuid.html", props=uuid_props_list,
+            prop_keys=uuid_props_list[0].keys(), labels=uuid_lab_list,
+            label_keys=uuid_lab_list[0].keys(), uuid_entry=u)
 
-@guest.route('/relid/<int:id>')
-def relid(id):
+@guest.route('/relid/<int:id>/<string:label>/<string:propname>/<string:newpropvalue>/')
+@guest.route('/relid/<int:id>/')
+def relid(id, label=None, propname=None, newpropvalue=None):
     print 'in relid'
     from app.models.dbmodels.relid import RelIdTable, RelLabels, RelProps
-    #TODO - get relid props
-    relid_props_list = RelProps.getRelPropsRelId(id)
-    #TODO - get relid labels
-    relid_lab_list = RelLabels.getRelLabelsRelId(id)
-    #TODO - get relid table ... all sorted by cid
+
+    if label is None or propname is None or newpropvalue is None:
+        relid_props_list = RelProps.getRelPropsRelId(id)
+        relid_lab_list = RelLabels.getRelLabelsRelId(id)
+    else:
+        relid_props_list = RelProps.getRelByPropRelId(propname, newpropvalue, id)
+        relid_lab_list = RelLabels.getRelByLabelRelId(label, id)
+
     u = RelIdTable.getRel(id).__dict__.copy()
-    #TODO - send all data to relid.html
+    del u['dbwrap']
+    del u['tablename']
+    
+    return render_template("relid.html", temptext='You are here ',
+                           props=relid_props_list, labels=relid_lab_list, relid_entry=u,
+                           label_keys=relid_lab_list[0].keys(),
+                           prop_keys=relid_props_list[0].keys())
 
-    return render_template("relid.html", temptext='You are here ' + str(r),
-                           props=relid_props_list, labels=relid_lab_list, relid_entry=u)
 
-
-@guest.route('/changeid/<int:id>')
+@guest.route('/changeid/<int:id>/')
 def changeid(id):
     print 'in changeid'
-    from app.models.dbmodels.changeid import ChangeItem
+    from app.models.dbmodels.change import ChangeItem
     #TODO - get changeid table ... all sorted by cid
     u = ChangeItem.getChangeItem(id).__dict__.copy()
     #TODO - send all data to changeid.html
+    del u['dbwrap']
+    del u['tablename']
 
-    return render_template("changeid.html", temptext='You are here ' + str(r),
-                           props=changeid_props_list, labels=changeid_lab_list, changeid_entry=u)
+    return render_template("changeid.html", temptext='You are here ',
+                            changeid_entry=u)
 
 
 @guest.route('/rel/')
@@ -79,8 +91,8 @@ def rel():
 
     #Second check rellabels
     ##TODO:
-    # r = RelLabels(changeid=5, relid=123, label='worksin', changetype=1)
-    # r.create()
+    r = RelLabels(changeid=5, relid=123, label='worksin', changetype=1)
+    r.create()
 
 
     #r2 = RelLabels(changeid=2, relid=1111111, label='aa', changetype=1)

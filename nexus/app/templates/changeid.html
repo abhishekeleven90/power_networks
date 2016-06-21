@@ -1,27 +1,25 @@
 <!-- extend base layout -->
 {% extends "basic.html" %}
 {% block content %}
-
-<div class="starter-template" align="center" >
-    {{temptext|safe}}
-    <!-- For the labels-->
-    <div class="row">
-        <div class="col-md-8 col-md-offset-3">
-            <h3>Details for {{changeid_entry.changeid}}</h3>
-            <!-- TODO - Replace with a panel maybe-->
-            <!-- TODO - similar to show_task.html -->
-            <table>
+<div class="row">
+    <div class="col-md-8 col-md-offset-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Details for ChangeID # - {{changeid_entry.changeid}}</h3>
+            </div>
+        <!-- TODO - Replace with a panel maybe-->
+        <!-- TODO - similar to show_task.html -->
+        <table class="table table-user-information">
+            {% for k,v in changeid_entry.items() %}
                 <tr>
-                    {% keys =  changeid_entry.keys()%}
-                    {% for k in keys %}
-                    <td> {{k}} </td> <td> {{changeid_entry[k]}} </td>
-                    {%endfor%}
+                    <td><b> {{k}}: </b> </td> <td> {{v}} </td>
                 </tr>
-            </table>
-        </div>
+            {%endfor%}
+        </table>
     </div>
+</div>
 
-    <hr>
+<hr>
 
 </div>
 {% endblock %}

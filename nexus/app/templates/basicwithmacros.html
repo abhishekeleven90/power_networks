@@ -340,3 +340,61 @@
       </div>
 
 {% endmacro %}
+
+{% macro labeltable(labels, label_keys, linkable_list)%}
+
+<!-- linkable list will contain all the keys which will be linkable -->
+<table class="table table-hover" >
+    <tr>
+        {%for k in label_keys %}
+            <th>{{k}}</th>
+        {%endfor%}
+    </tr>
+    {%for l in labels%}
+        <tr>
+            {% for k,v in l.items() %}
+                {%if k in linkable_list %}
+                    <td>
+                        {% set url = 'guest.' ~ k %}
+                        <a href="{{url_for(url, id=v)}}">
+                            {{v}}
+                        </a>
+                    </td>
+                {%else%}
+                    <td>{{v}}</td>
+                {%endif%}
+            {%endfor%}
+        </tr>
+    {%endfor%}
+</table>
+{% endmacro %}
+
+{% macro proptable(props, prop_keys, linkable_list) %}
+<!-- linkable list will contain all the keys which will be linkable -->
+<!-- FIXME - Is this table macro redundant?? After testing, yeah it is!!! -->
+<table class="table table-hover" >
+    <tr>
+        {%for k in prop_keys %}
+            <th>{{k}}</th>
+        {%endfor%}
+    </tr>
+    {%for p in props%}
+        <tr>
+            {% for k,v in p.items() %}
+                {%if k in linkable_list %}
+                <!--TODO: Change above line to k in linkable_list to generalize -->
+                    <td>
+                        {% set url = 'guest.' ~ k %}
+                        <a href="{{url_for(url, id=v)}}">
+                            {{v}}
+                        </a>
+                    </td>
+                {%else%}
+                    <td>{{v}}</td>
+                {%endif%}
+            {%endfor%}
+        </tr>
+    {%endfor%}
+</table>
+{% endmacro %}
+

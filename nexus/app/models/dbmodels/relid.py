@@ -106,7 +106,7 @@ class RelIdTable:
             self.dbwrap.commitAndClose()
 
         query = "SELECT relid, reltype, startuuid, enduuid \
-                 FROM " + self.tablename + " where relid=" + str(self.relid)
+                 FROM " + self.tablename + "  where relid=" + str(self.relid)
 
         cursor.execute(query)
         rows = cursor.fetchall()
@@ -184,11 +184,11 @@ class RelLabels:
             self.dbwrap.commitAndClose()
 
         if by == 'changeid':
-            bystr = "where changeid=" + self.userid
+            bystr = " where changeid=" + str(self.changeid)
         else:
-            bystr = "where taskid=" + self.taskid
+            bystr = " where relid=" + str(self.relid)
 
-        rest_str = 'ORDER by ' + self.changeid + ' DESC'
+        rest_str = ' ORDER by changeid DESC'
         query = "SELECT changeid, relid, label, changetype FROM "\
                 + self.tablename + bystr + rest_str
 
@@ -206,9 +206,12 @@ class RelLabels:
             results_list.append(rlabel.__dict__.copy())
 
         self.dbwrap.commitAndClose()
+        for r in results_list: 
+            del r['dbwrap']
+            del r['tablename']
         return results_list
     
-    def getListFromDBMultipleProps(self, by_list=['']):
+    def getListFromDBMultiple(self, by_list=['']):
 
         #TODO - verify the by_list
         for by in by_list: assert(by in self.__dict__.keys())
@@ -224,12 +227,18 @@ class RelLabels:
             self.dbwrap.commitAndClose()
 
         #TODO - create a list of all strings 
-        bystr_list = [' ' + by + '=' + self.__dict__[by] for by in by_list]
-            
+        bystr_list = []
+        for by in by_list:
+            paramstr = ' ' + str(by) + '='
+            if (type(self.__dict__[by]) == int): fieldstr = "%d"
+            else: fieldstr = "'%s'"
+            fields = fieldstr % self.__dict__[by]
+            bystr_list.append(paramstr + fields)
+
         #TODO - join all sources by ' AND '
         bystr = ' AND '.join(bystr_list)
         #TODO - append to select query and run it as usual
-        rest_str = 'ORDER by ' + self.changeid + ' DESC'
+        rest_str = ' ORDER by  changeid DESC'
         query = "SELECT changeid, relid, label, changetype FROM "\
                 + self.tablename + " WHERE " + bystr + rest_str
         print query
@@ -261,17 +270,23 @@ class RelLabels:
     @classmethod
     def getRelLabelsRelId(cls, relid):
         r = RelLabels(relid=relid)
-        return r.getListFromDB(relid)
+        return r.getListFromDB(by='relid')
 
     @classmethod
     def getRelLabelsChangeId(cls, changeid):
         r = RelLabels(changeid=changeid)
-        return r.getListFromDB(changeid)
+        return r.getListFromDB(by='changeid')
 
     @classmethod
-    def getRelPropsBothIds(cls, changeid):
-        rp = RelProps(changeid=changeid)
-        return rp.getListFromDBMultipleProps(['changeid', 'relid'])
+    def getRelLabelsBothIds(cls, changeid, relid):
+        rp = RelLabels(changeid=changeid, relid=relid)
+        return rp.getListFromDBMultiple(['changeid', 'relid'])
+
+    @classmethod
+    def getRelByLabelRelId(cls, label, relid):
+        u = RelLabels(relid=relid)
+        u.label = label
+        return u.getListFromDBMultiple(['label', 'relid'])
 
 class RelProps:
 
@@ -340,14 +355,15 @@ class RelProps:
             self.dbwrap.commitAndClose()
 
         if by == 'changeid':
-            bystr = "where changeid=" + self.userid
+            bystr = " where changeid=" + str(self.changeid)
         else:
-            bystr = "where relid=" + self.taskid
+            bystr = " where relid=" + str(self.relid)
 
-        rest_str = 'ORDER by ' + self.changeid + ' DESC'
+        rest_str = ' ORDER by changeid DESC'
         query = "SELECT changeid, relid, propname, oldpropvalue, newpropvalue,\
                  changetype FROM " + self.tablename + bystr + rest_str
 
+        print query
         cursor.execute(query)
         rows = cursor.fetchall()
         assert(len(rows) >= 1)
@@ -364,9 +380,12 @@ class RelProps:
             results_list.append(rprops.__dict__.copy())
 
         self.dbwrap.commitAndClose()
+        for r in results_list:
+            del r['dbwrap']
+            del r['tablename']
         return results_list
 
-    def getListFromDBMultipleProps(self, by_list=['']):
+    def getListFromDBMultiple(self, by_list=['']):
 
         #TODO - verify the by_list
         for by in by_list: assert(by in self.__dict__.keys())
@@ -377,17 +396,23 @@ class RelProps:
             cursor = self.dbwrap.cursor()
         except Exception as e:
             print e.message
-            print "[RelLabels object] In SELECT"
+            print "[RelProps object] In SELECT"
             print "Cannot get cursor"
             self.dbwrap.commitAndClose()
 
         #TODO - create a list of all strings 
-        bystr_list = [' ' + by + '=' + self.__dict__[by] for by in by_list]
+        bystr_list = []
+        for by in by_list:
+            paramstr = ' ' + str(by) + '='
+            if (type(self.__dict__[by]) == int): fieldstr = "%d"
+            else: fieldstr = "'%s'"
+            fields = fieldstr % self.__dict__[by]
+            bystr_list.append(paramstr + fields)
             
         #TODO - join all sources by ' AND '
         bystr = ' AND '.join(bystr_list)
         #TODO - append to select query and run it as usual
-        rest_str = 'ORDER by ' + self.changeid + ' DESC'
+        rest_str = ' ORDER by changeid DESC'
         query = "SELECT changeid, relid, propname, oldpropvalue, newpropvalue,\
                  changetype FROM " + self.tablename + " WHERE " + bystr + rest_str
         print query
@@ -397,15 +422,15 @@ class RelProps:
         assert(len(rows) >= 1)
         print len(rows)
         results_list = []
-        rlabel = RelLabels()
+        rprop = RelProps()
         for r in rows:
-            rlabel.changeid = r[0]
-            rlabel.relid = r[1]
-            rlabel.propname = r[2]
-            rlabel.oldpropvalue = r[3]
-            rlabel.newpropvalue = r[4]
-            rlabel.changetype = r[5]
-            results_list.append(rlabel.__dict__.copy())
+            rprop.changeid = r[0]
+            rprop.relid = r[1]
+            rprop.propname = r[2]
+            rprop.oldpropvalue = r[3]
+            rprop.newpropvalue = r[4]
+            rprop.changetype = r[5]
+            results_list.append(rprop.__dict__.copy())
 
         self.dbwrap.commitAndClose()
 
@@ -420,16 +445,23 @@ class RelProps:
 
     @classmethod
     def getRelPropsChangeId(cls, changeid):
-        rp = RelProps(changeid)
+        rp = RelProps(changeid=changeid)
         return rp.getListFromDB(by='changeid')
 
     @classmethod
     def getRelPropsRelId(cls, relid):
-        rp = RelProps(relid)
+        rp = RelProps(relid=relid)
         return rp.getListFromDB(by='relid')
 
     @classmethod
-    def getRelPropsBothIds(cls, changeid):
-        rp = RelProps(changeid=changeid)
-        return rp.getListFromDBMultipleProps(['changeid', 'relid'])
+    def getRelPropsBothIds(cls, changeid, relid):
+        rp = RelProps(changeid=changeid, relid=relid)
+        return rp.getListFromDBMultiple(['changeid', 'relid'])
+
+    @classmethod
+    def getRelByPropRelId(cls, propname, propvalue, relid):
+        u = RelProps(relid=relid)
+        u.propname = propname
+        u.newpropvalue = propvalue
+        return u.getListFromDBMultiple(['relid', 'propname', 'newpropvalue'])
 

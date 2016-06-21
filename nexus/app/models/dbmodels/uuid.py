@@ -109,6 +109,7 @@ class UuidTable:
         query = "SELECT uuid, name FROM " + self.tablename +\
                 " where uuid=" + str(self.uuid)
 
+        print query
         cursor.execute(query)
         rows = cursor.fetchall()
         assert(len(rows) == 1)
@@ -182,13 +183,59 @@ class UuidLabels:
             self.dbwrap.commitAndClose()
 
         if by == 'changeid':
-            bystr = "where changeid=" + self.changeid
+            bystr = " where changeid=" + str(self.changeid)
         else:
-            bystr = "where uuid=" + self.uuid
+            bystr = " where uuid=" + str(self.uuid)
 
-        rest_str = 'ORDER by ' + self.changeid + ' DESC'
+        rest_str = ' ORDER by changeid DESC'
         query = "SELECT changeid, uuid, label, changetype FROM "\
                 + self.tablename + bystr + rest_str
+
+        print query
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        assert(len(rows) >= 1)
+        print len(rows)
+        results_list = []
+        ulabel = UuidLabels()
+        for r in rows:
+            ulabel.changeid = r[0]
+            ulabel.uuid = r[1]
+            ulabel.label = r[2]
+            ulabel.changetype = r[3]
+            results_list.append(ulabel.__dict__.copy())
+
+        self.dbwrap.commitAndClose()
+        for r in results_list:
+            del r['tablename']
+            del r['dbwrap']
+        return results_list
+
+    def getListFromDBMultiple(self, by_list=['']):
+
+        #TODO - verify the by_list
+        for by in by_list: assert(by in self.__dict__.keys())
+
+        #TODO - connect to db
+        self.dbwrap.connect()
+        try:
+            cursor = self.dbwrap.cursor()
+        except Exception as e:
+            print e.message
+            print "[UuidLabels object] In SELECT"
+            print "Cannot get cursor"
+            self.dbwrap.commitAndClose()
+
+        #TODO - create a list of all strings 
+        bystr_list = [' ' + str(by) + '=' + self.__dict__[by] for by in by_list]
+            
+        #TODO - join all sources by ' AND '
+        bystr = ' AND '.join(bystr_list)
+        #TODO - append to select query and run it as usual
+        rest_str = ' ORDER by changeid DESC'
+        query = "SELECT changeid, uuid, label, changetype FROM "\
+                + self.tablename + " WHERE " + bystr + rest_str
+        print query
 
         cursor.execute(query)
         rows = cursor.fetchall()
@@ -204,7 +251,10 @@ class UuidLabels:
             results_list.append(rlabel.__dict__.copy())
 
         self.dbwrap.commitAndClose()
+
+        #TODO - return the list
         return results_list
+
 
     def __str__(self):
         s = '[ UuidLabels -- uuid: %s   label: %s  changeid: %s  changetype: %s]' %(self.uuid, self.label, self.changeid, self.changetype)
@@ -219,6 +269,18 @@ class UuidLabels:
     def getUuidLabelsChangeId(cls, changeid):
         u = UuidLabels(changeid=changeid)
         return u.getListFromDB(by='changeid')
+
+    @classmethod
+    def getUuidLabelsBothIds(cls, changeid, uuid):
+        u = UuidLabels(changeid=changeid, uuid=uuid)
+        return u.getListFromDBMultiple(['changeid', 'uuid'])
+
+    #TODO - get records by uuid, label
+    @classmethod
+    def getUuidByLabelUuid(cls, label, uuid):
+        u = UuidLabels(uuid=uuid)
+        u.label = label
+        return u.getListFromDBMultiple(['label', 'uuid'])
 
 
 class UuidProps:
@@ -277,7 +339,7 @@ class UuidProps:
 
     def getListFromDB(self, by):
 
-        assert ( by in ['changeid', 'uuid'])
+        assert (by in ['changeid', 'uuid'])
         self.dbwrap.connect()
         try:
             cursor = self.dbwrap.cursor()
@@ -287,30 +349,85 @@ class UuidProps:
             self.dbwrap.commitAndClose()
 
         if by == "changeid":
-            bystr = 'where changeid= ' + self.changeid
-        else: bystr = 'where uuid= ' + self.uuid
+            bystr = 'where changeid= ' + str(self.changeid)
+        else: bystr = ' where uuid= ' + str(self.uuid)
 
-        rest_str = 'ORDER by ' + self.changeid + ' DESC'
+        rest_str = ' ORDER by changeid DESC'
         query = "SELECT changeid, uuid, propname, oldpropvalue, newpropvalue,\
                  changetype FROM " + self.tablename + bystr + rest_str
 
+        print query
         cursor.execute(query)
         rows = cursor.fetchall()
         assert(len(rows) >= 1)
         results_list = []
-        rprops = UuidProps()
+        uprop = UuidProps()
         for r in rows:
-            rprops.changeid = r[0]
-            rprops.uuid = r[1]
-            rprops.propname = r[2]
-            rprops.oldpropvalue = r[3]
-            rprops.newpropvalue = r[4]
-            rprops.changetype = r[5]
-
-            results_list.append(rprops.__dict__.copy())
+            uprop.changeid = r[0]
+            uprop.uuid = r[1]
+            uprop.propname = r[2]
+            uprop.oldpropvalue = r[3]
+            uprop.newpropvalue = r[4]
+            uprop.changetype = r[5]
+            results_list.append(uprop.__dict__.copy())
 
         self.dbwrap.commitAndClose()
+        for r in results_list:
+            del r['tablename']
+            del r['dbwrap']
+
         return results_list
+
+    def getListFromDBMultiple(self, by_list=['']):
+
+        #TODO - verify the by_list
+        for by in by_list: assert(by in self.__dict__.keys())
+
+        #TODO - connect to db
+        self.dbwrap.connect()
+        try:
+            cursor = self.dbwrap.cursor()
+        except Exception as e:
+            print e.message
+            print "[UuidProps object] In SELECT"
+            print "Cannot get cursor"
+            self.dbwrap.commitAndClose()
+
+        #TODO - create a list of all strings
+        bystr_list = [' ' + str(by) + '=' + self.__dict__[by] for by in by_list]
+
+        #TODO - join all sources by ' AND '
+        bystr = ' AND '.join(bystr_list)
+        #TODO - append to select query and run it as usual
+        rest_str = ' ORDER by changeid DESC'
+        query = "SELECT changeid, uuid, propname, oldpropvalue, newpropvalue,\
+                 changetype FROM " + self.tablename + " WHERE " + bystr + rest_str
+        print query
+
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        assert(len(rows) >= 1)
+        print len(rows)
+        results_list = []
+        uprop = UuidProps()
+        for r in rows:
+            uprop.changeid = r[0]
+            uprop.relid = r[1]
+            uprop.propname = r[2]
+            uprop.oldpropvalue = r[3]
+            uprop.newpropvalue = r[4]
+            uprop.changetype = r[5]
+            results_list.append(uprop.__dict__.copy())
+
+        self.dbwrap.commitAndClose()
+
+        #TODO - return the list
+        for r in results_list:
+            del r['tablename']
+            del r['dbwrap']
+
+        return results_list
+
 
     def __str__(self):
         s = '[ UuidProps -- uuid: %s   propname: %s  changeid: %s  changetype: %s oldpropvalue: %s newpropvalue: %s]'
@@ -326,3 +443,15 @@ class UuidProps:
     def getUuidPropsChangeId(cls, changeid):
         up = UuidProps(changeid = changeid)
         return up.getListFromDB(by='changeid')
+
+    @classmethod
+    def getUuidPropsBothIds(cls, changeid, uuid):
+        u = UuidProps(changeid=changeid, uuid=uuid)
+        return u.getListFromDBMultiple(['changeid', 'uuid'])
+
+    @classmethod
+    def getUuidByPropUuid(cls, propname, propvalue, uuid):
+        u = UuidProps(uuid=uuid)
+        u.propname = propname
+        u.newpropvalue = propvalue
+        return u.getListFromDBMultiple(['uuid', 'propname', 'newpropvalue'])

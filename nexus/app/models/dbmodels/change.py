@@ -71,7 +71,7 @@ class ChangeItem:
             print "Cannot get cursor"
             self.dbwrap.commitAndClose()
 
-        rest_str = 'ORDER by ' + self.changeid + ' DESC'
+        rest_str = ' ORDER by ' + str(self.changeid) + ' DESC'
         query = "SELECT changeid, taskid, pushedby, verifiedby, verifydate, \
                  pushdate, fetchdate FROM " + self.tablename + " where changeid=" +\
                  str(self.changeid) + rest_str
@@ -90,8 +90,53 @@ class ChangeItem:
 
         return self
 
+    def getListFromDB(self, by):
+
+        assert(by in ['pushedby', 'changeid', 'taskid'])
+
+        #TODO - connect to db
+        self.dbwrap.connect()
+        try:
+            cursor = self.dbwrap.cursor()
+        except Exception as e:
+            print e.message
+            print "[ChangeId object] In SELECT"
+            print "Cannot get cursor"
+            self.dbwrap.commitAndClose()
+
+        by_str = ' ' + by + '=' + self.__dict__[by]
+
+        rest_str = ' ORDER by ' + str(self.changeid) + ' DESC'
+        query = "SELECT changeid, taskid, pushedby, verifiedby, verifydate, \
+                 pushdate, fetchdate FROM " + self.tablename + " WHERE "\
+                 + by_str + rest_str
+
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        assert(len(rows) >= 1)
+        print rows
+        results = []
+        chg = ChangeItem()
+        for r in rows:
+            chg.changeid = r[0]
+            chg.taskid = r[1]
+            chg.pushedby = r[2]
+            chg.verifiedby = r[3]
+            chg.verifydate = r[4]
+            chg.pushdate = r[5]
+            chg.fetchdate = r[6]
+            results.append(chg.__dict__.copy())
+
+        self.dbwrap.commitAndClose()
+        return results
+
     @classmethod
     def getChangeItem(cls, changeid):
         chg = ChangeItem()
         chg.changeid = changeid
         return chg.getSelfFromDB()
+
+    @classmethod
+    def getChangesUserId(cls, userid):
+        r = ChangeItem(pushedby=userid)
+        return r.getListFromDB(userid)
