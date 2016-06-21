@@ -6,6 +6,10 @@ from app.forms import EditEntityForm, form_error_helper
 def show():
 	from app.models.dbmodels.user import User
 	user = User.getUser(session['userid'])
+	##!!PROV!!: call all changes made by this user
+	##!!ELELV!!
+	##show changes in view
+	##also this profile can be shown to the amdin etc for elevate button
 	return render_template("user_profile.html", user = user)
 
 

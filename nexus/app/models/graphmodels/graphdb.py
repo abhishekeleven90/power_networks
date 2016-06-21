@@ -177,6 +177,30 @@ class GraphDB:
             enlist.append(res[0])
         return enlist
 
+    def getDirectlyConnectedRelations(self, idname, idval, uniquelabel='', isIDString = True,outgoing=True):
+        '''
+            given idname like uuid, henid and uniquelabel like entity or hyperedgenode
+            gives us the connected nodes of this node
+            returns nodes which have uuids only
+            note: works for hyperedgenodes only for now
+            #TODO: extend so that this info can be shown on view page
+        '''
+        from app.constants import LABEL_ENTITY
+        invertedComma = ''
+        if isIDString:
+            invertedComma = "'"
+        query = ''
+        if outgoing:
+            query = "match (n:%s {%s:%s%s%s})-[p]->(:%s) return distinct(p)"
+        else:
+            query = "match (n:%s {%s:%s%s%s})<-[p]-(:%s) return distinct(p)"
+        query = query %(uniquelabel, idname, invertedComma, idval, invertedComma, LABEL_ENTITY)
+        results = self.graph.cypher.execute(query)
+        rellist = []
+        for res in results:
+            rellist.append(res[0])
+        return rellist
+
 
     ##example of some text input: (n154346:businessperson:person:politician {name:"Anita",uuid:1234})
     ##Usage: deserializeNode('''(n154346:businessperson:person:politician {name:"Anita",uuid:1234})''')

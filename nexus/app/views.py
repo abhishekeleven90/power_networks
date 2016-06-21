@@ -172,13 +172,64 @@ def readEntity(uuid):
     ##show that info
     ## show the graph and connections in pble format? pble = presentatble
     from app.models.graphmodels.graphdb import CoreGraphDB
-    gg = CoreGraphDB()
-    node = gg.entity(uuid)
+    core = CoreGraphDB()
+    node = core.entity(uuid)
+    outrels = core.getDirectlyConnectedRelations('uuid', str(uuid), uniquelabel='entity', isIDString = False,outgoing=True)
+    inrels = core.getDirectlyConnectedRelations('uuid', str(uuid), uniquelabel='entity', isIDString = False,outgoing=False)
     #3missing is how to better represent it online
     return render_template("entity_read.html",
         homeclass="active",
         uuid=str(uuid),
-        entity=str(node),node=node)
+        entity=str(node),node=node,outrels=outrels,inrels=inrels)
+
+
+# @app.route('/changes/<int:changeid>/',defaults={'uuid': None},  methods=["GET","POST"])
+@app.route('/changes/<string:type>/<int:id>/',defaults={'name': None, 'subtype': None}, methods=["GET","POST"])
+@app.route('/changes/<string:type>/<string:subtype>/<string:name>/<string:id>/', methods=["GET","POST"])
+def changes(type,id,name,subtype):
+    ##show all changes for this changeid
+    '''
+        type=change -- id is changeid
+        type=user -- id is userid
+
+        for all above two subtype is None automatically
+        for all above two name is None automatically
+
+        type=relation, id is relid
+            if subtype not None:
+                subtype=prop, name is prop's name
+                subtype=label, name is label's name
+
+        type=entity, id is uuid
+            if subtype not None:
+                subtype=prop, name is prop's name
+                subtype=label, name is label's name
+    '''
+    ##TODO:pagination?? afterwards will see
+    ## http://127.0.0.1:5001/changes/change/345/
+    if type=="change":
+        ##TODO show change table
+        id = int(id) ##convert to string
+        return "change table being shown for changeid "+str(id)
+
+    ## http://127.0.0.1:5001/changes/user/545/
+    if type=="user":
+        return "change table being shown for userid "+str(id)
+
+    ##
+    if type=="entity" or type=="relation":
+        id=int(id) ##convert to string
+        if subtype is None:
+            ## http://127.0.0.1:5001/changes/entity/345/
+            ## http://127.0.0.1:5001/changes/relation/345/
+            return "change table being shown for "+str(type)+" "+str(id)
+        elif subtype=="label" or subtype=="prop":
+            ## http://127.0.0.1:5001/changes/entity/label/politcian/345/
+            ## http://127.0.0.1:5001/changes/entity/prop/name/345/
+            ## TODO: take care of label or prop doesnt exist for the graph object
+            return "change table being shown for %s, %s, %s, %s" %(type,subtype,name,id)
+
+    abort(404)
 
 #show the page about this relation
 #show an edit button on that page if the user is logged in, or route to log in page, how to remember?

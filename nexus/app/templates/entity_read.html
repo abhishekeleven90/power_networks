@@ -1,12 +1,76 @@
 <!-- extend base layout -->
 {% extends "basicwithmacros.html" %}
 
+{% macro enRelation(inrels, outrels)%}
+<table class="table table-hover">
+	<tr>
+		<td>
+			<b>
+						relation
+						</b>
+		</td>
+		<td>
+			<b>
+						relationship with [entity]
+						</b>
+		</td>
+		<td>
+			<b>
+						relid
+						</b>
+		</td>
+		<!-- bidirectional??TODO-->
+
+		<!-- <td>
+						<b>
+						startDate
+						</b>
+				</td>
+				<td>
+						<b>
+
+						</b>
+				</td> -->
+	</tr>
+	{% for rel in outrels %}
+	<tr>
+		<td>
+			- {{rel.type}} - >
+		</td>
+		<td>
+			{{rel.end_node['name']}} - <a href="{{url_for('readEntity',uuid=rel.end_node['uuid']|int)}}">{{rel.end_node['uuid']}}</a> <em>[{{list2csv(rel.end_node.labels)}}]</em>
+		</td>
+		<td>
+			<a href="{{url_for('readRelation',relid=rel['relid']|int)}}">{{rel['relid']}}</a>
+		</td>
+	</tr>
+	{% endfor %} {% for rel in inrels %}
+	<tr>
+		<td>
+			< - {{rel.type}} -
+		</td>
+				<td>
+					{{rel.start_node['name']}} - <a href="{{url_for('readEntity',uuid=rel.start_node['uuid']|int)}}">{{rel.start_node['uuid']}}</a> [{{list2csv(rel.start_node.labels)}}]
+				</td>
+				<td>
+					<a href="{{url_for('readRelation',relid=rel['relid']|int)}}">{{rel['relid']}}</a>
+				</td>
+	</tr>
+	{% endfor %}
+</table>
+
+{% endmacro %}
+
+
 {% block content %}
-	<!--<div class="container">-->
-		<br/>
-		<br/>
-      
-    <!--</div> container-->
-    {{entity_read(node,False)}}
-   
-{% endblock %}
+<!--<div class="container">-->
+<br/>
+<br/>
+
+<!--</div> container-->
+{{entity_read(node,False)}}
+
+<br/>
+<br/>
+
+<h3>All connections</h3> {{enRelation(inrels,outrels)}} {% endblock %}
