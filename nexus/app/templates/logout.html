@@ -1,0 +1,17 @@
+<!-- extend base layout -->
+{% extends "basic.html" %}
+{% block content %}
+<div class="starter-template" align="center" >
+    {{temptext|safe}}
+    <script type="text/javascript">
+             <!--
+                function Redirect() {
+                    window.location={{ url_for('home') }}
+                }
+                
+                document.write("You will be redirected to main page in 5 sec.");
+                setTimeout('Redirect()', 5000);
+             //-->
+          </script>
+</div>
+{% endblock %}

@@ -6,14 +6,13 @@ import ast
 import re
 import urllib
 import jellyfish as jf
+#from app.constants import SOLR_CORE, SOLR_HOST, SOLR_PORT
 
 ##TODO: use constants, and test with guest.route
 
 
 def get_uuids(labels=['entity'], name=None, aliases=None, keywords=None, jaro=True, rows= 100):
 
-    default_url="http://"+str('localhost')+":"+str('8983')+"/solr/"+str('mtp2')+"/select?q=*%3A*\
-            &wt=python&rows=50000&indent=true"
     t = time()
 
     if labels is None or labels == []:
@@ -24,7 +23,7 @@ def get_uuids(labels=['entity'], name=None, aliases=None, keywords=None, jaro=Tr
         print "[get_uuid_solr] - No name-returning empty uuid list"
         return []
 
-    base_url = "http://"+str('localhost')+":"+str('8983')+"/solr/"+str('mtp2')+"/select?q="
+    base_url = "http://10.237.27.67:8983/solr/mtp2/select?q="
     rest_url = "&wt=python&rows="+str(rows)+"&indent=true"
     label_str = 'labels%3A('+urllib.quote_plus(' '.join(labels)) + ')'
 
@@ -67,46 +66,55 @@ def get_uuids(labels=['entity'], name=None, aliases=None, keywords=None, jaro=Tr
 
     for doc in docs:
         if jaro:
-            df_dic['name'].append(name)
+            df_dic['name'].append(str(doc['name']))
             df_dic['uuid'].append(doc['uuid'])
-            alias_list = [re.findall("[ .\w]+", x)[0] for x in doc['aliases']]
-            #df_dic['score'].append(max([jf.jaro_winkler(x.lower(), name) for x in alias_list]))
+            alias_list = [' '.join(re.findall("[ .\w]+", x)) for x in doc['aliases']]
+
             words = []
             for x in alias_list:
                 words.append(x)
                 subwords = x.split(' ')
                 for word in subwords:
                     words.append(word)
+
             df_dic['score'].append(max([jf.jaro_winkler(x.lower(), name) for x in words]))
-            df = pd.DataFrame(df_dic)
-            df = df[df.score > 0.6]  # take only those rows whose jaro threshold is >= 0.6
-            df = df.sort('score', ascending=False)
-            uuid_list = list(df.uuid)
-        else: uuid_list.append(doc['uuid'])
+        else: 
+            uuid_list.append(doc['uuid'])
+            name_list.append(str(doc['name']))
+
+
+    if jaro:
+        df = pd.DataFrame(df_dic)
+        df = df[df.score > 0.6]  # take only those rows whose jaro threshold is >= 0.6
+        df = df.sort('score', ascending=False)
+        uuid_list = list(df.uuid)
+        name_list = list(df.name)
+        score_list = list(df.score)
+        return uuid_list, name_list, score_list
 
     print "##printing df"
     #print df[df['uuid'] == '62458']
     print "##[get_uuid] - Time taken  -{} s".format(time() - t)
     print "##[get_uuid_solr]- UUid list length -{}".format(len(uuid_list))
 
-    return uuid_list
+    return uuid_list, name_list
 
 
 if __name__ == "__main__":
     #l = get_uuid()
     #print l
-    test_lab = ['entity']
+    test_lab = ['businessperson']
     test_kw = ['power']
     test_name = 'gautam adani'
-    test_aliases = ['gautam','adani']
+    test_aliases = ['gautam adani']
     #test_thres = ['0.2','0.5']
     t = time()
-    res = get_uuids(labels=test_lab, name=test_name, keywords=test_kw, aliases=test_aliases, jaro=True)
+    uuid_list, name_list, score_list = get_uuids(labels=test_lab, name=test_name, keywords=test_kw, aliases=test_aliases, jaro=True)
     #print "##Final result:-"
     print "##Num items found - [final] "
-    res=res[:50]
-    for item in res:
-        print item
-    print len(res)
+    print len(uuid_list)
     #print res
+    print "UUID : NAME : SCORE"
+    for u, n, s in zip(uuid_list, name_list, score_list):
+        print str(u) + " : " + str(n) + " : " + str(s)
     print "##Total time taken-{} s".format(time() - t)

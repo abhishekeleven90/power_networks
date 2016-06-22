@@ -13,8 +13,6 @@ from app.constants import SOLR_CORE, SOLR_HOST, SOLR_PORT
 
 def get_uuids(labels=['entity'], name=None, aliases=None, keywords=None, jaro=True, rows= 100):
 
-    default_url="http://"+str(SOLR_HOST)+":"+str(SOLR_PORT)+"/solr/"+str(SOLR_CORE)+"/select?q=*%3A*\
-            &wt=python&rows=50000&indent=true"
     t = time()
 
     if labels is None or labels == []:
@@ -48,12 +46,11 @@ def get_uuids(labels=['entity'], name=None, aliases=None, keywords=None, jaro=Tr
             keywords_new.append('+'.join([x+'~' for x in re.findall("[\w]+", k)]))
         keyword_str = 'keywords%3A(' + '+'.join(keywords_new) + ')'
 
-
     multiValued_str = [w for w in [alias_ph_str, alias_f_str, keyword_str
-         ] if w != '']
+                        ] if w != '']
     multiValued_str = '+'.join(multiValued_str)
     final_query_str = [w for w in [label_str, multiValued_str]
-            if w != '']
+                       if w != '']
     final_query_str = '+AND+'.join(final_query_str)
 
     query = base_url+final_query_str+rest_url
@@ -68,9 +65,9 @@ def get_uuids(labels=['entity'], name=None, aliases=None, keywords=None, jaro=Tr
 
     for doc in docs:
         if jaro:
-            df_dic['name'].append(name)
+            df_dic['name'].append(str(doc['name']))
             df_dic['uuid'].append(doc['uuid'])
-            alias_list = [re.findall("[ .\w]+", x)[0] for x in doc['aliases']]
+            alias_list = [' '.join(re.findall("[ .\w]+", x)) for x in doc['aliases']]
 
             words = []
             for x in alias_list:
@@ -79,15 +76,15 @@ def get_uuids(labels=['entity'], name=None, aliases=None, keywords=None, jaro=Tr
                 for word in subwords:
                     words.append(word)
 
-            #3instead of alias_list, use words??
-            df_dic['score'].append(max([jf.jaro_winkler(x.lower(), name) for x in alias_list]))
+            df_dic['score'].append(max([jf.jaro_winkler(x.lower(), name) for x in words]))
+        else:
+            uuid_list.append(doc['uuid'])
 
-
-            df = pd.DataFrame(df_dic)
-            df = df[df.score > 0.6]  # take only those rows whose jaro threshold is >= 0.6
-            df = df.sort('score', ascending=False)
-            uuid_list = list(df.uuid)
-        else: uuid_list.append(doc['uuid'])
+    if jaro:
+        df = pd.DataFrame(df_dic)
+        df = df[df.score > 0.6]  # take only those rows whose jaro threshold is >= 0.6
+        df = df.sort('score', ascending=False)
+        uuid_list = list(df.uuid)
 
     print "##printing df"
     #print df[df['uuid'] == '62458']

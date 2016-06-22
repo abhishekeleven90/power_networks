@@ -55,7 +55,7 @@ def login():
     print "Successfully sent email"
     '''
     #TODO: check if temp.html works fine always
-    if session.get('userid')>=1:
+    if session.get('userid') >= 1:
         return render_template("temp.html", loginclass="active", signincss=False, temptext="Already logged in!")
     form = LoginForm()
     if form.validate_on_submit():
@@ -78,7 +78,7 @@ def logout():
     if not session.get('userid'):
             return render_template("temp.html", loginclass="active", signincss=False, temptext="Please log in first!")
     session.clear()
-    return render_template("temp.html", loginclass="active", signincss=False, temptext="Successfully logged out!")
+    return render_template("logout.html", loginclass="active", signincss=False, temptext="Successfully logged out!")
 
 #get to land first on signup page, post to actually sign up
 @app.route('/signup/', methods=["GET","POST"])
