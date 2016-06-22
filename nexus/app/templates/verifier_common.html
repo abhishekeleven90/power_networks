@@ -3,12 +3,12 @@
 {% block content %}
 
 <div align="right">
-    {% block contentinner %}    
+    {% block contentinner %}
         <a href={{ url_for( 'verifier.beginagain', choice = 'options', kind = kind ) }}>
                         <button type="submit" class="btn btn-danger">Begin Again!</button>
         </a>
     {% endblock %}
 </div>
 
-   
+
 {% endblock %}

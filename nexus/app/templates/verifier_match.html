@@ -9,7 +9,7 @@
 
 //             $(function() { // <== Doc ready
 
-//     $('tr').click(function(event) {  
+//     $('tr').click(function(event) {
 
 //         if(event.target.type != "radio") {
 
@@ -36,12 +36,12 @@
 
 {% block contentinner %}
 
-    <!-- 
+    <!--
         Why buttons? Since they do not conflict with form.
         Also, this way just click above and the uuid list changes for us.
         This is a good way, dont change it.
     -->
-        
+
         <a href={{ url_for( 'verifier.match', kind = kind) }}>
 
                     <button type="submit" class="btn btn-primary">No post algo!</button>
@@ -51,7 +51,7 @@
 
                     <button type="submit"  class="btn btn-primary">Waterman!</button>
         </a>
-        
+
         <a href={{ url_for( 'verifier.match', kind = kind, postalgo = "jaro" ) }}>
                     <button type="submit" class="btn btn-primary">Jaro!</button>
         </a>
@@ -74,7 +74,8 @@
         <br/>
         <h1> Crawl ID : {{ID}} </h1>
         <h3> kind: {{kind}} </h3>
-        <br/> 
+        <h3> sourceurl: <a href="{{crawl_obj_original['_sourceurl_']}}">{{crawl_obj_original['_sourceurl_']}}</a></h3>
+        <br/>
     <!--</div> container-->
     <h3>To be matched</h3>
 
@@ -99,7 +100,7 @@
 
 
      <!-- <h3>Choose post algo: </h3>
-     
+
      <label><input type="radio" name="postalgo" value="none"></input> None </label>
 
      <label><input type="radio" name="postalgo" value="jaro"></input> Jaro </label>
@@ -108,14 +109,14 @@
 
      <button type="submit" name="submit" class="btn btn-default" value="algo">Go Now!</button> -->
 
-</div>  
+</div>
         <h3>From graph</h3>
         <br/>
 
         {% if kind == 'node' %}
             <table class="table table-hover" id="matchTable">
                     <tr>
-                        
+
                         <td>
                             <b>
                                 uuid
@@ -144,15 +145,15 @@
                     </tr>
 
                     {% for obj in graphobjs %}
-                    <tr class='clickable-row' > 
-                        
+                    <tr class='clickable-row' >
+
 
                         {{printRowNode(obj)}}
 
 
                         <div class="radio">
                         <td>
-                            
+
                                 <label><input type="radio" name="match_id" value="{{obj.properties[idname]}}"></input> </label>
                         </td>
                         </div>
@@ -163,11 +164,11 @@
             </table>
 
 
-        {% else %}        
+        {% else %}
 
             {% for obj in graphobjs %}
-                 
-            
+
+
                 <div class="radio">
                     <label><input type="radio" name="match_id" value="{{obj.properties[idname]}}"></input> {{obj.properties[idname]}}</label> <!-- AA -->
                 </div>
@@ -181,15 +182,15 @@
                     {{entity_read(obj,True)}}
                 {% endif %}
 
-                    <hr/>     
+                    <hr/>
             {% endfor %}
 
         {% endif %}
-    
+
             <div class="radio">
-                
+
                 <!-- Using NA as None is not a NICE string-->
-                <label><input type="radio" name="match_id" value="##NA##" data-toggle="modal" data-target=".warn-for-insert"></input> No I don't find the graph object of kind {{kind}} here! </label> <!-- AA --> 
+                <label><input type="radio" name="match_id" value="##NA##" data-toggle="modal" data-target=".warn-for-insert"></input> No I don't find the graph object of kind {{kind}} here! </label> <!-- AA -->
 
             </div>
 
@@ -197,11 +198,11 @@
 
             {% if kind  == 'node' %} <!-- patch to not allow user to enter IDs for relations --> <!-- as relations have been handled only after nodes, relations are always absolutely resolved -->
             <div class="radio">
-                
-                
-                <label><input type="radio" name="match_id" value="##ID##"></input> Will enter my own ID for kind {{kind}}:  </label> <!-- AA --> 
 
-                <label><input type="text" name="input_id"/></label> <!-- AA --> 
+
+                <label><input type="radio" name="match_id" value="##ID##"></input> Will enter my own ID for kind {{kind}}:  </label> <!-- AA -->
+
+                <label><input type="text" name="input_id"/></label> <!-- AA -->
 
             </div>
 
@@ -224,13 +225,13 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            
+
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 
                             <h3 class="modal-title">Warning</h3>
                         </div>
                         <div class="modal-body">
-                            <p> NEW graph object will be <b>INSERTED</b> <br/> 
+                            <p> NEW graph object will be <b>INSERTED</b> <br/>
                                 Kind : <b>{{kind}}</b>   CRAWL_ID : <b>{{ID}}</b> </p>
                         </div>
                         <div class="modal-footer">
@@ -239,5 +240,5 @@
                         </div><!-- /.modal-content -->
                         </div><!-- /.modal-dialog -->
                         </div><!-- /.modal -->
-   
+
 {% endblock %}

@@ -1,5 +1,5 @@
 {% macro user_profile(user) %}
-    
+
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
 
@@ -11,17 +11,17 @@
               <div class="row">
 
                 <div class="col-md-3 col-lg-3 " align="center"> <img alt="{{user.userid}}" style="padding-top: 5px" class="img-responsive pull-xs-left" src="http://cdn2.saveritemedical.com/product-default.jpg"> </div>
-                
-                <div class=" col-md-9 col-lg-9 "> 
+
+                <div class=" col-md-9 col-lg-9 ">
                   <table class="table table-user-information">
                     <tbody>
-                      
+
                       <tr>
                         <td><b>Role</b></td>
                         <td>
 
                             {{user.role}}
-                          
+
                         </td>
                       </tr>
 
@@ -31,16 +31,16 @@
                         <td>
 
                             {{user.keyEnabled}}
-                          
+
                         </td>
                       </tr>
-                          
 
-                      
+
+
                     </tbody>
                   </table>
-                  
-                  
+
+
 
                 </div>
               </div>
@@ -51,12 +51,13 @@
                             <a href="edit.html" data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
                             <a data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
                         </span>-->
+                        <a href="#">your edit history>></a>
                     </div>
-            
+
           </div>
         </div>
       </div>
-    
+
 {% endmacro %}
 
 
@@ -67,7 +68,7 @@
 
 {% block content %}
 
-<!-- 
+<!--
 <ul class="nav nav-tabs">
   <li role=><a href="#">As a </a></li>
   <li role="presentation"><a href="{{url_for('user.show')}}">User</a></li>

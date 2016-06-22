@@ -280,7 +280,7 @@ def match(kind):
 
         return render_template("verifier_match.html", homeclass="active",
             row=crawl_obj, graphobjs=graphobjs, ID=session[CRAWL_ID_NAME], kind=kind,
-            idname=gg.getCoreIDName(kind), connected_ens=connected_ens)
+            idname=gg.getCoreIDName(kind), connected_ens=connected_ens, crawl_obj_original=crawl_obj_original)
 
     else:
 
@@ -428,14 +428,14 @@ def diffPushGen(kind):
         if new_labels == [] and new_props == [] and conf_props == []:
             ##
             flash('Objects match prop by prop, label by label, just setting resolved id in crawldb')
-            print 'Objects match prop by prop, label by label, just setting resolved id in crawldb'
+            # print 'Objects match prop by prop, label by label, just setting resolved id in crawldb'
             return resolveFast(gg, kind, crawl_obj_original, curr_id, CRAWL_ID_NAME, CURR_ID)
 
         print session.get(CRAWL_ID_NAME,'Bhai kuch nahi aaaya!')
 
 
         return render_template("verifier_diff_gen.html", homeclass="active",
-            new_labels=new_labels, conf_props=conf_props, new_props=new_props, orig=orig, naya=naya, crawl_id = session[CRAWL_ID_NAME], kind=kind, tasktype=tasktype)
+            new_labels=new_labels, conf_props=conf_props, new_props=new_props, orig=orig, naya=naya, crawl_id = session[CRAWL_ID_NAME], kind=kind, tasktype=tasktype, crawl_obj_original=crawl_obj_original)
     else:
 
         from app.constants import MVPLIST

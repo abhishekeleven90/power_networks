@@ -215,7 +215,9 @@ def changes(type,id,name,subtype):
     ## http://127.0.0.1:5001/changes/user/545/
     if type=="user":
         return "change table being shown for userid "+str(id)
-
+    #
+    # if type=="task":
+    #     return "
     ##
     if type=="entity" or type=="relation":
         id=int(id) ##convert to string

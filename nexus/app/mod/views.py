@@ -3,10 +3,6 @@ from flask import render_template, flash, redirect, session, g, request, url_for
 
 @mod.route('/')
 def show():
-    print request.args
-    val = request.args['propname[]']
-
-    flash(val)
     return render_template("mod_home.html")
 
 ##adding code here so that user work doesnt clutter
@@ -45,7 +41,7 @@ def trial():
     #copynode.labels.add('personOfTheYear')
     copynode[CRAWL_NODENUMBER] = int(Utils.currentTimeStamp()) ##though idiotic, we wont be needing it for this!
     ##but for generating a unique name na!
-    
+
     copynode[CRAWL_EN_ID_NAME] = CRAWL_EN_ID_FORMAT %(copynode[CRAWL_TASKID], copynode[CRAWL_NODENUMBER])
 
     #flash(str(node))

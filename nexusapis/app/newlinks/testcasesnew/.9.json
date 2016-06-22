@@ -8,7 +8,7 @@
           "sourceurl": "http://loksabha.nic.in",
           "labels": ["person", "politician", "entity", "president","indianPresident"],
           "properties": {
-              "name": "Pranab Mukherjee"
+              "name": "Kocheril Raman Narayanan"
           }
       }, {
           "id": "2",
@@ -23,67 +23,80 @@
           "id": "3",
           "fetchdate": "1466024344",
           "sourceurl": "http://loksabha.nic.in",
-          "labels": ["person", "politician", "entity","businessperson","director"],
+          "labels": ["person", "politician", "entity","businessperson"],
           "properties": {
-              "name": "Naveen Jindal",
-              "dob": "4 March 1976"
+              "name": "Mr. Naveen Jindal",
+              "startDate": "9 March, 1970"
           }
       }, {
           "id": "4",
           "fetchdate": "1466024344",
           "sourceurl": "http://loksabha.nic.in",
-          "labels": ["company", "indianCompany", "entity"],
+          "labels": ["person", "entity"],
           "properties": {
-              "name": "Jindal Petroleum Ltd."
+              "name": "Shalu Jindal"
           }
-      }, {
+      } , {
           "id": "5",
           "fetchdate": "1466024344",
           "sourceurl": "http://loksabha.nic.in",
-          "labels": ["person", "politician", "entity"],
+          "labels": ["person", "entity"],
           "properties": {
-              "name": "Pratibha D Patil"
+              "name": "Om Prakash Jindal"
           }
       }, {
           "id": "6",
           "fetchdate": "1466024344",
           "sourceurl": "http://loksabha.nic.in",
-          "labels": ["state", "indianState", "entity"],
+          "labels": ["person", "politician", "entity"],
           "properties": {
-              "name": "Haryana"
+              "name": "Sonia gandhi"
           }
-      },  {
-        "id": "7",
-        "fetchdate": "1466024344",
-        "sourceurl": "http://loksabha.nic.in",
-        "labels": ["city", "indianCity", "unionTerritory","entity"],
-        "properties": {
-            "name": "Chandigarh"
-        }
       }
     ],
       "relations": [{
           "id": "1",
           "label": "worksin",
-          "start_entity": "1",
+          "start_entity": "3",
           "end_entity": "2",
           "fetchdate": "1466024344",
           "sourceurl": "http://loksabha.nic.in",
           "bidirectional": "no",
           "properties": {
-              "startdate": "01/01/2000",
-              "endDate": "23/12/2015"
           }
       }, {
           "id": "2",
-          "label": "capitalOf",
-          "start_entity": "7",
-          "end_entity": "6",
+          "label": "worksin",
+          "start_entity": "6",
+          "end_entity": "2",
           "fetchdate": "1466024344",
           "sourceurl": "http://loksabha.nic.in",
           "bidirectional": "no",
           "properties": {
+            "position":"president"
           }
+      }, {
+        "id": "3",
+        "label": "relatedto",
+        "start_entity": "3",
+        "end_entity": "4",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "bidirectional": "yes",
+        "properties": {
+          "relation":"spouseof"
+        }
+      }, {
+        "id": "4",
+        "label": "relatedto",
+        "start_entity": "3",
+        "end_entity": "5",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "bidirectional": "no",
+        "properties": {
+          "relation":"childof"
+        }
       }
     ]
   }
