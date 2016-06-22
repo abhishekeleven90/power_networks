@@ -355,8 +355,8 @@
             {% for k,v in l.items() %}
                 {%if k in linkable_list %}
                     <td>
-                        {% set url = 'guest.' ~ k %}
-                        <a href="{{url_for(url, id=v)}}">
+                        {% set url = 'changes' %}
+                        <a href="{{url_for(url, type='change', id=v)}}">
                             {{v}}
                         </a>
                     </td>
@@ -384,8 +384,8 @@
                 {%if k in linkable_list %}
                 <!--TODO: Change above line to k in linkable_list to generalize -->
                     <td>
-                        {% set url = 'guest.' ~ k %}
-                        <a href="{{url_for(url, id=v)}}">
+                        {% set url = 'changes' %}
+                        <a href="{{url_for(url,type='change', id=v)}}">
                             {{v}}
                         </a>
                     </td>
