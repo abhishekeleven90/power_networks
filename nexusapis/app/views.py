@@ -36,6 +36,7 @@ def validjson():
 	# currdict = {}
 	# currdict['emailid']  = 'abhi@gmail.com'
 	# currdict['url'] = 'http://bit.ly'
+	
 	from werkzeug.datastructures import MultiDict
 	from app.forms import URLForm
 	formdata = MultiDict(mapping=request.json)

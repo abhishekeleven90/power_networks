@@ -124,6 +124,14 @@ def pushLinked():
     taskid = request.json['taskid']
     tokenid = request.json['token']
     userid = request.json['userid']
+
+
+    ##XXX: validate these three varibales
+    ##XXX: tken, userid, task all valid
+
+    if not taskid.isdigit():
+        return error_helper("taskid should be an integer", 400)
+
     # INFO: tokenid is just for initial validation, will not be saved
     # taskid and userid will be saved
     ##TODO: if the combination is valid
@@ -199,38 +207,53 @@ def pushLinked():
 
     for en in entities:
 
-        if not validate.validateNodeIsEntityOrHyperedge(en):
-            return error_helper('a node must have either entity or hyperedgenode as a label and not both', 400)
+        if not 'id' in en:
+            return error_helper('id required attribute missing for an entity', 400)
+
+
+        #print entities[en]
+        nodeid = en['id']
 
         for prop in required_endict_props:
             if not prop in en:
-                return error_helper(str(prop)+' required attribute missing for an entity', 400)
+                msg = str(prop)+' required attribute missing for entity %s' %(nodeid)
+                return error_helper(msg, 400)
 
-        #print entities[en]
-        nodeid = en['id'] ##TODO: check if id is there!
+        if not nodeid.isdigit():
+            msg = 'entity id should be a number for entity id %s' %(nodeid)
+            return error_helper(msg, 400)
 
         if nodeid in nodes:
-            return error_helper('id repeated under entities',400)
+            msg = 'id repeated under entities for entity id %s' %(nodeid)
+            return error_helper(msg, 400)
 
         if not len(en['labels'])>0:
-            return error_helper('Labels list empty for an entity', 400)
+            msg = 'Labels list empty for an entity for entity id %s' %(nodeid)
+            return error_helper(msg, 400)
 
         for prop in required_en_props:
-            if (not prop in en['properties']) and ('hyperedgenode' not in en['labels']) : ##patch for allowing hyperedgenode, checked doesnt affect anything else
-                return error_helper(str(prop)+' required property missing for an entity', 400)
+            if (not prop in en['properties']) : ##patch for allowing hyperedgenode, checked doesnt affect anything else
+                msg = '%s required property missing for an entity for entity id %s' %(prop, nodeid)
+                return error_helper(msg, 400)
 
         ## ALIASES CODE
         # if not len(en['properties']['aliases'])>0:
         #     return error_helper('aliases list empty for an entity', 400)
         # ##TODO: how to verify if the name is in aliases?
 
+        ## XXX: aliases to be handled as a csv?? ##keep it as it is will add - will have to change code when generating keywords etc.
+        ## Merge two options for all strings- assume csv seperate - add with "" and then see if lists do not have duplicates append and use
+        ## aliases not a list many changes, many places! ##or you can just assume a list and assume no prop named aliases
+
         for prop in reserved_en_props:
             if prop in en['properties']:
-                return error_helper(str(prop)+' reserved property not allowed explicitly for an entity', 400)
+                msg = str(prop)+' reserved property not allowed explicitly for an entity for entity id %s' %(nodeid)
+                return error_helper(msg, 400)
 
         allPropnamesValid, prop = validate.checkAllPropnamesValid(en['properties'])
         if not allPropnamesValid:
-            return error_helper(str(prop)+' cannot begin or end with underscore', 400)
+            msg = str(prop)+' cannot begin or end with underscore for entity id %s' %(nodeid)
+            return error_helper(msg, 400)
 
         ## MAJOR todo: determine automatically that the type is a list!!
         ## Also push it then like a list - but will have to maintain a list of props that can be list
@@ -240,6 +263,19 @@ def pushLinked():
 
         fetchdate = en['fetchdate']
         sourceurl = en['sourceurl']
+
+        if not fetchdate.isdigit():
+            msg = 'fecthdate should be a long time since epoch, negative if dates before 1970 for entity id %s' %(nodeid)
+            return error_helper(msg, 400)
+
+        if not validate.validateUrl(sourceurl):
+            msg = 'sourceurl should be valid url for entity for entity id %s' %(nodeid)
+            return error_helper(msg, 400)
+
+        boolval, prop = validate.checkInternalProps(en['properties'])
+        if not boolval:
+            msg = 'prop %s not in correct format for entity id %s' %(prop,nodeid)
+            return error_helper(msg, 400)
 
         nodeprops = {}
         for prop in en['properties']:
@@ -256,15 +292,16 @@ def pushLinked():
         #     nodeprops['aliases'].append(val)
 
         # nodeprops = en['properties']
+        nodeprops['_pushdate_'] = getTimeNow()
         nodeprops['_crawl_en_id_'] = 'en_'+taskid+'_'+str(nodeid)
         # nodeprops['_token_'] = tokenid ##TODO: if you change this!, will have to change code for entity_read macro.
         nodeprops['_taskid_'] = taskid
         nodeprops['_nodenumber_'] = nodeid
         nodeprops['_pushedby_'] = userid
-        nodeprops['_pushdate_'] = getTimeNow()
-        nodeprops['_fetchdate_'] = fetchdate
+        nodeprops['_fetchdate_'] = int(fetchdate)
         nodeprops['_sourceurl_'] = sourceurl
         nodes[nodeid] = {'labels':nodelabels,'properties':nodeprops}
+
 
     required_reldict_props = ['label','properties','start_entity','end_entity','bidirectional','id','fetchdate','sourceurl']
     reserved_rel_props = ['crawl_rel_id','resolvedWithRELID','taskname','token','_token','workname','date','time','resolvedDate','resolvedAgainst','verifiedBy','resolvedBy','verifiedDate','update','lastUpdatedBy','lastUpdatedOn','_crawl_rel_id_','_token_','_taskname_','_id_','_relnumber_','taskid','_taskid_','verifiedby','_verifiedby_','verifydate',
@@ -273,40 +310,68 @@ def pushLinked():
 
     for rel in relations:
 
-        for prop in required_reldict_props:
-            if not prop in rel:
-                return error_helper(str(prop)+' required attribute missing for a relation', 400)
+        if not 'id' in rel:
+            return error_helper('id required attribute missing for a relation', 400)
 
         linkid = rel['id']
+
+        for prop in required_reldict_props:
+            if not prop in rel:
+                msg = str(prop)+' required attribute missing for relation id %s' %(linkid)
+                return error_helper(str(prop)+' required attribute missing for a relation', 400)
+
+
         if linkid in links:
-            return error_helper('id repeated under relations',400)
+            msg = 'id repeated under relations for relation id %s' %(linkid)
+            return error_helper(msg, 400)
+
+        if not linkid.isdigit():
+            msg = 'linkid is not a number for relation id %s' %(linkid)
+            return error_helper(msg,400)
 
         linklabel = rel['label']
 
         if len(linklabel)<3:
-            return error_helper('Label too short for a relation', 400)
+            msg = 'Label too short for a relation for relation id %s' %(linkid)
+            return error_helper(msg, 400)
 
         bidirectional = rel['bidirectional']
 
-        print 'bbbbbb '+bidirectional
-        if bidirectional!='yes' and bidirectional!='no': ##decision taken avoid confusion yes no is default! ##TODO: add rules apis!
-            return error_helper('bidirectional not yes/no for a for a relation', 400)
+        if bidirectional!='True' and bidirectional!='False': ##decision taken avoid confusion yes no is default! ##TODO: add rules apis!
+            msg = 'bidirectional not True/False for a for a relation for relation id %s' %(linkid)
+            return error_helper(msg, 400)
 
         for prop in required_rel_props:
             if not prop in rel['properties']:
-                return error_helper(str(prop)+' required property missing for a relation', 400)
+                msg = str(prop)+' required property missing for a relation for relation id %s' %(linkid)
+                return error_helper(msg, 400)
 
         for prop in reserved_rel_props:
             if prop in rel['properties']:
-                return error_helper(str(prop)+' reserved property not allowed explicitly for a relation', 400)
+                msg = str(prop)+' reserved property not allowed explicitly for a relation for relation id %s' %(linkid)
+                return error_helper(msg, 400)
 
         allPropnamesValid, prop = validate.checkAllPropnamesValid(rel['properties'])
         if not allPropnamesValid:
-            return error_helper(str(prop)+' cannot begin or end with underscore', 400)
+            msg = str(prop)+' cannot begin or end with underscore for relation id %s' %(linkid)
+            return error_helper(msg, 400)
 
         linkprops = rel['properties']
         fetchdate = rel['fetchdate']
         sourceurl = rel['sourceurl']
+
+        if not fetchdate.isdigit():
+            msg = 'fetchdate should be a long time since epoch, negative if dates before 1970 for relation id %s' %(linkid)
+            return error_helper(msg, 400)
+
+        if not validate.validateUrl(sourceurl):
+            msg = 'sourceurl should be valid url for entity for relation id %s' %(linkid)
+            return error_helper(msg, 400)
+
+        boolval, prop = validate.checkInternalProps(linkprops)
+        if not boolval:
+            msg = 'prop %s not in correct format for relation id %s' %(prop, linkid)
+            return error_helper(msg, 400)
 
         startnode = 'en_'+taskid+'_'+str(rel['start_entity'])
         endnode = 'en_'+taskid+'_'+str(rel['end_entity'])
