@@ -185,3 +185,20 @@ def pickobject(kind):
 
 
     return redirect(url_for('verifier.diffPushGen', kind=kind))
+
+
+@mod.route('/temp/<string:kind>/<int:uuid>/')
+def temp(kind,uuid):
+    ##uuid
+    from app.models.graphmodels.graph_handle import GraphHandle
+    gg = GraphHandle()
+    obj = gg.getOriginalCoreObject(kind,uuid)
+    msg = ''
+    for prop in obj.properties:
+        print '----------'
+        print prop
+        print type(obj[prop])
+        print '----------'
+        msg = msg + '(%s: %s) || ' %(prop, str(type(obj[prop])))
+
+    return render_template('temp.html',temptext=msg)

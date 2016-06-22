@@ -92,7 +92,7 @@ def error_helper(message,statuscode):
 @newlinks.route('/pushlinked/', methods=['POST'])
 def pushLinked():
 
-    ##TODO: validate and push jso load to task table
+    ##TODO: validate and push json load to task table
 
     print 'datttttttta'
     print request.data
@@ -384,7 +384,6 @@ def pushLinked():
         linkprops['_pushdate_'] = getTimeNow()
         linkprops['_fetchdate_'] = fetchdate
         linkprops['_sourceurl_'] = sourceurl
-
 
 
         links[linkid] = {'label':linklabel,'properties':linkprops,'start_entity':startnode, 'end_entity':endnode}
