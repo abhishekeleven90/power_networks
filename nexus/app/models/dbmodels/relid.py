@@ -459,9 +459,8 @@ class RelProps:
         return rp.getListFromDBMultiple(['changeid', 'relid'])
 
     @classmethod
-    def getRelByPropRelId(cls, propname, propvalue, relid):
+    def getRelByPropRelId(cls, propname, relid):
         u = RelProps(relid=relid)
         u.propname = propname
-        u.newpropvalue = propvalue
-        return u.getListFromDBMultiple(['relid', 'propname', 'newpropvalue'])
+        return u.getListFromDBMultiple(['relid', 'propname'])
 

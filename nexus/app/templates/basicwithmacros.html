@@ -398,3 +398,19 @@
 </table>
 {% endmacro %}
 
+{% macro changepanel(changeid_entry)%}
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Details for ChangeID # - {{changeid_entry.changeid}}</h3>
+    </div>
+<!-- TODO - Replace with a panel maybe-->
+<!-- TODO - similar to show_task.html -->
+<table class="table table-user-information">
+    {% for k,v in changeid_entry.items() %}
+        <tr>
+            <td><b> {{k}}: </b> </td> <td> {{v}} </td>
+        </tr>
+    {%endfor%}
+</table>
+</div>
+{% endmacro %}

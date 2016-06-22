@@ -92,7 +92,7 @@ class ChangeItem:
 
     def getListFromDB(self, by):
 
-        assert(by in ['pushedby', 'changeid', 'taskid'])
+        assert(by in ['pushedby', 'changeid', 'taskid', 'userid'])
 
         #TODO - connect to db
         self.dbwrap.connect()
@@ -104,12 +104,20 @@ class ChangeItem:
             print "Cannot get cursor"
             self.dbwrap.commitAndClose()
 
-        by_str = ' ' + by + '=' + self.__dict__[by]
+        by_str = ' ' + by + '='
+        if self.__dict__[by] == int:
+            field_str = "%d"
+        else:
+            field_str = "'%s'"
 
-        rest_str = ' ORDER by ' + str(self.changeid) + ' DESC'
+        field = field_str % self.__dict__[by]
+
+        rest_str = ' ORDER by changeid DESC'
         query = "SELECT changeid, taskid, pushedby, verifiedby, verifydate, \
                  pushdate, fetchdate FROM " + self.tablename + " WHERE "\
-                 + by_str + rest_str
+                 + by_str + field + rest_str
+
+        print query
 
         cursor.execute(query)
         rows = cursor.fetchall()
@@ -128,6 +136,9 @@ class ChangeItem:
             results.append(chg.__dict__.copy())
 
         self.dbwrap.commitAndClose()
+        for r in results:
+            del r['tablename']
+            del r['dbwrap']
         return results
 
     @classmethod
@@ -139,4 +150,4 @@ class ChangeItem:
     @classmethod
     def getChangesUserId(cls, userid):
         r = ChangeItem(pushedby=userid)
-        return r.getListFromDB(userid)
+        return r.getListFromDB(by='pushedby')

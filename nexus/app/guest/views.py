@@ -40,17 +40,17 @@ def uuid(id):
             prop_keys=uuid_props_list[0].keys(), labels=uuid_lab_list,
             label_keys=uuid_lab_list[0].keys(), uuid_entry=u)
 
-@guest.route('/relid/<int:id>/<string:label>/<string:propname>/<string:newpropvalue>/')
+@guest.route('/relid/<int:id>/<string:label>/<string:propname>/')
 @guest.route('/relid/<int:id>/')
-def relid(id, label=None, propname=None, newpropvalue=None):
+def relid(id, label=None, propname=None):
     print 'in relid'
     from app.models.dbmodels.relid import RelIdTable, RelLabels, RelProps
 
-    if label is None or propname is None or newpropvalue is None:
+    if label is None or propname is None:
         relid_props_list = RelProps.getRelPropsRelId(id)
         relid_lab_list = RelLabels.getRelLabelsRelId(id)
     else:
-        relid_props_list = RelProps.getRelByPropRelId(propname, newpropvalue, id)
+        relid_props_list = RelProps.getRelByPropRelId(propname, id)
         relid_lab_list = RelLabels.getRelByLabelRelId(label, id)
 
     u = RelIdTable.getRel(id).__dict__.copy()
@@ -64,17 +64,24 @@ def relid(id, label=None, propname=None, newpropvalue=None):
 
 
 @guest.route('/changeid/<int:id>/')
-def changeid(id):
+@guest.route('/changeid/<int:id>/<int:userid>/')
+def changeid(id, userid=None):
     print 'in changeid'
     from app.models.dbmodels.change import ChangeItem
-    #TODO - get changeid table ... all sorted by cid
-    u = ChangeItem.getChangeItem(id).__dict__.copy()
-    #TODO - send all data to changeid.html
-    del u['dbwrap']
-    del u['tablename']
+    if userid is None:
+        #TODO - get changeid table ... all sorted by cid
+        citem = ChangeItem.getChangeItem(id).__dict__.copy()
+        #TODO - send all data to changeid.html
+        del citem['dbwrap']
+        del citem['tablename']
+        return render_template("changeid.html", temptext='You are here ',
+                            changeid_entry=citem, typestr='obj')
+    else:
+        clist = ChangeItem.getChangesUserId(userid=userid)
+        return render_template("changeid.html", changeid_list=clist,
+                               typestr='list')
 
-    return render_template("changeid.html", temptext='You are here ',
-                            changeid_entry=u)
+
 
 
 @guest.route('/rel/')
