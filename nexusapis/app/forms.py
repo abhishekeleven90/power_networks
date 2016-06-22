@@ -45,7 +45,6 @@ class LoginForm(Form):
     ##TODO: some time afterwards
 
 class URLForm(Form):
-    emailid = EmailField('Email', validators=[validators.DataRequired(), validators.Email()])
     url = StringField('URL',validators=[validators.DataRequired(),validators.URL('Not a valid URL')])
 
 class EditEntityForm(Form):
@@ -68,12 +67,12 @@ class MultiCheckboxField(SelectMultipleField):
     option_widget = widgets.CheckboxInput()
 
 
-class EntityValidForm(Form):
-    id = IntegerField('Internal ID',validators=[validators.DataRequired()])
-    ##also write a validator here that the id should be unique in all the ids
-    ##also write a validator here that the id is not in neo4j core
-    fetchdate = IntegerField('Fetch date',validators=[validators.DataRequired()])
-    sourceurl = StringField('URL',validators=[validators.DataRequired(),validators.URL('Not a valid URL')])
-    labels  = ListField('Labels',validators=[validators.DataRequired()])
-    print labels.data
-    print type(labels.data)
+# class EntityValidForm(Form):
+#     id = IntegerField('Internal ID',validators=[validators.DataRequired()])
+#     ##also write a validator here that the id should be unique in all the ids
+#     ##also write a validator here that the id is not in neo4j core
+#     fetchdate = IntegerField('Fetch date',validators=[validators.DataRequired()])
+#     sourceurl = StringField('URL',validators=[validators.DataRequired(),validators.URL('Not a valid URL')])
+#     labels  = ListField('Labels',validators=[validators.DataRequired()])
+#     print labels.data
+#     print type(labels.data)

@@ -1,6 +1,6 @@
 from app.user import user
 from flask import render_template, flash, redirect, session, g, request, url_for, abort
-from app.forms import EditEntityForm, form_error_helper
+from app.forms import form_error_helper
 
 @user.route('/')
 def show():

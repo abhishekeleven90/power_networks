@@ -7,6 +7,8 @@ from verifier import verifier
 from crawler import crawler
 from flask_wtf.csrf import CsrfProtect
 
+from apis import apis
+app = Flask(__name__)
 
 app = Flask(__name__)
 CsrfProtect(app)
@@ -17,6 +19,7 @@ app.register_blueprint(user, url_prefix='/user')
 app.register_blueprint(mod, url_prefix='/mod')
 app.register_blueprint(verifier, url_prefix='/verifier')
 app.register_blueprint(crawler, url_prefix='/crawler')
+app.register_blueprint(apis, url_prefix='/apis')
 
 app.config.from_object('config')
 

@@ -24,16 +24,13 @@ class LoginForm(Form):
     ##TODO: some time afterwards
 
 class URLForm(Form):
-    emailid = EmailField('Email', validators=[validators.DataRequired(), validators.Email()])
     url = StringField('URL',validators=[validators.DataRequired(),validators.URL('Not a valid URL')])
-
-class EditEntityForm(Form):
-    new_entity = TextAreaField('new_entity', validators=[validators.Required()])
 
 # class MergeNodeForm(Form):
 #     mult = [('1', 'Choice1'), ('2', 'Choice2'), ('3', 'Choice3')]
 #     mult = SelectMultipleField(choices = mult, default = ['1', '3']) ##No validators for now!
 #     pass
+
 
 def form_error_helper(form):
     for field, errors in form.errors.items():

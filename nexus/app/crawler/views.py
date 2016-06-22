@@ -1,7 +1,7 @@
 from app.crawler import crawler
 from flask import render_template, flash, redirect, session, request, url_for, abort
 from app.models.dbmodels.tasks import Tasks, Tasklog, Taskusers
-from app.forms import EditEntityForm, form_error_helper
+from app.forms import form_error_helper
 
 
 ##Show add task page
