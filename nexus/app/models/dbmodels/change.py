@@ -71,7 +71,7 @@ class ChangeItem:
             print "Cannot get cursor"
             self.dbwrap.commitAndClose()
 
-        rest_str = ' ORDER by ' + str(self.changeid) + ' DESC'
+        rest_str = ' ORDER by changeid DESC'
         query = "SELECT changeid, taskid, pushedby, verifiedby, verifydate, \
                  pushdate, fetchdate FROM " + self.tablename + " where changeid=" +\
                  str(self.changeid) + rest_str
