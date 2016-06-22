@@ -15,7 +15,8 @@
         <br/>
         <h4> Crawl Object Meta </h4><hr/>
         <b>Crawl ID :</b> {{crawl_id}}<br/>
-        <b>Kind :</b> {{kind}}
+        <b>Kind :</b> {{kind}} <br/>
+        <b>sourceurl:</b> <a href="{{crawl_obj_original['_sourceurl_']}}">{{crawl_obj_original['_sourceurl_']}}</a><br/>
         {%if kind == 'relation'%}
           <b>Crawl Relation type : </b> {{naya.type}}<br/>
         {%endif%}

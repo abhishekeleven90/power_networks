@@ -166,14 +166,14 @@
                                 View Connections
                           </button>
                         </a>
-                        <button type="button" class="btn btn-default">Request Delete</button>
+                        <!-- <button type="button" class="btn btn-default">Request Delete</button> -->
                   </div>
                   <br/>
                   <br/>
 
 
 
-                          <form role="form" action="{{url_for('guest.viz')}}" method="POST">
+                          <!-- <form role="form" action="{{url_for('guest.viz')}}" method="POST">
 
                             <input type="hidden" name="query" value="match (n:entity {uuid:{{node['uuid']}}})-[r]-(p) return n,r,p"/>
 
@@ -181,7 +181,7 @@
                             View Connections
                           </button>
 
-                        </form>
+                        </form> -->
 
                   {% endif %}
 
@@ -194,6 +194,9 @@
                             <a href="edit.html" data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
                             <a data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
                         </span>-->
+                        {% if not verifier %}
+                        <a href="{{url_for('changes',type='entity',id=node.properties[idname])}}">history>></a>
+                        {%endif%}
                     </div>
 
           </div>
@@ -323,9 +326,9 @@
 
                   <a href="{{url_for('user.edit',kind='relation',objid=rel.properties['relid']|int)}}" class="btn btn-primary">Edit Relation</a>
 
-                  <a href="#" class="btn btn-primary">Request Delete</a>
+                  <!-- <a href="#" class="btn btn-primary">Request Delete</a> -->
 
-                  <a href="#" class="btn btn-primary">Request Delete</a> <!--TODO:  When showing hyperedge resolution, why not this! -->
+                  <!-- <a href="#" class="btn btn-primary">Request Delete</a> <!--TODO:  When showing hyperedge resolution, why not this! -->
 
                   {% endif %}
 
@@ -333,6 +336,9 @@
               </div>
             </div>
                  <div class="panel-footer">
+                     {% if not verifier %}
+                   <a href="{{url_for('changes',type='relation',id=rel.properties['relid'])}}">history>></a>
+                   {%endif%}
                     </div>
 
           </div>
@@ -410,7 +416,7 @@
         <tr>
             <td><b> {{k}}: </b> </td> <td> {{v}} </td>
         </tr>
-    {%endfor%}
+    {% endfor %}
 </table>
 </div>
-{% endmacro %}
+{%endmacro%}

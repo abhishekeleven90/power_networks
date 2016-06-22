@@ -219,6 +219,7 @@ def changes(type, id, name, subtype):
                                typestr='obj')
 
     ## http://127.0.0.1:5001/changes/user/545/
+
     print type
     if type == "user":
         from app.models.dbmodels.change import ChangeItem
