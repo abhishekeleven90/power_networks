@@ -5,7 +5,7 @@ from datetime import datetime
 class ChangeItem:
 
     def __init__(self, taskid='', pushedby='', sourceurl='', verifiedby='',
-            fetchdate='', pushdate='', verifydate = ''):
+            fetchdate='', pushdate='', verifydate=''):
 
         ##password by default empty, must be checked from higher function
         ##for a non empty password
@@ -72,7 +72,7 @@ class ChangeItem:
             self.dbwrap.commitAndClose()
 
         rest_str = ' ORDER by changeid DESC'
-        query = "SELECT changeid, taskid, pushedby, verifiedby, verifydate, \
+        query = "SELECT changeid, taskid, pushedby, sourceurl, verifiedby, verifydate, \
                  pushdate, fetchdate FROM " + self.tablename + " where changeid=" +\
                  str(self.changeid) + rest_str
 
@@ -83,10 +83,11 @@ class ChangeItem:
             self.changeid = r[0]
             self.taskid = r[1]
             self.pushedby = r[2]
-            self.verifiedby = r[3]
-            self.verifydate = r[4]
-            self.pushdate = r[5]
-            self.fetchdate = r[6]
+            self.sourceurl = r[3]
+            self.verifiedby = r[4]
+            self.verifydate = r[5]
+            self.pushdate = r[6]
+            self.fetchdate = r[7]
 
         return self
 
@@ -114,7 +115,7 @@ class ChangeItem:
 
         rest_str = ' ORDER by changeid DESC'
         query = "SELECT changeid, taskid, pushedby, verifiedby, verifydate, \
-                 pushdate, fetchdate FROM " + self.tablename + " WHERE "\
+                 pushdate, fetchdate, sourceurl FROM " + self.tablename + " WHERE "\
                  + by_str + field + rest_str
 
         print query
@@ -133,6 +134,7 @@ class ChangeItem:
             chg.verifydate = r[4]
             chg.pushdate = r[5]
             chg.fetchdate = r[6]
+            chg.sourceurl = r[7]
             results.append(chg.__dict__.copy())
 
         self.dbwrap.commitAndClose()

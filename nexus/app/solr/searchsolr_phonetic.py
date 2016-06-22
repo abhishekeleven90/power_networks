@@ -72,11 +72,15 @@ def get_uuids(labels=['entity'], name=None, aliases=None, keywords=None, jaro=Tr
             df_dic['uuid'].append(doc['uuid'])
             alias_list = [re.findall("[ .\w]+", x)[0] for x in doc['aliases']]
             df_dic['score'].append(max([jf.jaro_winkler(x.lower(), name) for x in alias_list]))
-            df = pd.DataFrame(df_dic)
-            df = df[df.score > 0.6]  # take only those rows whose jaro threshold is >= 0.6
-            df = df.sort('score', ascending=False)
-            uuid_list = list(df.uuid)
-        else: uuid_list.append(doc['uuid'])
+        else: 
+            uuid_list.append(doc['uuid'])
+
+
+    if jaro:
+        df = pd.DataFrame(df_dic)
+        df = df[df.score > 0.6]  # take only those rows whose jaro threshold is >= 0.6
+        df = df.sort('score', ascending=False)
+        uuid_list = list(df.uuid)
 
     print "##printing df"
     #print df[df['uuid'] == '62458']
