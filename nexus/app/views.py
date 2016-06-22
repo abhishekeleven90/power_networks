@@ -60,14 +60,21 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         try:
-            someobj = Users.get(Users.userid == form.emailid.data, Users.password ==
-                hashlib.md5(form.password.data).hexdigest())
-            session['userid']=someobj.userid
-            session['role']=someobj.role
+            from app.models.dbmodels.user import User
+            userid = form.email.data
+            password = form.password.data
+            usr = User.getUser(userid=userid)
+
+            if not usr.validateUser(password):
+                raise Exception
+
+            session['userid'] = usr.userid
+            session['role'] = usr.role
             flash('Successfully logged in')
-            print session
+            print (session)
             return redirect('home')
-        except:
+        except Exception as e:
+            print repr(e)
             flash('Details do not match')
     else:
         form_error_helper(form)
@@ -81,12 +88,20 @@ def logout():
     return render_template("logout.html", loginclass="active", signincss=False, temptext="Successfully logged out!")
 
 #get to land first on signup page, post to actually sign up
-@app.route('/signup/', methods=["GET","POST"])
+@app.route('/signup/', methods=["GET", "POST"])
 def signup():
+    from app.models.dbmodels.user import User
     form = RegisterationForm()
     if form.validate_on_submit():
         flash('Signup details valid')
-        return redirect('home')
+        name = form.name.data
+        password = form.password.data
+        userid = form.email.data
+        usr = User(userid=userid, password=password, name=name)
+        usr.insert()
+        flash('Successfully signed up. Login to continue!')
+
+        return redirect(url_for('.home'))
     else:
         form_error_helper(form)
     return render_template("signup.html", signupclass="active", signincss=True, form=form)

@@ -5,8 +5,11 @@ from user import user
 from mod import mod
 from verifier import verifier
 from crawler import crawler
-app = Flask(__name__)
+from flask_wtf.csrf import CsrfProtect
 
+
+app = Flask(__name__)
+CsrfProtect(app)
 ##DON'T ADD A FORWARD SLASH AFTER GUEST WILL CREATE A PROBLEM
 app.register_blueprint(guest, url_prefix='/guest')
 app.register_blueprint(admin, url_prefix='/admin')

@@ -7,7 +7,8 @@ nt = NexusToken()
 
 class User:
 
-    def __init__(self, userid, password="", role=1, keyEnabled = 0):
+    def __init__(self, userid, password="", role=1, keyEnabled=0,
+                 name='', lastlogin='', lastpwdchange=''):
 
         ##password by default empty, must be checked from higher function
         ##for a non empty password
@@ -16,6 +17,11 @@ class User:
         self.password = nt.getMD5(password)
         self.apikey = nt.generateApiKey(self.userid)
         self.keyEnabled = keyEnabled
+        self.name = name
+        # lastlogin and lastpwdchange are normally inserted
+        # during last login last pwd change only
+        self.lastlogin = lastlogin
+        self.lastpwdchange = lastpwdchange
 
         ##other meta
         self.dbwrap = MetaSQLDB()
@@ -36,9 +42,10 @@ class User:
             self.dbwrap.commitAndClose()
 
         #print type(self.keyEnabled)
-        query = "INSERT INTO " + META_TABLE_USER + " (userid, password, role, apikey, keyEnabled) \
-                VALUES('%s', '%s', %d, '%s', %d)" % (self.userid, self.password, self.role,
-                self.apikey, self.keyEnabled)
+        query = "INSERT INTO " + self.tablename + " (userid, password, role, apikey,\
+                 keyEnabled, name, lastlogin, lastpwdchange) VALUES('%s', '%s', %d, '%s', %d, '%s', '%s', '%s')"\
+                 % (self.userid, self.password, self.role, self.apikey, self.keyEnabled,
+                    self.name, self.lastlogin, self.lastpwdchange)
 
         print query
         numrows = cursor.execute(query)
@@ -53,7 +60,8 @@ class User:
     def update(self, column='all'):
         ##update self object into db
 
-        attr_list = ['all', 'password', 'role', 'keyEnabled']
+        attr_list = ['all', 'password', 'role', 'keyEnabled'
+                     'name', 'lastpwdchange', 'lastlogin']
         assert(column in attr_list)
 
         self.dbwrap.connect()
@@ -63,7 +71,7 @@ class User:
             print "[User object] In update"
             print "Cannot get cursor"
             self.dbwrap.commitAndClose()
-        base_query = "UPDATE " + META_TABLE_USER + " SET "
+        base_query = "UPDATE " + self.tablename + " SET "
         rest_query = " WHERE userid= '"+str(self.userid) + "'"
         if column == "all":
             body_query = "password='%s', role=%d, apikey='%s', keyEnabled=%d" % \
@@ -108,6 +116,7 @@ class User:
         return
 
     def getSelfFromDB(self):
+        ''' Gets an user obj by userid field'''
 
         self.dbwrap.connect()
         try:
@@ -118,22 +127,22 @@ class User:
             self.dbwrap.commitAndClose()
 
         query = "SELECT userid, password, role, apikey, keyEnabled \
-                 FROM " + META_TABLE_USER + " where userid='" + str(self.userid) + "'"
+                 , name, lastlogin, lastpwdchange FROM " + self.tablename\
+                + " where userid='" + str(self.userid) + "'"
 
         cursor.execute(query)
         rows = cursor.fetchall()
         assert(len(rows) == 1)
         for r in rows:
-            uid = r[0]
-            password = r[1]
-            role = r[2]
-            apikey = r[3]
-            keyEnabled = r[4]
+            self.userid = r[0]
+            self.password = r[1]
+            self.role = r[2]
+            self.apikey = r[3]
+            self.keyEnabled = r[4]
+            self.name = r[5]
+            self.lastlogin = r[6]
+            self.lastpwdchange = r[7]
 
-        self.password = password
-        self.role = role
-        self.apikey = apikey
-        self.keyEnabled = keyEnabled
         self.dbwrap.commitAndClose()
         return self
 
@@ -143,7 +152,3 @@ class User:
         ##has to be classmethod
         usr = User(userid)
         return usr.getSelfFromDB()
-
-    def test(self):
-
-        usr1 = User('amartya',)
