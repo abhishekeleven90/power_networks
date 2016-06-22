@@ -205,14 +205,14 @@ def wikiHelper(kind, obj, objid, work):
 					nayaobj[prop]=None
 
 			##adding MVP patch for wiki:
-			from app.constants import MVPLIST
-			for prop in MVPLIST:
-				if prop in nayaobj:
-					aliaslist = nayaobj[prop].split(',')
-					nayaobj[prop] = []
-					for alias in aliaslist:
-						if len(str(alias))>0:
-							nayaobj[prop].append(alias)
+			# from app.constants import MVPLIST
+			# for prop in MVPLIST:
+			# 	if prop in nayaobj:
+			# 		aliaslist = nayaobj[prop].split(',')
+			# 		nayaobj[prop] = []
+			# 		for alias in aliaslist:
+			# 			if len(str(alias))>0:
+			# 				nayaobj[prop].append(alias)
 
 			###XXX:
 			##jsonvalidatehelper

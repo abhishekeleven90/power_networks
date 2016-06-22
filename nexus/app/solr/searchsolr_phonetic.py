@@ -71,7 +71,18 @@ def get_uuids(labels=['entity'], name=None, aliases=None, keywords=None, jaro=Tr
             df_dic['name'].append(name)
             df_dic['uuid'].append(doc['uuid'])
             alias_list = [re.findall("[ .\w]+", x)[0] for x in doc['aliases']]
+
+            words = []
+            for x in alias_list:
+                words.append(x)
+                subwords = x.split(' ')
+                for word in subwords:
+                    words.append(word)
+
+            #3instead of alias_list, use words??
             df_dic['score'].append(max([jf.jaro_winkler(x.lower(), name) for x in alias_list]))
+
+
             df = pd.DataFrame(df_dic)
             df = df[df.score > 0.6]  # take only those rows whose jaro threshold is >= 0.6
             df = df.sort('score', ascending=False)
@@ -101,4 +112,3 @@ if __name__ == "__main__":
     print len(res)
     #print res
     print "##Total time taken-{} s".format(time() - t)
-

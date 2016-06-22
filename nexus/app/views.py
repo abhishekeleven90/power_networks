@@ -184,9 +184,9 @@ def readEntity(uuid):
 
 
 # @app.route('/changes/<int:changeid>/',defaults={'uuid': None},  methods=["GET","POST"])
-@app.route('/changes/<string:type>/<int:id>/',defaults={'name': None, 'subtype': None}, methods=["GET","POST"])
+@app.route('/changes/<string:type>/<string:id>/',defaults={'name': None, 'subtype': None}, methods=["GET","POST"])
 @app.route('/changes/<string:type>/<string:subtype>/<string:name>/<string:id>/', methods=["GET","POST"])
-def changes(type,id,name,subtype):
+def changes(type, id, name, subtype):
     ##show all changes for this changeid
     '''
         type=change -- id is changeid
@@ -207,24 +207,52 @@ def changes(type,id,name,subtype):
     '''
     ##TODO:pagination?? afterwards will see
     ## http://127.0.0.1:5001/changes/change/345/
-    if type=="change":
+    if type == "change":
         ##TODO show change table
-        id = int(id) ##convert to string
-        return "change table being shown for changeid "+str(id)
+        id = int(id)  # convert to string
+        from app.models.dbmodels.change import ChangeItem
+        chg = ChangeItem.getChangeItem(id).__dict__.copy()
+        del chg['dbwrap']
+        del chg['tablename']
+
+        return render_template("changeid.html", changeid_entry=chg,
+                               typestr='obj')
 
     ## http://127.0.0.1:5001/changes/user/545/
-    if type=="user":
-        return "change table being shown for userid "+str(id)
-    #
-    # if type=="task":
-    #     return "
+
+    print type
+    if type == "user":
+        from app.models.dbmodels.change import ChangeItem
+        chgList = ChangeItem.getChangesUserId(id)
+        return render_template("changeid.html", props=chgList,
+                               prop_keys=chgList[0].keys(), typestr='list')
+
     ##
-    if type=="entity" or type=="relation":
-        id=int(id) ##convert to string
+    if type == "entity" or type == "relation":
+        from app.models.dbmodels.uuid import UuidLabels, UuidProps, UuidTable
+        from app.models.dbmodels.relid import RelProps, RelLabels, RelIdTable
+
+        id = int(id) ##convert to string
         if subtype is None:
             ## http://127.0.0.1:5001/changes/entity/345/
             ## http://127.0.0.1:5001/changes/relation/345/
-            return "change table being shown for "+str(type)+" "+str(id)
+            if type == "entity":
+                obj = UuidTable.getUuid(id)
+                ulList = UuidLabels.getUuidLabelsUUId(id)
+                upList = UuidProps.getUuidPropsUUId(id)
+                return render_template("uuid.html", uuid_entry=obj, labels=ulList,
+                                       label_keys=ulList[0].keys(), props=upList,
+                                       prop_keys=upList[0].keys())
+
+            else:
+                obj = RelIdTable.getRel(id)
+                rlList = RelLabels.getRelLabelsRelId(id)
+                rpList = RelProps.getRelPropsRelId(id)
+                return render_template("relid.html", relid_entry=obj, labels=rlList,
+                                       label_keys=rlList[0].keys(), props=rpList,
+                                       prop_keys=rpList[0].keys())
+
+
         elif subtype=="label" or subtype=="prop":
             ## http://127.0.0.1:5001/changes/entity/label/politcian/345/
             ## http://127.0.0.1:5001/changes/entity/prop/name/345/
