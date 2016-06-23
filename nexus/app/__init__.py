@@ -11,7 +11,7 @@ from apis import apis
 app = Flask(__name__)
 
 app = Flask(__name__)
-CsrfProtect(app)
+# CsrfProtect(app)
 ##DON'T ADD A FORWARD SLASH AFTER GUEST WILL CREATE A PROBLEM
 app.register_blueprint(guest, url_prefix='/guest')
 app.register_blueprint(admin, url_prefix='/admin')
@@ -36,21 +36,22 @@ def before_request():
     ##you need to get which url from some custom object flask may provide
     ##raise permission denied error
     print 'app hi'
-    g.db = dbwork.dbobject()
-    g.db.connect()
+    # g.db = dbwork.dbobject()
+    # g.db.connect()
+    # print g.db
     from app.constants import ROLE_ADMIN, ROLE_CRAWLER, ROLE_MODERATOR, ROLE_USER, ROLE_VERIFIER
     g.ROLE_ADMIN = ROLE_ADMIN
     g.ROLE_CRAWLER = ROLE_CRAWLER
     g.ROLE_MODERATOR = ROLE_MODERATOR
     g.ROLE_USER = ROLE_USER
     g.ROLE_VERIFIER = ROLE_VERIFIER
-    g.user = None ##Session related
-    ##adding for neo4j graph
+    # g.user = None ##Session related
+    # ##adding for neo4j graph
 
 @app.after_request
 def after_request(response):
     print 'app bye'
-    g.db.close()
+    # g.db.close()
     return response
 
 from app import views

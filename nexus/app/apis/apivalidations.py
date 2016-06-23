@@ -63,6 +63,11 @@ class Validate:
             if type(props['aliases']) is not list:
                 return False, 'aliases'
 
+        if 'bidirectional' in props: ##for the validations in wiki form
+            val = props['bidirectional']
+            if val!="True" and val!="False":
+                return False, 'bidirectional'
+
         return True, 'success'
 
     def error_helper(self, message,statuscode):
@@ -71,10 +76,10 @@ class Validate:
     def internalPropsConverter(self, props):
 
         if 'startdate' in props:
-            props['startdate'] = int(props['startdate'])
+            props['startdate'] = long(props['startdate'])
 
         if 'enddate' in props:
-            props['enddate'] = int(props['enddate'])
+            props['enddate'] = long(props['enddate'])
 
         if 'iscurrent' in props:
             props['iscurrent'] = bool(props['iscurrent'])

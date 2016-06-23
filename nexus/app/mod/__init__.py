@@ -14,8 +14,7 @@ def before_request():
 @mod.after_request
 def after_request(response):
     print "mod bye!!!"
-    print g.db ## this object exists!!
-    return response   
+    # print g.db ## this object exists!!
+    return response
 
-from app.mod import views 
-
+from app.mod import views

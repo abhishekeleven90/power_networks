@@ -14,8 +14,7 @@ def before_request():
 @user.after_request
 def after_request(response):
     print "user bye!!!"
-    print g.db ## this object exists!!
-    return response   
+    # print g.db ## this object exists!!
+    return response
 
-from app.user import views 
-
+from app.user import views

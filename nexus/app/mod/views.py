@@ -1,8 +1,12 @@
 from app.mod import mod
-from flask import render_template, flash, redirect, session, g, request, url_for, abort
+from flask import render_template, flash, redirect, session, g, request, url_for, abort, jsonify
 
 @mod.route('/')
 def show():
+    from app.apis.views import postgraph
+    somejson={}
+    entities=[]
+    somejson['entities']=entities
     return render_template("mod_home.html")
 
 ##adding code here so that user work doesnt clutter

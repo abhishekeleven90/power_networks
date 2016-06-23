@@ -14,8 +14,8 @@
 
 #META TABLE CONNECT CONFIG
 META_SQL_DBNAME = 'nexus'
-META_SQL_DBHOST = '10.237.27.151'
-META_SQL_DBUSER = 'nexususer' ##nexususer
+META_SQL_DBHOST = 'localhost'
+META_SQL_DBUSER = 'root' ##nexususer
 META_SQL_DBPASSWORD = 'yoyo'
 META_SQL_DBPORT = 3306
 

@@ -1,3 +1,4 @@
+
 from app.verifier import verifier
 from flask import render_template, flash, redirect, session, request, url_for, g
 from app.models.graphmodels.graph_handle import GraphHandle

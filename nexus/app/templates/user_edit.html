@@ -132,7 +132,7 @@
 
           {% for prop in obj.properties %}
 
-            {% if prop!='uuid' and prop!='relid' and prop!='aliases' %}
+            {% if prop!='uuid' and prop!='relid' and strType(obj[prop])!='list' %} <!-- remoivng and prop!=aliases -->
 
               {{generaterow(prop,toPrintString(obj[prop]),'actualpropname[]','actualpropval[]') }}
 

@@ -147,6 +147,8 @@ class Utils:
             return 'list' ##else returns "<type 'list'>"
         if type(val) is int:
             return 'int'
+        if type(val) is long:
+            return 'long'
         if type(val) is str or type(val) is unicode:
             return 'str'
         if type(val) is bool:
@@ -162,3 +164,8 @@ class Utils:
             currval = cls.processString(val)
             toreturn = toreturn + quotes + currval + quotes + space
         return toreturn
+
+    @classmethod
+    def csvtolist(cls, csv):
+        somelist = csv.split(',')
+        return cls.convertToList(somelist)

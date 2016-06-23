@@ -27,6 +27,7 @@ def postgraph():
     print request.data
     print 'jsonnnnnnnn'
     print request.json
+    print type(request.json)
 
     ##removed entities, rels alone can be pushed if previous ids known
     ##changed name to meta_desc
@@ -230,9 +231,9 @@ def postgraph():
         nodeprops['_crawl_en_id_'] = 'en_'+taskid+'_'+str(nodeid)
         # nodeprops['_token_'] = tokenid ##TODO: if you change this!, will have to change code for entity_read macro.
         nodeprops['_taskid_'] = int(taskid)
-        nodeprops['_nodenumber_'] = int(nodeid)
+        nodeprops['_nodenumber_'] = long(nodeid)
         nodeprops['_pushedby_'] = userid
-        nodeprops['_fetchdate_'] = int(fetchdate)
+        nodeprops['_fetchdate_'] = long(fetchdate)
         nodeprops['_sourceurl_'] = sourceurl
         nodes[nodeid] = {'labels':nodelabels,'properties':nodeprops}
 
@@ -314,11 +315,11 @@ def postgraph():
         linkprops['_crawl_rel_id_'] = 'rel_'+taskid+'_'+str(linkid)
         #linkprops['_token_'] = tokenid
         linkprops['_taskid_'] = int(taskid)
-        linkprops['_relnumber_'] = int(linkid)
+        linkprops['_relnumber_'] = long(linkid)
         linkprops['bidirectional'] = bool(bidirectional)
         linkprops['_pushedby_'] = userid
         linkprops['_pushdate_'] = Utils.currentTimeStamp()
-        linkprops['_fetchdate_'] = int(fetchdate)
+        linkprops['_fetchdate_'] = long(fetchdate)
         linkprops['_sourceurl_'] = sourceurl
 
 
