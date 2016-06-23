@@ -1,0 +1,119 @@
+{
+    "taskid": "1",
+    "userid": "abhi2@gmail.com",
+    "token": "token2",
+    "entities": [{
+        "id": "1",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "labels": ["person", "politician", "entity"],
+        "properties": {
+            "name": "Narendra Modi"
+        }
+    }, {
+        "id": "2",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "labels": ["organization", "politicalparty", "nationalparty", "entity"],
+        "properties": {
+            "name": "Bhartiya Janta Party"
+        }
+    }, {
+        "id": "3",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "labels": ["constituency", "entity"],
+        "properties": {
+            "name": "Varanasi"
+        }
+    }, {
+        "id": "4",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "labels": ["state", "entity", "IndianState"],
+        "properties": {
+            "name": "UttarPradesh"
+        }
+    }, {
+        "id": "5",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "labels": ["LokSabhaElections", "NationalIndianElections", "IndianElections", "Elections", "entity"],
+        "properties": {
+            "year": "2014",
+            "name": "Lok Sabha 2014",
+            "startdate": "01/01/2014"
+        }
+    }, {
+        "id": "6",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "labels": ["ConstitutionBody", "Lok Sabha", "IndianConstitutionBody", "NationalIndianConstitutionBody", "entity"],
+        "properties": {
+            "year": "2014",
+            "number": "16",
+            "name": "16th Lok Sabha"
+        }
+    }],
+    "relations": [{
+        "id": "1",
+        "label": "worksin",
+        "start_entity": "1",
+        "end_entity": "2",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "bidirectional": "no",
+        "properties": {
+            "startdate": "01/01/2010"
+        }
+    }, {
+        "id": "2",
+        "label": "geobelongs",
+        "start_entity": "3",
+        "end_entity": "4",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "bidirectional": "no",
+        "properties": {}
+    }, {
+        "id": "3",
+        "label": "foughtfromconstituency",
+        "start_entity": "1",
+        "end_entity": "3",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "bidirectional": "no",
+        "properties": {}
+    }, {
+        "id": "4",
+        "label": "foughtfromparty",
+        "start_entity": "1",
+        "end_entity": "2",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "bidirectional": "no",
+        "properties": {
+
+        }
+    }, {
+        "id": "6",
+        "label": "foughtInElections",
+        "start_entity": "1",
+        "end_entity": "6",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "bidirectional": "no",
+        "properties": {}
+    }, {
+        "id": "7",
+        "label": "memberOf",
+        "start_entity": "1",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "end_entity": "6",
+        "bidirectional": "no",
+        "properties": {
+
+        }
+    }]
+}

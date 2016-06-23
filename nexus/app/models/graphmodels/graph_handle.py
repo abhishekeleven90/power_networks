@@ -289,9 +289,6 @@ class GraphHandle():
             for prop in conf_props: ##for fresh insert wont go inside
                 curr_obj_val = curr_obj[prop]
                 old_obj_val = old_obj[prop]
-                if prop in MVPLIST or type(curr_obj[prop]) is list or type(old_obj[prop]) is list:
-                    curr_obj_val = Utils.convertToRegularList(curr_obj_val)
-                    old_obj_val = Utils.convertToRegularList(old_obj_val)
                 olditem = UuidProps(changeid=changeid, uuid=curr_id, propname=prop, changetype=CHANGE_MODIFY, oldpropvalue = str(old_obj_val), newpropvalue=str(curr_obj_val))
                 olditem.create()
                 numrows = numrows + 1
@@ -312,10 +309,10 @@ class GraphHandle():
             for prop in conf_props:
                 curr_obj_val = curr_obj[prop]
                 old_obj_val = old_obj[prop]
-                if prop in MVPLIST or type(curr_obj[prop]) is list or type(old_obj[prop]) is list:
-                    ##TODO: test for MVP in relations
-                    curr_obj_val = Utils.convertToRegularList(curr_obj_val)
-                    old_obj_val = Utils.convertToRegularList(old_obj_val)
+                # if prop in MVPLIST or type(curr_obj[prop]) is list or type(old_obj[prop]) is list:
+                #     ##TODO: test for MVP in relations
+                #     curr_obj_val = Utils.convertToRegularList(curr_obj_val)
+                #     old_obj_val = Utils.convertToRegularList(old_obj_val)
                 olditem = RelProps(changeid=changeid, relid=curr_id, propname=prop, changetype=CHANGE_MODIFY, oldpropvalue = str(old_obj_val), newpropvalue=str(curr_obj_val))
                 ##IDEA: TODO: Now I am thinking instead of all this mysql hoopla
                 ## the original idea of versioning each node in a separate graph would have been the best!
@@ -406,13 +403,14 @@ class GraphHandle():
         nayarel =  self.coredb.insertCoreRelWrap(crawl_rel, start_node_uuid, end_node_uuid, relid)
 
         ##now adding the touched entities to index db for solr
+        ##yes when the relation is inserted!!
         print self.updateIndexDBHelper(start_node_uuid) +' rows added for uuid '+str(start_node_uuid)
 
         print self.updateIndexDBHelper(end_node_uuid) +' rows added for uuid '+str(end_node_uuid)
 
         return nayarel
 
-    def matchNodesInCore(self, crawl_obj_original):
+    def matchNodesInCore(self, crawl_obj_original, algo):
 
 
         ##use the crawl object original - and generate search query to get
@@ -427,8 +425,13 @@ class GraphHandle():
         print labels
         print keywords
 
+        jaro=False
+        if algo is not None:
+            if algo=='jaro':
+                jaro=True
+
         from app.solr.searchsolr_phonetic import get_uuids
-        matchingUUIDS = get_uuids(labels=labels, name=name, aliases = aliases, keywords=keywords)
+        matchingUUIDS = get_uuids(labels=labels, name=name, jaro=jaro, aliases = aliases, keywords=keywords)
         print  matchingUUIDS
 
         if len(matchingUUIDS)>50: ##to show first 50 results
@@ -619,7 +622,7 @@ class GraphHandle():
 
         return None
 
-    def matchPossibleObjects(self, kind, crawl_obj, crawl_obj_original):
+    def matchPossibleObjects(self, kind, crawl_obj, crawl_obj_original, algo):
 
         '''
             the heart and soul of the verifier task
@@ -632,7 +635,7 @@ class GraphHandle():
         if kind == 'relation':
             return self.matchRelationsInCore(crawl_obj)
         elif kind == 'node':
-            return self.matchNodesInCore(crawl_obj_original)
+            return self.matchNodesInCore(crawl_obj_original, algo)
         elif kind == 'hyperedgenode':
             return self.matchHyperEdgeNodesInCore(crawl_obj)
 
@@ -701,6 +704,10 @@ class GraphHandle():
         if kind == 'hyperedgenode':
             from app.constants import CRAWL_HEN_ID_NAME, LABEL_HYPEREDGE_NODE
             return self.crawldb.getDirectlyConnectedEntities(CRAWL_HEN_ID_NAME, graphobj[CRAWL_HEN_ID_NAME], LABEL_HYPEREDGE_NODE, isIDString = True)
+
+        if kind == 'node':
+            from app.constants import CRAWL_EN_ID_NAME
+            return self.crawldb.getDirectlyConnectedEntities(CRAWL_EN_ID_NAME, graphobj[CRAWL_EN_ID_NAME], 'entity', isIDString= True)
 
         return None
 
@@ -816,7 +823,7 @@ class GraphHandle():
         ##first will have to create to use setResolvedWithID
 
         if kind=='relation':
-            
+
             self.setResolvedWithID('node',obj.start_node,start_id,'nexusbot')
 
             self.setResolvedWithID('node',obj.end_node,end_id,'nexusbot')

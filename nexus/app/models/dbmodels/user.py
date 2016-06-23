@@ -1,6 +1,6 @@
 from app.constants import META_TABLE_USER
 from app.sqldb import MetaSQLDB
-from app.utils.token import NexusToken
+from app.utils.nexustoken import NexusToken
 
 
 nt = NexusToken()

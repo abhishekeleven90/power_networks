@@ -99,6 +99,8 @@ def mycustomvalid(form, dict):
 def wikiHelper(kind, obj, objid, work):
 
 	from app.models.graphmodels.graph_handle import GraphHandle
+	from app.forms import AddRelationForm, URLForm
+	from app.utils.commonutils import Utils
 	# from py2neo import Node, Relationship
 	gg = GraphHandle()
 
@@ -112,9 +114,12 @@ def wikiHelper(kind, obj, objid, work):
 		copyobj[prop] = ''
 
 	form = ''
+	form2 = URLForm()
+
 	if kind=='relation':
-		from app.forms import AddRelationForm
+
 		form = AddRelationForm()
+
 
 	if 'editForm' in request.form: ##life saviour line! ##editForm is the submit button!
 
@@ -125,9 +130,11 @@ def wikiHelper(kind, obj, objid, work):
 		# print len(sourceurl)
 		flash(sourceurl)
 
+		##the ones that have arrived
 		propnames = request.form.getlist('propname[]')
 		propvals = request.form.getlist('propval[]')
 
+		##the ones that wre original
 		orignames = request.form.getlist('actualpropname[]')
 		origvals = request.form.getlist('actualpropval[]')
 
@@ -135,42 +142,41 @@ def wikiHelper(kind, obj, objid, work):
 		origlabels = request.form.getlist('origlabel[]')
 		newlabels = request.form.getlist('newlabel[]')
 
-
-
 		newobj = gg.coredb.copyObjectAsItIs(kind, copyobj)
 
 		# ignore uuid
 		# if props with same name again , consider later one
-		# if
+
 		flash(str(propnames)+ " ::::: " +str(propvals))
-		newpropdict = {}
+		newpropdict = {}##will use later to see if contains orig prop that we mentioned
 		ll = len(propnames)
 		for i in range(ll):
 			if (len(propnames[i].strip())>1):
 				if (len(propvals[i].strip())>0):
-					newpropdict[propnames[i]] = propvals[i]
+					newpropdict[propnames[i]] = propvals[i] #--------------VAR--------
 
 		flash(str(orignames) + " :::::: " +str(origvals))
 		#flash(str(needednames) +" :::::: "+str(neededvals))
 		flash(str(newlabels))
 
-		newlabelsnonempty = []
+		newlabelsnonempty = [] ##actual labels after striping
 		for label in newlabels:
 			if len(label.strip())>0:
-				newlabelsnonempty.append(label.strip())
+				newlabelsnonempty.append(label.strip()) #--------------VAR--------
 
-		newobj = gg.coredb.copyObjectAsItIs(kind, copyobj)
+		newobj = gg.coredb.copyObjectAsItIs(kind, copyobj) ##we copy the object from core graph #--------------VAR--------
+		##so that it is a new object
+		##it is actually the copy of the original
 
 		ll = len(origvals)
 		origpropdict = {}
 		for i in range(ll):
 			if (len(orignames[i].strip())>1):
 				if (len(origvals[i].strip())>0): ##THOUGH HERE TOO WE HAVE KEEP HOLD ON '' name
-					newobj[orignames[i].strip()] = origvals[i].strip()
-
+					newobj[orignames[i].strip()] = origvals[i].strip() #--------------VAR--------
 
 		flag = False
-		msg = ""
+		msg = "" ##todo: make alist
 
 		if sourceurl is None or len(sourceurl)<10:
 			msg = msg + 'sourceurl check again' +';;;'
@@ -186,57 +192,83 @@ def wikiHelper(kind, obj, objid, work):
 				msg = msg + ' Added a custom prop that has same name as in our required prop list' +';;;'
 				flag = True
 
+		##soururl check
+		##new props names check
+		##type of our internalPropsConverter
+		from app.apis.apivalidations import Validate
+		validate = Validate()
+
+		res, prop = validate.checkAllPropnamesValid(newpropdict)
+		if not res:
+			flag=True
+			msg = msg+ " error in propname: "+prop+';;; '
+
+		if not validate.validateUrl(sourceurl):
+			flag=True
+			msg = msg+ " error in sourceurl ;;; "
+
 		if flag:
 			flash(msg)
 			return render_template('user_edit.html', sourceurl =sourceurl, obj = newobj, newpropdict=newpropdict, needed = needed, labels=labels, newlabels=newlabelsnonempty, kind=kind, objid=objid, form = form, work=work)
 
+		##the newobj was a dummy, using the newobj
+		nayaobj = gg.coredb.copyObjectAsItIs(kind, newobj)
+
+		for label in newlabelsnonempty:
+			nayaobj.labels.add(label)
+
+		for prop in newpropdict:
+			nayaobj[prop] = newpropdict[prop]
+
+		for prop in newobj.properties:
+			if len(str(newobj[prop]).strip())==0:
+				nayaobj[prop]=None
+
+		res, prop = validate.checkInternalProps(nayaobj.properties)
+		if not res:
+			flash("error in prop : "+prop)
+			return render_template('user_edit.html', sourceurl =sourceurl, obj = newobj, newpropdict=newpropdict, needed = needed, labels=labels, newlabels=newlabelsnonempty, kind=kind, objid=objid, form = form, work=work)
+
+		validate.internalPropsConverter(nayaobj.properties)
+
+
+		# for prop in copyobj:
+		# 	if type(copyobj[prop]) is list:
+		# 		if prop in nayaobj: ##though it will be there
+		# 			nayaobj[prop] = Utils.csvtolist(nayaobj[prop])
+
+		##adding MVP patch for wiki:
+		# from app.constants import MVPLIST
+		# for prop in MVPLIST:
+		# 	if prop in nayaobj:
+		# 		aliaslist = nayaobj[prop].split(',')
+		# 		nayaobj[prop] = []
+		# 		for alias in aliaslist:
+		# 			if len(str(alias))>0:
+		# 				nayaobj[prop].append(alias)
+
+		###XXX:
+		##jsonvalidatehelper
+		##make a json TODO
+		##validate json api call normal without token
+		##whould give true
+		#json object to be made at this point for this object remove uuid and stuff
+		###and then validate that json using the code in api, when merge! TODO
+
+
+		someobj = gg.wikiObjCreate(kind, nayaobj, session['userid'], sourceurl)
+
+		flash(str(someobj))
+
+		flash('Successfully pushed for moderation')
+
+		if objid is not None:
+			if kind=='node':
+				return redirect(url_for('readEntity',uuid=objid))
+			if kind =='relation':
+				return redirect(url_for('readRelation',relid=objid))
 		else:
-
-			nayaobj = gg.coredb.copyObjectAsItIs(kind, newobj)
-
-			for label in newlabelsnonempty:
-				nayaobj.labels.add(label)
-
-			for prop in newpropdict:
-				nayaobj[prop] = newpropdict[prop]
-
-			for prop in newobj.properties:
-				if len(str(newobj[prop]).strip())==0:
-					nayaobj[prop]=None
-
-			##adding MVP patch for wiki:
-			# from app.constants import MVPLIST
-			# for prop in MVPLIST:
-			# 	if prop in nayaobj:
-			# 		aliaslist = nayaobj[prop].split(',')
-			# 		nayaobj[prop] = []
-			# 		for alias in aliaslist:
-			# 			if len(str(alias))>0:
-			# 				nayaobj[prop].append(alias)
-
-			###XXX:
-			##jsonvalidatehelper
-			##make a json TODO
-			##validate json api call normal without token
-			##whould give true
-			#json object to be made at this point for this object remove uuid and stuff
-			###and then validate that json using the code in api, when merge! TODO
-
-
-			someobj = gg.wikiObjCreate(kind, nayaobj, session['userid'], sourceurl)
-
-			flash(str(someobj))
-
-			flash('Successfully pushed for moderation')
-
-			if objid is not None:
-				if kind=='node':
-					return redirect(url_for('readEntity',uuid=objid))
-				if kind =='relation':
-					return redirect(url_for('readRelation',relid=objid))
-			else:
-				return redirect(url_for('home'))
-
+			return redirect(url_for('home'))
 
 	return render_template('user_edit.html', sourceurl='', obj  = copyobj, needed = needed,  labels=labels, kind=kind, objid=objid, form=form, work = work)
 

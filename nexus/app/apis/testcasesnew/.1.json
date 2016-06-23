@@ -1,0 +1,26 @@
+{
+	"taskid": "1",
+	"userid" : "abhi2@gmail.com",
+	"token": "token2",
+	"entities":
+    [
+      {
+    		"id": "1",
+    		"fetchdate" : "1466024344",
+    		"sourceurl" : "http://loksabha.nic.in",
+    		"labels": ["person", "politician", "entity"],
+    		"properties": {
+    			   "name": "Sonia Gandhi"
+    		}
+	    },
+      {
+    		"id": "2",
+    		"fetchdate" : "1466024344",
+    		"sourceurl" : "http://loksabha.nic.in",
+    		"labels": ["person", "politician", "entity"],
+    		"properties": {
+    			   "name": "Rahul Gandhi"
+    		}
+	    }
+    ]
+}

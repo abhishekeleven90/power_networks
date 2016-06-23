@@ -256,7 +256,6 @@ class GraphDB:
     def generateSearchData(self, idname, idval, isIDString, getList=False):
 
         from app.utils.commonutils import Utils
-        utils  = Utils()
 
         comp = self.getNodeByUniqueID('entity', idname, idval, isIDString)
         ##comp is the node in question
@@ -276,7 +275,7 @@ class GraphDB:
             ##begins with underscore ignore
             if prop!='uuid' and prop!='aliases' and prop[0]!='_':
                 currvalue = str(comp.properties[prop])
-                currvalue = utils.processString(currvalue)
+                currvalue = Utils.processString(currvalue)
                 if prop!='uuid' and len(currvalue)>3:
                     if not getList:
                         keywords = keywords + quotes +currvalue + quotes+","
@@ -288,9 +287,9 @@ class GraphDB:
 
         for rel in neighbours:
             currvalue = str(rel.properties['name'])
-            currvalue = utils.processString(currvalue)
+            currvalue = Utils.processString(currvalue)
             if not getList:
-                keywords = keywords + quotes +rel.properties['name'] + quotes+","
+                keywords = keywords + quotes +currvalue + quotes+","
             else:
                 keywords.append(rel.properties['name'])
         # keywords = keywords + '"'
@@ -303,23 +302,33 @@ class GraphDB:
                 labels.append(label)
         # labels=labels + '"'
 
-        aliases = comp['aliases']
+        aliases = []
 
         if aliases is None or aliases == []:
             aliases = [comp['name']]
 
-        # aliases_to_return = '"'
-        # aliases_to_return = ''
+        ##patch
+        from app.utils.commonutils import Utils
+        aliases = Utils.merge(comp['aliases'],comp['name'])
+
+        print 'allllllllllllllaaaaaaaa'
+        print aliases
+        # if type(aliases) is not list: ##fix for just one aliases, though wont be req
+        #     aliases = [aliases]
+        # ##patch
 
         for alias in aliases:
             if not getList:
-                aliases_to_return = aliases_to_return + quotes +alias + quotes+","
+                aliases_to_return = aliases_to_return + quotes +str(Utils.processString(alias)) + quotes+","
             else:
                 aliases_to_return.append(alias)
         # aliases =aliases_to_return + '"'
 
         # name = '"'+comp.properties['name']+'"'
         name = comp.properties['name']
+        print 'aliases_to_return, aliases, aliases_to_return'
+        print aliases_to_return
+        print keywords
 
         return name, labels, aliases_to_return, keywords
 
@@ -378,8 +387,8 @@ class CoreGraphDB(GraphDB):
             else:
                 from app.utils.commonutils import Utils
                 utils = Utils()
-                origstr = utils.processString(str(orig[x]))
-                nayastr = utils.processString(str(naya[x]))
+                origstr = Utils.processString(str(orig[x]))
+                nayastr = Utils.processString(str(naya[x]))
                 if origstr != nayastr:
                     ##exactly equal prop! TODO: if all props equal -> empty,
 
@@ -465,7 +474,7 @@ class CoreGraphDB(GraphDB):
         node[idprop] = idval
         ##patch for aliases
         if 'aliases' not in node.properties:
-            node['aliases'] = [str(node['name'])] ##TODO: move 2 constants
+            node['aliases'] = [str(node['name'])] ##TODO: move aliases to cosntants?
         print node
         self.graph.create(node)
         node.pull()

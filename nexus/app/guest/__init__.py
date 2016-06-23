@@ -11,8 +11,7 @@ def before_request():
 @guest.after_request
 def after_request(response):
     print "guest bye!!!"
-    print g.db ## this object exists!!
-    return response   
+    # print g.db ## this object exists!!
+    return response
 
-from app.guest import views 
-
+from app.guest import views

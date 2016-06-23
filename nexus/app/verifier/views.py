@@ -1,3 +1,4 @@
+
 from app.verifier import verifier
 from flask import render_template, flash, redirect, session, request, url_for, g
 from app.models.graphmodels.graph_handle import GraphHandle
@@ -274,7 +275,7 @@ def match(kind):
 
         algo = request.args.get('postalgo')
 
-        graphobjs = gg.matchPossibleObjects(kind, crawl_obj, crawl_obj_original)
+        graphobjs = gg.matchPossibleObjects(kind, crawl_obj, crawl_obj_original, algo)
         connected_ens = gg.getDirectlyConnectedEntitiesCrawl(kind, crawl_obj_original) ##will be none if not hyperedgenode for now
         flash('Selected post-algo: '+str(algo))
 
@@ -440,7 +441,7 @@ def diffPushGen(kind):
 
         from app.constants import MVPLIST
         from app.utils.commonutils import Utils
-        utils = Utils()
+        # utils = Utils()
 
         ##for provenance
         old_obj = gg.copyCrawlObject(kind,orig)
@@ -462,66 +463,104 @@ def diffPushGen(kind):
             flash('You selected nothing. Please select something. <br/> Or you can select JUST RESOLVE.')
             return redirect(url_for('.diffPushGen',kind=kind, tasktype = tasktype))
 
+        ##IDEA:show in view the type also? - let the user decide --write a jinga helper
+
+        ##labels first
+        for label in request.form.getlist('newlabels'):
+            ##add this label to orig!
+            orig.labels.add(label)
+            flash('Label: '+str(label))
+
+        if kind == 'node':
+            if orig['aliases'] is None or orig['aliases'] == []:
+                orig['aliases'] = [orig['name'].strip()] ##the new name at any cost
+                flash("Aliases created: "+str(orig['aliases']))
+
         ##we are really going to update something, if reach here
         for prop in conf_props:
 
-            tosave = str(request.form[prop])
+            option = str(request.form[prop])
+
+            # if option is orig no changes
+            # if option is naya select the new one
+            # if option is merge see their orig types and merge into lists:
+            # while merging: str-str, list-list,str-list, list-str
+
+            if option=="orig":
+                continue ##nothing to do
+
+            if option=="naya":
+
+                ##only if the new aliases is selected
+                ##IDEA: if aliases in conf_props, just merge no matter what
+                if prop.strip()=='aliases':
+                    print "Before merging: "+str(orig[prop])
+                    orig[prop] = Utils.merge(orig[prop], naya[prop])
+                    print "After merging: "+str(orig[prop])
+                    flash("Merged: "+prop+' : '+str(orig[prop])+': no matter what option selected')
+                    continue
+
+                msg = "Updated: " + prop+' : '+str(orig[prop])
+                if type(orig[prop])!=type(naya[prop]):
+                    msg = msg + ' : '+'type changed to '+str(type(naya[obj]))
+                else:
+                    msg = msg + ' : '+'type unchanged '
+                orig[prop] = naya[prop]
+                flash(msg)
+
+                if prop=='name':
+                    print "Before name merging: "+str(orig['aliases'])
+                    orig['aliases'] = Utils.merge(naya[prop],orig['aliases'])
+                    print "After name merging: "+str(orig['aliases'])
+                    print 'New Name: '+str(orig['name'])
+                    flash('Merged : aliases list due to name change: '+str(orig['aliases']))
+                continue
 
 
-            ##the following code just checks if the props in conflict are list
-            ##then we choose one of them, convert them to list and push
-            ##but this seems to be a bad idea
-            ##so commenting out
+            ##use orig only -- flash a warning too -- ignored new data
+            ##IDEA: when in wiki, if orig type is int or bool, new type should be same
+            ##also: check for the four props in wiki
+            ##so basically the type should go write in crawldb
+            ##and then we can handle everything right
+            if option=="merge" and prop!='name': ##for rels too ##wrote check here too, will hide in the view
+                ##iff props not in validatedprops, go ahead and merge whatever the case
+                ##this way we handle startdate, enddate, iscurrent, bidirectional seperately for us
+                ##not doing this idea - bad one: if type of prop in orig is bool or int merge is not valid
+                from app.constants import CORE_VALIDATED_PROPS
+                if prop not in CORE_VALIDATED_PROPS:
+                    orig[prop] = Utils.merge(orig[prop], naya[prop])
+                    flash("Merged: "+prop+' : '+str(orig[prop]))
+                    continue
+                else:
+                    ##TODO: don't show merge option for these props!
+                    flash("WARNING! Merging of props with name: %s not allowed. Will use old value." %(prop))
+                    continue
+            else:
+                flash(str(prop)+": "+"nothing selected (or property name asked to merge not allowed)")
 
 
-            flash(prop+' : '+str(tosave))
-            ##update this prop in orig graph object!
-            #orig[prop] = request.form[prop]
-
-            if str(tosave)!=str(orig[prop]): ##added patch before provenance,
-                ##if creates problem, can remove
-                orig[prop] = tosave ##naya prop/orig prop
-
-
-        for label in request.form.getlist('newlabels'):
-            flash('Label: '+str(label))
-            ##add this label to orig!
-            orig.labels.add(label)
-
-
+        ##new_props first, so that if aliases in new_props, it's created here
         for prop in new_props:
 
             value_list = request.form.getlist(prop)
             if len(value_list)==1: ##as only one value is going to be any way
-                tosave = str(request.form[prop])
 
-                flash(prop+' : '+str(value_list[0]))
+                ##just for sanity check!
+                ##only if selected
+                if prop=='aliases':##as already aliases created above, so may be not new now
+                    orig[prop]=Utils.merge(orig[prop],naya[prop])
+                    flash('Merged new propert: aliases: '+str(orig[prop]))
+                    continue
+
+                # tosave = str(request.form[prop]) ##XXX: save from nayaobj instead from anywhere else
+
                 ##add this prop to orig graph object!
                 #orig[prop] = request.form[prop]
-                orig[prop] = tosave ##naya prop/orig prop
+                orig[prop] = naya[prop] ##naya prop/orig prop
+                flash("Inserted: "+prop+' : '+str(naya[prop]))
 
-
-        ##name with alias patch
-        ##NOTE: we didnt processString when savinf first alias!
-        ##That's why here too!
-        ##TODO: move to graph_handle
-        if kind == 'node':
-            if orig['aliases'] is None:
-                orig['aliases'] = [orig['name']] ##the new name at any cost
-            aliasoriglist = utils.copyList(orig['aliases'])
-            aliasmodifylist = utils.copyListOfStrings(orig['aliases'])
-            flag = False
-            for aliasorig in request.form.getlist('addtoalias'):
-                aliasmodify = utils.processString(aliasorig)
-                if aliasmodify not in aliasmodifylist:
-                    flash('addtoalias: '+str(aliasorig))
-                    flag = True
-                    aliasoriglist.append(str(aliasorig))
-            if flag:
-                orig['aliases'] = aliasoriglist
 
         orig.push()#one graph object resolved!
-
 
         flash(kind+ ' : '+CRAWL_ID_NAME+' : '+ str(session[CRAWL_ID_NAME]))
 

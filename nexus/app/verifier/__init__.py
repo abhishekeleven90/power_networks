@@ -14,8 +14,7 @@ def before_request():
 @verifier.after_request
 def after_request(response):
     print "verifier bye!!!"
-    print g.db ## this object exists!!
-    return response   
+    # print g.db ## this object exists!!
+    return response
 
-from app.verifier import views 
-
+from app.verifier import views

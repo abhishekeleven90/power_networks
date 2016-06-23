@@ -11,7 +11,7 @@ from app.constants import SOLR_CORE, SOLR_HOST, SOLR_PORT
 ##TODO: use constants, and test with guest.route
 
 
-def get_uuids(labels=['entity'], name=None, aliases=None, keywords=None, jaro=True, rows= 100):
+def get_uuids(labels=['entity'], name=None, aliases=None, keywords=None, jaro=False, rows= 100):
 
     t = time()
 
