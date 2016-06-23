@@ -14,8 +14,8 @@
 
 #META TABLE CONNECT CONFIG
 META_SQL_DBNAME = 'nexus'
-META_SQL_DBHOST = 'localhost'
-META_SQL_DBUSER = 'root' ##nexususer
+META_SQL_DBHOST = '10.237.27.151'
+META_SQL_DBUSER = 'nexususer' ##nexususer
 META_SQL_DBPASSWORD = 'yoyo'
 META_SQL_DBPORT = 3306
 
@@ -94,6 +94,7 @@ META_TABLE_RELIDPROPS = 'relidprops'
 META_TABLE_RELIDLAB = 'relidlabels'
 META_TABLE_UUIDLAB = 'uuidlabels'
 META_TABLE_UUIDPROPS = 'uuidprops'
+META_TABLE_DATEFMT = '%Y-%m-%d %H:%M:%S'
 
 ##INDEX TABLE NAMES
 INDEX_TABLE_ENTITIES = 'entities'

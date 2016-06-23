@@ -1,7 +1,6 @@
-from app.constants import META_TABLE_CHANGE
+from app.constants import META_TABLE_CHANGE, META_TABLE_DATEFMT
 from app.sqldb import MetaSQLDB
 from datetime import datetime
-
 class ChangeItem:
 
     def __init__(self, taskid='', pushedby='', sourceurl='', verifiedby='',
@@ -16,7 +15,7 @@ class ChangeItem:
 
         self.verifydate = verifydate ##adding this patch for neo4j, since this ts will be gen from neo4j
         if verifydate == '':
-            self.verifydate = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            self.verifydate = datetime.now().strftime(META_TABLE_DATEFMT)
 
         self.fetchdate = fetchdate
         self.pushdate = pushdate

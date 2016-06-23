@@ -2,36 +2,51 @@
 {% extends "basic.html" %}
 {% from "formhelper.html" import render_field %}
 {% block content %}
-	<div class="starter-template" >
-
-		<form class="form-signin" method="POST" action={{url_for('signup')}}>
-			{{ form.hidden_tag() }}
-			<h2 class="form-signin-heading">Fill your details
-			</h2>
-			<label for="name" class="sr-only">{{form.name.label}}</label>
-			{{form.name(class="form-control",placeholder="Name",required="",autofocus="")}}
-			<!--<input type="text" id="inputNames" class="form-control" placeholder="Name" required="" autofocus="">-->
-			<label for="emailid" class="sr-only">{{form.emailid.label}}
-			</label>
-			{{form.emailid(class="form-control",placeholder="Email Address",required="",autofocus="")}}
-			<!--<input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">-->
-
-			<label for="password" class="sr-only">{{form.password.label}}</label>
-			{{form.password(class="form-control",placeholder="Password",required="",autofocus="")}}
-			<!--<input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">-->
-
-			<label for="repassword" class="sr-only">{{form.repassword.label}}
-			</label>
-			{{form.repassword(class="form-control",placeholder="Password Again",required="",autofocus="")}}
-			<!--<input type="password" id="rePassword" class="form-control" placeholder="Password Again" required="">-->
-			<div class="checkbox">
-				<label>
-					{{form.accept_terms(value="remember-me")}} Remember me
-					<!--<input type="checkbox" value="remember-me"> Remember me-->
-				</label>
-			</div>
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Register
-			</button>
-		</form>
-	</div>
+	<div class="row" >
+        <div class="col-md-8 ">
+            <fieldset>
+                <form class="form-horizontal"  method="POST" action={{url_for('signup')}}>
+                    {{ form.hidden_tag() }}
+                    <div class="col-md-offset-3">
+                        <h2 class="form-signin-heading">Fill your details</h2>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-6 control-label sr-only" for="name">{{form.name.label}}</label>  
+                        <div class="col-md-6">
+                            {{form.name(class="form-control input-md",placeholder="Name", required="",autofocus="")}}
+                            <span class="help-block">Your Name</span>  
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-6 control-label sr-only" for="email">{{form.email.label}}</label>  
+                        <div class="col-md-6">
+                            {{form.email(class="form-control input-md",placeholder="Email", required="",autofocus="")}}
+                            <span class="help-block">Your Email ID</span>  
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-6 control-label sr-only" for="password">{{form.password.label}}</label>  
+                        <div class="col-md-6">
+                            {{form.password(class="form-control input-md",placeholder="Password", required="",autofocus="")}}
+                            <span class="help-block">Enter password</span>  
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-6 control-label sr-only" for="name">{{form.repassword.label}}</label>  
+                        <div class="col-md-6">
+                            {{form.repassword(class="form-control input-md",placeholder="Confirm Password", required="",autofocus="")}}
+                            <span class="help-block">Enter password again. Passwords should match.</span>  
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-6 control-label" for=""></label>
+                        <div class="col-md-6">
+                            <!-- Button -->
+                            <button type="submit" class="btn btn-default btn-primary btn-block">Register</button>
+                        </div>
+                    </div>
+                </form>
+            </fieldset>
+        </div>
+    </div>
 {% endblock %}
