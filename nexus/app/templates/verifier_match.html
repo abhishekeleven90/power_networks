@@ -47,10 +47,6 @@
                     <button type="submit" class="btn btn-primary">No post algo!</button>
         </a>
 
-        <a href={{ url_for( 'verifier.match', kind = kind, postalgo = "waterman") }}>
-
-                    <button type="submit"  class="btn btn-primary">Waterman!</button>
-        </a>
 
         <a href={{ url_for( 'verifier.match', kind = kind, postalgo = "jaro" ) }}>
                     <button type="submit" class="btn btn-primary">Jaro!</button>
@@ -110,7 +106,17 @@
      <button type="submit" name="submit" class="btn btn-default" value="algo">Go Now!</button> -->
 
 </div>
-        <h3>From graph</h3>
+  {% if connected_ens %}
+  <div class="alert alert-info">
+    <strong>Connected in CRAWL-DB with <!--  --> </strong>
+    {%for en in connected_ens %}
+      {{en['name']}},
+    {% endfor %}
+  </div><br/>
+  <hr/>
+  {% endif %}
+
+        <h3>From core graph</h3>
         <br/>
 
         {% if kind == 'node' %}

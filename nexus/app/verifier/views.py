@@ -275,7 +275,7 @@ def match(kind):
 
         algo = request.args.get('postalgo')
 
-        graphobjs = gg.matchPossibleObjects(kind, crawl_obj, crawl_obj_original)
+        graphobjs = gg.matchPossibleObjects(kind, crawl_obj, crawl_obj_original, algo)
         connected_ens = gg.getDirectlyConnectedEntitiesCrawl(kind, crawl_obj_original) ##will be none if not hyperedgenode for now
         flash('Selected post-algo: '+str(algo))
 

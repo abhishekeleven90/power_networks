@@ -410,7 +410,7 @@ class GraphHandle():
 
         return nayarel
 
-    def matchNodesInCore(self, crawl_obj_original):
+    def matchNodesInCore(self, crawl_obj_original, algo):
 
 
         ##use the crawl object original - and generate search query to get
@@ -425,8 +425,13 @@ class GraphHandle():
         print labels
         print keywords
 
+        jaro=False
+        if algo is not None:
+            if algo=='jaro':
+                jaro=True
+
         from app.solr.searchsolr_phonetic import get_uuids
-        matchingUUIDS = get_uuids(labels=labels, name=name, aliases = aliases, keywords=keywords)
+        matchingUUIDS = get_uuids(labels=labels, name=name, jaro=jaro, aliases = aliases, keywords=keywords)
         print  matchingUUIDS
 
         if len(matchingUUIDS)>50: ##to show first 50 results
@@ -617,7 +622,7 @@ class GraphHandle():
 
         return None
 
-    def matchPossibleObjects(self, kind, crawl_obj, crawl_obj_original):
+    def matchPossibleObjects(self, kind, crawl_obj, crawl_obj_original, algo):
 
         '''
             the heart and soul of the verifier task
@@ -630,7 +635,7 @@ class GraphHandle():
         if kind == 'relation':
             return self.matchRelationsInCore(crawl_obj)
         elif kind == 'node':
-            return self.matchNodesInCore(crawl_obj_original)
+            return self.matchNodesInCore(crawl_obj_original, algo)
         elif kind == 'hyperedgenode':
             return self.matchHyperEdgeNodesInCore(crawl_obj)
 
@@ -699,6 +704,10 @@ class GraphHandle():
         if kind == 'hyperedgenode':
             from app.constants import CRAWL_HEN_ID_NAME, LABEL_HYPEREDGE_NODE
             return self.crawldb.getDirectlyConnectedEntities(CRAWL_HEN_ID_NAME, graphobj[CRAWL_HEN_ID_NAME], LABEL_HYPEREDGE_NODE, isIDString = True)
+
+        if kind == 'node':
+            from app.constants import CRAWL_EN_ID_NAME
+            return self.crawldb.getDirectlyConnectedEntities(CRAWL_EN_ID_NAME, graphobj[CRAWL_EN_ID_NAME], 'entity', isIDString= True)
 
         return None
 
