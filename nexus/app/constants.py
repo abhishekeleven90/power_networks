@@ -93,6 +93,7 @@ META_TABLE_RELIDPROPS = 'relidprops'
 META_TABLE_RELIDLAB = 'relidlabels'
 META_TABLE_UUIDLAB = 'uuidlabels'
 META_TABLE_UUIDPROPS = 'uuidprops'
+META_TABLE_DATEFMT = '%Y-%m-%d %H:%M:%S'
 
 ##INDEX TABLE NAMES
 INDEX_TABLE_ENTITIES = 'entities'

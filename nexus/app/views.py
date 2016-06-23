@@ -70,10 +70,13 @@ def login():
 
             session['userid'] = usr.userid
             session['role'] = usr.role
+            usr.setLastLogin()
             flash('Successfully logged in')
             print (session)
             return redirect('home')
         except Exception as e:
+            import traceback
+            print traceback.format_exc()
             print repr(e)
             flash('Details do not match')
     else:

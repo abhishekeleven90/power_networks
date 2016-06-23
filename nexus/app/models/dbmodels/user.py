@@ -104,7 +104,7 @@ class User:
         return
 
     def validateUser(self, password):
-        self.getSelfFromDB()
+        #self.getSelfFromDB()
         password = nt.getMD5(password)
         if self.password == password:
             return True
@@ -145,6 +145,15 @@ class User:
 
         self.dbwrap.commitAndClose()
         return self
+
+    def setLastLogin(self):
+
+        from datetime import datetime
+        from app.constants import META_TABLE_DATEFMT
+
+        self.lastlogin = datetime.now().strftime(META_TABLE_DATEFMT)
+        self.update('lastlogin')
+        return
 
     @classmethod
     def getUser(cls, userid):
