@@ -20,13 +20,13 @@ def postgraph():
 
     ##TODO: validate and push json load to task table
 
+    if not request.json: ##is a dict!!
+        return validate.error_helper("The request body does not have JSON Data",400)
+
     print 'datttttttta'
     print request.data
     print 'jsonnnnnnnn'
     print request.json
-
-    if not request.json: ##is a dict!!
-        return validate.error_helper("The request body does not have JSON Data",400)
 
     ##removed entities, rels alone can be pushed if previous ids known
     ##changed name to meta_desc
@@ -153,6 +153,10 @@ def postgraph():
             msg = 'id repeated under entities for entity id %s' %(nodeid)
             return validate.error_helper(msg, 400)
 
+        if type(en['labels']) is not list:
+            msg = 'Labels not list for for entity id %s' %(nodeid)
+            return validate.error_helper(msg, 400)
+
         if not len(en['labels'])>0:
             msg = 'Labels list empty for an entity for entity id %s' %(nodeid)
             return validate.error_helper(msg, 400)
@@ -161,6 +165,8 @@ def postgraph():
             if (not prop in en['properties']) : ##patch for allowing hyperedgenode, checked doesnt affect anything else
                 msg = '%s required property missing for an entity for entity id %s' %(prop, nodeid)
                 return validate.error_helper(msg, 400)
+
+        ##XXX: check labels list and check aliases list
 
         ## ALIASES CODE
         # if not len(en['properties']['aliases'])>0:

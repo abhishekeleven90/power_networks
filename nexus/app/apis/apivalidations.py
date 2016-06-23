@@ -59,6 +59,10 @@ class Validate:
             if val!="True" and val!="False":
                 return False, 'iscurrent'
 
+        if 'aliases' in props:
+            if type(props['aliases']) is not list:
+                return False, 'aliases'
+
         return True, 'success'
 
     def error_helper(self, message,statuscode):

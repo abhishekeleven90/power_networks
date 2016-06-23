@@ -289,9 +289,6 @@ class GraphHandle():
             for prop in conf_props: ##for fresh insert wont go inside
                 curr_obj_val = curr_obj[prop]
                 old_obj_val = old_obj[prop]
-                if prop in MVPLIST or type(curr_obj[prop]) is list or type(old_obj[prop]) is list:
-                    curr_obj_val = Utils.convertToRegularList(curr_obj_val)
-                    old_obj_val = Utils.convertToRegularList(old_obj_val)
                 olditem = UuidProps(changeid=changeid, uuid=curr_id, propname=prop, changetype=CHANGE_MODIFY, oldpropvalue = str(old_obj_val), newpropvalue=str(curr_obj_val))
                 olditem.create()
                 numrows = numrows + 1
@@ -312,10 +309,10 @@ class GraphHandle():
             for prop in conf_props:
                 curr_obj_val = curr_obj[prop]
                 old_obj_val = old_obj[prop]
-                if prop in MVPLIST or type(curr_obj[prop]) is list or type(old_obj[prop]) is list:
-                    ##TODO: test for MVP in relations
-                    curr_obj_val = Utils.convertToRegularList(curr_obj_val)
-                    old_obj_val = Utils.convertToRegularList(old_obj_val)
+                # if prop in MVPLIST or type(curr_obj[prop]) is list or type(old_obj[prop]) is list:
+                #     ##TODO: test for MVP in relations
+                #     curr_obj_val = Utils.convertToRegularList(curr_obj_val)
+                #     old_obj_val = Utils.convertToRegularList(old_obj_val)
                 olditem = RelProps(changeid=changeid, relid=curr_id, propname=prop, changetype=CHANGE_MODIFY, oldpropvalue = str(old_obj_val), newpropvalue=str(curr_obj_val))
                 ##IDEA: TODO: Now I am thinking instead of all this mysql hoopla
                 ## the original idea of versioning each node in a separate graph would have been the best!
@@ -406,6 +403,7 @@ class GraphHandle():
         nayarel =  self.coredb.insertCoreRelWrap(crawl_rel, start_node_uuid, end_node_uuid, relid)
 
         ##now adding the touched entities to index db for solr
+        ##yes when the relation is inserted!!
         print self.updateIndexDBHelper(start_node_uuid) +' rows added for uuid '+str(start_node_uuid)
 
         print self.updateIndexDBHelper(end_node_uuid) +' rows added for uuid '+str(end_node_uuid)
@@ -816,7 +814,7 @@ class GraphHandle():
         ##first will have to create to use setResolvedWithID
 
         if kind=='relation':
-            
+
             self.setResolvedWithID('node',obj.start_node,start_id,'nexusbot')
 
             self.setResolvedWithID('node',obj.end_node,end_id,'nexusbot')

@@ -27,7 +27,7 @@ INDEX_SQL_DBPASSWORD = 'yoyo'
 INDEX_SQL_DBPORT = 3306
 
 #CORE_GRAPH_CONNECT CONFIG
-CORE_GRAPH_HOST = '10.237.27.151'
+CORE_GRAPH_HOST = 'localhost'
 CORE_GRAPH_USER = 'neo4j'
 CORE_GRAPH_PORT = '7474'  #fot http this is
 CORE_GRAPH_PASSWORD = 'yoyo'
@@ -72,11 +72,12 @@ CRAWL_EN_ID_FORMAT = "en_%s_%s"
 CRAWL_REL_ID_FORMAT = "rel_%s_%s"
 LABEL_HYPEREDGE_NODE = 'hyperedgenode'
 LABEL_ENTITY = 'entity'
+CORE_VALIDATED_PROPS = ["startdate","enddate","bidirectional","iscurrent"]
 
 
 
 #SOLR CONFIG
-SOLR_HOST = '10.237.27.67'
+SOLR_HOST = 'localhost'
 SOLR_PORT = 8983
 SOLR_CORE = 'mtp2'
 

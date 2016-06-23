@@ -1,0 +1,82 @@
+{
+    "taskid": "1",
+    "userid": "abhi2@gmail.com",
+    "token": "token2",
+    "entities": [{
+        "id": "1",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "labels": ["person", "politician", "entity","businessperson","memberOfParliament"],
+        "properties": {
+            "name": "Naveen Jindal",
+            "address": "Kurushetra",
+            "dob": "11 Feb, 1990",
+            "job": "business"
+        }
+    }, {
+        "id": "2",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "labels": ["organization", "politicalparty", "nationalparty", "entity"],
+        "properties": {
+            "name": "Indian National Congress"
+        }
+    }, {
+        "id": "3",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "labels": ["constituency", "entity"],
+        "properties": {
+            "name": "Kurushetra"
+        }
+    }, {
+        "id": "4",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "labels": ["state", "entity", "indianState"],
+        "properties": {
+            "name": "Haryana"
+        }
+    }],
+    "relations": [{
+        "id": "1",
+        "label": "worksin",
+        "start_entity": "1",
+        "end_entity": "2",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "bidirectional": "no",
+        "properties": {
+            "startdate": "01/01/2010"
+        }
+    }, {
+        "id": "2",
+        "label": "geobelongs",
+        "start_entity": "3",
+        "end_entity": "4",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "bidirectional": "no",
+        "properties": {}
+    }, {
+        "id": "3",
+        "label": "foughtfromconstituency",
+        "start_entity": "1",
+        "end_entity": "3",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "bidirectional": "no",
+        "properties": {}
+    }, {
+        "id": "4",
+        "label": "foughtfromparty",
+        "start_entity": "1",
+        "end_entity": "2",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "bidirectional": "no",
+        "properties": {
+
+        }
+    }]
+}

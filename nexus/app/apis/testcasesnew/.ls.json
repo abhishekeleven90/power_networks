@@ -1,0 +1,104 @@
+{
+	"taskid": "1",
+	"userid": "abhi2@gmail.com",
+	"token": "token2",
+	"entities": [{
+		"id": "1",
+		"fetchdate": "765365645434",
+		"sourceurl": "http://urlhere.com",
+		"labels": ["person", "entity", "politician"],
+		"properties": {
+			"name": "Ponguleti Srinivasa Reddy",
+			"profession": "Businessperson Agriculturist",
+			"startdate": "9767834787486",
+			"dob": "04 Nov 1965",
+			"address": ["8-2-293/82/A/222/A, RD. No. 17, Jubilee Hills, Hyderabad-500033, Telangana 09866076546 (M)"],
+			"education": "B.A. Educated at Osmania Open University",
+			"startplace": "Narayanapuram, Distt. Khammam (Andhra Pradesh)",
+			"email": "",
+			"iscurrent": "True",
+			"rawdatainternalid":"1"
+		}
+	}, {
+		"id": "2",
+		"fetchdate": "765365645434",
+		"sourceurl": "http://urlhere.com",
+		"labels": ["person", "entity"],
+		"properties": {
+			"name": "Ponguleti Swarajyam"
+		}
+	}, {
+		"id": "3",
+		"fetchdate": "765365645434",
+		"sourceurl": "http://urlhere.com",
+		"labels": ["person", "entity"],
+		"properties": {
+			"name": "Ponguleti Raghava Reddy"
+		}
+	}, {
+		"id": "4",
+		"fetchdate": "765365645434",
+		"sourceurl": "http://urlhere.com",
+		"labels": ["person", "entity"],
+		"properties": {
+			"name": "Ponguleti Madhuri"
+		}
+	}, {
+		"id": "5",
+		"fetchdate": "765365645434",
+		"sourceurl": "http://urlhere.com",
+		"labels": ["entity", "constituency"],
+		"properties": {
+			"name": "Khammam"
+		}
+	}],
+	"relations": [{
+		"id": "1",
+		"label": "relatedto",
+		"start_entity": "1",
+		"end_entity": "2",
+		"fetchdate": "1466024344",
+		"sourceurl": "http://loksabha.nic.in",
+		"bidirectional": "False",
+		"properties": {
+			"kind": "childof",
+			"subkind": "hasfather"
+		}
+	}, {
+		"id": "2",
+		"label": "relatedto",
+		"start_entity": "1",
+		"end_entity": "3",
+		"fetchdate": "1466024344",
+		"sourceurl": "http://loksabha.nic.in",
+		"bidirectional": "False",
+		"properties": {
+			"kind": "childof",
+			"subkind": "hasmother"
+		}
+	}, {
+		"id": "3",
+		"label": "relatedto",
+		"start_entity": "1",
+		"end_entity": "4",
+		"fetchdate": "1466024344",
+		"sourceurl": "http://loksabha.nic.in",
+		"bidirectional": "True",
+		"properties": {
+			"kind": "spouseof"
+		}
+	}, {
+		"id": "4",
+		"label": "contestedfrom",
+		"start_entity": "1",
+		"end_entity": "5",
+		"fetchdate": "1466024344",
+		"sourceurl": "http://loksabha.nic.in",
+		"bidirectional": "False",
+		"properties": {
+			"kind": "ls2014",
+			"result":"won",
+			"asindependent":"False"
+		}
+	}]
+}

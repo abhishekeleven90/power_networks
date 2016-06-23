@@ -55,3 +55,4 @@ from app.utils.diffcolors import diffObjects
 from app.utils.commonutils import Utils
 app.jinja_env.globals.update(diffObjects=diffObjects)
 app.jinja_env.globals.update(toPrintString=Utils.toPrintString)
+app.jinja_env.globals.update(strType=Utils.strType)

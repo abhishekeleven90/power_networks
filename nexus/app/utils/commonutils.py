@@ -3,7 +3,8 @@ class Utils:
     def __init__(self):
         pass
 
-    def processString(self, currvalue):
+    @classmethod
+    def processString(cls, currvalue):
         currvalue = str(currvalue)
         currvalue = currvalue.strip()
         currvalue = currvalue.lower()
@@ -15,14 +16,16 @@ class Utils:
         currvalue = currvalue.replace(";",'')
         return str(currvalue)
 
-    def copyListOfStrings(self, listofstr):
+    @classmethod
+    def copyListOfStrings(cls, listofstr):
         ret = []
         for val in listofstr:
-            val = self.processString(val)
+            val = cls.processString(val)
             ret.append(val)
         return ret
 
-    def copyList(self, somelist):
+    @classmethod
+    def copyList(cls, somelist):
         ret = []
         for val in somelist:
             ret.append(val)
@@ -75,7 +78,7 @@ class Utils:
     def isStringEmptyNone(cls, givenstr):
         if givenstr is None:
             return True
-        if len(self.processString(givenstr))==0:
+        if len(cls.processString(givenstr))==0:
             return True
         return False
 
@@ -99,3 +102,63 @@ class Utils:
             return toret
         else:
             return str(someobj)
+
+    @classmethod
+    def convertToList(cls, val):
+        '''
+            checks type and if type not list
+            converts to a list, useful before merge
+        '''
+        valtype = type(val)
+        toreturn = []
+        if valtype is not list:
+            toreturn.append(str(val).strip())
+        else:
+            for item in val:
+                toreturn.append(str(item).strip())
+        return toreturn
+
+    @classmethod
+    def merge(cls, origval, newval):
+        '''
+            merges anything : you finally get a list of strings
+            tries to remove duplicates
+            note: call only after you have validated if you have to merge or not
+        '''
+
+        origval = cls.convertToList(origval)
+        newval = cls.convertToList(newval)
+
+        copyorig = cls.copyListOfStrings(origval)
+        toappend = []
+
+        for val in origval:
+            toappend.append(str(val).strip())
+
+        for val in newval:
+            copycurrval = cls.processString(val)
+            if copycurrval not in copyorig:
+                toappend.append(str(val).strip()) ##converted val to string as list of strings!
+        return toappend
+
+    @classmethod
+    def strType(cls,val):
+        if type(val) is list:
+            return 'list' ##else returns "<type 'list'>"
+        if type(val) is int:
+            return 'int'
+        if type(val) is str or type(val) is unicode:
+            return 'str'
+        if type(val) is bool:
+            return 'bool'
+        return 'unknown'
+
+    @classmethod
+    def convertListToSearchCSV(cls, list):
+        toreturn = " "
+        quotes = "'"
+        space = ' '
+        for val in list:
+            currval = cls.processString(val)
+            toreturn = toreturn + quotes + currval + quotes + space
+        return toreturn

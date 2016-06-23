@@ -1,0 +1,102 @@
+  {
+      "taskid": "1",
+      "userid": "abhi2@gmail.com",
+      "token": "token2",
+      "entities": [{
+          "id": "1",
+          "fetchdate": "1466024344",
+          "sourceurl": "http://loksabha.nic.in",
+          "labels": ["person", "politician", "entity", "president","indianPresident"],
+          "properties": {
+              "name": "Kocheril Raman Narayanan"
+          }
+      }, {
+          "id": "2",
+          "fetchdate": "1466024344",
+          "sourceurl": "http://loksabha.nic.in",
+          "labels": ["organization", "politicalparty", "nationalparty", "entity"],
+          "properties": {
+              "name": "Indian National Congress",
+              "startDate":"1 January 1900"
+          }
+      }, {
+          "id": "3",
+          "fetchdate": "1466024344",
+          "sourceurl": "http://loksabha.nic.in",
+          "labels": ["person", "politician", "entity","businessperson"],
+          "properties": {
+              "name": "Mr. Naveen Jindal",
+              "startDate": "9 March, 1970"
+          }
+      }, {
+          "id": "4",
+          "fetchdate": "1466024344",
+          "sourceurl": "http://loksabha.nic.in",
+          "labels": ["person", "entity"],
+          "properties": {
+              "name": "Shalu Jindal"
+          }
+      } , {
+          "id": "5",
+          "fetchdate": "1466024344",
+          "sourceurl": "http://loksabha.nic.in",
+          "labels": ["person", "entity"],
+          "properties": {
+              "name": "Om Prakash Jindal"
+          }
+      }, {
+          "id": "6",
+          "fetchdate": "1466024344",
+          "sourceurl": "http://loksabha.nic.in",
+          "labels": ["person", "politician", "entity"],
+          "properties": {
+              "name": "Sonia gandhi"
+          }
+      }
+    ],
+      "relations": [{
+          "id": "1",
+          "label": "worksin",
+          "start_entity": "3",
+          "end_entity": "2",
+          "fetchdate": "1466024344",
+          "sourceurl": "http://loksabha.nic.in",
+          "bidirectional": "no",
+          "properties": {
+          }
+      }, {
+          "id": "2",
+          "label": "worksin",
+          "start_entity": "6",
+          "end_entity": "2",
+          "fetchdate": "1466024344",
+          "sourceurl": "http://loksabha.nic.in",
+          "bidirectional": "no",
+          "properties": {
+            "position":"president"
+          }
+      }, {
+        "id": "3",
+        "label": "relatedto",
+        "start_entity": "3",
+        "end_entity": "4",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "bidirectional": "yes",
+        "properties": {
+          "relation":"spouseof"
+        }
+      }, {
+        "id": "4",
+        "label": "relatedto",
+        "start_entity": "3",
+        "end_entity": "5",
+        "fetchdate": "1466024344",
+        "sourceurl": "http://loksabha.nic.in",
+        "bidirectional": "no",
+        "properties": {
+          "relation":"childof"
+        }
+      }
+    ]
+  }
