@@ -111,6 +111,16 @@ class User:
 
         return False
 
+    @classmethod
+    def validateToken(cls, userid, token):
+        try:
+            usr = cls.getUser(userid=userid)
+            return usr.apikey==token and usr.keyEnabled==1
+        except Exception as e:
+            return False
+        pass
+
+
     def __str__(self):
         print '[User: userid: '+str(self.userid)+' role: '+str(self.role)+']'
         return
@@ -159,5 +169,8 @@ class User:
     def getUser(cls, userid):
         ##get User object using the userid
         ##has to be classmethod
-        usr = User(userid)
-        return usr.getSelfFromDB()
+        try:
+            usr = User(userid)
+            return usr.getSelfFromDB()
+        except:
+            return None

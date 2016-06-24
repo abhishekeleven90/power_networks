@@ -16,6 +16,8 @@ def show():
 @apis.route('/postgraph/', methods=['POST'])
 def postgraph():
 
+    ##json invalid shows bad request error: TODO
+
     validate = Validate()
 
     ##TODO: validate and push json load to task table
@@ -23,9 +25,8 @@ def postgraph():
     if not request.json: ##is a dict!!
         return validate.error_helper("The request body does not have JSON Data",400)
 
-    print 'datttttttta'
+
     print request.data
-    print 'jsonnnnnnnn'
     print request.json
     print type(request.json)
 
@@ -35,6 +36,23 @@ def postgraph():
     for prop in required_master_props:
         if not prop in request.json:
             return validate.error_helper(str(prop)+"property not in json data", 400)
+
+
+
+    taskid = request.json['taskid']
+    tokenid = request.json['token']
+    userid = request.json['userid']
+
+
+    ##XXX: validate these three varibales
+    ##XXX: tken, userid, task all valid
+
+    if not taskid.isdigit():
+        return validate.error_helper("taskid should be an integer", 400)
+
+    from app.models.dbmodels.tasks import Taskusers
+    if not Taskusers.validateTaskAndUser(taskid=taskid,userid=userid):
+        return validate.error_helper("Not authorized with task id", 403)
 
     # patch for one of these should be present but never none
     # relations can exist in isolation coz of entities that are already present in db
@@ -48,22 +66,6 @@ def postgraph():
     if not flag:
         return validate.error_helper("neither entities nor relations in json data", 400)
 
-    taskid = request.json['taskid']
-    tokenid = request.json['token']
-    userid = request.json['userid']
-
-
-    ##XXX: validate these three varibales
-    ##XXX: tken, userid, task all valid
-
-    if not taskid.isdigit():
-        return validate.error_helper("taskid should be an integer", 400)
-
-    # INFO: tokenid is just for initial validation, will not be saved
-    # taskid and userid will be saved
-    ##TODO: if the combination is valid
-    ##else abort
-    ##TODO: get fetchdate and source_url to entities, , 'fetchdate', 'sourceurls'
 
 
     ## MAJOR TODO!
@@ -146,9 +148,9 @@ def postgraph():
                 msg = str(prop)+' required attribute missing for entity %s' %(nodeid)
                 return validate.error_helper(msg, 400)
 
-        if not nodeid.isdigit():
-            msg = 'entity id should be a number for entity id %s' %(nodeid)
-            return validate.error_helper(msg, 400)
+        # if not nodeid.isdigit():
+        #     msg = 'entity id should be a number for entity id %s' %(nodeid)
+        #     return validate.error_helper(msg, 400)
 
         if nodeid in nodes:
             msg = 'id repeated under entities for entity id %s' %(nodeid)
@@ -231,7 +233,7 @@ def postgraph():
         nodeprops['_crawl_en_id_'] = 'en_'+taskid+'_'+str(nodeid)
         # nodeprops['_token_'] = tokenid ##TODO: if you change this!, will have to change code for entity_read macro.
         nodeprops['_taskid_'] = int(taskid)
-        nodeprops['_nodenumber_'] = long(nodeid)
+        nodeprops['_nodenumber_'] = nodeid
         nodeprops['_pushedby_'] = userid
         nodeprops['_fetchdate_'] = long(fetchdate)
         nodeprops['_sourceurl_'] = sourceurl
@@ -260,9 +262,9 @@ def postgraph():
             msg = 'id repeated under relations for relation id %s' %(linkid)
             return validate.error_helper(msg, 400)
 
-        if not linkid.isdigit():
-            msg = 'linkid is not a number for relation id %s' %(linkid)
-            return validate.error_helper(msg,400)
+        # if not linkid.isdigit():
+        #     msg = 'linkid is not a number for relation id %s' %(linkid)
+        #     return validate.error_helper(msg,400)
 
         linklabel = rel['label']
 
@@ -315,7 +317,7 @@ def postgraph():
         linkprops['_crawl_rel_id_'] = 'rel_'+taskid+'_'+str(linkid)
         #linkprops['_token_'] = tokenid
         linkprops['_taskid_'] = int(taskid)
-        linkprops['_relnumber_'] = long(linkid)
+        linkprops['_relnumber_'] = linkid
         linkprops['bidirectional'] = bool(bidirectional)
         linkprops['_pushedby_'] = userid
         linkprops['_pushdate_'] = Utils.currentTimeStamp()
