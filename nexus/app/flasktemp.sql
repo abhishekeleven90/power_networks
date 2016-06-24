@@ -67,8 +67,7 @@ CREATE TABLE `tasklog` (
   `description` text NOT NULL,
   `jsondump` MEDIUMTEXT not null,
   `dumpdate` datetime NOT NULL,
-  foreign key (`taskid`) references `tasks`(`taskid`) on delete cascade on update cascade,
-  foreign key (`userid`) references `users`(`userid`) on delete cascade on update cascade
+  foreign key (`taskid`, `userid`) references `taskusers`(`taskid`,`userid`) on delete cascade on update cascade,
 );
 
 
