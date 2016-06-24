@@ -36,3 +36,7 @@ def name_preprocess(name,reverse=False):
     name_components = decompose_name(name,reverse)
     return ' '.join(name_components)
 
+if __name__ =="__main__":
+    print name_preprocess('Adhalrao Patil,Shri Shivaji')
+
+
