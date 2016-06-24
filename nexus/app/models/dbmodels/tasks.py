@@ -232,6 +232,41 @@ class Taskusers:
         self.dbwrap.commitAndClose()
         return result_list
 
+    def getSelfFromDB(self):
+
+        self.dbwrap.connect()
+        try:
+            cursor = self.dbwrap.cursor()
+        except:
+            print "[Taskusers object] In getSelfFromDB"
+            print "Cannot get cursor"
+            self.dbwrap.commitAndClose()
+            exit(3)
+
+        query = "SELECT taskid, userid  \
+                 FROM " + self.tablename + " where taskid=" + str(self.taskid) + \
+                 " AND userid='" + self.userid + "'"
+
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        assert(len(rows) == 1)
+        for r in rows:
+            self.userid = r[0]
+            self.taskid = r[1]
+
+        self.dbwrap.commitAndClose()
+        return self
+
+    @classmethod
+    def validateTaskAndUser(cls, taskid, userid):
+        try:
+            tu = Taskusers()
+            tu.userid = userid
+            tu.taskid = taskid
+            tu = tu.getSelfFromDB()
+            return True
+        except Exception as e:
+            return False
 
 class Tasklog:
 

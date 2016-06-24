@@ -3,11 +3,23 @@ from flask import render_template, flash, redirect, session, g, request, url_for
 
 @mod.route('/')
 def show():
-    from app.apis.views import postgraph
-    somejson={}
-    entities=[]
-    somejson['entities']=entities
+    from app.models.dbmodels.user import User
+    flash(str(User.validateToken('abhi10@gmail.com','2ee457b79dsd6f81eab77431876d57bac99')))
+
+    from app.models.dbmodels.tasks import Taskusers
+    flash(Taskusers.validateTaskAndUser(taskid=1,userid='abhi2@gmail.com'))
+
+    from app.models.dbmodels.user import User
+    usr = User.getUser(userid='abhi@gmail.com')
+    ##check usr not None
+    ##will be from session
+    ## usr.apikey ## get this
+
+
     return render_template("mod_home.html")
+
+
+
 
 ##adding code here so that user work doesnt clutter
 ##but move this to user at the onset!

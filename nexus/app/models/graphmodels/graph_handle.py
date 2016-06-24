@@ -781,6 +781,7 @@ class GraphHandle():
 
         from app.models.dbmodels.tasks import Tasks
         task = Tasks.getWikiTaskByUser(userid)
+        ## if task None that is our problem
         ##will throw an error if not in db, it will be our problem, not anybody's - would only occur if the at time of user creation, entry not updated here
         obj[CRAWL_TASKID] =  task.taskid##get from db for thi user
 

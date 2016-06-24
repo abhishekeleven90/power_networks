@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort, g, session
+from flask import Blueprint, render_template, abort, g, session, request, jsonify
 
 apis = Blueprint('apis', __name__)
 
@@ -6,10 +6,21 @@ apis = Blueprint('apis', __name__)
 # to create and tear down a database connection on each request.
 @apis.before_request
 def before_request():
-    # from app.constants import ROLE_MODERATOR
-    # if session.get('role')<ROLE_MODERATOR:
-    #     abort(403)
-    ##TODO: user, token
+
+    from app.models.dbmodels.user import User
+    userid = request.args.get('userid',None)
+    token = request.args.get('token',None)
+    flag = True
+    retdict = {}
+    retdict['error'] = 'Not authorized'
+    ret = jsonify(retdict)
+    # print userid
+    # print token
+    if userid is None or token is None:
+        # print 'here'
+        return ret, 403
+    if not User.validateToken(userid=userid,token=token):
+        return ret, 403
     print 'apis hi!!!' ##this is like a wrapper inside a wrapper
 
 @apis.after_request

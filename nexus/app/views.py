@@ -101,6 +101,9 @@ def signup():
         password = form.password.data
         userid = form.email.data
         usr = User(userid=userid, password=password, name=name)
+        print usr.userid
+        print usr.name
+        print usr.password
         usr.insert()
         flash('Successfully signed up. Login to continue!')
 

@@ -42,12 +42,13 @@ class User:
             self.dbwrap.commitAndClose()
 
         #print type(self.keyEnabled)
-        query = "INSERT INTO " + self.tablename + " (userid, password, role, apikey,\
-                 keyEnabled, name, lastlogin, lastpwdchange) VALUES('%s', '%s', %d, '%s', %d, '%s', '%s', '%s')"\
+        query = "INSERT INTO " + self.tablename + " (`userid`, `password`, `role`, `apikey`,\
+                 `keyenabled`, `name`, `lastlogin`, `lastpwdchange`) VALUES('%s', '%s', %d, '%s', %d, '%s', '%s', '%s')"\
                  % (self.userid, self.password, self.role, self.apikey, self.keyEnabled,
                     self.name, self.lastlogin, self.lastpwdchange)
 
         print query
+        print self.dbwrap.dbhost
         numrows = cursor.execute(query)
         self.dbwrap.commitAndClose()
         return numrows
@@ -111,6 +112,16 @@ class User:
 
         return False
 
+    @classmethod
+    def validateToken(cls, userid, token):
+        try:
+            usr = cls.getUser(userid=userid)
+            return usr.apikey==token and usr.keyEnabled==1
+        except Exception as e:
+            return False
+        pass
+
+
     def __str__(self):
         print '[User: userid: '+str(self.userid)+' role: '+str(self.role)+']'
         return
@@ -159,5 +170,8 @@ class User:
     def getUser(cls, userid):
         ##get User object using the userid
         ##has to be classmethod
-        usr = User(userid)
-        return usr.getSelfFromDB()
+        try:
+            usr = User(userid)
+            return usr.getSelfFromDB()
+        except:
+            return None
