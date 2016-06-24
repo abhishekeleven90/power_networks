@@ -53,6 +53,14 @@ CREATE TABLE `taskusers` (
   foreign key (`userid`) references `users`(`userid`) on delete cascade on update cascade
 );
 
+CREATE TRIGGER `after_tasks_insert` AFTER INSERT ON `tasks`
+ FOR EACH ROW INSERT INTO taskusers(userid, taskid)
+VALUES (NEW.ownerid, NEW.taskid);
+
+CREATE TRIGGER `after_users_insert` AFTER INSERT ON `users`
+ FOR EACH ROW INSERT INTO tasks(name, ownerid, description, createdate, iscrawled)
+VALUES ('Default task', NEW.userid,  'Default task of the user', NOW(), 0);
+
 CREATE TABLE `tasklog` (
   `taskid` int not null,
   `userid` varchar(255) NOT NULL,
