@@ -115,6 +115,7 @@ CREATE TABLE IF NOT EXISTS `tasks` (
   `description` text NOT NULL,
   `createdate` datetime NOT NULL,
   `iscrawled` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
   PRIMARY KEY (`taskid`),
   KEY `ownerid` (`ownerid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -157,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `keyenabled` int(11) NOT NULL,
   `lastlogin` datetime NOT NULL,
   `lastpwdchange` datetime NOT NULL,
-  `name` varchar(1000) NOT NULL,
+  `username` varchar(255) NOT NULL,
   PRIMARY KEY (`userid`),
   UNIQUE KEY `apikey` (`apikey`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

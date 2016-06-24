@@ -42,12 +42,13 @@ class User:
             self.dbwrap.commitAndClose()
 
         #print type(self.keyEnabled)
-        query = "INSERT INTO " + self.tablename + " (userid, password, role, apikey,\
-                 keyEnabled, name, lastlogin, lastpwdchange) VALUES('%s', '%s', %d, '%s', %d, '%s', '%s', '%s')"\
+        query = "INSERT INTO " + self.tablename + " (`userid`, `password`, `role`, `apikey`,\
+                 `keyenabled`, `name`, `lastlogin`, `lastpwdchange`) VALUES('%s', '%s', %d, '%s', %d, '%s', '%s', '%s')"\
                  % (self.userid, self.password, self.role, self.apikey, self.keyEnabled,
                     self.name, self.lastlogin, self.lastpwdchange)
 
         print query
+        print self.dbwrap.dbhost
         numrows = cursor.execute(query)
         self.dbwrap.commitAndClose()
         return numrows

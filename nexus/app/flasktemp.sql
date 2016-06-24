@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `keyenabled` int(11) NOT NULL,
   `lastlogin` datetime NOT NULL,
   `lastpwdchange` datetime NOT NULL,
-  `name` varchar(1000) NOT NULL,
+  `name` varchar(255) NOT NULL,
   PRIMARY KEY (`userid`)
 );
 
@@ -67,7 +67,8 @@ CREATE TABLE `tasklog` (
   `description` text NOT NULL,
   `jsondump` MEDIUMTEXT not null,
   `dumpdate` datetime NOT NULL,
-  foreign key (`taskid`, `userid`) references `taskusers`(`taskid`,`userid`) on delete cascade on update cascade,
+  foreign key (`taskid`) references `tasks`(`taskid`) on delete cascade on update cascade,
+  foreign key (`userid`) references `users`(`userid`) on delete cascade on update cascade
 );
 
 
