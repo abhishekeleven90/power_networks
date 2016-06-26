@@ -330,6 +330,8 @@ class GraphDB:
         print aliases_to_return
         print keywords
 
+        if len(keywords)>50:
+            keywords=keywords[:50]
         return name, labels, aliases_to_return, keywords
 
 
