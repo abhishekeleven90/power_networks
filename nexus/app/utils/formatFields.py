@@ -18,20 +18,37 @@ def formatName(name):
 
     # remove all dots from name and salutations
     mod_name = re.sub(r'\.', '', mod_name)
-    salutations = ['mr', 'shri', 'shree', 'shrimati', 'shreemati', 'mrs', 'ms',
-                   'shriman', 'dr', 'lt', 'capt', 'shrimati', 'smt']
-    salutations = '|'.join(salutations)
-    mod_name = re.sub(r'(\b' + salutations + r'\b)', '',
-                      mod_name, flags=re.IGNORECASE)
+    salutations = ['mr', 'srimati', 'sreemati', 'shrimati', 'shreemati',
+                   'shriman', 'mrs', 'ms', 'shri', 'shree', 'dr', 'lt',
+                   'capt',  'smt', 'late']
+
+    # instead of re.sub we can use word in string to check above words
+    #salutations = '|'.join(salutations)
+    # mod_name = re.sub(r'(\b' + salutations + r'\b)', '',
+    #                  mod_name, flags=re.IGNORECASE)
+
+    #This one is better!
+    mod_name = ' '.join([x for x in mod_name.split() if x not in salutations])
 
     return mod_name.strip()
 
-def getTimeStampLong(datestr):
+def getTimeStampLong(datestr, fmt=None):
     #TODO - form datetime obj using str
     from datetime import datetime
     from time import mktime
 
-    dtobj = datetime.strptime(datestr, "%d %b %Y")
+    if fmt is None:
+        dtobj = datetime.strptime(datestr, "%d %b %Y")
+    else:
+        try:
+            dtobj = datetime.strptime(datestr, fmt)
+        except ValueError as e:
+            print repr(e)
+            try:
+                dtobj = datetime.strptime(datestr, "%d %b %Y")
+            except:
+                return "000.000"
+
     #TODO - get UTC time stamp from the object
     return mktime(dtobj.timetuple())
 
@@ -39,8 +56,8 @@ def getTimeStampLong(datestr):
 if __name__ == "__main__":
     print formatName('Adhalrao Patil,Shri Shivaji')
     print formatName('Adhikari,Shri Deepak (Dev)')
-    print formatName('Adhikari,Shri Sisir Kumar')
-    print formatName('Amartya Chaudhuri')
+    print formatName('Shrimati Kalpakam Yechury')
+    print formatName('Shri Amartya Chaudhuri')
     print getTimeStampLong('05 Jun 1972')
     print getTimeStampLong('15 Jul 1972')
 
