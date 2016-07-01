@@ -25,7 +25,7 @@ def postgraph():
     if not request.json: ##is a dict!!
         return validate.error_helper("The request body does not have JSON Data",400)
 
-
+    print 'yahaaaaaaaaaaaaaaan'
     print request.data
     print request.json
     print type(request.json)
@@ -35,7 +35,7 @@ def postgraph():
     required_master_props = ['taskid', 'userid', 'token']
     for prop in required_master_props:
         if not prop in request.json:
-            return validate.error_helper(str(prop)+"property not in json data", 400)
+            return validate.error_helper(str(prop)+" property not in json data", 400)
 
 
 
@@ -318,7 +318,10 @@ def postgraph():
         #linkprops['_token_'] = tokenid
         linkprops['_taskid_'] = int(taskid)
         linkprops['_relnumber_'] = linkid
-        linkprops['bidirectional'] = bool(bidirectional)
+        if bidirectional=='False':
+            linkprops['bidirectional'] = False
+        else:
+            linkprops['bidirectional'] = True
         linkprops['_pushedby_'] = userid
         linkprops['_pushdate_'] = Utils.currentTimeStamp()
         linkprops['_fetchdate_'] = long(fetchdate)

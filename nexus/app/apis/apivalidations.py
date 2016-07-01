@@ -82,6 +82,10 @@ class Validate:
             props['enddate'] = long(props['enddate'])
 
         if 'iscurrent' in props:
-            props['iscurrent'] = bool(props['iscurrent'])
+            val = (props['iscurrent'])
+            if val=='True':
+                props['iscurrent'] = True
+            else:
+                props['iscurrent'] = False
 
         return props

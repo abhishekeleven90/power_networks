@@ -6,25 +6,25 @@
     <h4>You already have tasks in session. Resume them or Clear them.</h4><br/>
 
     <a href={{url_for('verifier.beginagain', choice = 'resume', kind=kind )}}>
-                    <button type="submit" class="btn btn-primary">Resume my resolution task!</button>
+                    <button type="submit" id="beginresume" class="btn btn-primary">Resume my resolution task!</button>
     </a>
 
     <br/>
     <br/>
 
     <a href={{url_for('verifier.beginagain', choice = 'sessionclear', kind=kind )}}>
-                    <button type="submit" class="btn btn-warning">Clear my resolution session!</button>
+                    <button type="submit" id="beginclear" class="btn btn-warning">Clear my resolution session!</button>
     </a>
 
     <br/>
     <br/>
 
     <a href={{url_for('verifier.beginagain', choice = 'releaseall', kind=kind )}}>
-                    <button type="submit" class="btn btn-danger">Release resolution locks/session!</button>
+                    <button type="submit" id="beginrelease" class="btn btn-danger">Release resolution locks/session!</button>
     </a>
 
 
 </div>
 
-   
+
 {% endblock %}

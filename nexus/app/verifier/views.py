@@ -1,6 +1,6 @@
 
 from app.verifier import verifier
-from flask import render_template, flash, redirect, session, request, url_for, g
+from flask import render_template, flash, redirect, session, request, url_for, g, abort
 from app.models.graphmodels.graph_handle import GraphHandle
 
 @verifier.route('/')
@@ -479,6 +479,27 @@ def diffPushGen(kind):
         ##we are really going to update something, if reach here
         for prop in conf_props:
 
+
+            if prop=='name':
+                ## we do change here for name specific
+                for opt in request.form.getlist('name'):
+                    # print 'naaaaaaaaaaaaaaaaaaameeeeeee'
+                    print opt
+                    if opt == 'primarychange':
+                        # print 'primarychange selected yayyyyyyy'
+                        flash('Changed primary name to '+str(naya[prop]))
+                        orig[prop] = naya[prop]
+                    if opt == 'aliasadd':
+                        # print 'aliasadd selected...yayyyyyyy'
+                        print "Before aliasadd option: "+str(orig['aliases'])
+                        orig['aliases'] = Utils.merge(naya[prop],orig['aliases'])
+                        print "After aliasadd option: "+str(orig['aliases'])
+                        flash('Merged : aliases as ASKED : '+str(orig['aliases']))
+                # print orig
+                # print 'aborting'
+                continue
+                # print 'shouhfhjkdfhkjshdkfjhdshkjfhkjhdkjhjdshuld not reach here'
+
             option = str(request.form[prop])
 
             # if option is orig no changes
@@ -492,7 +513,7 @@ def diffPushGen(kind):
             if option=="naya":
 
                 ##only if the new aliases is selected
-                ##IDEA: if aliases in conf_props, just merge no matter what
+                ##IDEA: if aliases in conf_props and selected, just merge no matter what
                 if prop.strip()=='aliases':
                     print "Before merging: "+str(orig[prop])
                     orig[prop] = Utils.merge(orig[prop], naya[prop])
@@ -508,7 +529,7 @@ def diffPushGen(kind):
                 orig[prop] = naya[prop]
                 flash(msg)
 
-                if prop=='name':
+                if prop=='name': ##wont/reach here now for name
                     print "Before name merging: "+str(orig['aliases'])
                     orig['aliases'] = Utils.merge(naya[prop],orig['aliases'])
                     print "After name merging: "+str(orig['aliases'])
